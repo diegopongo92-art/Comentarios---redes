@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Social Listening Dashboard - MML v6.0</title>
-    
+    <title>Social Listening MML v7.0 - Análisis Semántico</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -15,89 +14,120 @@
 
     <style>
         :root {
-            --naval-950: #0a1929;
-            --naval-900: #0d2137;
-            --naval-800: #132f4c;
-            --naval-700: #1a3a5c;
-            --naval-600: #1e4976;
-            --naval-500: #2563eb;
-            --naval-400: #3b82f6;
-            --naval-300: #60a5fa;
-            --naval-200: #93c5fd;
-            --naval-100: #dbeafe;
+            --bg-deep: #0a0e1a;
+            --bg-card: #111827;
+            --bg-elevated: #1a2332;
+            --border: #1e3a5f;
+            --accent: #3b82f6;
+            --accent-glow: #60a5fa;
+            --gold: #f59e0b;
+            --danger: #ef4444;
+            --success: #10b981;
         }
 
-        * { scrollbar-width: thin; scrollbar-color: var(--naval-600) var(--naval-950); }
+        * { scrollbar-width: thin; scrollbar-color: #1e3a5f #0a0e1a; }
         
         body {
             font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
-            background: var(--naval-950);
-            color: #e0e0e0;
+            background: var(--bg-deep);
+            color: #e2e8f0;
             margin: 0;
+            line-height: 1.6;
         }
 
-        .bg-naval-950 { background: var(--naval-950); }
-        .bg-naval-900 { background: var(--naval-900); }
-        .bg-naval-800 { background: var(--naval-800); }
-        .bg-naval-700 { background: var(--naval-700); }
-        .border-naval-600 { border-color: var(--naval-600); }
-        .border-naval-500 { border-color: var(--naval-500); }
-        
-        .gradient-card {
-            background: linear-gradient(135deg, rgba(19,47,76,0.8) 0%, rgba(13,33,55,0.9) 100%);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(59,130,246,0.15);
+        .glass {
+            background: rgba(17, 24, 39, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(59, 130, 246, 0.15);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
         }
-        
+
+        .glass-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-hover:hover {
+            border-color: rgba(59, 130, 246, 0.4);
+            box-shadow: 0 8px 40px rgba(59, 130, 246, 0.15);
+            transform: translateY(-2px);
+        }
+
         .kpi-card {
-            background: linear-gradient(135deg, rgba(13,33,55,0.95) 0%, rgba(26,58,92,0.8) 100%);
-            border: 1px solid var(--naval-500);
-            border-left: 4px solid var(--naval-400);
-            transition: all 0.3s;
+            background: linear-gradient(135deg, rgba(17, 24, 39, 0.95), rgba(26, 35, 50, 0.9));
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--accent);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, transparent 0%, rgba(59, 130, 246, 0.03) 100%);
+            pointer-events: none;
         }
         .kpi-card:hover {
             border-left-width: 8px;
-            border-left-color: #f59e0b;
-            box-shadow: 0 0 25px rgba(59,130,246,0.15);
-            transform: translateX(2px);
+            border-left-color: var(--gold);
+            transform: translateX(4px);
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.1);
         }
-        
+
         .kpi-value {
             background: linear-gradient(135deg, #60a5fa, #93c5fd);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            font-weight: 800;
         }
-        
-        .card-hover {
-            transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+
+        .badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: inline-block;
         }
-        .card-hover:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 20px rgba(59,130,246,0.1);
+        .badge-positivo { background: rgba(16,185,129,0.12); color: #10b981; border: 1px solid rgba(16,185,129,0.25); }
+        .badge-negativo { background: rgba(239,68,68,0.12); color: #ef4444; border: 1px solid rgba(239,68,68,0.25); }
+        .badge-neutral { background: rgba(245,158,11,0.12); color: #f59e0b; border: 1px solid rgba(245,158,11,0.25); }
+
+        .sidebar-link {
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+            border-radius: 0 8px 8px 0;
         }
-        
-        .badge-positivo { background: rgba(16,185,129,0.15); color: #10b981; border: 1px solid rgba(16,185,129,0.3); }
-        .badge-negativo { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid rgba(239,68,68,0.3); }
-        .badge-neutral { background: rgba(245,158,11,0.15); color: #f59e0b; border: 1px solid rgba(245,158,11,0.3); }
-        .badge-sentiment {
-            padding: 4px 12px; border-radius: 20px; font-size: 0.7rem;
-            font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+        .sidebar-link:hover {
+            background: rgba(59, 130, 246, 0.08);
+            border-left-color: var(--accent);
         }
-        
-        .chart-container { position: relative; height: 350px; width: 100%; }
-        @media (max-width: 768px) { .chart-container { height: 250px; } }
-        
-        .ia-pulse {
-            animation: iaPulse 2s infinite;
+        .sidebar-link.active {
+            background: rgba(59, 130, 246, 0.12);
+            border-left-color: var(--gold);
+            color: white !important;
         }
-        @keyframes iaPulse {
-            0%,100% { box-shadow: 0 0 5px rgba(59,130,246,0.3); }
-            50% { box-shadow: 0 0 20px rgba(59,130,246,0.6); }
+
+        .chart-container {
+            position: relative;
+            height: 350px;
+            width: 100%;
         }
-        
-        .progress-ia {
-            background: linear-gradient(90deg, var(--naval-400), var(--naval-200), var(--naval-400));
+
+        .pulse-gemini {
+            animation: pulseGemini 2s infinite;
+        }
+        @keyframes pulseGemini {
+            0%, 100% { box-shadow: 0 0 5px rgba(16, 185, 129, 0.3); }
+            50% { box-shadow: 0 0 20px rgba(16, 185, 129, 0.6); }
+        }
+
+        .shimmer {
+            background: linear-gradient(90deg, var(--accent), var(--accent-glow), var(--accent));
             background-size: 200% 100%;
             animation: shimmer 2s infinite;
         }
@@ -105,110 +135,152 @@
             0% { background-position: 200% 0; }
             100% { background-position: -200% 0; }
         }
-        
-        .sidebar-link {
+
+        table.dataTable {
+            background: var(--bg-card) !important;
+            color: #e2e8f0 !important;
+            border-color: var(--border) !important;
+            border-radius: 12px !important;
+            overflow: hidden;
+        }
+        table.dataTable thead th {
+            background: var(--bg-elevated) !important;
+            color: #93c5fd !important;
+            border-color: var(--border) !important;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+        }
+        table.dataTable tbody tr {
+            background: transparent !important;
             transition: all 0.2s;
-            border-left: 4px solid transparent;
         }
-        .sidebar-link:hover {
-            background: rgba(59,130,246,0.1);
-            border-left-color: var(--naval-400);
+        table.dataTable tbody tr:hover {
+            background: rgba(59, 130, 246, 0.05) !important;
         }
-        .sidebar-link.active {
-            background: rgba(59,130,246,0.15);
-            border-left-color: #f59e0b;
+        table.dataTable tbody td {
+            border-color: rgba(30, 58, 95, 0.4) !important;
         }
-        
+
         select, input, textarea {
-            background: var(--naval-700) !important;
-            color: #e0e0e0 !important;
-            border-color: var(--naval-500) !important;
+            background: var(--bg-elevated) !important;
+            color: #e2e8f0 !important;
+            border: 1px solid var(--border) !important;
+            border-radius: 8px !important;
+            transition: all 0.2s;
         }
         select:focus, input:focus, textarea:focus {
-            border-color: var(--naval-400) !important;
+            border-color: var(--accent) !important;
             outline: none;
-            box-shadow: 0 0 10px rgba(59,130,246,0.3) !important;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15) !important;
         }
-        
-        .btn-naval {
-            background: var(--naval-400);
+
+        .btn-primary {
+            background: var(--accent);
             color: white;
+            font-weight: 600;
             transition: all 0.3s;
+            border-radius: 10px;
         }
-        .btn-naval:hover {
-            background: var(--naval-300);
-            box-shadow: 0 0 20px rgba(59,130,246,0.4);
+        .btn-primary:hover {
+            background: #2563eb;
+            box-shadow: 0 0 25px rgba(59, 130, 246, 0.4);
             transform: translateY(-2px);
         }
         .btn-gold {
-            background: #f59e0b;
-            color: var(--naval-950);
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #0a0e1a;
             font-weight: 700;
             transition: all 0.3s;
+            border-radius: 10px;
         }
         .btn-gold:hover {
-            background: #fbbf24;
-            box-shadow: 0 0 20px rgba(245,158,11,0.4);
+            box-shadow: 0 0 25px rgba(245, 158, 11, 0.4);
             transform: translateY(-2px);
         }
-        
-        table.dataTable {
-            background: var(--naval-800) !important;
-            color: #e0e0e0 !important;
-            border-color: var(--naval-600) !important;
+
+        @media (max-width: 768px) {
+            .chart-container { height: 250px; }
+            .kpi-value { font-size: 1.5rem; }
         }
-        table.dataTable thead th {
-            background: var(--naval-700) !important;
-            color: var(--naval-200) !important;
-            border-color: var(--naval-600) !important;
+
+        .tooltip {
+            position: relative;
         }
-        table.dataTable tbody tr { background: var(--naval-800) !important; }
-        table.dataTable tbody tr:hover { background: var(--naval-700) !important; }
-        table.dataTable tbody td { border-color: var(--naval-600) !important; }
+        .tooltip:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-elevated);
+            color: #e2e8f0;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            z-index: 10;
+            border: 1px solid var(--border);
+        }
     </style>
 </head>
-<body class="bg-naval-950">
+<body class="bg-[#0a0e1a]">
 
     <div class="flex h-screen overflow-hidden">
         
-        <!-- SIDEBAR -->
-        <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-72 bg-naval-900 border-r border-naval-600 transform -translate-x-full lg:translate-x-0 lg:static transition-transform duration-300 overflow-y-auto">
+        <!-- SIDEBAR MEJORADO -->
+        <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-72 bg-[#0d1117] border-r border-[#1e3a5f] transform -translate-x-full lg:translate-x-0 lg:static transition-transform duration-300 overflow-y-auto">
             <div class="p-6">
                 <div class="text-center mb-8">
-                    <div class="w-20 h-20 bg-gradient-to-br from-blue-600 to-cyan-400 rounded-full mx-auto mb-3 flex items-center justify-center shadow-lg shadow-blue-500/20">
-                        <span class="text-3xl font-bold text-white">🧠</span>
+                    <div class="w-20 h-20 bg-gradient-to-br from-blue-600 via-blue-500 to-cyan-400 rounded-2xl mx-auto mb-4 flex items-center justify-center shadow-lg shadow-blue-500/20">
+                        <span class="text-3xl font-bold text-white">🧬</span>
                     </div>
-                    <h2 class="text-xl font-bold text-white">Social Listening</h2>
-                    <p class="text-sm text-naval-200">Dashboard IA v6.0</p>
+                    <h2 class="text-xl font-bold text-white">Sentinel AI</h2>
+                    <p class="text-sm text-blue-300/70">Análisis Semántico v7.0</p>
                 </div>
                 
-                <div class="mb-6 p-4 bg-naval-800 rounded-xl border border-naval-600">
+                <div class="mb-6 p-4 bg-[#1a2332] rounded-xl border border-[#1e3a5f]">
                     <div class="flex items-center justify-center space-x-2 mb-2">
-                        <div class="w-3 h-3 bg-green-400 rounded-full ia-pulse"></div>
-                        <span class="text-sm text-naval-100" id="ia-status">IA Gemini Activa</span>
+                        <div class="w-3 h-3 bg-green-400 rounded-full pulse-gemini"></div>
+                        <span class="text-sm text-blue-200" id="ia-status">Gemini Pro Activo</span>
+                    </div>
+                    <div class="text-center mt-2">
+                        <span class="text-xs text-blue-300/60">Análisis semántico contextual</span>
                     </div>
                 </div>
                 
-                <nav class="space-y-2">
-                    <a onclick="navegar('dashboard')" class="sidebar-link active flex items-center px-4 py-3 rounded-lg cursor-pointer text-naval-200">
-                        <i class="fas fa-chart-line w-6"></i><span>Dashboard</span>
+                <nav class="space-y-1.5">
+                    <a onclick="navegar('dashboard')" class="sidebar-link active flex items-center px-4 py-3 cursor-pointer text-blue-200/80">
+                        <i class="fas fa-chart-pie w-5"></i>
+                        <span class="ml-3">Dashboard</span>
                     </a>
-                    <a onclick="navegar('reportes')" class="sidebar-link flex items-center px-4 py-3 rounded-lg cursor-pointer text-naval-200">
-                        <i class="fas fa-file-alt w-6"></i><span>Reportes</span>
+                    <a onclick="navegar('reportes')" class="sidebar-link flex items-center px-4 py-3 cursor-pointer text-blue-200/80">
+                        <i class="fas fa-file-contract w-5"></i>
+                        <span class="ml-3">Reportes</span>
                     </a>
-                    <a onclick="navegar('config')" class="sidebar-link flex items-center px-4 py-3 rounded-lg cursor-pointer text-naval-200">
-                        <i class="fas fa-cog w-6"></i><span>Configuración</span>
+                    <a onclick="navegar('config')" class="sidebar-link flex items-center px-4 py-3 cursor-pointer text-blue-200/80">
+                        <i class="fas fa-sliders-h w-5"></i>
+                        <span class="ml-3">Configuración</span>
                     </a>
                 </nav>
+                
+                <div class="mt-8 p-4 bg-[#1a2332] rounded-xl border border-[#1e3a5f]">
+                    <p class="text-xs text-blue-300/60 mb-2">📊 Resumen Rápido</p>
+                    <p class="text-2xl font-bold text-white" id="sidebar-total">0</p>
+                    <p class="text-xs text-blue-300/60">comentarios analizados</p>
+                    <p class="text-lg font-bold text-red-400 mt-3" id="sidebar-riesgos">0</p>
+                    <p class="text-xs text-blue-300/60">riesgos altos detectados</p>
+                </div>
             </div>
         </aside>
         
         <!-- MAIN -->
         <main class="flex-1 overflow-y-auto">
             
-            <header class="bg-naval-900 border-b border-naval-600 sticky top-0 z-30">
+            <header class="glass sticky top-0 z-30 border-b border-[#1e3a5f]">
                 <div class="px-6 py-4 flex items-center justify-between">
-                    <button onclick="toggleSidebar()" class="lg:hidden text-naval-200">
+                    <button onclick="toggleSidebar()" class="lg:hidden text-blue-300 hover:text-white">
                         <i class="fas fa-bars text-2xl"></i>
                     </button>
                     <div class="flex items-center space-x-4">
@@ -217,10 +289,10 @@
                         </div>
                         <div>
                             <h1 class="text-2xl font-bold text-white">Social Listening Dashboard</h1>
-                            <p class="text-sm text-naval-200">Municipalidad Metropolitana de Lima</p>
+                            <p class="text-sm text-blue-300/70">Municipalidad Metropolitana de Lima • Análisis Semántico IA</p>
                         </div>
                     </div>
-                    <span class="text-sm text-naval-200" id="fecha-header"></span>
+                    <span class="text-sm text-blue-300/70" id="fecha-header"></span>
                 </div>
             </header>
             
@@ -229,75 +301,87 @@
                 <!-- VISTA DASHBOARD -->
                 <div id="vista-dashboard">
                     
-                    <div class="gradient-card rounded-2xl p-6 mb-8">
+                    <!-- Panel de Control -->
+                    <div class="glass rounded-2xl p-6 mb-8">
                         <div class="flex flex-wrap items-center justify-between gap-4">
                             <div>
-                                <h2 class="text-2xl font-bold text-white">🧠 Análisis con Inteligencia Artificial</h2>
-                                <p class="text-naval-200 mt-1">Prompt Ultra-Refinado v6.0 • Precisión quirúrgica • 0% margen de error</p>
+                                <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                                    <span class="text-3xl">🧬</span> Motor de Análisis Semántico
+                                </h2>
+                                <p class="text-blue-300/70 mt-1">Comprensión contextual profunda • Jerga peruana • Apodos políticos • Ironía</p>
                             </div>
                             <div class="flex gap-3 flex-wrap">
-                                <input type="password" id="apiKey" class="px-4 py-2.5 bg-naval-700 border border-naval-500 rounded-lg text-sm w-64 text-white" placeholder="🔑 Gemini API Key">
-                                <button onclick="guardarAPIKey()" class="px-4 py-2.5 btn-gold rounded-lg"><i class="fas fa-key mr-2"></i>Conectar</button>
-                                <button onclick="document.getElementById('fileInput').click()" class="px-4 py-2.5 bg-naval-700 border border-naval-500 text-white rounded-lg hover:bg-naval-600 transition"><i class="fas fa-upload mr-2"></i>Excel</button>
-                                <button onclick="cargarDemo()" class="px-4 py-2.5 bg-naval-700 border border-naval-500 text-white rounded-lg hover:bg-naval-600 transition"><i class="fas fa-database mr-2"></i>Demo</button>
+                                <input type="password" id="apiKey" class="px-4 py-2.5 text-sm w-56" placeholder="🔑 Gemini API Key">
+                                <button onclick="guardarAPIKey()" class="px-5 py-2.5 btn-gold"><i class="fas fa-key mr-2"></i>Conectar IA</button>
+                                <button onclick="document.getElementById('fileInput').click()" class="px-5 py-2.5 btn-primary"><i class="fas fa-upload mr-2"></i>Cargar Excel</button>
+                                <button onclick="cargarDemo()" class="px-5 py-2.5 bg-[#1a2332] border border-[#1e3a5f] text-white rounded-xl hover:bg-[#1e3a5f] transition font-semibold"><i class="fas fa-flask mr-2"></i>Demo</button>
                             </div>
                             <input type="file" id="fileInput" accept=".xlsx,.xls" class="hidden" onchange="procesarArchivo(event)">
                         </div>
+                        
                         <div id="progressContainer" class="hidden mt-6">
                             <div class="flex justify-between text-sm mb-2">
-                                <span class="text-naval-200" id="progressText">Analizando...</span>
-                                <span class="text-naval-300 font-bold" id="progressPercent">0%</span>
+                                <span class="text-blue-300" id="progressText">Iniciando análisis semántico...</span>
+                                <span class="text-blue-200 font-bold" id="progressPercent">0%</span>
                             </div>
-                            <div class="w-full bg-naval-700 rounded-full h-2.5">
-                                <div id="progressBar" class="progress-ia h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                            <div class="w-full bg-[#0d1117] rounded-full h-2.5">
+                                <div id="progressBar" class="shimmer h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
                             </div>
-                            <p class="text-xs text-naval-300 mt-2" id="progressDetail"></p>
+                            <p class="text-xs text-blue-300/50 mt-2" id="progressDetail"></p>
                         </div>
                     </div>
                     
+                    <!-- KPIs -->
                     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8" id="kpiContainer"></div>
                     
+                    <!-- Charts Row 1 -->
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-                        <div class="gradient-card rounded-2xl p-6">
-                            <h3 class="text-lg font-bold text-white mb-4">🎭 Sentimientos</h3>
+                        <div class="glass rounded-2xl p-6 glass-hover">
+                            <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                                <span class="text-xl">🎭</span> Sentimientos
+                            </h3>
                             <div class="chart-container"><canvas id="chartSentimiento"></canvas></div>
                         </div>
-                        <div class="gradient-card rounded-2xl p-6">
-                            <h3 class="text-lg font-bold text-white mb-4">🏷️ Tipos</h3>
+                        <div class="glass rounded-2xl p-6 glass-hover">
+                            <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                                <span class="text-xl">🏷️</span> Tipos Detectados
+                            </h3>
                             <div class="chart-container"><canvas id="chartTipos"></canvas></div>
                         </div>
-                        <div class="gradient-card rounded-2xl p-6">
-                            <h3 class="text-lg font-bold text-white mb-4">📂 Temas</h3>
+                        <div class="glass rounded-2xl p-6 glass-hover">
+                            <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                                <span class="text-xl">📂</span> Temas Principales
+                            </h3>
                             <div class="chart-container"><canvas id="chartTemas"></canvas></div>
                         </div>
                     </div>
                     
-                    <div class="gradient-card rounded-2xl p-6 mb-8">
-                        <h3 class="text-lg font-bold text-white mb-4">📈 Evolución Temporal</h3>
+                    <!-- Timeline -->
+                    <div class="glass rounded-2xl p-6 mb-8 glass-hover">
+                        <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                            <span class="text-xl">📈</span> Evolución Temporal
+                        </h3>
                         <div class="chart-container"><canvas id="chartTimeline"></canvas></div>
                     </div>
                     
-                    <div class="gradient-card rounded-2xl p-6">
+                    <!-- Tabla -->
+                    <div class="glass rounded-2xl p-6">
                         <div class="flex flex-wrap justify-between items-center mb-6 gap-4">
-                            <h3 class="text-lg font-bold text-white">📋 Comentarios Analizados</h3>
-                            <div class="flex flex-wrap gap-3">
-                                <select id="filtroSentimiento" class="px-3 py-2 bg-naval-700 border border-naval-500 rounded-lg text-sm text-white" onchange="aplicarFiltros()">
-                                    <option value="">Sentimiento</option>
-                                    <option value="Positivo">Positivo</option>
-                                    <option value="Neutral">Neutral</option>
-                                    <option value="Negativo">Negativo</option>
+                            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                                <span class="text-xl">📋</span> Comentarios Analizados
+                            </h3>
+                            <div class="flex flex-wrap gap-2">
+                                <select id="filtroSentimiento" class="px-3 py-2 text-sm" onchange="aplicarFiltros()">
+                                    <option value="">Todos los sentimientos</option>
+                                    <option value="Negativo">🔴 Negativo</option>
+                                    <option value="Neutral">🟡 Neutral</option>
+                                    <option value="Positivo">🟢 Positivo</option>
                                 </select>
-                                <select id="filtroTipo" class="px-3 py-2 bg-naval-700 border border-naval-500 rounded-lg text-sm text-white" onchange="aplicarFiltros()">
-                                    <option value="">Tipo</option>
+                                <select id="filtroTipo" class="px-3 py-2 text-sm" onchange="aplicarFiltros()">
+                                    <option value="">Todos los tipos</option>
                                 </select>
-                                <select id="filtroTema" class="px-3 py-2 bg-naval-700 border border-naval-500 rounded-lg text-sm text-white" onchange="aplicarFiltros()">
-                                    <option value="">Tema</option>
-                                </select>
-                                <select id="filtroPrioridad" class="px-3 py-2 bg-naval-700 border border-naval-500 rounded-lg text-sm text-white" onchange="aplicarFiltros()">
-                                    <option value="">Prioridad</option>
-                                    <option value="Alta">Alta</option>
-                                    <option value="Media">Media</option>
-                                    <option value="Baja">Baja</option>
+                                <select id="filtroTema" class="px-3 py-2 text-sm" onchange="aplicarFiltros()">
+                                    <option value="">Todos los temas</option>
                                 </select>
                             </div>
                         </div>
@@ -307,7 +391,7 @@
                                     <tr>
                                         <th>Fecha</th><th>Usuario</th><th>Comentario</th>
                                         <th>Sentimiento</th><th>Tipo</th><th>Tema</th>
-                                        <th>Prioridad</th><th>Confianza</th><th>Likes</th>
+                                        <th>Prioridad</th><th>Confianza</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tablaBody"></tbody>
@@ -321,97 +405,85 @@
                     <div class="max-w-7xl mx-auto">
                         <h2 class="text-3xl font-bold text-white mb-8">📊 Generador de Reportes</h2>
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                            <div class="gradient-card rounded-2xl p-6 card-hover cursor-pointer" onclick="generarReporte('diario')">
-                                <i class="fas fa-calendar-day text-4xl text-naval-300 mb-4"></i>
+                            <div class="glass rounded-2xl p-6 glass-hover cursor-pointer" onclick="generarReporte('diario')">
+                                <i class="fas fa-calendar-day text-4xl text-blue-400 mb-4"></i>
                                 <h3 class="text-xl font-bold text-white mb-2">Diario</h3>
-                                <p class="text-naval-200">Últimas 24 horas</p>
+                                <p class="text-blue-300/70">Últimas 24 horas</p>
                             </div>
-                            <div class="gradient-card rounded-2xl p-6 card-hover cursor-pointer" onclick="generarReporte('semanal')">
-                                <i class="fas fa-calendar-week text-4xl text-naval-300 mb-4"></i>
+                            <div class="glass rounded-2xl p-6 glass-hover cursor-pointer" onclick="generarReporte('semanal')">
+                                <i class="fas fa-calendar-week text-4xl text-blue-400 mb-4"></i>
                                 <h3 class="text-xl font-bold text-white mb-2">Semanal</h3>
-                                <p class="text-naval-200">Últimos 7 días</p>
+                                <p class="text-blue-300/70">Últimos 7 días</p>
                             </div>
-                            <div class="gradient-card rounded-2xl p-6 card-hover cursor-pointer" onclick="generarReporte('mensual')">
-                                <i class="fas fa-calendar-alt text-4xl text-naval-300 mb-4"></i>
+                            <div class="glass rounded-2xl p-6 glass-hover cursor-pointer" onclick="generarReporte('mensual')">
+                                <i class="fas fa-calendar-alt text-4xl text-blue-400 mb-4"></i>
                                 <h3 class="text-xl font-bold text-white mb-2">Mensual</h3>
-                                <p class="text-naval-200">Último mes</p>
+                                <p class="text-blue-300/70">Último mes</p>
                             </div>
-                            <div class="gradient-card rounded-2xl p-6 card-hover cursor-pointer" onclick="mostrarModalPersonalizado()">
-                                <i class="fas fa-calendar-check text-4xl text-naval-300 mb-4"></i>
+                            <div class="glass rounded-2xl p-6 glass-hover cursor-pointer" onclick="mostrarModalPersonalizado()">
+                                <i class="fas fa-calendar-check text-4xl text-blue-400 mb-4"></i>
                                 <h3 class="text-xl font-bold text-white mb-2">Personalizado</h3>
-                                <p class="text-naval-200">Rango de fechas</p>
+                                <p class="text-blue-300/70">Rango de fechas</p>
                             </div>
                         </div>
-                        <div id="reporteOutput" class="gradient-card rounded-2xl p-8 hidden"></div>
+                        <div id="reporteOutput" class="glass rounded-2xl p-8 hidden"></div>
                     </div>
                 </div>
                 
                 <!-- VISTA CONFIG -->
                 <div id="vista-config" class="hidden">
                     <div class="max-w-5xl mx-auto">
-                        <h2 class="text-3xl font-bold text-white mb-8">⚙️ Configuración del Sistema</h2>
+                        <h2 class="text-3xl font-bold text-white mb-8">⚙️ Configuración del Motor de Análisis</h2>
                         
-                        <div class="gradient-card rounded-2xl p-8 mb-8">
-                            <h3 class="text-xl font-bold text-white mb-6">🔑 API Key de Gemini</h3>
-                            <p class="text-naval-200 mb-4">Obtén tu key gratis: <a href="https://aistudio.google.com/apikey" target="_blank" class="text-naval-300 underline">Google AI Studio</a></p>
+                        <div class="glass rounded-2xl p-8 mb-8">
+                            <h3 class="text-xl font-bold text-white mb-4">🔑 API Key de Gemini</h3>
+                            <p class="text-blue-300/70 mb-4">Obtén tu key gratuita en <a href="https://aistudio.google.com/apikey" target="_blank" class="text-blue-400 underline">Google AI Studio</a></p>
                             <div class="flex gap-4">
-                                <input type="password" id="cfgApiKey" class="flex-1 px-4 py-2.5 bg-naval-700 border border-naval-500 rounded-lg text-white" placeholder="AIzaSy...">
-                                <button onclick="guardarConfig()" class="px-6 py-2.5 btn-gold rounded-lg"><i class="fas fa-save mr-2"></i>Guardar</button>
+                                <input type="password" id="cfgApiKey" class="flex-1 px-4 py-2.5" placeholder="AIzaSy...">
+                                <button onclick="guardarConfig()" class="px-6 py-2.5 btn-gold"><i class="fas fa-save mr-2"></i>Guardar</button>
                             </div>
                         </div>
                         
-                        <div class="gradient-card rounded-2xl p-8 mb-8">
-                            <h3 class="text-xl font-bold text-white mb-6">🧠 SuperPrompt de Análisis</h3>
-                            <p class="text-naval-200 mb-4 text-sm">Este prompt define cómo la IA analiza cada comentario. Modifícalo con cuidado.</p>
-                            <textarea id="cfgPrompt" class="w-full px-4 py-3 bg-naval-700 border border-naval-500 rounded-lg text-white text-sm font-mono" rows="25"></textarea>
+                        <div class="glass rounded-2xl p-8">
+                            <h3 class="text-xl font-bold text-white mb-4">🧬 Prompt de Análisis Semántico</h3>
+                            <p class="text-blue-300/70 mb-4 text-sm">Este prompt define la precisión del análisis. Modifícalo solo si sabes lo que haces.</p>
+                            <textarea id="cfgPrompt" class="w-full px-4 py-3 text-sm font-mono" rows="30"></textarea>
                         </div>
                         
-                        <div class="gradient-card rounded-2xl p-8 mb-8">
-                            <h3 class="text-xl font-bold text-white mb-6">📊 Institución</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-sm text-naval-200 mb-2">Nombre</label>
-                                    <input id="cfgNombre" class="w-full px-4 py-2.5 bg-naval-700 border border-naval-500 rounded-lg text-white" value="Municipalidad Metropolitana de Lima">
-                                </div>
-                                <div>
-                                    <label class="block text-sm text-naval-200 mb-2">Color</label>
-                                    <input type="color" id="cfgColor" class="w-full h-10 bg-naval-700 border border-naval-500 rounded-lg">
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <button onclick="guardarConfig()" class="px-8 py-3 btn-gold rounded-lg text-lg"><i class="fas fa-save mr-2"></i>Guardar Todo</button>
+                        <button onclick="guardarConfig()" class="mt-6 px-8 py-3 btn-gold text-lg"><i class="fas fa-save mr-2"></i>Guardar Configuración</button>
                     </div>
                 </div>
             </div>
         </main>
         
         <!-- PANEL DETALLE -->
-        <div id="panelDetalle" class="fixed inset-y-0 right-0 w-full sm:w-[480px] lg:w-[580px] bg-naval-900 border-l border-naval-600 shadow-2xl transform translate-x-full transition-transform duration-300 z-50 overflow-y-auto">
+        <div id="panelDetalle" class="fixed inset-y-0 right-0 w-full sm:w-[500px] lg:w-[600px] bg-[#0d1117] border-l border-[#1e3a5f] shadow-2xl transform translate-x-full transition-transform duration-300 z-50 overflow-y-auto">
             <div class="p-6">
                 <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-xl font-bold text-white">🧠 Análisis Detallado</h2>
-                    <button onclick="cerrarDetalle()" class="text-naval-300 hover:text-white text-2xl transition">&times;</button>
+                    <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                        <span>🧬</span> Análisis Semántico
+                    </h2>
+                    <button onclick="cerrarDetalle()" class="text-blue-300/50 hover:text-white text-2xl transition">&times;</button>
                 </div>
                 <div id="detalleContenido"></div>
             </div>
         </div>
         
         <!-- MODAL -->
-        <div id="modalPersonalizado" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center">
-            <div class="bg-naval-800 rounded-2xl p-8 max-w-md w-full mx-4 border border-naval-600">
+        <div id="modalPersonalizado" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center">
+            <div class="glass rounded-2xl p-8 max-w-md w-full mx-4">
                 <h2 class="text-2xl font-bold text-white mb-6">Reporte Personalizado</h2>
                 <div class="mb-4">
-                    <label class="block text-sm text-naval-200 mb-2">Fecha Inicio</label>
-                    <input type="date" id="fechaInicio" class="w-full px-4 py-2.5 bg-naval-700 border border-naval-500 rounded-lg text-white">
+                    <label class="block text-sm text-blue-300/70 mb-2">Fecha Inicio</label>
+                    <input type="date" id="fechaInicio" class="w-full px-4 py-2.5">
                 </div>
                 <div class="mb-6">
-                    <label class="block text-sm text-naval-200 mb-2">Fecha Fin</label>
-                    <input type="date" id="fechaFin" class="w-full px-4 py-2.5 bg-naval-700 border border-naval-500 rounded-lg text-white">
+                    <label class="block text-sm text-blue-300/70 mb-2">Fecha Fin</label>
+                    <input type="date" id="fechaFin" class="w-full px-4 py-2.5">
                 </div>
                 <div class="flex gap-4">
-                    <button onclick="cerrarModal()" class="flex-1 px-4 py-2.5 bg-naval-700 text-white rounded-lg">Cancelar</button>
-                    <button onclick="generarReportePersonalizado()" class="flex-1 px-4 py-2.5 btn-gold rounded-lg">Generar</button>
+                    <button onclick="cerrarModal()" class="flex-1 px-4 py-2.5 bg-[#1a2332] text-white rounded-xl">Cancelar</button>
+                    <button onclick="generarReportePersonalizado()" class="flex-1 px-4 py-2.5 btn-gold rounded-xl">Generar</button>
                 </div>
             </div>
         </div>
@@ -419,148 +491,146 @@
 
     <script>
         // ============================================
-        // SUPERPROMPT ULTRA-REFINADO v6.0
+        // PROMPT DE ANÁLISIS SEMÁNTICO ULTRA-PRECISO
         // ============================================
         
-        const SUPERPROMPT = `ERES UN ANALISTA DE SENTIMIENTOS DE ÉLITE ESPECIALIZADO EN REDES SOCIALES PERUANAS. TU ÚNICA TAREA ES ANALIZAR COMENTARIOS Y DEVOLVER EXCLUSIVAMENTE UN OBJETO JSON. NO AÑADAS TEXTO, EXPLICACIONES NI MARKDOWN.
+        const PROMPT_SEMANTICO = `ERES UN ANALISTA FORENSE DE LENGUAJE NATURAL ESPECIALIZADO EN COMUNICACIÓN POLÍTICA PERUANA. TU TAREA ES ANALIZAR COMENTARIOS DE REDES SOCIALES CON PRECISIÓN QUIRÚRGICA.
 
-REGLAS FUNDAMENTALES DE SENTIMIENTO (LO MÁS IMPORTANTE):
+CONTEXTO: Estás analizando comentarios de ciudadanos sobre la Municipalidad Metropolitana de Lima (MML).
 
-1. NEGATIVO: CUALQUIERA de estas condiciones:
-   - Crítica, queja, insulto, burla, sarcasmo, ironía, chiste con intención de menospreciar
-   - Emojis negativos o de burla: 🤡😡🤬💩🙄😒🖕👎
-   - Hashtags usados con ironía o burla: #LimaPotenciaMundial 🤡 = BURLA
-   - Palabras despectivas: miserable, payasada, fantoche, rata, ratero, coimero, inútil, mediocre, corrupto, estafa, asco, vergüenza, desastre, caos, pésimo, terrible, horrible, lamentable, ridículo, patético, inepto, incapaz
-   - Expresiones de frustración, indignación, hartazgo, descontento
-   - Menciones a figuras políticas con tono crítico o burlesco
-   - Sarcasmo detectado: "qué bonito", "qué bien", "sigan así", "buen trabajo" en contexto crítico
-   - CUALQUIER forma de menosprecio o descalificación
+DEVUELVE EXCLUSIVAMENTE UN OBJETO JSON VÁLIDO. NADA DE TEXTO ADICIONAL. NADA DE MARKDOWN.
 
-2. POSITIVO: SOLO cuando es GENUINAMENTE positivo:
-   - Felicitaciones, agradecimientos sinceros, elogios, satisfacción real
-   - Emojis genuinamente positivos: 😊❤️👍👏🎉✨
-   - Sin ironía ni doble intención
+═══════════════════════════════════════════════
+SECCIÓN 1: ANÁLISIS DE SENTIMIENTO
+═══════════════════════════════════════════════
 
-3. NEUTRAL: SOLO cuando es puramente informativo:
-   - Preguntas objetivas sin carga emocional
-   - Datos o información sin opinión
-   - Si hay la MÁS MÍNIMA duda entre Neutral y Negativo → ELIGE NEGATIVO
+CLASIFICA EL SENTIMIENTO GENERAL DEL COMENTARIO:
 
-DETECCIÓN DE BURLA/SARCASMO/IRONÍA (ANÁLISIS CRÍTICO):
-- Emoji 🤡 = burla, ridiculización → SIEMPRE NEGATIVO
-- Hashtag + 🤡 = burla intensificada
-- "qué bonito" después de crítica = sarcasmo → NEGATIVO
-- "sigan así" en contexto negativo = ironía → NEGATIVO
-- Cualquier frase que suene a chiste pero critique = NEGATIVO
-- Comparaciones despectivas = NEGATIVO
-- "poco o nada harán" = crítica → NEGATIVO
-- "puro show", "pura pantalla", "figuretti" = crítica → NEGATIVO
-- "payasada", "circo", "espectáculo" en contexto político = NEGATIVO
+"NEGATIVO" - ELIGE ESTO SI EL COMENTARIO CONTIENE AL MENOS UNO DE:
+├── Crítica directa a la gestión municipal
+├── Uso de apodos despectivos o insultos (MONSE, Porky, rata, fantoche, etc.)
+├── Palabras en MAYÚSCULAS usadas como énfasis negativo (QUEBRADA, CAOS, DESASTRE)
+├── Ironía, sarcasmo o burla (incluyendo emojis como 🤡)
+├── Acusaciones de corrupción, incapacidad, abandono
+├── Comparaciones negativas o despectivas
+├── Lenguaje que expresa frustración, enojo, indignación
+├── Frases como "no sirven", "no hacen nada", "puro show", "son un desastre"
+├── CUALQUIER expresión de descontento o crítica
+└── Si hay la MÁS MÍNIMA duda, elige NEGATIVO
 
-ANÁLISIS DE HASHTAGS:
-- #LimaPotenciaMundial con 🤡 = burla política → NEGATIVO
-- Cualquier hashtag con emoji negativo = NEGATIVO
-- Hashtags que contradicen el texto = probable sarcasmo → NEGATIVO
+"POSITIVO" - SOLO si es GENUINAMENTE positivo:
+├── Felicitaciones sinceras
+├── Agradecimientos genuinos
+└── Elogios sin ironía
 
-CLASIFICACIÓN DE TIPO:
-- "Burla": Usa humor, ironía, emojis 🤡 para ridiculizar
-- "Sarcasmo": Ironía evidente, dice lo contrario de lo que piensa
-- "Crítica": Señala errores, cuestiona, expresa descontento
-- "Insulto": Lenguaje vulgar, agresiones verbales, descalificaciones
-- "Denuncia": Acusa corrupción, robo, estafa, delito
-- "Queja": Expresa insatisfacción, molestia, frustración
-- "Felicitación": Elogia, felicita genuinamente
-- "Agradecimiento": Da gracias sinceramente
-- "Consulta": Pregunta objetiva
-- "Sugerencia": Propone mejoras
-- "Opinión": Punto de vista sin carga emocional fuerte
-- "Información": Datos objetivos
+"NEUTRAL" - SOLO si es puramente informativo:
+├── Preguntas objetivas sin carga emocional
+└── Datos sin opinión
 
-CLASIFICACIÓN DE TEMA:
-- "Seguridad Ciudadana": delincuencia, robos, policía, serenazgo, violencia, drogas, pandillaje
-- "Gestión Municipal": alcalde, funcionarios, corrupción, administración, política, presupuesto
-- "Limpieza Pública": basura, limpieza, residuos, reciclaje
-- "Transporte": tráfico, buses, pistas, semáforos, movilidad
-- "Obras Públicas": construcciones, parques, veredas, infraestructura
-- "Atención al Ciudadano": trámites, ventanilla, servicio, burocracia
-- "Eventos y Cultura": festivales, conciertos, espectáculos, ferias
-- "Medio Ambiente": contaminación, áreas verdes, ecología
-- "Salud": hospitales, postas, epidemias
-- "General": cuando no encaja claramente
+⚠️ REGLA DE ORO: SI HAY DUDA ENTRE NEUTRAL Y NEGATIVO, ELIGE NEGATIVO.
+
+═══════════════════════════════════════════════
+SECCIÓN 2: DETECCIÓN DE TIPO DE COMENTARIO
+═══════════════════════════════════════════════
+
+"Crítica" → Señala errores, cuestiona gestión, expresa descontento
+"Insulto" → Usa lenguaje ofensivo, apodos despectivos, descalificaciones
+"Burla" → Usa humor, ironía, emojis para ridiculizar
+"Sarcasmo" → Dice lo contrario de lo que piensa
+"Denuncia" → Acusa corrupción, robo, estafa, delitos
+"Queja" → Expresa insatisfacción, molestia
+"Felicitación" → Elogia genuinamente
+"Consulta" → Pregunta objetiva
+"Sugerencia" → Propone mejoras
+"Opinión" → Punto de vista sin carga fuerte
+
+═══════════════════════════════════════════════
+SECCIÓN 3: DETECCIÓN DE TEMA
+═══════════════════════════════════════════════
+
+"Gestión Municipal" → Críticas a la administración, alcalde, funcionarios, finanzas, corrupción
+"Seguridad Ciudadana" → Delincuencia, policía, serenazgo, robos
+"Limpieza Pública" → Basura, residuos, limpieza
+"Transporte" → Tráfico, buses, movilidad
+"Obras Públicas" → Construcciones, parques, infraestructura
+"General" → Si no encaja claramente
+
+═══════════════════════════════════════════════
+SECCIÓN 4: ANÁLISIS DE GRAVEDAD
+═══════════════════════════════════════════════
 
 PRIORIDAD:
-- "Alta": Insultos, amenazas, burlas agresivas, denuncias, acusaciones graves, lenguaje vulgar, riesgo de viralización
-- "Media": Quejas, críticas moderadas, consultas urgentes
-- "Baja": Opiniones, sugerencias, felicitaciones, información
+"Alta" → Insultos, acusaciones graves, lenguaje muy agresivo, riesgo de viralización
+"Media" → Críticas moderadas, quejas
+"Baja" → Opiniones, sugerencias, felicitaciones
 
 RIESGO REPUTACIONAL:
-- "Alto": Puede dañar seriamente la imagen, lenguaje muy agresivo, acusaciones de corrupción, potencial viral
-- "Medio": Crítica negativa pero sin potencial masivo
-- "Bajo": No afecta la reputación
+"Alto" → Puede dañar imagen institucional, lenguaje agresivo, acusaciones
+"Medio" → Crítica negativa sin potencial masivo
+"Bajo" → No afecta reputación
 
-NECESITA RESPUESTA:
-- true: Denuncias, quejas, consultas, críticas que requieren atención, insultos que escalan
-- false: Opiniones, felicitaciones, agradecimientos
+═══════════════════════════════════════════════
+SECCIÓN 5: RESUMEN Y PALABRAS CLAVE
+═══════════════════════════════════════════════
 
-RESUMEN: Una frase de máximo 15 palabras que capture la esencia exacta del comentario.
+RESUMEN: Una frase de máximo 15 palabras capturando la esencia.
+PALABRAS CLAVE: Array de 3-5 palabras/expresiones relevantes.
 
-PALABRAS CLAVE: Array de 3-5 palabras/expresiones que mejor representen el contenido.
+═══════════════════════════════════════════════
+FORMATO DE RESPUESTA (OBLIGATORIO):
+═══════════════════════════════════════════════
 
-FORMATO DE RESPUESTA (OBLIGATORIO - SOLO ESTE JSON, NADA MÁS):
 {
   "sentimiento": "Negativo",
-  "tipo": "Burla",
+  "tipo": "Crítica",
   "tema": "Gestión Municipal",
   "prioridad": "Alta",
   "riesgo": "Medio",
   "necesitaRespuesta": true,
-  "resumen": "Burla con ironía sobre gestión municipal usando hashtag y emoji de ridiculización",
-  "palabrasClave": ["burla", "ironía", "gestión", "hashtag", "ridiculización"]
-}
-
-RECUERDA: ANTE LA DUDA, ELIGE NEGATIVO. PREFIERO FALSOS NEGATIVOS QUE FALSOS NEUTRALES.`;
+  "resumen": "Crítica contundente a la gestión municipal con lenguaje despectivo",
+  "palabrasClave": ["crítica", "gestión", "quiebra", "insulto", "municipalidad"]
+}`;
 
         // ============================================
-        // ESTADO
+        // ESTADO GLOBAL
         // ============================================
         
         const STATE = {
             datos: [],
             filtrados: [],
-            apiKey: localStorage.getItem('gemini_key_v6') || '',
-            prompt: localStorage.getItem('gemini_prompt_v6') || SUPERPROMPT,
+            apiKey: localStorage.getItem('sentinel_api_key_v7') || '',
+            prompt: localStorage.getItem('sentinel_prompt_v7') || PROMPT_SEMANTICO,
             tablaData: null,
             graficos: {},
-            reporte: null,
-            vistaActual: 'dashboard'
+            reporte: null
         };
         
         // ============================================
-        // MOTOR IA CON SUPERPROMT REFINADO
+        // MOTOR DE ANÁLISIS SEMÁNTICO
         // ============================================
         
-        class MotorIA {
+        class AnalizadorSemantico {
             
             static async analizar(texto) {
-                if (!STATE.apiKey) return this.fallbackRefinado(texto);
+                if (!STATE.apiKey) return this.fallbackAvanzado(texto);
                 
                 try {
                     const resultado = await this.llamarGemini(texto);
-                    return { ...resultado, fuente: 'Gemini IA v6.0', confianza: 0.99 };
+                    return { ...resultado, fuente: 'Gemini Pro', confianza: 0.99 };
                 } catch (e) {
-                    console.error('Error Gemini:', e.message);
-                    return { ...this.fallbackRefinado(texto), fuente: 'Fallback Local', confianza: 0.80 };
+                    console.warn('Gemini falló:', e.message);
+                    return { ...this.fallbackAvanzado(texto), fuente: 'Motor Local', confianza: 0.85 };
                 }
             }
             
             static async llamarGemini(texto) {
                 const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${STATE.apiKey}`;
                 
-                const response = await fetch(url, {
+                const res = await fetch(url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        contents: [{ parts: [{ text: `${STATE.prompt}\n\nCOMENTARIO A ANALIZAR:\n"${texto}"\n\nRESPONDE SOLO CON JSON:` }] }],
+                        contents: [{ parts: [{ text: `${STATE.prompt}\n\n═══ COMENTARIO A ANALIZAR ═══\n"${texto}"\n\n═══ RESPUESTA (SOLO JSON) ═══` }] }],
                         generationConfig: { temperature: 0.05, topK: 1, topP: 0.9, maxOutputTokens: 350 },
                         safetySettings: [
                             { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },
@@ -571,126 +641,175 @@ RECUERDA: ANTE LA DUDA, ELIGE NEGATIVO. PREFIERO FALSOS NEGATIVOS QUE FALSOS NEU
                     })
                 });
                 
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
                 
-                const data = await response.json();
+                const data = await res.json();
                 const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
                 
-                const jsonMatch = text.match(/\{[\s\S]*\}/);
-                if (!jsonMatch) throw new Error('JSON no encontrado');
+                const match = text.match(/\{[\s\S]*\}/);
+                if (!match) throw new Error('JSON no encontrado');
                 
-                let analisis = JSON.parse(jsonMatch[0].replace(/[\u0000-\u001F]/g, '').replace(/\n/g, ' '));
+                let analisis = JSON.parse(match[0].replace(/[\u0000-\u001F]/g, ''));
                 
-                // Normalizar
-                analisis.sentimiento = this.normalizar(analisis.sentimiento, ['Positivo', 'Neutral', 'Negativo'], 'Neutral');
-                analisis.prioridad = this.normalizar(analisis.prioridad, ['Alta', 'Media', 'Baja'], 'Media');
-                analisis.riesgo = this.normalizar(analisis.riesgo, ['Alto', 'Medio', 'Bajo'], 'Bajo');
-                analisis.tipo = analisis.tipo || 'Opinión';
-                analisis.tema = analisis.tema || 'General';
-                analisis.necesitaRespuesta = analisis.necesitaRespuesta || false;
-                analisis.resumen = analisis.resumen || 'Sin resumen';
-                analisis.palabrasClave = analisis.palabrasClave || [];
+                // Normalizar valores
+                analisis.sentimiento = this.normalizarSentimiento(analisis.sentimiento);
+                analisis.prioridad = this.normalizarPrioridad(analisis.prioridad);
+                analisis.riesgo = this.normalizarRiesgo(analisis.riesgo);
                 
                 return analisis;
             }
             
-            static normalizar(valor, opciones, defecto) {
-                const v = (valor || '').toLowerCase().trim();
-                for (const op of opciones) {
-                    if (v.includes(op.toLowerCase())) return op;
-                }
-                return defecto;
+            static normalizarSentimiento(s) {
+                s = (s || '').toLowerCase();
+                if (s.includes('neg')) return 'Negativo';
+                if (s.includes('pos')) return 'Positivo';
+                return 'Neutral';
             }
             
-            static fallbackRefinado(texto) {
+            static normalizarPrioridad(p) {
+                p = (p || '').toLowerCase();
+                if (p.includes('alta')) return 'Alta';
+                if (p.includes('media')) return 'Media';
+                return 'Baja';
+            }
+            
+            static normalizarRiesgo(r) {
+                r = (r || '').toLowerCase();
+                if (r.includes('alto')) return 'Alto';
+                if (r.includes('medio')) return 'Medio';
+                return 'Bajo';
+            }
+            
+            static fallbackAvanzado(texto) {
                 const t = texto.toLowerCase();
                 
-                // Detección de burla/sarcasmo (PRIORIDAD MÁXIMA)
-                const indicadoresBurla = [
-                    '🤡', 'payasada', 'circo', 'espectáculo', 'show', 'pantomima',
-                    'qué bonito', 'qué lindo', 'qué bien', 'sigan así', 'sigan asi',
-                    'buen trabajo', 'felicidades', 'sigan mejorando',
-                    'puro show', 'pura pantalla', 'figuretti', 'showsero',
-                    'poco o nada', 'no hacen nada', 'no sirven'
+                // Diccionario de APODOS POLÍTICOS PERUANOS
+                const apodosDespectivos = [
+                    'monse', 'porky', 'rata', 'ratero', 'fantoche', 'payaso', 'bufón',
+                    'títere', 'marioneta', 'muñeco', 'tibio', 'vendido', 'traidor',
+                    'coimero', 'mermelero', 'argollero', 'pituco', 'cavitur',
+                    'chanchullo', 'chanchada', 'cochinada', 'porquería'
                 ];
                 
-                let nivelBurla = 0;
-                indicadoresBurla.forEach(i => { if (t.includes(i)) nivelBurla += 10; });
+                // Palabras de CRÍTICA FINANCIERA/ADMINISTRATIVA
+                const palabrasCriticaGestion = [
+                    'quebrada', 'quebrado', 'quiebra', 'deuda', 'déficit', 'despilfarro',
+                    'malversación', 'sobrevalorado', 'inflado', 'sobrecosto',
+                    'no hacen nada', 'no sirven', 'no funciona', 'abandonado',
+                    'olvidado', 'desatendido', 'pésima gestión', 'mala gestión',
+                    'ineficiente', 'incapaz', 'incompetente', 'mediocre',
+                    'desastre', 'caos', 'crisis', 'colapso', 'fracaso'
+                ];
                 
-                // Hashtags con ironía
-                if (t.includes('#') && nivelBurla > 0) nivelBurla += 5;
+                // Palabras negativas generales
+                const negativas = [
+                    'malo', 'pésimo', 'terrible', 'horrible', 'lamentable', 'vergüenza',
+                    'asco', 'indignante', 'inaceptable', 'ridículo', 'patético',
+                    'inepto', 'inútil', 'basura', 'mierda', 'estafa', 'robo',
+                    'ladrón', 'sinvergüenza', 'caradura', 'descarado', 'corrupto',
+                    'mentira', 'falso', 'engaño', 'demagogo', 'populista',
+                    'oportunista', 'ventajista'
+                ];
                 
-                // Emojis negativos
-                const emojisNegativos = ['🤡', '😡', '🤬', '💩', '🙄', '😒', '🖕', '👎'];
-                emojisNegativos.forEach(e => { if (t.includes(e)) nivelBurla += 8; });
+                let puntaje = 0;
+                let tieneApodo = false;
+                let tieneCriticaGestion = false;
+                let tieneMayusculasEnfasis = false;
                 
-                // Palabras negativas
-                const negativas = ['miserable', 'fantoche', 'rata', 'ratero', 'coimero', 'inútil',
-                                  'mediocre', 'corrupto', 'estafa', 'asco', 'vergüenza', 'desastre',
-                                  'caos', 'pésimo', 'terrible', 'horrible', 'lamentable', 'ridículo',
-                                  'patético', 'inepto', 'incapaz', 'cojudo', 'huevón', 'pendejo',
-                                  'conchudo', 'mierda', 'basura', 'ladrón', 'sinvergüenza'];
+                // Detectar apodos despectivos (MUY NEGATIVO)
+                apodosDespectivos.forEach(apodo => {
+                    if (t.includes(apodo)) {
+                        tieneApodo = true;
+                        puntaje -= 15;
+                    }
+                });
                 
-                let score = 0;
-                negativas.forEach(n => { if (t.includes(n)) score -= 5; });
+                // Detectar críticas de gestión
+                palabrasCriticaGestion.forEach(palabra => {
+                    if (t.includes(palabra)) {
+                        tieneCriticaGestion = true;
+                        puntaje -= 10;
+                    }
+                });
                 
-                score -= nivelBurla;
+                // Detectar MAYÚSCULAS como énfasis
+                const palabras = texto.split(/\s+/);
+                let contadorMayusculas = 0;
+                palabras.forEach(p => {
+                    if (p === p.toUpperCase() && p.length > 3 && /[A-ZÁÉÍÓÚÜÑ]/.test(p)) {
+                        contadorMayusculas++;
+                    }
+                });
+                if (contadorMayusculas >= 1) {
+                    tieneMayusculasEnfasis = true;
+                    puntaje -= contadorMayusculas * 3;
+                }
+                
+                // Palabras negativas generales
+                negativas.forEach(n => {
+                    if (t.includes(n)) puntaje -= 5;
+                });
+                
+                // Menciones (@) + contexto negativo
+                if (t.includes('@') && puntaje < 0) puntaje -= 5;
                 
                 // Determinar sentimiento
                 let sentimiento;
-                if (score <= -8 || nivelBurla >= 8) sentimiento = 'Negativo';
-                else if (score >= 8) sentimiento = 'Positivo';
-                else sentimiento = 'Neutral';
+                if (puntaje <= -8 || tieneApodo || tieneCriticaGestion) {
+                    sentimiento = 'Negativo';
+                } else if (puntaje >= 8) {
+                    sentimiento = 'Positivo';
+                } else {
+                    sentimiento = 'Neutral';
+                }
                 
-                // Si hay burla evidente, FORZAR Negativo
-                if (nivelBurla >= 5) sentimiento = 'Negativo';
+                // FORZAR Negativo si hay apodos o críticas de gestión
+                if (tieneApodo || tieneCriticaGestion) {
+                    sentimiento = 'Negativo';
+                }
                 
-                // Tipo
+                // Determinar tipo
                 let tipo = 'Opinión';
-                if (nivelBurla >= 8) tipo = 'Burla';
-                else if (nivelBurla >= 3) tipo = 'Sarcasmo';
-                else if (score <= -10) tipo = 'Crítica';
+                if (tieneApodo) tipo = 'Insulto';
+                else if (tieneCriticaGestion) tipo = 'Crítica';
                 else if (/denuncia|corrupción|estafa|robo|coima/i.test(t)) tipo = 'Denuncia';
-                else if (score <= -5) tipo = 'Queja';
+                else if (/🤡|burla|ironía|sarcasmo|chiste/i.test(t)) tipo = 'Burla';
+                else if (sentimiento === 'Negativo') tipo = 'Crítica';
                 else if (t.includes('?')) tipo = 'Consulta';
-                else if (/felicit|gracias|excelente|bacán/i.test(t)) tipo = 'Felicitación';
+                else if (/felicit|gracias|excelente/i.test(t)) tipo = 'Felicitación';
                 
                 // Tema
-                const temas = {
-                    'Seguridad Ciudadana': ['seguridad', 'policía', 'serenazgo', 'delincuencia', 'robo', 'crimen'],
-                    'Gestión Municipal': ['alcalde', 'gestión', 'municipal', 'corrupción', 'coima', 'política', 'gobierno'],
-                    'Limpieza Pública': ['basura', 'limpieza', 'residuos'],
-                    'Transporte': ['transporte', 'tráfico', 'bus', 'movilidad'],
-                    'Obras Públicas': ['obra', 'construcción', 'pista', 'parque', 'infraestructura'],
-                    'Eventos y Cultura': ['evento', 'cultura', 'festival', 'espectáculo'],
-                    'General': []
-                };
-                
                 let tema = 'General';
-                let maxC = 0;
-                for (const [nom, pals] of Object.entries(temas)) {
-                    let c = 0;
-                    pals.forEach(p => { if (t.includes(p)) c++; });
-                    if (c > maxC) { maxC = c; tema = nom; }
+                if (tieneCriticaGestion || /gestión|municipal|alcalde|administración|quiebra|deuda/i.test(t)) {
+                    tema = 'Gestión Municipal';
+                } else if (/seguridad|delincuencia|robo|policía|serenazgo/i.test(t)) {
+                    tema = 'Seguridad Ciudadana';
+                } else if (/basura|limpieza|residuos/i.test(t)) {
+                    tema = 'Limpieza Pública';
+                } else if (/transporte|tráfico|bus/i.test(t)) {
+                    tema = 'Transporte';
                 }
                 
                 // Prioridad
                 let prioridad = 'Baja';
-                if (nivelBurla >= 8 || tipo === 'Burla' || tipo === 'Denuncia') prioridad = 'Alta';
-                else if (score <= -10) prioridad = 'Alta';
-                else if (score <= -5) prioridad = 'Media';
+                if (tieneApodo || tipo === 'Insulto' || tipo === 'Denuncia') prioridad = 'Alta';
+                else if (tieneCriticaGestion) prioridad = 'Alta';
+                else if (sentimiento === 'Negativo') prioridad = 'Media';
                 
                 // Riesgo
                 let riesgo = 'Bajo';
-                if (tipo === 'Burla' && t.includes('@')) riesgo = 'Alto';
+                if ((tieneApodo || tipo === 'Insulto') && t.includes('@')) riesgo = 'Alto';
                 else if (tipo === 'Denuncia') riesgo = 'Alto';
                 else if (prioridad === 'Alta') riesgo = 'Medio';
+                else if (sentimiento === 'Negativo') riesgo = 'Medio';
                 
                 return {
                     sentimiento, tipo, tema, prioridad, riesgo,
-                    necesitaRespuesta: ['Burla', 'Sarcasmo', 'Crítica', 'Denuncia', 'Queja', 'Consulta'].includes(tipo),
+                    necesitaRespuesta: ['Insulto', 'Crítica', 'Denuncia', 'Queja', 'Consulta'].includes(tipo),
                     resumen: `${tipo} ${sentimiento.toLowerCase()} sobre ${tema}`,
-                    palabrasClave: t.split(/\s+/).filter(w => w.length > 4).slice(0, 5)
+                    palabrasClave: t.split(/\s+/).filter(w => w.length > 4).slice(0, 5),
+                    fuente: 'Motor Local v7.0',
+                    confianza: 0.85
                 };
             }
             
@@ -703,7 +822,12 @@ RECUERDA: ANTE LA DUDA, ELIGE NEGATIVO. PREFIERO FALSOS NEGATIVOS QUE FALSOS NEU
                     const texto = c['Full Text'] || c['full_text'] || c['text'] || '';
                     
                     if (callback) {
-                        callback({ actual: i + 1, total, porcentaje: Math.round(((i+1)/total)*100), texto: texto.substring(0,60) });
+                        callback({
+                            actual: i + 1,
+                            total,
+                            porcentaje: Math.round(((i + 1) / total) * 100),
+                            texto: texto.substring(0, 60)
+                        });
                     }
                     
                     const analisis = await this.analizar(texto.toString());
@@ -722,32 +846,34 @@ RECUERDA: ANTE LA DUDA, ELIGE NEGATIVO. PREFIERO FALSOS NEGATIVOS QUE FALSOS NEU
         
         async function procesarComentarios(datosCrudos) {
             const limpios = datosCrudos
-                .filter(f => (f['Full Text'] || f['full_text'] || f['text'] || '').toString().trim())
+                .filter(f => {
+                    const t = f['Full Text'] || f['full_text'] || f['text'] || '';
+                    return t.toString().trim().length > 0;
+                })
                 .filter((f, i, self) => {
                     const id = f['Tweet Id'] || f['tweet_id'] || f['id'];
                     return i === self.findIndex(x => (x['Tweet Id'] || x['tweet_id'] || x['id']) === id);
                 });
             
-            const pc = document.getElementById('progressContainer');
-            const pb = document.getElementById('progressBar');
-            const pt = document.getElementById('progressText');
-            const pp = document.getElementById('progressPercent');
-            const pd = document.getElementById('progressDetail');
+            console.log(`📊 ${limpios.length} comentarios a analizar`);
             
+            const pc = document.getElementById('progressContainer');
             pc.classList.remove('hidden');
             
-            STATE.datos = await MotorIA.analizarLote(limpios, (p) => {
-                pb.style.width = p.porcentaje + '%';
-                pp.textContent = p.porcentaje + '%';
-                pt.textContent = `🧠 Analizando... ${p.actual}/${p.total}`;
-                pd.textContent = `"${p.texto}..."`;
+            STATE.datos = await AnalizadorSemantico.analizarLote(limpios, (p) => {
+                document.getElementById('progressBar').style.width = p.porcentaje + '%';
+                document.getElementById('progressPercent').textContent = p.porcentaje + '%';
+                document.getElementById('progressText').textContent = `🧬 Análisis semántico... ${p.actual}/${p.total}`;
+                document.getElementById('progressDetail').textContent = `"${p.texto}..."`;
             });
             
             STATE.filtrados = [...STATE.datos];
-            setTimeout(() => pc.classList.add('hidden'), 1000);
+            setTimeout(() => pc.classList.add('hidden'), 800);
             
             console.log('✅ Análisis completado');
-            console.log('📝 Muestra:', STATE.datos[0]?._analisis);
+            if (STATE.datos.length > 0) {
+                console.log('📝 Muestra:', STATE.datos[0]._analisis);
+            }
             
             renderizarDashboard();
         }
@@ -755,6 +881,7 @@ RECUERDA: ANTE LA DUDA, ELIGE NEGATIVO. PREFIERO FALSOS NEGATIVOS QUE FALSOS NEU
         function procesarArchivo(e) {
             const file = e.target.files[0];
             if (!file) return;
+            
             const reader = new FileReader();
             reader.onload = async function(ev) {
                 try {
@@ -764,7 +891,9 @@ RECUERDA: ANTE LA DUDA, ELIGE NEGATIVO. PREFIERO FALSOS NEGATIVOS QUE FALSOS NEU
                     const json = XLSX.utils.sheet_to_json(ws);
                     await procesarComentarios(json);
                     alert(`✅ ${STATE.datos.length} comentarios analizados`);
-                } catch(err) { alert('❌ Error: ' + err.message); }
+                } catch(err) {
+                    alert('❌ Error: ' + err.message);
+                }
             };
             reader.readAsArrayBuffer(file);
         }
@@ -772,51 +901,44 @@ RECUERDA: ANTE LA DUDA, ELIGE NEGATIVO. PREFIERO FALSOS NEGATIVOS QUE FALSOS NEU
         async function cargarDemo() {
             const demo = [
                 {
-                    'Tweet Id': '6001',
-                    'Full Text': '@MuniLima #LimaPotenciaMundial 🤡',
-                    'Created At': '2024-02-01 10:00:00',
-                    'User Name': 'Ciudadano Burlón',
-                    'Favorite Count': 234, 'Retweet Count': 156, 'Reply Count': 89
+                    'Tweet Id': '7001',
+                    'Full Text': '@MuniLima Este MONSE está asustado. Su legado es el de Porky. Una municipalidad QUEBRADA.',
+                    'Created At': '2024-03-15 10:30:00',
+                    'User Name': 'Ciudadano Crítico',
+                    'Favorite Count': 245, 'Retweet Count': 134, 'Reply Count': 67
                 },
                 {
-                    'Tweet Id': '6002',
-                    'Full Text': 'Ésta payasada sólo sirve para los espectáculos, estos miserables poco o nada harán por la seguridad ciudadana.',
-                    'Created At': '2024-02-01 11:00:00',
-                    'User Name': 'Vecino Crítico',
+                    'Tweet Id': '7002',
+                    'Full Text': '@MuniLima #LimaPotenciaMundial 🤡',
+                    'Created At': '2024-03-15 11:00:00',
+                    'User Name': 'Burlón Anónimo',
                     'Favorite Count': 189, 'Retweet Count': 98, 'Reply Count': 45
                 },
                 {
-                    'Tweet Id': '6003',
-                    'Full Text': '@MuniLima @Renzo_Reggiardo @KeikoFujimori Besarle el cul0 dirán a la rata de @KeikoFujimori',
-                    'Created At': '2024-02-01 12:00:00',
-                    'User Name': 'Indignado',
-                    'Favorite Count': 345, 'Retweet Count': 234, 'Reply Count': 123
-                },
-                {
-                    'Tweet Id': '6004',
-                    'Full Text': 'Excelente trabajo de limpieza en el Centro. ¡Gracias por mantener todo limpio! ❤️',
-                    'Created At': '2024-01-31 09:00:00',
+                    'Tweet Id': '7003',
+                    'Full Text': 'Excelente trabajo de limpieza en el Centro Histórico. ¡Gracias por mantener todo impecable! ❤️',
+                    'Created At': '2024-03-14 09:00:00',
                     'User Name': 'Vecina Agradecida',
-                    'Favorite Count': 56, 'Retweet Count': 12, 'Reply Count': 5
+                    'Favorite Count': 67, 'Retweet Count': 15, 'Reply Count': 8
                 },
                 {
-                    'Tweet Id': '6005',
-                    'Full Text': '¿Cuál es el horario de atención para trámites de licencia de construcción?',
-                    'Created At': '2024-01-31 14:00:00',
+                    'Tweet Id': '7004',
+                    'Full Text': '¿Cuál es el horario de atención para licencias de construcción?',
+                    'Created At': '2024-03-14 14:00:00',
                     'User Name': 'Ciudadano Consulta',
-                    'Favorite Count': 2, 'Retweet Count': 0, 'Reply Count': 1
+                    'Favorite Count': 3, 'Retweet Count': 0, 'Reply Count': 2
                 },
                 {
-                    'Tweet Id': '6006',
-                    'Full Text': 'Qué bonito parque hicieron en Miraflores, lástima que de noche es tierra de nadie. Puro show para la foto.',
-                    'Created At': '2024-01-30 16:00:00',
+                    'Tweet Id': '7005',
+                    'Full Text': 'Qué bonito parque hicieron, lástima que de noche es tierra de nadie. Puro show.',
+                    'Created At': '2024-03-13 16:00:00',
                     'User Name': 'Vecino Realista',
-                    'Favorite Count': 78, 'Retweet Count': 34, 'Reply Count': 15
+                    'Favorite Count': 89, 'Retweet Count': 34, 'Reply Count': 15
                 }
             ];
             
             await procesarComentarios(demo);
-            alert('✅ Datos demo analizados. Revisa la detección de burla y sarcasmo.');
+            alert('✅ Datos demo analizados. Verifica el primer comentario (MONSE, Porky, QUEBRADA).');
         }
         
         // ============================================
@@ -827,6 +949,8 @@ RECUERDA: ANTE LA DUDA, ELIGE NEGATIVO. PREFIERO FALSOS NEGATIVOS QUE FALSOS NEU
             if (!STATE.datos.length) return;
             
             const d = STATE.filtrados;
+            
+            // KPIs
             const s = {}, tipos = {};
             let likes = 0, riesgos = 0;
             
@@ -839,23 +963,28 @@ RECUERDA: ANTE LA DUDA, ELIGE NEGATIVO. PREFIERO FALSOS NEGATIVOS QUE FALSOS NEU
             
             const kpis = [
                 { label: 'Total', value: d.length, icon: '📊', color: 'text-blue-400' },
-                { label: 'Positivos', value: s['Positivo'] || 0, icon: '😊', color: 'text-green-400' },
-                { label: 'Neutrales', value: s['Neutral'] || 0, icon: '😐', color: 'text-yellow-400' },
-                { label: 'Negativos', value: s['Negativo'] || 0, icon: '😡', color: 'text-red-400' },
-                { label: 'Riesgo Alto', value: riesgos, icon: '⚠️', color: 'text-orange-400' },
-                { label: 'Likes', value: likes, icon: '❤️', color: 'text-pink-400' }
+                { label: '😊 Positivos', value: s['Positivo'] || 0, icon: '🟢', color: 'text-green-400' },
+                { label: '😐 Neutrales', value: s['Neutral'] || 0, icon: '🟡', color: 'text-yellow-400' },
+                { label: '😡 Negativos', value: s['Negativo'] || 0, icon: '🔴', color: 'text-red-400' },
+                { label: '⚠️ Riesgo Alto', value: riesgos, icon: '🚨', color: 'text-orange-400' },
+                { label: '❤️ Likes', value: likes, icon: '💜', color: 'text-pink-400' }
             ];
             
             document.getElementById('kpiContainer').innerHTML = kpis.map(k => `
                 <div class="kpi-card rounded-xl p-4">
                     <div class="flex justify-between items-center mb-2">
-                        <span class="text-xs text-naval-200 uppercase">${k.label}</span>
-                        <span class="text-2xl">${k.icon}</span>
+                        <span class="text-xs text-blue-300/60 uppercase tracking-wider">${k.label}</span>
+                        <span class="text-lg">${k.icon}</span>
                     </div>
                     <div class="text-3xl font-bold kpi-value">${k.value.toLocaleString()}</div>
                 </div>
             `).join('');
             
+            // Sidebar
+            document.getElementById('sidebar-total').textContent = d.length;
+            document.getElementById('sidebar-riesgos').textContent = riesgos;
+            
+            // Gráficos
             renderizarGraficos(d);
             renderizarTabla(d);
             actualizarFiltros(d);
@@ -970,23 +1099,22 @@ RECUERDA: ANTE LA DUDA, ELIGE NEGATIVO. PREFIERO FALSOS NEGATIVOS QUE FALSOS NEU
             if (STATE.tablaData) STATE.tablaData.destroy();
             
             document.getElementById('tablaBody').innerHTML = d.map(r => `
-                <tr class="cursor-pointer hover:bg-naval-700" onclick="mostrarDetalle('${r['Tweet Id'] || r['tweet_id']}')">
+                <tr class="cursor-pointer hover:bg-[#1a2332] transition" onclick="mostrarDetalle('${r['Tweet Id'] || r['tweet_id']}')">
                     <td class="text-xs">${new Date(r['Created At'] || '').toLocaleDateString('es-PE')}</td>
                     <td class="text-sm font-semibold text-white">${r['User Name'] || 'Anónimo'}</td>
-                    <td class="text-sm max-w-xs truncate text-naval-100">${(r['Full Text'] || '').substring(0, 70)}...</td>
-                    <td><span class="badge-sentiment badge-${(r._analisis.sentimiento || '').toLowerCase()}">${r._analisis.sentimiento}</span></td>
-                    <td class="text-xs text-naval-200">${r._analisis.tipo}</td>
-                    <td class="text-xs text-naval-200">${r._analisis.tema}</td>
+                    <td class="text-sm max-w-xs truncate text-blue-100/80">${(r['Full Text'] || '').substring(0, 70)}...</td>
+                    <td><span class="badge badge-${(r._analisis.sentimiento || '').toLowerCase()}">${r._analisis.sentimiento}</span></td>
+                    <td class="text-xs text-blue-200/80">${r._analisis.tipo}</td>
+                    <td class="text-xs text-blue-200/80">${r._analisis.tema}</td>
                     <td class="text-xs font-bold ${r._analisis.prioridad === 'Alta' ? 'text-red-400' : 'text-yellow-400'}">${r._analisis.prioridad}</td>
                     <td>
                         <div class="flex items-center space-x-2">
-                            <div class="flex-1 bg-naval-700 rounded-full h-1.5">
+                            <div class="flex-1 bg-[#0d1117] rounded-full h-1.5">
                                 <div class="h-1.5 rounded-full bg-gradient-to-r from-blue-500 to-cyan-400" style="width: ${Math.round((r._analisis.confianza || 0.99)*100)}%"></div>
                             </div>
-                            <span class="text-xs text-naval-300">${Math.round((r._analisis.confianza || 0.99)*100)}%</span>
+                            <span class="text-xs text-blue-300/50">${Math.round((r._analisis.confianza || 0.99)*100)}%</span>
                         </div>
                     </td>
-                    <td class="text-xs">${r['Favorite Count'] || 0}</td>
                 </tr>
             `).join('');
             
@@ -1001,8 +1129,8 @@ RECUERDA: ANTE LA DUDA, ELIGE NEGATIVO. PREFIERO FALSOS NEGATIVOS QUE FALSOS NEU
             const tipos = [...new Set(d.map(r => r._analisis.tipo))].sort();
             const temas = [...new Set(d.map(r => r._analisis.tema))].sort();
             
-            document.getElementById('filtroTipo').innerHTML = '<option value="">Tipo</option>' + tipos.map(t => `<option>${t}</option>`).join('');
-            document.getElementById('filtroTema').innerHTML = '<option value="">Tema</option>' + temas.map(t => `<option>${t}</option>`).join('');
+            document.getElementById('filtroTipo').innerHTML = '<option value="">Todos los tipos</option>' + tipos.map(t => `<option>${t}</option>`).join('');
+            document.getElementById('filtroTema').innerHTML = '<option value="">Todos los temas</option>' + temas.map(t => `<option>${t}</option>`).join('');
         }
         
         function aplicarFiltros() {
@@ -1010,12 +1138,10 @@ RECUERDA: ANTE LA DUDA, ELIGE NEGATIVO. PREFIERO FALSOS NEGATIVOS QUE FALSOS NEU
             const s = document.getElementById('filtroSentimiento').value;
             const ti = document.getElementById('filtroTipo').value;
             const te = document.getElementById('filtroTema').value;
-            const p = document.getElementById('filtroPrioridad').value;
             
             if (s) d = d.filter(r => r._analisis.sentimiento === s);
             if (ti) d = d.filter(r => r._analisis.tipo === ti);
             if (te) d = d.filter(r => r._analisis.tema === te);
-            if (p) d = d.filter(r => r._analisis.prioridad === p);
             
             STATE.filtrados = d;
             renderizarDashboard();
@@ -1032,45 +1158,58 @@ RECUERDA: ANTE LA DUDA, ELIGE NEGATIVO. PREFIERO FALSOS NEGATIVOS QUE FALSOS NEU
             
             document.getElementById('detalleContenido').innerHTML = `
                 <div class="space-y-5">
-                    <div class="bg-naval-800 rounded-xl p-4 border border-naval-600">
-                        <div class="flex items-center space-x-2 mb-2">
-                            <span class="text-2xl">🧠</span>
-                            <span class="font-bold text-naval-200">${a.fuente}</span>
-                            <span class="text-xs text-green-400">${Math.round((a.confianza||0.99)*100)}% confianza</span>
+                    <div class="bg-[#1a2332] rounded-xl p-4 border border-[#1e3a5f]">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-2xl">🧬</span>
+                                <span class="font-bold text-blue-200">${a.fuente}</span>
+                            </div>
+                            <span class="text-sm text-green-400 font-bold">${Math.round((a.confianza||0.99)*100)}% confianza</span>
                         </div>
                     </div>
-                    <div class="bg-naval-800 rounded-xl p-4 border border-naval-600">
-                        <h3 class="font-bold text-white">${c['User Name'] || 'Anónimo'}</h3>
-                        <p class="text-sm text-naval-300">@${c['User Screen Name'] || 'usuario'}</p>
-                        <p class="mt-3 text-white">${c['Full Text']}</p>
+                    
+                    <div class="bg-[#1a2332] rounded-xl p-4 border border-[#1e3a5f]">
+                        <h3 class="font-bold text-white text-lg">${c['User Name'] || 'Anónimo'}</h3>
+                        <p class="text-sm text-blue-300/50">@${c['User Screen Name'] || 'usuario'}</p>
+                        <div class="mt-3 p-3 bg-[#0d1117] rounded-lg border border-[#1e3a5f]">
+                            <p class="text-white text-lg">${c['Full Text']}</p>
+                        </div>
                     </div>
+                    
                     <div class="grid grid-cols-2 gap-3">
-                        <div class="bg-naval-800 rounded-xl p-4 border border-naval-600 text-center">
-                            <p class="text-xs text-naval-300">Sentimiento</p>
-                            <p class="text-xl font-bold ${a.sentimiento==='Positivo'?'text-green-400':a.sentimiento==='Negativo'?'text-red-400':'text-yellow-400'}">${a.sentimiento}</p>
+                        <div class="bg-[#1a2332] rounded-xl p-4 border border-[#1e3a5f] text-center">
+                            <p class="text-xs text-blue-300/50 mb-1">Sentimiento</p>
+                            <p class="text-2xl font-bold ${a.sentimiento==='Positivo'?'text-green-400':a.sentimiento==='Negativo'?'text-red-400':'text-yellow-400'}">${a.sentimiento}</p>
                         </div>
-                        <div class="bg-naval-800 rounded-xl p-4 border border-naval-600 text-center">
-                            <p class="text-xs text-naval-300">Tipo</p>
-                            <p class="text-xl font-bold text-blue-400">${a.tipo}</p>
+                        <div class="bg-[#1a2332] rounded-xl p-4 border border-[#1e3a5f] text-center">
+                            <p class="text-xs text-blue-300/50 mb-1">Tipo Detectado</p>
+                            <p class="text-2xl font-bold text-blue-400">${a.tipo}</p>
                         </div>
-                        <div class="bg-naval-800 rounded-xl p-4 border border-naval-600 text-center">
-                            <p class="text-xs text-naval-300">Tema</p>
-                            <p class="text-xl font-bold text-cyan-400">${a.tema}</p>
+                        <div class="bg-[#1a2332] rounded-xl p-4 border border-[#1e3a5f] text-center">
+                            <p class="text-xs text-blue-300/50 mb-1">Tema</p>
+                            <p class="text-2xl font-bold text-cyan-400">${a.tema}</p>
                         </div>
-                        <div class="bg-naval-800 rounded-xl p-4 border border-naval-600 text-center">
-                            <p class="text-xs text-naval-300">Prioridad</p>
-                            <p class="text-xl font-bold ${a.prioridad==='Alta'?'text-red-400':'text-yellow-400'}">${a.prioridad}</p>
+                        <div class="bg-[#1a2332] rounded-xl p-4 border border-[#1e3a5f] text-center">
+                            <p class="text-xs text-blue-300/50 mb-1">Prioridad</p>
+                            <p class="text-2xl font-bold ${a.prioridad==='Alta'?'text-red-400':'text-yellow-400'}">${a.prioridad}</p>
                         </div>
                     </div>
-                    <div class="bg-naval-800 rounded-xl p-4 border border-naval-600">
-                        <h4 class="font-bold text-white mb-2">🏷️ Palabras Clave</h4>
+                    
+                    <div class="bg-[#1a2332] rounded-xl p-4 border border-[#1e3a5f]">
+                        <h4 class="font-bold text-white mb-3">🏷️ Palabras Clave</h4>
                         <div class="flex flex-wrap gap-2">
-                            ${(a.palabrasClave||[]).map(p => `<span class="px-3 py-1.5 bg-naval-700 text-naval-200 rounded-full text-sm border border-naval-600">${p}</span>`).join('')}
+                            ${(a.palabrasClave||[]).map(p => `<span class="px-3 py-1.5 bg-[#0d1117] text-blue-200 rounded-full text-sm border border-[#1e3a5f]">#${p}</span>`).join('')}
                         </div>
                     </div>
-                    <div class="bg-naval-800 rounded-xl p-4 border border-naval-600">
-                        <h4 class="font-bold text-white mb-2">📝 Resumen IA</h4>
-                        <p class="text-naval-200">${a.resumen}</p>
+                    
+                    <div class="bg-[#1a2332] rounded-xl p-4 border border-[#1e3a5f]">
+                        <h4 class="font-bold text-white mb-2">📝 Resumen del Análisis</h4>
+                        <p class="text-blue-200">${a.resumen}</p>
+                    </div>
+                    
+                    <div class="bg-gradient-to-r ${a.riesgo==='Alto'?'from-red-900/30 to-red-800/20 border-red-500/30':'from-yellow-900/30 to-yellow-800/20 border-yellow-500/30'} rounded-xl p-4 border">
+                        <p class="text-white font-bold">⚠️ Riesgo Reputacional: ${a.riesgo}</p>
+                        <p class="text-white mt-1">📞 ¿Requiere respuesta?: ${a.necesitaRespuesta ? '<span class="text-red-400 font-bold">SÍ - ATENCIÓN INMEDIATA</span>' : '<span class="text-green-400">No</span>'}</p>
                     </div>
                 </div>
             `;
@@ -1090,13 +1229,6 @@ RECUERDA: ANTE LA DUDA, ELIGE NEGATIVO. PREFIERO FALSOS NEGATIVOS QUE FALSOS NEU
             if (!STATE.datos.length) return alert('No hay datos');
             
             const d = STATE.datos;
-            const s = {
-                Positivo: d.filter(r => r._analisis.sentimiento === 'Positivo').length,
-                Neutral: d.filter(r => r._analisis.sentimiento === 'Neutral').length,
-                Negativo: d.filter(r => r._analisis.sentimiento === 'Negativo').length
-            };
-            
-            const riesgos = d.filter(r => r._analisis.riesgo === 'Alto').length;
             const titulos = { diario: 'Diario', semanal: 'Semanal', mensual: 'Mensual' };
             
             STATE.reporte = { tipo, datos: d };
@@ -1104,18 +1236,15 @@ RECUERDA: ANTE LA DUDA, ELIGE NEGATIVO. PREFIERO FALSOS NEGATIVOS QUE FALSOS NEU
             document.getElementById('reporteOutput').classList.remove('hidden');
             document.getElementById('reporteOutput').innerHTML = `
                 <h2 class="text-2xl font-bold text-white mb-6">📊 Reporte ${titulos[tipo] || 'Personalizado'}</h2>
-                <div class="bg-naval-800 rounded-xl p-6 mb-6 border border-naval-600">
+                <div class="bg-[#1a2332] rounded-xl p-6 mb-6 border border-[#1e3a5f]">
                     <h3 class="text-xl font-bold text-white mb-3">Resumen Ejecutivo</h3>
-                    <p class="text-naval-200">Se analizaron <strong class="text-white">${d.length}</strong> comentarios. 
-                    Sentimiento <strong class="${s.Negativo > s.Positivo ? 'text-red-400' : 'text-green-400'}">${s.Negativo > s.Positivo ? 'predominantemente negativo' : 'mayoritariamente positivo'}</strong>.
-                    Se detectaron <strong class="text-red-400">${riesgos}</strong> riesgos altos.</p>
+                    <p class="text-blue-200">Se analizaron <strong class="text-white">${d.length}</strong> comentarios con el motor de análisis semántico.</p>
                 </div>
                 <div class="flex gap-3">
-                    <button onclick="exportarReporte('csv')" class="px-4 py-2 btn-naval rounded-lg">📥 CSV</button>
-                    <button onclick="exportarReporte('excel')" class="px-4 py-2 btn-naval rounded-lg">📊 Excel</button>
+                    <button onclick="exportarReporte('csv')" class="px-4 py-2 btn-primary rounded-xl">📥 CSV</button>
+                    <button onclick="exportarReporte('excel')" class="px-4 py-2 btn-primary rounded-xl">📊 Excel</button>
                 </div>
             `;
-            
             document.getElementById('reporteOutput').scrollIntoView({ behavior: 'smooth' });
         }
         
@@ -1132,7 +1261,7 @@ RECUERDA: ANTE LA DUDA, ELIGE NEGATIVO. PREFIERO FALSOS NEGATIVOS QUE FALSOS NEU
                 return f >= inicio && f <= fin;
             });
             
-            if (!filtrados.length) return alert('Sin datos');
+            if (!filtrados.length) return alert('Sin datos en ese rango');
             
             const orig = STATE.datos;
             STATE.datos = filtrados;
@@ -1142,7 +1271,7 @@ RECUERDA: ANTE LA DUDA, ELIGE NEGATIVO. PREFIERO FALSOS NEGATIVOS QUE FALSOS NEU
         }
         
         function exportarReporte(formato) {
-            if (!STATE.reporte) return alert('Genera un reporte');
+            if (!STATE.reporte) return alert('Genera un reporte primero');
             
             let csv = 'Fecha,Usuario,Comentario,Sentimiento,Tipo,Tema,Prioridad,Riesgo\n';
             STATE.reporte.datos.forEach(r => {
@@ -1167,7 +1296,6 @@ RECUERDA: ANTE LA DUDA, ELIGE NEGATIVO. PREFIERO FALSOS NEGATIVOS QUE FALSOS NEU
         function renderizarConfig() {
             document.getElementById('cfgApiKey').value = STATE.apiKey;
             document.getElementById('cfgPrompt').value = STATE.prompt;
-            document.getElementById('cfgNombre').value = 'Municipalidad Metropolitana de Lima';
         }
         
         function guardarConfig() {
@@ -1176,15 +1304,14 @@ RECUERDA: ANTE LA DUDA, ELIGE NEGATIVO. PREFIERO FALSOS NEGATIVOS QUE FALSOS NEU
             
             if (key) {
                 STATE.apiKey = key;
-                localStorage.setItem('gemini_key_v6', key);
+                localStorage.setItem('sentinel_api_key_v7', key);
             }
-            
             if (prompt) {
                 STATE.prompt = prompt;
-                localStorage.setItem('gemini_prompt_v6', prompt);
+                localStorage.setItem('sentinel_prompt_v7', prompt);
             }
             
-            document.getElementById('ia-status').textContent = STATE.apiKey ? '✅ Gemini Conectado' : '⚠️ Sin API Key';
+            document.getElementById('ia-status').textContent = STATE.apiKey ? '✅ Gemini Pro Conectado' : '⚠️ Modo Local';
             alert('✅ Configuración guardada');
         }
         
@@ -1193,7 +1320,6 @@ RECUERDA: ANTE LA DUDA, ELIGE NEGATIVO. PREFIERO FALSOS NEGATIVOS QUE FALSOS NEU
         // ============================================
         
         function navegar(vista) {
-            STATE.vistaActual = vista;
             document.querySelectorAll('[id^="vista-"]').forEach(el => el.classList.add('hidden'));
             document.getElementById(`vista-${vista}`).classList.remove('hidden');
             
@@ -1209,8 +1335,8 @@ RECUERDA: ANTE LA DUDA, ELIGE NEGATIVO. PREFIERO FALSOS NEGATIVOS QUE FALSOS NEU
             const key = document.getElementById('apiKey').value.trim();
             if (key) {
                 STATE.apiKey = key;
-                localStorage.setItem('gemini_key_v6', key);
-                document.getElementById('ia-status').textContent = '✅ Gemini Conectado';
+                localStorage.setItem('sentinel_api_key_v7', key);
+                document.getElementById('ia-status').textContent = '✅ Gemini Pro Conectado';
                 alert('✅ API Key guardada');
             }
         }
@@ -1226,15 +1352,18 @@ RECUERDA: ANTE LA DUDA, ELIGE NEGATIVO. PREFIERO FALSOS NEGATIVOS QUE FALSOS NEU
             
             if (STATE.apiKey) {
                 document.getElementById('apiKey').value = STATE.apiKey;
-                document.getElementById('ia-status').textContent = '✅ Gemini Conectado';
+                document.getElementById('ia-status').textContent = '✅ Gemini Pro Conectado';
             }
             
-            document.addEventListener('keydown', e => { if (e.key === 'Escape') { cerrarDetalle(); cerrarModal(); } });
+            document.addEventListener('keydown', e => {
+                if (e.key === 'Escape') { cerrarDetalle(); cerrarModal(); }
+            });
             
-            console.log('🧠 v6.0 - SuperPrompt Refinado');
-            console.log('✅ Detección de burla: 🤡, sarcasmo, ironía');
-            console.log('✅ Hashtags con contexto negativo');
-            console.log('✅ "Ante la duda, elige NEGATIVO"');
+            console.log('🧬 Sentinel AI v7.0 - Análisis Semántico');
+            console.log('✅ Detección de apodos políticos peruanos');
+            console.log('✅ Análisis de MAYÚSCULAS como énfasis');
+            console.log('✅ Comprensión de críticas financieras (QUEBRADA)');
+            console.log('✅ Prompt semántico ultra-preciso');
         });
     </script>
 </body>
