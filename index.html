@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Social Listening Dashboard | MML</title>
+    <title>Social Listening Dashboard | MML PRO</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -13,12 +13,7 @@
                 extend: {
                     fontFamily: { sans: ['Inter', 'sans-serif'] },
                     colors: {
-                        brand: {
-                            red: '#E31837',
-                            dark: '#1E293B',
-                            light: '#F8FAFC',
-                            gray: '#64748B'
-                        }
+                        brand: { red: '#E31837', dark: '#1E293B', light: '#F8FAFC', gray: '#64748B' }
                     }
                 }
             }
@@ -37,20 +32,17 @@
         }
         .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
         
-        /* Ajustes para que la tabla lea bien los comentarios largos */
         table.dataTable.no-footer { border-bottom: 1px solid #E2E8F0; width: 100% !important; }
-        table.dataTable tbody td { vertical-align: top; padding: 12px 8px; }
+        table.dataTable tbody td { vertical-align: top; padding: 16px 12px; }
         .comment-cell { 
             white-space: normal !important; 
             word-wrap: break-word; 
             min-width: 350px; 
-            line-height: 1.4;
+            line-height: 1.5;
         }
         
         .tab-content { display: none; }
         .tab-content.active { display: block; animation: fadeIn 0.3s ease-in; }
-        
-        /* Transiciones de color de red social */
         .dynamic-bg { transition: background-color 0.3s ease; }
         .dynamic-text { transition: color 0.3s ease; }
     </style>
@@ -71,8 +63,8 @@
     <div id="home-view" class="fixed inset-0 z-50 bg-brand-light flex flex-col items-center justify-center p-6 transition-opacity duration-500">
         <div class="max-w-5xl w-full text-center space-y-8">
             <div class="mb-12">
-                <h1 class="text-4xl font-bold text-brand-dark tracking-tight mb-4">Social Listening <span class="text-brand-red">Dashboard</span></h1>
-                <p class="text-lg text-brand-gray">Motor NLP Avanzado MML. Seleccione la red social a analizar.</p>
+                <h1 class="text-4xl font-bold text-brand-dark tracking-tight mb-4">Social Listening <span class="text-brand-red">PRO</span></h1>
+                <p class="text-lg text-brand-gray">Motor NLP Avanzado con Detección de Ironía y Política (Lima).</p>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -173,31 +165,27 @@
                             <p class="text-3xl font-bold text-slate-800 mt-2" id="kpi-total">0</p>
                         </div>
                         <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm border-b-4 border-b-green-500">
-                            <p class="text-sm text-slate-500 font-medium">Positivos</p>
+                            <p class="text-sm text-slate-500 font-medium">Aprobación (Positivos)</p>
                             <p class="text-3xl font-bold text-slate-800 mt-2" id="kpi-pos">0</p>
                         </div>
                         <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm border-b-4 border-b-red-500">
-                            <p class="text-sm text-slate-500 font-medium">Críticas / Insultos</p>
+                            <p class="text-sm text-slate-500 font-medium">Críticas e Insultos</p>
                             <p class="text-3xl font-bold text-slate-800 mt-2" id="kpi-neg">0</p>
                         </div>
-                        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm border-b-4 border-b-orange-500">
-                            <p class="text-sm text-slate-500 font-medium">Riesgo Alto (Prensa/Viral)</p>
-                            <p class="text-3xl font-bold text-slate-800 mt-2" id="kpi-risk">0</p>
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm border-b-4 border-b-purple-600">
+                            <p class="text-sm text-slate-500 font-medium">Ataques Políticos</p>
+                            <p class="text-3xl font-bold text-slate-800 mt-2" id="kpi-pol">0</p>
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                            <h3 class="font-semibold text-slate-700 mb-4">Sentimiento de la Ciudadanía</h3>
+                            <h3 class="font-semibold text-slate-700 mb-4">Sentimiento Real de la Ciudadanía</h3>
                             <div class="relative h-64 w-full"><canvas id="chart-sentiment"></canvas></div>
                         </div>
                         <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                            <h3 class="font-semibold text-slate-700 mb-4">Principales Temáticas Identificadas</h3>
+                            <h3 class="font-semibold text-slate-700 mb-4">Top Temáticas de Discusión</h3>
                             <div class="relative h-64 w-full"><canvas id="chart-themes"></canvas></div>
-                        </div>
-                        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm lg:col-span-2">
-                            <h3 class="font-semibold text-slate-700 mb-4">Evolución de Interacciones</h3>
-                            <div class="relative h-64 w-full"><canvas id="chart-timeline"></canvas></div>
                         </div>
                     </div>
                 </div>
@@ -211,8 +199,8 @@
                                     <th class="w-24">Fecha</th>
                                     <th class="w-32">Usuario</th>
                                     <th>Comentario Literal</th>
-                                    <th class="w-24">Clasificación</th>
-                                    <th class="w-32">Tema</th>
+                                    <th class="w-32">Clasificación NLP</th>
+                                    <th class="w-40">Tema Detectado</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -220,35 +208,23 @@
                     </div>
                 </div>
 
-                <!-- PESTAÑA: REPORTES Y ANÁLISIS AUTOMÁTICO -->
+                <!-- PESTAÑA: REPORTES -->
                 <div id="tab-reports" class="tab-content">
                     <div class="flex justify-between items-center mb-6">
-                        <h3 class="text-2xl font-bold text-slate-800">Análisis Automático Generado</h3>
+                        <h3 class="text-2xl font-bold text-slate-800">Reporte Ejecutivo</h3>
                         <button onclick="app.exportToPDF()" class="flex items-center gap-2 bg-slate-800 text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-slate-700 transition-colors shadow-sm">
-                            <i data-lucide="download" class="w-4 h-4"></i> Descargar Reporte PDF
+                            <i data-lucide="download" class="w-4 h-4"></i> Exportar PDF
                         </button>
                     </div>
                     
                     <div class="bg-white p-8 rounded-xl border border-slate-200 shadow-sm" id="pdf-container">
-                        <div class="border-b border-slate-200 pb-4 mb-6 flex justify-between items-end">
-                            <div>
-                                <h1 class="text-3xl font-bold text-slate-900 mb-2">Reporte de Social Listening</h1>
-                                <p class="text-slate-500">Municipalidad Metropolitana de Lima | Fuente: <span id="report-network" class="font-semibold"></span></p>
-                            </div>
-                            <div class="text-right text-sm text-slate-500">
-                                Fecha de generación: <br><span id="report-date" class="font-medium text-slate-800"></span>
-                            </div>
+                        <div class="border-b border-slate-200 pb-4 mb-6">
+                            <h1 class="text-3xl font-bold text-slate-900 mb-2">Reporte de Inteligencia Digital</h1>
+                            <p class="text-slate-500">Municipalidad Metropolitana de Lima | <span id="report-date"></span></p>
                         </div>
-                        
                         <div class="prose max-w-none text-slate-700">
-                            <h2 class="text-xl font-bold text-slate-800 mt-6 mb-3">1. Resumen Ejecutivo</h2>
+                            <h2 class="text-xl font-bold text-slate-800 mt-6 mb-3">1. Resumen de Percepción</h2>
                             <p id="report-executive" class="leading-relaxed bg-slate-50 p-4 rounded-lg border border-slate-100"></p>
-
-                            <h2 class="text-xl font-bold text-slate-800 mt-8 mb-3">2. Puntos Críticos y Riesgos</h2>
-                            <ul id="report-risks" class="list-disc pl-5 space-y-2 text-red-700 bg-red-50 p-4 rounded-lg border border-red-100"></ul>
-
-                            <h2 class="text-xl font-bold text-slate-800 mt-8 mb-3">3. Principales Focos de Atención (Temas)</h2>
-                            <div id="report-themes-list" class="grid grid-cols-2 gap-4"></div>
                         </div>
                     </div>
                 </div>
@@ -258,64 +234,55 @@
     </div>
 
     <script>
-        // MOTOR DE NLP LOCAL ADAPTADO A LIMA / PERÚ
+        // MOTOR DE NLP PRO ADAPTADO A POLÍTICA LIMEÑA Y SARCASMO
         const Dictionaries = {
             sentiment: {
-                positive: ["excelente", "bueno", "buena", "bien", "gracias", "felicito", "felicitaciones", "apoyo", "mejora", "mejor", "gran trabajo", "genial", "maravilloso", "útil", "orgullo", "solución", "resuelto", "bacan", "bacán", "lo máximo", "chévere", "chevere", "buenazo"],
-                negative: ["malo", "mala", "pésimo", "peor", "asco", "basura", "corrupción", "corrupto", "robo", "ladrones", "incompetentes", "desastre", "vergüenza", "inútil", "mentira", "estafa", "harto", "terrible", "horrible", "caos", "abandonado", "sucio", "peligro", "inepto", "ineptos", "decepcionante", "basuras"]
+                // Se procesarán DESPUÉS de comprobar ironías
+                positive: ["excelente", "bueno", "buena", "bien", "gracias", "felicito", "felicitaciones", "apoyo", "mejora", "mejor", "gran trabajo", "genial", "maravilloso", "orgullo", "solución", "resuelto", "bacan", "bacán", "lo máximo", "chévere", "chevere", "buenazo", "obra de arte"],
+                negative: ["malo", "mala", "pésimo", "peor", "asco", "basura", "corrupción", "corrupto", "robo", "incompetentes", "desastre", "vergüenza", "inútil", "inútiles", "incapaz", "mentira", "estafa", "harto", "terrible", "horrible", "caos", "abandonado", "sucio", "peligro", "inepto", "ineptos", "decepcionante", "destruyendo", "destruido", "destruir", "vago", "vagos"]
             },
+            
+            // Sarcasmo y Reclamos Directos (Anula las palabras positivas)
+            sarcasm_and_demands: [
+                "gracias a uds", "gracias a ustedes", "gracias por nada", "gracias por destruir", "sigan así", "ponte a trabajar", "pónganse a trabajar", "hagan algo", "hasta cuándo", "dónde está", "qué hacen", "por qué no", "cuándo van a", "para cuándo", "no hacen nada", "puro show", "pura foto"
+            ],
+
+            // Insultos y Jerga Política Peruana (Peso destructivo alto)
             insults_slang: [
-                "ctm", "csm", "mrd", "mierda", "webon", "huevon", "cojudo", "imbécil", "idiota", "estúpido", "lacra", "choro", "ratero", "cutra", "coimero", "asno", "rata"
+                "ctm", "csm", "mrd", "mierda", "webon", "huevon", "cojudo", "imbécil", "idiota", "estúpido", "lacra", "choro", "ratero", "cutra", "coimero", "asno", "rata",
+                "lactarsela", "chupamedias", "sobón", "mermelero", "chancho", "trikina", "porky", "miserable"
             ],
-            questions_criticism: [
-                "hasta cuándo", "dónde está", "qué hacen", "por qué no", "cuándo van a", "para cuándo", "no hacen nada", "puro show", "cortina de humo", "pura foto", "roban", "plata"
-            ],
+
             themes: {
-                "Transporte y Tránsito": ["tráfico", "tránsito", "accidente", "semaforo", "semáforo", "metropolitano", "corredor", "pasaje", "bus", "combis", "coasters", "colectivero", "rutas de lima", "línea amarilla", "peaje", "atu"],
-                "Obras Públicas e Infraestructura": ["obra", "construcción", "puente", "asfalto", "bache", "hueco", "pista", "vereda", "cierre", "bypass", "vía expresa", "pasamayito", "ramiro prialé", "emape"],
-                "Seguridad y Serenazgo": ["seguridad", "robo", "asalto", "delincuencia", "policía", "comisaría", "pnp", "crimen", "serenazgo", "sereno", "serenos", "patrullaje", "sicariato", "extorsión", "cupos", "terna", "escuadrón"],
+                "Política y Gestión Municipal": ["renzo reggiardo", "keiko fujimori", "keiko", "fujimori", "rafael lópez aliaga", "lópez aliaga", "rla", "porky", "chancho", "alcalde", "muni lima", "munilima", "gestión", "política", "regidores", "congreso", "votos", "elecciones", "promesas"],
+                "Transporte e Infraestructura": ["tráfico", "tránsito", "accidente", "semaforo", "semáforo", "metropolitano", "corredor", "pasaje", "bus", "combis", "rutas de lima", "peaje", "atu", "obra", "puente", "asfalto", "bache", "hueco", "pista", "vereda", "cierre", "bypass", "vía expresa", "panamericana", "panamericana sur"],
+                "Seguridad y Serenazgo": ["seguridad", "robo", "asalto", "delincuencia", "policía", "comisaría", "pnp", "crimen", "serenazgo", "sereno", "serenos", "patrullaje", "sicariato", "extorsión", "cupos", "terna"],
                 "Limpieza y Medio Ambiente": ["limpieza", "basura", "sucio", "contaminación", "desmontes", "barrido", "río rímac", "parque", "árbol", "áreas verdes"],
-                "Comercio Ambulatorio": ["ambulantes", "comercio informal", "informalidad", "gamarra", "mesa redonda", "mercado central", "fiscalizadores", "decomiso"],
-                "Cultura y Turismo": ["centro histórico", "plaza san martín", "chabuca granda", "parque de las aguas", "circuito mágico", "parque de las leyendas", "teatro", "turismo"],
-                "Gestión Municipal / Corrupción": ["alcalde", "gestión", "mml", "regidores", "presupuesto", "coima", "diezmo", "cutra", "impuestos", "arbitrios"]
+                "Comercio Ambulatorio": ["ambulantes", "comercio informal", "informalidad", "gamarra", "mesa redonda", "mercado central", "fiscalizadores", "decomiso"]
             },
             risk: ["prensa", "noticiero", "escándalo", "viral", "muerte", "atv", "canal n", "cuarto poder", "panorama", "latina", "denuncia penal", "fiscalía"]
         };
 
-        const state = {
-            network: '',
-            color: '',
-            rawData: [],
-            processedData: [],
-            charts: {}
-        };
+        const state = { network: '', color: '', rawData: [], processedData: [], charts: {} };
 
         const app = {
             init() {
                 lucide.createIcons();
-                document.getElementById('report-date').innerText = new Date().toLocaleDateString('es-PE', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+                document.getElementById('report-date').innerText = new Date().toLocaleDateString('es-PE', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
             },
 
             selectNetwork(network, color, iconName) {
-                state.network = network;
-                state.color = color;
-                
-                // Actualizar interfaz visual
+                state.network = network; state.color = color;
                 document.getElementById('upload-network-name').innerText = network;
                 document.getElementById('sidebar-net-name').innerText = network;
-                document.getElementById('report-network').innerText = network;
-                
                 document.getElementById('upload-btn').style.backgroundColor = color;
                 document.getElementById('sidebar-icon-container').style.backgroundColor = color;
                 document.getElementById('upload-icon').style.color = color;
-                
-                const iconHtml = `<i data-lucide="${iconName}" class="text-white w-4 h-4"></i>`;
-                document.getElementById('sidebar-icon').outerHTML = iconHtml;
+                document.getElementById('sidebar-icon').outerHTML = `<i data-lucide="${iconName}" class="text-white w-4 h-4"></i>`;
                 
                 const uploadZone = document.getElementById('upload-zone');
                 uploadZone.classList.remove('hidden');
                 setTimeout(() => uploadZone.classList.remove('opacity-0'), 50);
-                
                 lucide.createIcons();
                 window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
             },
@@ -323,109 +290,100 @@
             processFile(event) {
                 const file = event.target.files[0];
                 if (!file) return;
-
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     const data = new Uint8Array(e.target.result);
                     const workbook = XLSX.read(data, { type: 'array' });
-                    const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-                    const json = XLSX.utils.sheet_to_json(worksheet);
+                    const json = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
                     this.analyzeData(json);
                 };
                 reader.readAsArrayBuffer(file);
             },
 
-            // Motor de Clasificación Mejorado (Regex + Scoring)
             analyzeData(data) {
                 state.rawData = data;
                 state.processedData = data.map(row => {
-                    const text = String(row['Full Text'] || row['Text'] || row['comentario'] || row['Comentario'] || row['Descripción'] || '').trim();
+                    const text = String(row['Full Text'] || row['Text'] || row['comentario'] || row['Comentario'] || '').trim();
                     const textLower = text.toLowerCase();
-                    const dateRaw = row['Created At'] || row['Date'] || row['fecha'] || row['Fecha'] || '';
+                    const dateRaw = row['Created At'] || row['Date'] || row['fecha'] || '';
                     const user = row['User Screen Name'] || row['Usuario'] || row['Username'] || 'Anónimo';
                     
                     if(!text) return null;
 
-                    // 1. ANÁLISIS DE SENTIMIENTO Y CRÍTICA (Scoring)
+                    // 1. ANÁLISIS DE SENTIMIENTO CORE
                     let score = 0;
                     let hasInsult = false;
-                    let hasCriticism = false;
+                    let isSarcasticOrDemanding = false;
 
-                    // Puntuación base
-                    Dictionaries.sentiment.positive.forEach(w => { if(new RegExp(`\\b${w}\\b`).test(textLower)) score += 1; });
-                    Dictionaries.sentiment.negative.forEach(w => { if(new RegExp(`\\b${w}\\b`).test(textLower)) score -= 1.5; }); // Peso mayor a lo negativo
-                    
-                    // Insultos y Jergas (Penalización severa)
+                    // A) Evaluar Sarcasmo e Ironía PRIMERO
+                    Dictionaries.sarcasm_and_demands.forEach(phrase => {
+                        if(textLower.includes(phrase)) {
+                            score -= 5; // Penalidad masiva, anula cualquier palabra positiva
+                            isSarcasticOrDemanding = true;
+                        }
+                    });
+
+                    // B) Evaluar Insultos y Jerga dura
                     Dictionaries.insults_slang.forEach(w => { 
-                        if(new RegExp(`\\b${w}\\b`).test(textLower) || textLower.includes(w)) {
-                            score -= 3;
+                        if(textLower.includes(w) || new RegExp(`\\b${w}\\b`).test(textLower)) {
+                            score -= 4;
                             hasInsult = true;
                         }
                     });
 
-                    // Cuestionamientos / Críticas de gestión
-                    Dictionaries.questions_criticism.forEach(phrase => {
-                        if(textLower.includes(phrase)) {
-                            score -= 2;
-                            hasCriticism = true;
-                        }
+                    // C) Evaluar Positivos (Condicionado a no ser sarcasmo)
+                    Dictionaries.sentiment.positive.forEach(w => { 
+                        // Si hay sarcasmo detectado, la palabra "gracias" o "felicitaciones" pierde su valor positivo
+                        if (isSarcasticOrDemanding && (w === "gracias" || w === "gran trabajo" || w === "obra de arte")) return;
+                        if(new RegExp(`\\b${w}\\b`).test(textLower)) score += 1; 
                     });
 
+                    // D) Evaluar Negativos Base
+                    Dictionaries.sentiment.negative.forEach(w => { 
+                        if(new RegExp(`\\b${w}\\b`).test(textLower)) score -= 1.5; 
+                    }); 
+
+                    // 2. DETERMINAR CLASIFICACIÓN FINAL
                     let sentiment = "Neutral";
-                    let type = "Opinión/Consulta";
+                    let type = "Opinión";
                     
                     if (score <= -1.5) sentiment = "Negativo";
                     else if (score > 0) sentiment = "Positivo";
 
                     if (hasInsult) type = "Insulto/Agresión";
-                    else if (hasCriticism && sentiment === "Negativo") type = "Crítica/Queja";
-                    else if (sentiment === "Positivo") type = "Aprobación/Felicitación";
+                    else if (isSarcasticOrDemanding && sentiment === "Negativo") type = "Crítica/Queja";
+                    else if (sentiment === "Positivo") type = "Aprobación";
 
-                    // 2. CLASIFICACIÓN DE TEMAS (Regex matching)
+                    // 3. CLASIFICACIÓN DE TEMAS
                     let theme = "Otro (No identificado)";
                     let maxMatches = 0;
-
                     for (const [key, words] of Object.entries(Dictionaries.themes)) {
                         let matches = 0;
                         words.forEach(w => {
                             if(new RegExp(`\\b${w}\\b`).test(textLower) || textLower.includes(w)) matches++;
                         });
-                        if(matches > maxMatches) {
-                            maxMatches = matches;
-                            theme = key;
-                        }
+                        if(matches > maxMatches) { maxMatches = matches; theme = key; }
                     }
 
-                    // 3. RIESGO REPUTACIONAL
-                    let risk = "Bajo";
-                    if (sentiment === "Negativo" && Dictionaries.risk.some(w => new RegExp(`\\b${w}\\b`).test(textLower))) {
-                        risk = "Alto";
+                    // Forzar categoría política si hay jerga política específica
+                    if (["porky", "chancho", "trikina", "keiko", "reggiardo"].some(w => textLower.includes(w))) {
+                        theme = "Política y Gestión Municipal";
                     }
 
-                    // 4. PARSEO DE FECHA
-                    let dateStr = "Sin fecha";
-                    if(dateRaw) {
-                        try {
-                            const d = new Date(dateRaw);
-                            if(!isNaN(d.getTime())) dateStr = d.toISOString().split('T')[0];
-                            else dateStr = dateRaw.toString().substring(0, 10);
-                        } catch(e) {}
-                    }
+                    let risk = (sentiment === "Negativo" && Dictionaries.risk.some(w => new RegExp(`\\b${w}\\b`).test(textLower))) ? "Alto" : "Bajo";
+                    
+                    let dateStr = dateRaw ? new Date(dateRaw).toISOString().split('T')[0] : "Sin fecha";
 
                     return { date: dateStr, user: user.startsWith('@') ? user : `@${user}`, text, sentiment, type, theme, risk };
-                }).filter(Boolean); // Eliminar vacíos
+                }).filter(Boolean);
 
                 this.showDashboard();
-                this.generateReportText();
             },
 
             showDashboard() {
                 document.getElementById('home-view').classList.add('hidden');
                 document.getElementById('dashboard-view').classList.remove('hidden');
                 document.getElementById('record-count').innerText = state.processedData.length;
-                
-                // Setear color de nav activo
-                document.documentElement.style.setProperty('--active-color', state.color);
                 document.getElementById('nav-dashboard').style.color = state.color;
                 
                 this.updateKPIs();
@@ -434,79 +392,33 @@
             },
 
             updateKPIs() {
-                const total = state.processedData.length;
-                const pos = state.processedData.filter(d => d.sentiment === 'Positivo').length;
-                const neg = state.processedData.filter(d => d.sentiment === 'Negativo').length;
-                const risk = state.processedData.filter(d => d.risk === 'Alto').length;
-
-                document.getElementById('kpi-total').innerText = total;
-                document.getElementById('kpi-pos').innerText = pos;
-                document.getElementById('kpi-neg').innerText = neg;
-                document.getElementById('kpi-risk').innerText = risk;
+                const data = state.processedData;
+                document.getElementById('kpi-total').innerText = data.length;
+                document.getElementById('kpi-pos').innerText = data.filter(d => d.sentiment === 'Positivo').length;
+                document.getElementById('kpi-neg').innerText = data.filter(d => d.sentiment === 'Negativo').length;
+                document.getElementById('kpi-pol').innerText = data.filter(d => d.theme === 'Política y Gestión Municipal' && d.sentiment === 'Negativo').length;
             },
 
             renderCharts() {
                 Object.values(state.charts).forEach(chart => chart.destroy());
 
-                const sentimentCounts = { Positivo: 0, Neutral: 0, Negativo: 0 };
+                const sentCounts = { Positivo: 0, Neutral: 0, Negativo: 0 };
                 const themeCounts = {};
-                const dateCounts = {};
-
                 state.processedData.forEach(d => {
-                    sentimentCounts[d.sentiment]++;
+                    sentCounts[d.sentiment]++;
                     themeCounts[d.theme] = (themeCounts[d.theme] || 0) + 1;
-                    if(d.date !== "Sin fecha") dateCounts[d.date] = (dateCounts[d.date] || 0) + 1;
                 });
 
-                const ctxSentiment = document.getElementById('chart-sentiment').getContext('2d');
-                state.charts.sentiment = new Chart(ctxSentiment, {
+                state.charts.sentiment = new Chart(document.getElementById('chart-sentiment'), {
                     type: 'doughnut',
-                    data: {
-                        labels: ['Positivo', 'Neutral', 'Negativo'],
-                        datasets: [{
-                            data: [sentimentCounts.Positivo, sentimentCounts.Neutral, sentimentCounts.Negativo],
-                            backgroundColor: ['#22c55e', '#cbd5e1', '#ef4444'],
-                            borderWidth: 0
-                        }]
-                    },
+                    data: { labels: ['Aprobación', 'Neutral', 'Rechazo/Crítica'], datasets: [{ data: [sentCounts.Positivo, sentCounts.Neutral, sentCounts.Negativo], backgroundColor: ['#22c55e', '#cbd5e1', '#ef4444'], borderWidth: 0 }] },
                     options: { maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
                 });
 
-                // Filtrar "Otro" si hay muchos temas específicos
-                let sortedThemes = Object.entries(themeCounts).sort((a,b) => b[1] - a[1]);
-                if(sortedThemes.length > 5) sortedThemes = sortedThemes.filter(t => !t[0].includes("Otro"));
-                sortedThemes = sortedThemes.slice(0, 5);
-
-                const ctxThemes = document.getElementById('chart-themes').getContext('2d');
-                state.charts.themes = new Chart(ctxThemes, {
+                let sortedThemes = Object.entries(themeCounts).sort((a,b) => b[1] - a[1]).filter(t => !t[0].includes("Otro")).slice(0, 5);
+                state.charts.themes = new Chart(document.getElementById('chart-themes'), {
                     type: 'bar',
-                    data: {
-                        labels: sortedThemes.map(t => t[0]),
-                        datasets: [{
-                            label: 'Comentarios',
-                            data: sortedThemes.map(t => t[1]),
-                            backgroundColor: state.color,
-                            borderRadius: 4
-                        }]
-                    },
-                    options: { maintainAspectRatio: false, plugins: { legend: { display: false } } }
-                });
-
-                const sortedDates = Object.keys(dateCounts).sort();
-                const ctxTimeline = document.getElementById('chart-timeline').getContext('2d');
-                state.charts.timeline = new Chart(ctxTimeline, {
-                    type: 'line',
-                    data: {
-                        labels: sortedDates,
-                        datasets: [{
-                            label: 'Volumen',
-                            data: sortedDates.map(d => dateCounts[d]),
-                            borderColor: state.color,
-                            backgroundColor: state.color + '20',
-                            fill: true,
-                            tension: 0.3
-                        }]
-                    },
+                    data: { labels: sortedThemes.map(t => t[0]), datasets: [{ label: 'Menciones', data: sortedThemes.map(t => t[1]), backgroundColor: state.color, borderRadius: 4 }] },
                     options: { maintainAspectRatio: false, plugins: { legend: { display: false } } }
                 });
             },
@@ -518,17 +430,16 @@
                     data: state.processedData,
                     columns: [
                         { data: 'date' },
-                        { data: 'user', render: data => `<span class="font-medium text-slate-700">${data}</span>` },
-                        { data: 'text', className: 'comment-cell' }, // Usa la clase CSS para salto de línea
+                        { data: 'user', render: data => `<span class="font-semibold text-slate-800">${data}</span>` },
+                        { data: 'text', className: 'comment-cell text-slate-700' },
                         { data: 'sentiment', render: (data, type, row) => {
-                            let color = data === 'Positivo' ? 'text-green-600 bg-green-50' : (data === 'Negativo' ? 'text-red-600 bg-red-50' : 'text-slate-600 bg-slate-100');
-                            let badge = `<span class="px-2 py-1 rounded-md text-xs font-bold block w-max mb-1 ${color}">${data}</span>`;
-                            let subBadge = `<span class="text-[10px] text-slate-400 uppercase tracking-wider">${row.type}</span>`;
-                            return badge + subBadge;
+                            let color = data === 'Positivo' ? 'text-green-700 bg-green-100' : (data === 'Negativo' ? 'text-red-700 bg-red-100' : 'text-slate-700 bg-slate-200');
+                            return `<span class="px-2.5 py-1 rounded-md text-xs font-bold block w-max mb-1.5 ${color}">${data}</span>
+                                    <span class="text-[11px] text-slate-500 uppercase font-semibold tracking-wider">${row.type}</span>`;
                         }},
                         { data: 'theme', render: (data, type, row) => {
-                            let riskBadge = row.risk === 'Alto' ? `<br><span class="text-[10px] font-bold text-red-600 bg-red-100 px-1 mt-1 inline-block rounded">⚠️ RIESGO VIRAL</span>` : '';
-                            return `<span class="text-xs font-medium text-slate-600">${data}</span>${riskBadge}`;
+                            let isPol = data === 'Política y Gestión Municipal' ? 'text-purple-700 font-bold' : 'text-slate-600 font-medium';
+                            return `<span class="text-sm ${isPol}">${data}</span>`;
                         }}
                     ],
                     language: { url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json' },
@@ -537,86 +448,20 @@
                 });
             },
 
-            generateReportText() {
-                const total = state.processedData.length;
-                if(total === 0) return;
-
-                const neg = state.processedData.filter(d => d.sentiment === 'Negativo').length;
-                const pos = state.processedData.filter(d => d.sentiment === 'Positivo').length;
-                const pctNeg = Math.round((neg / total) * 100);
-                const pctPos = Math.round((pos / total) * 100);
-                
-                const highRisk = state.processedData.filter(d => d.risk === 'Alto');
-                const themes = {};
-                state.processedData.forEach(d => { if(!d.theme.includes("Otro")) themes[d.theme] = (themes[d.theme] || 0) + 1; });
-                const topTheme = Object.entries(themes).sort((a,b) => b[1] - a[1])[0];
-
-                // Redacción automática
-                let resumen = `Se analizaron un total de <strong>${total} comentarios</strong> extraídos de la red social ${state.network}. `;
-                resumen += `La percepción ciudadana muestra un <strong>${pctNeg}% de rechazo o crítica</strong> frente a un <strong>${pctPos}% de aprobación</strong>. `;
-                
-                if(pctNeg > 50) resumen += `El tono predominante es altamente crítico, sugiriendo una necesidad urgente de intervención comunicacional u operativa. `;
-                else if (pctPos > 40) resumen += `Existe un bloque sólido de respaldo a las acciones de la gestión. `;
-                
-                if(topTheme) resumen += `El tema que acapara la mayor atención de los ciudadanos es <strong>${topTheme[0]}</strong>, concentrando ${topTheme[1]} menciones directas.`;
-
-                document.getElementById('report-executive').innerHTML = resumen;
-
-                // Riesgos
-                const riskUl = document.getElementById('report-risks');
-                riskUl.innerHTML = '';
-                if(highRisk.length > 0) {
-                    riskUl.innerHTML += `<li>Se detectaron <strong>${highRisk.length} comentarios de Alto Riesgo Reputacional</strong> (mencionan prensa, fiscalía, viralización o denuncias graves).</li>`;
-                    // Mostrar hasta 3 ejemplos
-                    highRisk.slice(0,3).forEach(r => {
-                        riskUl.innerHTML += `<li class="text-sm italic text-slate-600 bg-white p-2 rounded border border-red-200">"${r.text}" - ${r.user}</li>`;
-                    });
-                } else {
-                    riskUl.innerHTML = `<li class="text-green-700">No se detectaron crisis reputacionales latentes con mención a prensa o denuncias graves en este lote.</li>`;
-                }
-
-                // Temas
-                const themesList = document.getElementById('report-themes-list');
-                themesList.innerHTML = '';
-                Object.entries(themes).sort((a,b) => b[1] - a[1]).slice(0,4).forEach(t => {
-                    themesList.innerHTML += `<div class="bg-slate-50 border border-slate-200 p-4 rounded-lg text-center">
-                        <div class="text-2xl font-black text-slate-800">${t[1]}</div>
-                        <div class="text-xs uppercase font-bold text-slate-500">${t[0]}</div>
-                    </div>`;
-                });
-            },
-
             exportToPDF() {
-                const element = document.getElementById('pdf-container');
-                html2canvas(element, { scale: 2 }).then(canvas => {
-                    const imgData = canvas.toDataURL('image/png');
+                html2canvas(document.getElementById('pdf-container'), { scale: 2 }).then(canvas => {
                     const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
-                    const imgProps = pdf.getImageProperties(imgData);
-                    const pdfWidth = pdf.internal.pageSize.getWidth();
-                    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-                    
-                    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-                    pdf.save(`Reporte_Social_Listening_${state.network}.pdf`);
+                    pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, pdf.internal.pageSize.getWidth(), (canvas.height * pdf.internal.pageSize.getWidth()) / canvas.width);
+                    pdf.save(`MML_Social_Listening.pdf`);
                 });
             },
 
             switchTab(tabId) {
-                document.querySelectorAll('.nav-btn').forEach(btn => {
-                    btn.classList.remove('bg-slate-50');
-                    btn.style.color = '';
-                    btn.classList.add('text-slate-600');
-                });
-                
-                const activeBtn = document.getElementById(`nav-${tabId}`);
-                activeBtn.classList.remove('text-slate-600');
-                activeBtn.classList.add('bg-slate-50');
-                activeBtn.style.color = state.color || '#E31837';
-
-                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                document.querySelectorAll('.nav-btn').forEach(btn => { btn.classList.remove('bg-slate-50'); btn.style.color = ''; });
+                document.getElementById(`nav-${tabId}`).classList.add('bg-slate-50');
+                document.getElementById(`nav-${tabId}`).style.color = state.color;
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
                 document.getElementById(`tab-${tabId}`).classList.add('active');
-                
-                const titles = { 'dashboard': 'Visión General', 'data': 'Base de Datos Procesada', 'reports': 'Reportes y Análisis NLP' };
-                document.getElementById('header-title').innerText = titles[tabId];
             }
         };
 
