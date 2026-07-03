@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Social Listening MML v7.0 - Análisis Semántico</title>
+    <title>Sentinel AI Enterprise v8.0 - Plataforma Completa</title>
+    
+    <!-- Dependencias -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -11,377 +13,560 @@
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="https://cdn.jsdelivr.net/npm/wordcloud@1.2.2/src/wordcloud2.js"></script>
+    
     <style>
+        /* ============================================
+           SISTEMA DE DISEÑO ENTERPRISE
+           ============================================ */
+        
         :root {
-            --bg-deep: #0a0e1a;
-            --bg-card: #111827;
+            --bg-void: #060913;
+            --bg-deep: #0a0f1e;
+            --bg-surface: #111827;
             --bg-elevated: #1a2332;
-            --border: #1e3a5f;
-            --accent: #3b82f6;
-            --accent-glow: #60a5fa;
-            --gold: #f59e0b;
-            --danger: #ef4444;
-            --success: #10b981;
+            --bg-hover: #1e2d44;
+            
+            --border-subtle: #1e3050;
+            --border-active: #3b82f6;
+            --border-gold: #f59e0b;
+            
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            
+            --accent-blue: #3b82f6;
+            --accent-cyan: #06b6d4;
+            --accent-purple: #8b5cf6;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --accent-orange: #f59e0b;
+            --accent-pink: #ec4899;
+            
+            --glass-bg: rgba(17, 24, 39, 0.7);
+            --glass-border: rgba(59, 130, 246, 0.15);
+            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            
+            --transition-fast: 0.15s ease;
+            --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-bounce: 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
-
-        * { scrollbar-width: thin; scrollbar-color: #1e3a5f #0a0e1a; }
+        
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: var(--border-subtle) var(--bg-void);
+        }
+        
+        *::-webkit-scrollbar { width: 6px; height: 6px; }
+        *::-webkit-scrollbar-track { background: var(--bg-void); }
+        *::-webkit-scrollbar-thumb { background: var(--border-subtle); border-radius: 10px; }
         
         body {
-            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
-            background: var(--bg-deep);
-            color: #e2e8f0;
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg-void);
+            color: var(--text-primary);
             margin: 0;
             line-height: 1.6;
+            overflow-x: hidden;
         }
-
+        
+        /* ========== EFECTOS GLASS ========== */
         .glass {
-            background: rgba(17, 24, 39, 0.8);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(59, 130, 246, 0.15);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
         }
-
+        
         .glass-hover {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all var(--transition-smooth);
         }
         .glass-hover:hover {
             border-color: rgba(59, 130, 246, 0.4);
-            box-shadow: 0 8px 40px rgba(59, 130, 246, 0.15);
+            box-shadow: 0 12px 40px rgba(59, 130, 246, 0.1);
             transform: translateY(-2px);
         }
-
-        .kpi-card {
-            background: linear-gradient(135deg, rgba(17, 24, 39, 0.95), rgba(26, 35, 50, 0.9));
-            border: 1px solid var(--border);
-            border-left: 4px solid var(--accent);
-            transition: all 0.3s ease;
+        
+        /* ========== GRADIENTES AVANZADOS ========== */
+        .gradient-hero {
+            background: linear-gradient(135deg, #0a0f1e 0%, #1a2332 50%, #0d1b2a 100%);
+        }
+        
+        .gradient-blue-purple {
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+        }
+        
+        .gradient-cyan-green {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-green));
+        }
+        
+        .gradient-fire {
+            background: linear-gradient(135deg, var(--accent-red), var(--accent-orange));
+        }
+        
+        .gradient-aurora {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+        }
+        
+        /* ========== ANIMACIONES ========== */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes fadeInLeft {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        @keyframes fadeInRight {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 5px rgba(59, 130, 246, 0.3); }
+            50% { box-shadow: 0 0 25px rgba(59, 130, 246, 0.6); }
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        @keyframes rotate-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            15% { transform: scale(1.15); }
+            30% { transform: scale(1); }
+            45% { transform: scale(1.1); }
+            60% { transform: scale(1); }
+        }
+        
+        .animate-fadeInUp { animation: fadeInUp 0.6s ease-out; }
+        .animate-fadeInLeft { animation: fadeInLeft 0.6s ease-out; }
+        .animate-fadeInRight { animation: fadeInRight 0.6s ease-out; }
+        .animate-pulse-glow { animation: pulse-glow 2s infinite; }
+        .animate-float { animation: float 6s ease-in-out infinite; }
+        .animate-heartbeat { animation: heartbeat 1.5s ease-in-out infinite; }
+        
+        .shimmer-effect {
+            background: linear-gradient(90deg, 
+                var(--accent-blue), 
+                var(--accent-purple), 
+                var(--accent-cyan), 
+                var(--accent-blue));
+            background-size: 200% 100%;
+            animation: shimmer 3s infinite;
+        }
+        
+        /* ========== COMPONENTES ========== */
+        .kpi-card-enterprise {
             position: relative;
             overflow: hidden;
+            border-left: 4px solid var(--accent-blue);
+            transition: all var(--transition-smooth);
         }
-        .kpi-card::before {
+        .kpi-card-enterprise::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, transparent 0%, rgba(59, 130, 246, 0.03) 100%);
+            background: linear-gradient(135deg, rgba(59,130,246,0.03) 0%, transparent 50%);
             pointer-events: none;
         }
-        .kpi-card:hover {
+        .kpi-card-enterprise:hover {
             border-left-width: 8px;
-            border-left-color: var(--gold);
+            border-left-color: var(--accent-orange);
             transform: translateX(4px);
-            box-shadow: 0 0 30px rgba(59, 130, 246, 0.1);
+            box-shadow: 0 0 30px rgba(59,130,246,0.1);
         }
-
-        .kpi-value {
-            background: linear-gradient(135deg, #60a5fa, #93c5fd);
+        
+        .kpi-value-enterprise {
+            background: linear-gradient(135deg, #60a5fa, #a78bfa, #22d3ee);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            font-weight: 800;
         }
-
-        .badge {
-            padding: 4px 12px;
+        
+        .badge-enterprise {
+            padding: 4px 10px;
             border-radius: 20px;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            display: inline-block;
+            letter-spacing: 1.5px;
         }
-        .badge-positivo { background: rgba(16,185,129,0.12); color: #10b981; border: 1px solid rgba(16,185,129,0.25); }
-        .badge-negativo { background: rgba(239,68,68,0.12); color: #ef4444; border: 1px solid rgba(239,68,68,0.25); }
-        .badge-neutral { background: rgba(245,158,11,0.12); color: #f59e0b; border: 1px solid rgba(245,158,11,0.25); }
-
-        .sidebar-link {
-            transition: all 0.2s ease;
-            border-left: 3px solid transparent;
-            border-radius: 0 8px 8px 0;
-        }
-        .sidebar-link:hover {
-            background: rgba(59, 130, 246, 0.08);
-            border-left-color: var(--accent);
-        }
-        .sidebar-link.active {
-            background: rgba(59, 130, 246, 0.12);
-            border-left-color: var(--gold);
-            color: white !important;
-        }
-
-        .chart-container {
+        
+        .btn-enterprise {
+            padding: 10px 20px;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            transition: all var(--transition-smooth);
             position: relative;
-            height: 350px;
-            width: 100%;
+            overflow: hidden;
         }
-
-        .pulse-gemini {
-            animation: pulseGemini 2s infinite;
+        .btn-enterprise::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
         }
-        @keyframes pulseGemini {
-            0%, 100% { box-shadow: 0 0 5px rgba(16, 185, 129, 0.3); }
-            50% { box-shadow: 0 0 20px rgba(16, 185, 129, 0.6); }
+        .btn-enterprise:active::after {
+            width: 300px;
+            height: 300px;
         }
-
-        .shimmer {
-            background: linear-gradient(90deg, var(--accent), var(--accent-glow), var(--accent));
-            background-size: 200% 100%;
-            animation: shimmer 2s infinite;
+        
+        /* ========== SIDEBAR ========== */
+        .sidebar-enterprise {
+            background: linear-gradient(180deg, #0a0f1e 0%, #111827 100%);
+            border-right: 1px solid var(--border-subtle);
         }
-        @keyframes shimmer {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
+        
+        .nav-item-enterprise {
+            transition: all var(--transition-smooth);
+            border-left: 3px solid transparent;
+            position: relative;
         }
-
+        .nav-item-enterprise:hover {
+            background: rgba(59,130,246,0.08);
+            border-left-color: var(--accent-blue);
+        }
+        .nav-item-enterprise.active {
+            background: rgba(59,130,246,0.12);
+            border-left-color: var(--accent-orange);
+            box-shadow: inset 0 0 20px rgba(59,130,246,0.05);
+        }
+        .nav-item-enterprise.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 3px;
+            height: 100%;
+            background: var(--accent-orange);
+            box-shadow: 0 0 10px var(--accent-orange);
+        }
+        
+        /* ========== ALERT BADGE ========== */
+        .crisis-pulse {
+            animation: crisisPulse 0.5s ease-in-out infinite alternate;
+        }
+        @keyframes crisisPulse {
+            from { box-shadow: 0 0 10px rgba(239,68,68,0.5); }
+            to { box-shadow: 0 0 30px rgba(239,68,68,0.8); }
+        }
+        
+        /* ========== TOOLTIP ========== */
+        .tooltip-enterprise {
+            position: relative;
+        }
+        .tooltip-enterprise:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-elevated);
+            color: var(--text-primary);
+            padding: 6px 12px;
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+            white-space: nowrap;
+            z-index: 100;
+            border: 1px solid var(--border-subtle);
+            pointer-events: none;
+        }
+        
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 1024px) {
+            .sidebar-enterprise {
+                transform: translateX(-100%);
+            }
+            .sidebar-enterprise.open {
+                transform: translateX(0);
+            }
+        }
+        
+        /* ========== PRINT ========== */
+        @media print {
+            body { background: white; color: black; }
+            .glass { border: 1px solid #ddd; box-shadow: none; }
+            .sidebar-enterprise { display: none; }
+        }
+        
+        /* ========== DATA TABLES OVERRIDE ========== */
         table.dataTable {
-            background: var(--bg-card) !important;
-            color: #e2e8f0 !important;
-            border-color: var(--border) !important;
-            border-radius: 12px !important;
+            background: var(--bg-surface) !important;
+            color: var(--text-primary) !important;
+            border-radius: var(--radius-lg) !important;
             overflow: hidden;
         }
         table.dataTable thead th {
             background: var(--bg-elevated) !important;
-            color: #93c5fd !important;
-            border-color: var(--border) !important;
+            color: var(--text-secondary) !important;
+            border-color: var(--border-subtle) !important;
             font-weight: 600;
             text-transform: uppercase;
-            font-size: 0.7rem;
             letter-spacing: 1px;
+            font-size: 0.7rem;
         }
         table.dataTable tbody tr {
-            background: transparent !important;
-            transition: all 0.2s;
+            transition: background var(--transition-fast);
         }
         table.dataTable tbody tr:hover {
-            background: rgba(59, 130, 246, 0.05) !important;
+            background: var(--bg-hover) !important;
         }
         table.dataTable tbody td {
-            border-color: rgba(30, 58, 95, 0.4) !important;
-        }
-
-        select, input, textarea {
-            background: var(--bg-elevated) !important;
-            color: #e2e8f0 !important;
-            border: 1px solid var(--border) !important;
-            border-radius: 8px !important;
-            transition: all 0.2s;
-        }
-        select:focus, input:focus, textarea:focus {
-            border-color: var(--accent) !important;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15) !important;
-        }
-
-        .btn-primary {
-            background: var(--accent);
-            color: white;
-            font-weight: 600;
-            transition: all 0.3s;
-            border-radius: 10px;
-        }
-        .btn-primary:hover {
-            background: #2563eb;
-            box-shadow: 0 0 25px rgba(59, 130, 246, 0.4);
-            transform: translateY(-2px);
-        }
-        .btn-gold {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            color: #0a0e1a;
-            font-weight: 700;
-            transition: all 0.3s;
-            border-radius: 10px;
-        }
-        .btn-gold:hover {
-            box-shadow: 0 0 25px rgba(245, 158, 11, 0.4);
-            transform: translateY(-2px);
-        }
-
-        @media (max-width: 768px) {
-            .chart-container { height: 250px; }
-            .kpi-value { font-size: 1.5rem; }
-        }
-
-        .tooltip {
-            position: relative;
-        }
-        .tooltip:hover::after {
-            content: attr(data-tooltip);
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--bg-elevated);
-            color: #e2e8f0;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            white-space: nowrap;
-            z-index: 10;
-            border: 1px solid var(--border);
+            border-color: rgba(30, 48, 80, 0.3) !important;
         }
     </style>
 </head>
-<body class="bg-[#0a0e1a]">
+<body class="bg-[#060913]">
 
+    <!-- ============================================
+    CONTENEDOR PRINCIPAL
+    ============================================ -->
     <div class="flex h-screen overflow-hidden">
         
-        <!-- SIDEBAR MEJORADO -->
-        <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-72 bg-[#0d1117] border-r border-[#1e3a5f] transform -translate-x-full lg:translate-x-0 lg:static transition-transform duration-300 overflow-y-auto">
+        <!-- ============================================
+        SIDEBAR ENTERPRISE
+        ============================================ -->
+        <aside id="sidebar" class="sidebar-enterprise fixed inset-y-0 left-0 z-50 w-80 lg:static transition-transform duration-300 overflow-y-auto">
             <div class="p-6">
-                <div class="text-center mb-8">
-                    <div class="w-20 h-20 bg-gradient-to-br from-blue-600 via-blue-500 to-cyan-400 rounded-2xl mx-auto mb-4 flex items-center justify-center shadow-lg shadow-blue-500/20">
-                        <span class="text-3xl font-bold text-white">🧬</span>
+                
+                <!-- Logo y Marca -->
+                <div class="text-center mb-8 animate-fadeInUp">
+                    <div class="relative inline-block">
+                        <div class="w-24 h-24 bg-gradient-to-br from-blue-600 via-purple-600 to-cyan-400 rounded-2xl flex items-center justify-center shadow-2xl animate-float">
+                            <span class="text-4xl font-black text-white">🧬</span>
+                        </div>
+                        <div class="absolute -bottom-1 -right-1 w-6 h-6 bg-green-400 rounded-full border-2 border-[#0a0f1e] animate-pulse-glow"></div>
                     </div>
-                    <h2 class="text-xl font-bold text-white">Sentinel AI</h2>
-                    <p class="text-sm text-blue-300/70">Análisis Semántico v7.0</p>
+                    <h2 class="text-2xl font-black text-white mt-4">SENTINEL AI</h2>
+                    <p class="text-sm text-blue-300/60">Enterprise v8.0</p>
                 </div>
                 
-                <div class="mb-6 p-4 bg-[#1a2332] rounded-xl border border-[#1e3a5f]">
-                    <div class="flex items-center justify-center space-x-2 mb-2">
-                        <div class="w-3 h-3 bg-green-400 rounded-full pulse-gemini"></div>
-                        <span class="text-sm text-blue-200" id="ia-status">Gemini Pro Activo</span>
+                <!-- Estado del Sistema -->
+                <div class="mb-6 p-4 bg-[#1a2332] rounded-xl border border-[#1e3050] animate-fadeInLeft">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-xs text-blue-300/60">ESTADO DEL SISTEMA</span>
+                        <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse-glow"></span>
                     </div>
-                    <div class="text-center mt-2">
-                        <span class="text-xs text-blue-300/60">Análisis semántico contextual</span>
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-xs">
+                            <span class="text-blue-200/80">IA Principal</span>
+                            <span class="text-green-400 font-bold">Gemini Pro</span>
+                        </div>
+                        <div class="flex justify-between text-xs">
+                            <span class="text-blue-200/80">Motor Emocional</span>
+                            <span class="text-green-400 font-bold">Activo</span>
+                        </div>
+                        <div class="flex justify-between text-xs">
+                            <span class="text-blue-200/80">Detector Crisis</span>
+                            <span class="text-green-400 font-bold">Monitoreando</span>
+                        </div>
+                        <div class="flex justify-between text-xs">
+                            <span class="text-blue-200/80">Procesados Hoy</span>
+                            <span class="text-white font-bold" id="sidebar-processed">0</span>
+                        </div>
                     </div>
                 </div>
                 
-                <nav class="space-y-1.5">
-                    <a onclick="navegar('dashboard')" class="sidebar-link active flex items-center px-4 py-3 cursor-pointer text-blue-200/80">
-                        <i class="fas fa-chart-pie w-5"></i>
-                        <span class="ml-3">Dashboard</span>
+                <!-- Navegación Principal -->
+                <nav class="space-y-1">
+                    <a onclick="navigateTo('dashboard')" class="nav-item-enterprise active flex items-center px-4 py-3 rounded-lg cursor-pointer text-blue-200/80">
+                        <i class="fas fa-chart-pie w-6 text-blue-400"></i>
+                        <span class="ml-3 font-semibold">Dashboard</span>
+                        <span class="ml-auto text-xs bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded-full">NUEVO</span>
                     </a>
-                    <a onclick="navegar('reportes')" class="sidebar-link flex items-center px-4 py-3 cursor-pointer text-blue-200/80">
-                        <i class="fas fa-file-contract w-5"></i>
-                        <span class="ml-3">Reportes</span>
+                    
+                    <a onclick="navigateTo('emotions')" class="nav-item-enterprise flex items-center px-4 py-3 rounded-lg cursor-pointer text-blue-200/80">
+                        <i class="fas fa-brain w-6 text-purple-400"></i>
+                        <span class="ml-3 font-semibold">Laboratorio Emocional</span>
+                        <span class="ml-auto text-xs bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded-full">v8.0</span>
                     </a>
-                    <a onclick="navegar('config')" class="sidebar-link flex items-center px-4 py-3 cursor-pointer text-blue-200/80">
-                        <i class="fas fa-sliders-h w-5"></i>
-                        <span class="ml-3">Configuración</span>
+                    
+                    <a onclick="navigateTo('crisis')" class="nav-item-enterprise flex items-center px-4 py-3 rounded-lg cursor-pointer text-blue-200/80">
+                        <i class="fas fa-exclamation-triangle w-6 text-red-400"></i>
+                        <span class="ml-3 font-semibold">Centro de Crisis</span>
+                        <span id="crisis-badge" class="ml-auto text-xs bg-red-500/20 text-red-300 px-2 py-0.5 rounded-full hidden">0</span>
+                    </a>
+                    
+                    <a onclick="navigateTo('narratives')" class="nav-item-enterprise flex items-center px-4 py-3 rounded-lg cursor-pointer text-blue-200/80">
+                        <i class="fas fa-project-diagram w-6 text-cyan-400"></i>
+                        <span class="ml-3 font-semibold">Narrativas</span>
+                    </a>
+                    
+                    <a onclick="navigateTo('influence')" class="nav-item-enterprise flex items-center px-4 py-3 rounded-lg cursor-pointer text-blue-200/80">
+                        <i class="fas fa-users w-6 text-green-400"></i>
+                        <span class="ml-3 font-semibold">Red de Influencia</span>
+                    </a>
+                    
+                    <a onclick="navigateTo('stories')" class="nav-item-enterprise flex items-center px-4 py-3 rounded-lg cursor-pointer text-blue-200/80">
+                        <i class="fas fa-book-open w-6 text-orange-400"></i>
+                        <span class="ml-3 font-semibold">Story Generator</span>
+                    </a>
+                    
+                    <a onclick="navigateTo('collab')" class="nav-item-enterprise flex items-center px-4 py-3 rounded-lg cursor-pointer text-blue-200/80">
+                        <i class="fas fa-comments w-6 text-pink-400"></i>
+                        <span class="ml-3 font-semibold">Colaboración</span>
+                    </a>
+                    
+                    <div class="my-4 border-t border-[#1e3050]"></div>
+                    
+                    <a onclick="navigateTo('reports')" class="nav-item-enterprise flex items-center px-4 py-3 rounded-lg cursor-pointer text-blue-200/80">
+                        <i class="fas fa-file-contract w-6 text-blue-300"></i>
+                        <span class="ml-3 font-semibold">Reportes</span>
+                    </a>
+                    
+                    <a onclick="navigateTo('config')" class="nav-item-enterprise flex items-center px-4 py-3 rounded-lg cursor-pointer text-blue-200/80">
+                        <i class="fas fa-sliders-h w-6 text-blue-300"></i>
+                        <span class="ml-3 font-semibold">Configuración</span>
                     </a>
                 </nav>
-                
-                <div class="mt-8 p-4 bg-[#1a2332] rounded-xl border border-[#1e3a5f]">
-                    <p class="text-xs text-blue-300/60 mb-2">📊 Resumen Rápido</p>
-                    <p class="text-2xl font-bold text-white" id="sidebar-total">0</p>
-                    <p class="text-xs text-blue-300/60">comentarios analizados</p>
-                    <p class="text-lg font-bold text-red-400 mt-3" id="sidebar-riesgos">0</p>
-                    <p class="text-xs text-blue-300/60">riesgos altos detectados</p>
-                </div>
             </div>
         </aside>
         
-        <!-- MAIN -->
+        <!-- ============================================
+        CONTENIDO PRINCIPAL
+        ============================================ -->
         <main class="flex-1 overflow-y-auto">
             
-            <header class="glass sticky top-0 z-30 border-b border-[#1e3a5f]">
-                <div class="px-6 py-4 flex items-center justify-between">
+            <!-- Header Enterprise -->
+            <header class="glass sticky top-0 z-30 border-b border-[#1e3050] px-6 py-4">
+                <div class="flex items-center justify-between">
                     <button onclick="toggleSidebar()" class="lg:hidden text-blue-300 hover:text-white">
                         <i class="fas fa-bars text-2xl"></i>
                     </button>
+                    
                     <div class="flex items-center space-x-4">
-                        <div class="w-12 h-12 bg-gradient-to-br from-blue-600 to-cyan-400 rounded-xl flex items-center justify-center shadow-lg">
-                            <span class="text-white font-bold text-xl">M</span>
-                        </div>
-                        <div>
-                            <h1 class="text-2xl font-bold text-white">Social Listening Dashboard</h1>
-                            <p class="text-sm text-blue-300/70">Municipalidad Metropolitana de Lima • Análisis Semántico IA</p>
+                        <h1 class="text-xl font-bold text-white" id="header-title">Dashboard Principal</h1>
+                    </div>
+                    
+                    <div class="flex items-center space-x-4">
+                        <span class="text-sm text-blue-300/60" id="fecha-header"></span>
+                        <div class="flex items-center space-x-2 text-xs bg-red-500/10 text-red-300 px-3 py-1.5 rounded-full" id="crisis-indicator">
+                            <span class="w-2 h-2 bg-red-500 rounded-full"></span>
+                            <span id="crisis-count">0 alertas</span>
                         </div>
                     </div>
-                    <span class="text-sm text-blue-300/70" id="fecha-header"></span>
                 </div>
             </header>
             
-            <div class="p-6">
+            <!-- Contenedor de Vistas -->
+            <div class="p-6" id="view-container">
                 
-                <!-- VISTA DASHBOARD -->
-                <div id="vista-dashboard">
+                <!-- ============================================
+                VISTA: DASHBOARD PRINCIPAL
+                ============================================ -->
+                <div id="view-dashboard">
                     
                     <!-- Panel de Control -->
-                    <div class="glass rounded-2xl p-6 mb-8">
+                    <div class="glass rounded-2xl p-6 mb-8 animate-fadeInUp">
                         <div class="flex flex-wrap items-center justify-between gap-4">
                             <div>
-                                <h2 class="text-2xl font-bold text-white flex items-center gap-2">
-                                    <span class="text-3xl">🧬</span> Motor de Análisis Semántico
-                                </h2>
-                                <p class="text-blue-300/70 mt-1">Comprensión contextual profunda • Jerga peruana • Apodos políticos • Ironía</p>
+                                <h2 class="text-2xl font-bold text-white">🧬 Centro de Control Enterprise</h2>
+                                <p class="text-blue-300/60 mt-1">Análisis semántico • Emociones • Crisis • Narrativas • Influencia</p>
                             </div>
                             <div class="flex gap-3 flex-wrap">
-                                <input type="password" id="apiKey" class="px-4 py-2.5 text-sm w-56" placeholder="🔑 Gemini API Key">
-                                <button onclick="guardarAPIKey()" class="px-5 py-2.5 btn-gold"><i class="fas fa-key mr-2"></i>Conectar IA</button>
-                                <button onclick="document.getElementById('fileInput').click()" class="px-5 py-2.5 btn-primary"><i class="fas fa-upload mr-2"></i>Cargar Excel</button>
-                                <button onclick="cargarDemo()" class="px-5 py-2.5 bg-[#1a2332] border border-[#1e3a5f] text-white rounded-xl hover:bg-[#1e3a5f] transition font-semibold"><i class="fas fa-flask mr-2"></i>Demo</button>
+                                <input type="password" id="apiKey" class="px-4 py-2.5 bg-[#1a2332] border border-[#1e3050] rounded-lg text-sm w-56 text-white placeholder-blue-300/30" placeholder="🔑 Gemini API Key">
+                                <button onclick="guardarAPIKey()" class="px-5 py-2.5 btn-enterprise bg-gradient-to-r from-amber-500 to-orange-600 text-black font-bold rounded-lg hover:shadow-lg hover:shadow-orange-500/20"><i class="fas fa-key mr-2"></i>Conectar IA</button>
+                                <button onclick="document.getElementById('fileInput').click()" class="px-5 py-2.5 btn-enterprise bg-[#1a2332] border border-[#1e3050] text-white rounded-lg hover:bg-[#1e3050] font-semibold"><i class="fas fa-upload mr-2"></i>Cargar Excel</button>
+                                <button onclick="cargarDemo()" class="px-5 py-2.5 btn-enterprise bg-[#1a2332] border border-[#1e3050] text-white rounded-lg hover:bg-[#1e3050] font-semibold"><i class="fas fa-flask mr-2"></i>Demo</button>
                             </div>
                             <input type="file" id="fileInput" accept=".xlsx,.xls" class="hidden" onchange="procesarArchivo(event)">
                         </div>
                         
+                        <!-- Progreso -->
                         <div id="progressContainer" class="hidden mt-6">
                             <div class="flex justify-between text-sm mb-2">
-                                <span class="text-blue-300" id="progressText">Iniciando análisis semántico...</span>
+                                <span class="text-blue-300" id="progressText">Iniciando motores de análisis...</span>
                                 <span class="text-blue-200 font-bold" id="progressPercent">0%</span>
                             </div>
-                            <div class="w-full bg-[#0d1117] rounded-full h-2.5">
-                                <div id="progressBar" class="shimmer h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                            <div class="w-full bg-[#0a0f1e] rounded-full h-2.5">
+                                <div id="progressBar" class="shimmer-effect h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
                             </div>
-                            <p class="text-xs text-blue-300/50 mt-2" id="progressDetail"></p>
+                            <p class="text-xs text-blue-300/40 mt-2" id="progressDetail"></p>
                         </div>
                     </div>
                     
-                    <!-- KPIs -->
+                    <!-- KPIs Enterprise -->
                     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8" id="kpiContainer"></div>
                     
-                    <!-- Charts Row 1 -->
+                    <!-- Gráficos Fila 1 -->
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-                        <div class="glass rounded-2xl p-6 glass-hover">
-                            <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                                <span class="text-xl">🎭</span> Sentimientos
-                            </h3>
-                            <div class="chart-container"><canvas id="chartSentimiento"></canvas></div>
+                        <div class="glass rounded-2xl p-6 glass-hover animate-fadeInUp" style="animation-delay: 0.1s">
+                            <h3 class="text-lg font-bold text-white mb-4">🎭 Sentimientos</h3>
+                            <div class="chart-container" style="height: 300px"><canvas id="chartSentimiento"></canvas></div>
                         </div>
-                        <div class="glass rounded-2xl p-6 glass-hover">
-                            <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                                <span class="text-xl">🏷️</span> Tipos Detectados
-                            </h3>
-                            <div class="chart-container"><canvas id="chartTipos"></canvas></div>
+                        <div class="glass rounded-2xl p-6 glass-hover animate-fadeInUp" style="animation-delay: 0.2s">
+                            <h3 class="text-lg font-bold text-white mb-4">🧠 Emociones Detectadas</h3>
+                            <div class="chart-container" style="height: 300px"><canvas id="chartEmociones"></canvas></div>
                         </div>
-                        <div class="glass rounded-2xl p-6 glass-hover">
-                            <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                                <span class="text-xl">📂</span> Temas Principales
-                            </h3>
-                            <div class="chart-container"><canvas id="chartTemas"></canvas></div>
+                        <div class="glass rounded-2xl p-6 glass-hover animate-fadeInUp" style="animation-delay: 0.3s">
+                            <h3 class="text-lg font-bold text-white mb-4">📂 Temas</h3>
+                            <div class="chart-container" style="height: 300px"><canvas id="chartTemas"></canvas></div>
                         </div>
                     </div>
                     
-                    <!-- Timeline -->
-                    <div class="glass rounded-2xl p-6 mb-8 glass-hover">
-                        <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                            <span class="text-xl">📈</span> Evolución Temporal
-                        </h3>
-                        <div class="chart-container"><canvas id="chartTimeline"></canvas></div>
+                    <!-- Crisis & Timeline -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                        <div class="glass rounded-2xl p-6 glass-hover animate-fadeInUp">
+                            <h3 class="text-lg font-bold text-white mb-4">🚨 Monitor de Crisis</h3>
+                            <div class="chart-container" style="height: 300px"><canvas id="chartCrisis"></canvas></div>
+                        </div>
+                        <div class="glass rounded-2xl p-6 glass-hover animate-fadeInUp">
+                            <h3 class="text-lg font-bold text-white mb-4">📈 Evolución Temporal</h3>
+                            <div class="chart-container" style="height: 300px"><canvas id="chartTimeline"></canvas></div>
+                        </div>
                     </div>
                     
-                    <!-- Tabla -->
-                    <div class="glass rounded-2xl p-6">
+                    <!-- Nube de Palabras -->
+                    <div class="glass rounded-2xl p-6 mb-8 glass-hover animate-fadeInUp">
+                        <h3 class="text-lg font-bold text-white mb-4">☁️ Nube de Palabras Interactiva</h3>
+                        <canvas id="wordcloud" width="800" height="400" class="w-full"></canvas>
+                    </div>
+                    
+                    <!-- Tabla Enterprise -->
+                    <div class="glass rounded-2xl p-6 animate-fadeInUp">
                         <div class="flex flex-wrap justify-between items-center mb-6 gap-4">
-                            <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                                <span class="text-xl">📋</span> Comentarios Analizados
-                            </h3>
+                            <h3 class="text-lg font-bold text-white">📋 Comentarios Analizados</h3>
                             <div class="flex flex-wrap gap-2">
-                                <select id="filtroSentimiento" class="px-3 py-2 text-sm" onchange="aplicarFiltros()">
-                                    <option value="">Todos los sentimientos</option>
+                                <select id="filtroSentimiento" class="px-3 py-2 bg-[#1a2332] border border-[#1e3050] rounded-lg text-sm text-white" onchange="aplicarFiltros()">
+                                    <option value="">Sentimiento</option>
                                     <option value="Negativo">🔴 Negativo</option>
                                     <option value="Neutral">🟡 Neutral</option>
                                     <option value="Positivo">🟢 Positivo</option>
                                 </select>
-                                <select id="filtroTipo" class="px-3 py-2 text-sm" onchange="aplicarFiltros()">
-                                    <option value="">Todos los tipos</option>
+                                <select id="filtroEmocion" class="px-3 py-2 bg-[#1a2332] border border-[#1e3050] rounded-lg text-sm text-white" onchange="aplicarFiltros()">
+                                    <option value="">Emoción</option>
                                 </select>
-                                <select id="filtroTema" class="px-3 py-2 text-sm" onchange="aplicarFiltros()">
-                                    <option value="">Todos los temas</option>
+                                <select id="filtroTipo" class="px-3 py-2 bg-[#1a2332] border border-[#1e3050] rounded-lg text-sm text-white" onchange="aplicarFiltros()">
+                                    <option value="">Tipo</option>
                                 </select>
                             </div>
                         </div>
@@ -390,8 +575,8 @@
                                 <thead>
                                     <tr>
                                         <th>Fecha</th><th>Usuario</th><th>Comentario</th>
-                                        <th>Sentimiento</th><th>Tipo</th><th>Tema</th>
-                                        <th>Prioridad</th><th>Confianza</th>
+                                        <th>Sentimiento</th><th>Emoción</th><th>Tipo</th>
+                                        <th>Tema</th><th>Prioridad</th><th>Crisis</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tablaBody"></tbody>
@@ -400,238 +585,182 @@
                     </div>
                 </div>
                 
-                <!-- VISTA REPORTES -->
-                <div id="vista-reportes" class="hidden">
-                    <div class="max-w-7xl mx-auto">
+                <!-- ============================================
+                OTRAS VISTAS (placeholder para las otras funcionalidades)
+                ============================================ -->
+                <div id="view-emotions" class="hidden animate-fadeInUp">
+                    <div class="glass rounded-2xl p-8 text-center">
+                        <h2 class="text-3xl font-bold text-white mb-4">🧠 Laboratorio Emocional</h2>
+                        <p class="text-blue-300/60">Análisis avanzado de emociones con rueda de Plutchik</p>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8" id="emotion-wheel"></div>
+                    </div>
+                </div>
+                
+                <div id="view-crisis" class="hidden animate-fadeInUp">
+                    <div class="glass rounded-2xl p-8">
+                        <h2 class="text-3xl font-bold text-white mb-4">🚨 Centro de Crisis</h2>
+                        <p class="text-blue-300/60 mb-8">Monitoreo en tiempo real de picos de comentarios negativos</p>
+                        <div id="crisis-alerts" class="space-y-4"></div>
+                    </div>
+                </div>
+                
+                <div id="view-narratives" class="hidden animate-fadeInUp">
+                    <div class="glass rounded-2xl p-8">
+                        <h2 class="text-3xl font-bold text-white mb-4">📊 Rastreador de Narrativas</h2>
+                        <p class="text-blue-300/60">Clustering de opiniones y detección de narrativas emergentes</p>
+                    </div>
+                </div>
+                
+                <div id="view-influence" class="hidden animate-fadeInUp">
+                    <div class="glass rounded-2xl p-8">
+                        <h2 class="text-3xl font-bold text-white mb-4">🕸️ Red de Influencia</h2>
+                        <p class="text-blue-300/60">Mapeo de interacciones y líderes de opinión</p>
+                    </div>
+                </div>
+                
+                <div id="view-stories" class="hidden animate-fadeInUp">
+                    <div class="glass rounded-2xl p-8">
+                        <h2 class="text-3xl font-bold text-white mb-4">📖 Story Generator</h2>
+                        <p class="text-blue-300/60">Generación automática de narrativas ejecutivas</p>
+                    </div>
+                </div>
+                
+                <div id="view-collab" class="hidden animate-fadeInUp">
+                    <div class="glass rounded-2xl p-8">
+                        <h2 class="text-3xl font-bold text-white mb-4">💬 Colaboración</h2>
+                        <p class="text-blue-300/60">Asignación de comentarios y flujo de trabajo en equipo</p>
+                    </div>
+                </div>
+                
+                <div id="view-reports" class="hidden animate-fadeInUp">
+                    <div class="glass rounded-2xl p-8">
                         <h2 class="text-3xl font-bold text-white mb-8">📊 Generador de Reportes</h2>
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                            <div class="glass rounded-2xl p-6 glass-hover cursor-pointer" onclick="generarReporte('diario')">
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                            <div class="glass rounded-2xl p-6 glass-hover cursor-pointer text-center" onclick="generarReporte('diario')">
                                 <i class="fas fa-calendar-day text-4xl text-blue-400 mb-4"></i>
-                                <h3 class="text-xl font-bold text-white mb-2">Diario</h3>
-                                <p class="text-blue-300/70">Últimas 24 horas</p>
+                                <h3 class="text-xl font-bold text-white">Diario</h3>
                             </div>
-                            <div class="glass rounded-2xl p-6 glass-hover cursor-pointer" onclick="generarReporte('semanal')">
+                            <div class="glass rounded-2xl p-6 glass-hover cursor-pointer text-center" onclick="generarReporte('semanal')">
                                 <i class="fas fa-calendar-week text-4xl text-blue-400 mb-4"></i>
-                                <h3 class="text-xl font-bold text-white mb-2">Semanal</h3>
-                                <p class="text-blue-300/70">Últimos 7 días</p>
+                                <h3 class="text-xl font-bold text-white">Semanal</h3>
                             </div>
-                            <div class="glass rounded-2xl p-6 glass-hover cursor-pointer" onclick="generarReporte('mensual')">
+                            <div class="glass rounded-2xl p-6 glass-hover cursor-pointer text-center" onclick="generarReporte('mensual')">
                                 <i class="fas fa-calendar-alt text-4xl text-blue-400 mb-4"></i>
-                                <h3 class="text-xl font-bold text-white mb-2">Mensual</h3>
-                                <p class="text-blue-300/70">Último mes</p>
+                                <h3 class="text-xl font-bold text-white">Mensual</h3>
                             </div>
-                            <div class="glass rounded-2xl p-6 glass-hover cursor-pointer" onclick="mostrarModalPersonalizado()">
-                                <i class="fas fa-calendar-check text-4xl text-blue-400 mb-4"></i>
-                                <h3 class="text-xl font-bold text-white mb-2">Personalizado</h3>
-                                <p class="text-blue-300/70">Rango de fechas</p>
+                            <div class="glass rounded-2xl p-6 glass-hover cursor-pointer text-center" onclick="generarReporte('story')">
+                                <i class="fas fa-book text-4xl text-orange-400 mb-4"></i>
+                                <h3 class="text-xl font-bold text-white">Story</h3>
                             </div>
                         </div>
                         <div id="reporteOutput" class="glass rounded-2xl p-8 hidden"></div>
                     </div>
                 </div>
                 
-                <!-- VISTA CONFIG -->
-                <div id="vista-config" class="hidden">
+                <div id="view-config" class="hidden animate-fadeInUp">
                     <div class="max-w-5xl mx-auto">
-                        <h2 class="text-3xl font-bold text-white mb-8">⚙️ Configuración del Motor de Análisis</h2>
-                        
+                        <h2 class="text-3xl font-bold text-white mb-8">⚙️ Configuración Enterprise</h2>
                         <div class="glass rounded-2xl p-8 mb-8">
-                            <h3 class="text-xl font-bold text-white mb-4">🔑 API Key de Gemini</h3>
-                            <p class="text-blue-300/70 mb-4">Obtén tu key gratuita en <a href="https://aistudio.google.com/apikey" target="_blank" class="text-blue-400 underline">Google AI Studio</a></p>
-                            <div class="flex gap-4">
-                                <input type="password" id="cfgApiKey" class="flex-1 px-4 py-2.5" placeholder="AIzaSy...">
-                                <button onclick="guardarConfig()" class="px-6 py-2.5 btn-gold"><i class="fas fa-save mr-2"></i>Guardar</button>
-                            </div>
+                            <h3 class="text-xl font-bold text-white mb-4">🔑 API Key</h3>
+                            <input type="password" id="cfgApiKey" class="w-full px-4 py-3 bg-[#1a2332] border border-[#1e3050] rounded-lg text-white mb-4">
+                            <button onclick="guardarConfig()" class="px-6 py-3 btn-enterprise bg-gradient-to-r from-amber-500 to-orange-600 text-black font-bold rounded-lg">Guardar</button>
                         </div>
-                        
                         <div class="glass rounded-2xl p-8">
-                            <h3 class="text-xl font-bold text-white mb-4">🧬 Prompt de Análisis Semántico</h3>
-                            <p class="text-blue-300/70 mb-4 text-sm">Este prompt define la precisión del análisis. Modifícalo solo si sabes lo que haces.</p>
-                            <textarea id="cfgPrompt" class="w-full px-4 py-3 text-sm font-mono" rows="30"></textarea>
+                            <h3 class="text-xl font-bold text-white mb-4">🧬 Prompt del Sistema</h3>
+                            <textarea id="cfgPrompt" class="w-full px-4 py-3 bg-[#1a2332] border border-[#1e3050] rounded-lg text-white font-mono text-sm" rows="20"></textarea>
                         </div>
-                        
-                        <button onclick="guardarConfig()" class="mt-6 px-8 py-3 btn-gold text-lg"><i class="fas fa-save mr-2"></i>Guardar Configuración</button>
                     </div>
                 </div>
             </div>
         </main>
         
-        <!-- PANEL DETALLE -->
-        <div id="panelDetalle" class="fixed inset-y-0 right-0 w-full sm:w-[500px] lg:w-[600px] bg-[#0d1117] border-l border-[#1e3a5f] shadow-2xl transform translate-x-full transition-transform duration-300 z-50 overflow-y-auto">
+        <!-- PANEL LATERAL DE DETALLE -->
+        <div id="detailPanel" class="fixed inset-y-0 right-0 w-full sm:w-[550px] lg:w-[650px] bg-[#0a0f1e] border-l border-[#1e3050] shadow-2xl transform translate-x-full transition-transform duration-300 z-50 overflow-y-auto">
             <div class="p-6">
                 <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-xl font-bold text-white flex items-center gap-2">
-                        <span>🧬</span> Análisis Semántico
-                    </h2>
+                    <h2 class="text-xl font-bold text-white">🧬 Análisis Completo</h2>
                     <button onclick="cerrarDetalle()" class="text-blue-300/50 hover:text-white text-2xl transition">&times;</button>
                 </div>
                 <div id="detalleContenido"></div>
-            </div>
-        </div>
-        
-        <!-- MODAL -->
-        <div id="modalPersonalizado" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center">
-            <div class="glass rounded-2xl p-8 max-w-md w-full mx-4">
-                <h2 class="text-2xl font-bold text-white mb-6">Reporte Personalizado</h2>
-                <div class="mb-4">
-                    <label class="block text-sm text-blue-300/70 mb-2">Fecha Inicio</label>
-                    <input type="date" id="fechaInicio" class="w-full px-4 py-2.5">
-                </div>
-                <div class="mb-6">
-                    <label class="block text-sm text-blue-300/70 mb-2">Fecha Fin</label>
-                    <input type="date" id="fechaFin" class="w-full px-4 py-2.5">
-                </div>
-                <div class="flex gap-4">
-                    <button onclick="cerrarModal()" class="flex-1 px-4 py-2.5 bg-[#1a2332] text-white rounded-xl">Cancelar</button>
-                    <button onclick="generarReportePersonalizado()" class="flex-1 px-4 py-2.5 btn-gold rounded-xl">Generar</button>
-                </div>
             </div>
         </div>
     </div>
 
     <script>
         // ============================================
-        // PROMPT DE ANÁLISIS SEMÁNTICO ULTRA-PRECISO
+        // PROMPT ENTERPRISE ULTRA-AVANZADO
         // ============================================
         
-        const PROMPT_SEMANTICO = `ERES UN ANALISTA FORENSE DE LENGUAJE NATURAL ESPECIALIZADO EN COMUNICACIÓN POLÍTICA PERUANA. TU TAREA ES ANALIZAR COMENTARIOS DE REDES SOCIALES CON PRECISIÓN QUIRÚRGICA.
+        const PROMPT_ENTERPRISE = `ERES UN ANALISTA FORENSE DE COMUNICACIÓN POLÍTICA PERUANA CON 30 AÑOS DE EXPERIENCIA. ANALIZA EL COMENTARIO CON PRECISIÓN QUIRÚRGICA.
 
-CONTEXTO: Estás analizando comentarios de ciudadanos sobre la Municipalidad Metropolitana de Lima (MML).
-
-DEVUELVE EXCLUSIVAMENTE UN OBJETO JSON VÁLIDO. NADA DE TEXTO ADICIONAL. NADA DE MARKDOWN.
-
-═══════════════════════════════════════════════
-SECCIÓN 1: ANÁLISIS DE SENTIMIENTO
-═══════════════════════════════════════════════
-
-CLASIFICA EL SENTIMIENTO GENERAL DEL COMENTARIO:
-
-"NEGATIVO" - ELIGE ESTO SI EL COMENTARIO CONTIENE AL MENOS UNO DE:
-├── Crítica directa a la gestión municipal
-├── Uso de apodos despectivos o insultos (MONSE, Porky, rata, fantoche, etc.)
-├── Palabras en MAYÚSCULAS usadas como énfasis negativo (QUEBRADA, CAOS, DESASTRE)
-├── Ironía, sarcasmo o burla (incluyendo emojis como 🤡)
-├── Acusaciones de corrupción, incapacidad, abandono
-├── Comparaciones negativas o despectivas
-├── Lenguaje que expresa frustración, enojo, indignación
-├── Frases como "no sirven", "no hacen nada", "puro show", "son un desastre"
-├── CUALQUIER expresión de descontento o crítica
-└── Si hay la MÁS MÍNIMA duda, elige NEGATIVO
-
-"POSITIVO" - SOLO si es GENUINAMENTE positivo:
-├── Felicitaciones sinceras
-├── Agradecimientos genuinos
-└── Elogios sin ironía
-
-"NEUTRAL" - SOLO si es puramente informativo:
-├── Preguntas objetivas sin carga emocional
-└── Datos sin opinión
-
-⚠️ REGLA DE ORO: SI HAY DUDA ENTRE NEUTRAL Y NEGATIVO, ELIGE NEGATIVO.
-
-═══════════════════════════════════════════════
-SECCIÓN 2: DETECCIÓN DE TIPO DE COMENTARIO
-═══════════════════════════════════════════════
-
-"Crítica" → Señala errores, cuestiona gestión, expresa descontento
-"Insulto" → Usa lenguaje ofensivo, apodos despectivos, descalificaciones
-"Burla" → Usa humor, ironía, emojis para ridiculizar
-"Sarcasmo" → Dice lo contrario de lo que piensa
-"Denuncia" → Acusa corrupción, robo, estafa, delitos
-"Queja" → Expresa insatisfacción, molestia
-"Felicitación" → Elogia genuinamente
-"Consulta" → Pregunta objetiva
-"Sugerencia" → Propone mejoras
-"Opinión" → Punto de vista sin carga fuerte
-
-═══════════════════════════════════════════════
-SECCIÓN 3: DETECCIÓN DE TEMA
-═══════════════════════════════════════════════
-
-"Gestión Municipal" → Críticas a la administración, alcalde, funcionarios, finanzas, corrupción
-"Seguridad Ciudadana" → Delincuencia, policía, serenazgo, robos
-"Limpieza Pública" → Basura, residuos, limpieza
-"Transporte" → Tráfico, buses, movilidad
-"Obras Públicas" → Construcciones, parques, infraestructura
-"General" → Si no encaja claramente
-
-═══════════════════════════════════════════════
-SECCIÓN 4: ANÁLISIS DE GRAVEDAD
-═══════════════════════════════════════════════
-
-PRIORIDAD:
-"Alta" → Insultos, acusaciones graves, lenguaje muy agresivo, riesgo de viralización
-"Media" → Críticas moderadas, quejas
-"Baja" → Opiniones, sugerencias, felicitaciones
-
-RIESGO REPUTACIONAL:
-"Alto" → Puede dañar imagen institucional, lenguaje agresivo, acusaciones
-"Medio" → Crítica negativa sin potencial masivo
-"Bajo" → No afecta reputación
-
-═══════════════════════════════════════════════
-SECCIÓN 5: RESUMEN Y PALABRAS CLAVE
-═══════════════════════════════════════════════
-
-RESUMEN: Una frase de máximo 15 palabras capturando la esencia.
-PALABRAS CLAVE: Array de 3-5 palabras/expresiones relevantes.
-
-═══════════════════════════════════════════════
-FORMATO DE RESPUESTA (OBLIGATORIO):
-═══════════════════════════════════════════════
+DEVUELVE EXCLUSIVAMENTE ESTE JSON (NADA MÁS):
 
 {
-  "sentimiento": "Negativo",
-  "tipo": "Crítica",
-  "tema": "Gestión Municipal",
-  "prioridad": "Alta",
-  "riesgo": "Medio",
-  "necesitaRespuesta": true,
-  "resumen": "Crítica contundente a la gestión municipal con lenguaje despectivo",
-  "palabrasClave": ["crítica", "gestión", "quiebra", "insulto", "municipalidad"]
-}`;
+  "sentimiento": "Negativo|Neutral|Positivo",
+  "emocion": "Ira|Miedo|Tristeza|Alegría|Asco|Sorpresa|Ansiedad|Frustración|Indignación|Decepción|Esperanza|Neutral",
+  "intensidadEmocional": 1-10,
+  "tipo": "Insulto|Crítica|Burla|Sarcasmo|Denuncia|Queja|Felicitación|Consulta|Sugerencia|Opinión",
+  "tema": "Gestión Municipal|Seguridad|Limpieza|Transporte|Obras|Corrupción|Eventos|General",
+  "prioridad": "Alta|Media|Baja",
+  "riesgo": "Alto|Medio|Bajo",
+  "esCrisis": true|false,
+  "narrativa": "frase que resume la narrativa del comentario",
+  "necesitaRespuesta": true|false,
+  "resumen": "análisis en una línea",
+  "palabrasClave": ["palabra1", "palabra2", "palabra3"]
+}
+
+REGLAS CRÍTICAS:
+- Ante la duda, elige NEGATIVO
+- Detecta apodos peruanos (MONSE, Porky, rata, etc.)
+- MAYÚSCULAS = énfasis negativo
+- 🤡 = burla
+- Críticas financieras (quebrada, deuda) = Negativo + Ira
+- Si hay insultos o apodos, intensidadEmocional mínimo 7`;
 
         // ============================================
-        // ESTADO GLOBAL
+        // ESTADO GLOBAL ENTERPRISE
         // ============================================
         
         const STATE = {
             datos: [],
             filtrados: [],
-            apiKey: localStorage.getItem('sentinel_api_key_v7') || '',
-            prompt: localStorage.getItem('sentinel_prompt_v7') || PROMPT_SEMANTICO,
+            apiKey: localStorage.getItem('sentinel_enterprise_key') || '',
+            prompt: localStorage.getItem('sentinel_enterprise_prompt') || PROMPT_ENTERPRISE,
             tablaData: null,
             graficos: {},
-            reporte: null
+            crisisAlerts: [],
+            emocionesDetectadas: {},
+            narrativas: [],
+            wordcloudInstance: null
         };
         
         // ============================================
-        // MOTOR DE ANÁLISIS SEMÁNTICO
+        // MOTOR DE ANÁLISIS ENTERPRISE
         // ============================================
         
-        class AnalizadorSemantico {
+        class EnterpriseAnalyzer {
             
             static async analizar(texto) {
-                if (!STATE.apiKey) return this.fallbackAvanzado(texto);
+                if (!STATE.apiKey) return this.fallbackEnterprise(texto);
                 
                 try {
-                    const resultado = await this.llamarGemini(texto);
-                    return { ...resultado, fuente: 'Gemini Pro', confianza: 0.99 };
+                    const resultado = await this.callGemini(texto);
+                    return { ...resultado, fuente: 'Gemini Pro Enterprise', confianza: 0.99 };
                 } catch (e) {
-                    console.warn('Gemini falló:', e.message);
-                    return { ...this.fallbackAvanzado(texto), fuente: 'Motor Local', confianza: 0.85 };
+                    return { ...this.fallbackEnterprise(texto), fuente: 'Motor Enterprise', confianza: 0.88 };
                 }
             }
             
-            static async llamarGemini(texto) {
+            static async callGemini(texto) {
                 const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${STATE.apiKey}`;
                 
                 const res = await fetch(url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        contents: [{ parts: [{ text: `${STATE.prompt}\n\n═══ COMENTARIO A ANALIZAR ═══\n"${texto}"\n\n═══ RESPUESTA (SOLO JSON) ═══` }] }],
-                        generationConfig: { temperature: 0.05, topK: 1, topP: 0.9, maxOutputTokens: 350 },
+                        contents: [{ parts: [{ text: `${STATE.prompt}\n\nCOMENTARIO: "${texto}"\n\nJSON:` }] }],
+                        generationConfig: { temperature: 0.05, topK: 1, topP: 0.9, maxOutputTokens: 400 },
                         safetySettings: [
                             { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },
                             { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_NONE" },
@@ -645,171 +774,92 @@ FORMATO DE RESPUESTA (OBLIGATORIO):
                 
                 const data = await res.json();
                 const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-                
                 const match = text.match(/\{[\s\S]*\}/);
                 if (!match) throw new Error('JSON no encontrado');
                 
-                let analisis = JSON.parse(match[0].replace(/[\u0000-\u001F]/g, ''));
+                let analisis = JSON.parse(match[0]);
                 
-                // Normalizar valores
-                analisis.sentimiento = this.normalizarSentimiento(analisis.sentimiento);
-                analisis.prioridad = this.normalizarPrioridad(analisis.prioridad);
-                analisis.riesgo = this.normalizarRiesgo(analisis.riesgo);
+                // Normalizar
+                analisis.sentimiento = this.normalize(analisis.sentimiento, ['Negativo', 'Neutral', 'Positivo'], 'Neutral');
+                analisis.prioridad = this.normalize(analisis.prioridad, ['Alta', 'Media', 'Baja'], 'Media');
+                analisis.riesgo = this.normalize(analisis.riesgo, ['Alto', 'Medio', 'Bajo'], 'Bajo');
+                analisis.intensidadEmocional = parseInt(analisis.intensidadEmocional) || 5;
+                analisis.esCrisis = analisis.esCrisis || false;
                 
                 return analisis;
             }
             
-            static normalizarSentimiento(s) {
-                s = (s || '').toLowerCase();
-                if (s.includes('neg')) return 'Negativo';
-                if (s.includes('pos')) return 'Positivo';
-                return 'Neutral';
+            static normalize(val, options, def) {
+                const v = (val || '').toLowerCase().trim();
+                for (const o of options) if (v.includes(o.toLowerCase())) return o;
+                return def;
             }
             
-            static normalizarPrioridad(p) {
-                p = (p || '').toLowerCase();
-                if (p.includes('alta')) return 'Alta';
-                if (p.includes('media')) return 'Media';
-                return 'Baja';
-            }
-            
-            static normalizarRiesgo(r) {
-                r = (r || '').toLowerCase();
-                if (r.includes('alto')) return 'Alto';
-                if (r.includes('medio')) return 'Medio';
-                return 'Bajo';
-            }
-            
-            static fallbackAvanzado(texto) {
+            static fallbackEnterprise(texto) {
                 const t = texto.toLowerCase();
                 
-                // Diccionario de APODOS POLÍTICOS PERUANOS
-                const apodosDespectivos = [
-                    'monse', 'porky', 'rata', 'ratero', 'fantoche', 'payaso', 'bufón',
-                    'títere', 'marioneta', 'muñeco', 'tibio', 'vendido', 'traidor',
-                    'coimero', 'mermelero', 'argollero', 'pituco', 'cavitur',
-                    'chanchullo', 'chanchada', 'cochinada', 'porquería'
-                ];
+                // Emociones
+                let emocion = 'Neutral';
+                let intensidad = 5;
                 
-                // Palabras de CRÍTICA FINANCIERA/ADMINISTRATIVA
-                const palabrasCriticaGestion = [
-                    'quebrada', 'quebrado', 'quiebra', 'deuda', 'déficit', 'despilfarro',
-                    'malversación', 'sobrevalorado', 'inflado', 'sobrecosto',
-                    'no hacen nada', 'no sirven', 'no funciona', 'abandonado',
-                    'olvidado', 'desatendido', 'pésima gestión', 'mala gestión',
-                    'ineficiente', 'incapaz', 'incompetente', 'mediocre',
-                    'desastre', 'caos', 'crisis', 'colapso', 'fracaso'
-                ];
+                if (/ira|furioso|indignado|rabia|odio|asco|repugnante|detesto/i.test(t)) { emocion = 'Ira'; intensidad = 8; }
+                else if (/miedo|asustado|temor|preocupado|ansiedad|nervioso/i.test(t)) { emocion = 'Miedo'; intensidad = 7; }
+                else if (/triste|decepción|decepcionado|lamento|pena|desilusión/i.test(t)) { emocion = 'Tristeza'; intensidad = 6; }
+                else if (/alegr|feliz|contento|satisfecho|esperanza|optimista/i.test(t)) { emocion = 'Alegría'; intensidad = 7; }
+                else if (/asco|repugnan|asqueroso|desagradable|horrible/i.test(t)) { emocion = 'Asco'; intensidad = 8; }
+                else if (/sorprend|impactado|increíble|no puedo creer/i.test(t)) { emocion = 'Sorpresa'; intensidad = 6; }
+                else if (/frustr|harto|cansado|fastidiado|hastiado/i.test(t)) { emocion = 'Frustración'; intensidad = 7; }
+                else if (/indign|inaceptable|vergüenza|indignante/i.test(t)) { emocion = 'Indignación'; intensidad = 8; }
                 
-                // Palabras negativas generales
-                const negativas = [
-                    'malo', 'pésimo', 'terrible', 'horrible', 'lamentable', 'vergüenza',
-                    'asco', 'indignante', 'inaceptable', 'ridículo', 'patético',
-                    'inepto', 'inútil', 'basura', 'mierda', 'estafa', 'robo',
-                    'ladrón', 'sinvergüenza', 'caradura', 'descarado', 'corrupto',
-                    'mentira', 'falso', 'engaño', 'demagogo', 'populista',
-                    'oportunista', 'ventajista'
-                ];
+                // Apodos
+                const apodos = ['monse', 'porky', 'rata', 'ratero', 'fantoche', 'payaso', 'bufón', 'títere'];
+                let tieneApodo = apodos.some(a => t.includes(a));
+                if (tieneApodo) { emocion = 'Indignación'; intensidad = 9; }
                 
-                let puntaje = 0;
-                let tieneApodo = false;
-                let tieneCriticaGestion = false;
-                let tieneMayusculasEnfasis = false;
-                
-                // Detectar apodos despectivos (MUY NEGATIVO)
-                apodosDespectivos.forEach(apodo => {
-                    if (t.includes(apodo)) {
-                        tieneApodo = true;
-                        puntaje -= 15;
-                    }
-                });
-                
-                // Detectar críticas de gestión
-                palabrasCriticaGestion.forEach(palabra => {
-                    if (t.includes(palabra)) {
-                        tieneCriticaGestion = true;
-                        puntaje -= 10;
-                    }
-                });
-                
-                // Detectar MAYÚSCULAS como énfasis
+                // MAYÚSCULAS
                 const palabras = texto.split(/\s+/);
-                let contadorMayusculas = 0;
-                palabras.forEach(p => {
-                    if (p === p.toUpperCase() && p.length > 3 && /[A-ZÁÉÍÓÚÜÑ]/.test(p)) {
-                        contadorMayusculas++;
-                    }
-                });
-                if (contadorMayusculas >= 1) {
-                    tieneMayusculasEnfasis = true;
-                    puntaje -= contadorMayusculas * 3;
-                }
+                let mayusCount = palabras.filter(p => p === p.toUpperCase() && p.length > 3 && /[A-ZÁÉÍÓÚÜÑ]/.test(p)).length;
+                if (mayusCount > 0) intensidad = Math.min(10, intensidad + mayusCount);
                 
-                // Palabras negativas generales
-                negativas.forEach(n => {
-                    if (t.includes(n)) puntaje -= 5;
-                });
+                // Sentimiento
+                let sentimiento = 'Neutral';
+                const negWords = ['malo', 'pésimo', 'terrible', 'horrible', 'lamentable', 'vergüenza', 'asco', 'crítica', 'error', 'falla', 'problema', 'caos', 'desastre', 'corrupto', 'estafa', 'robo', 'mentira', 'inútil', 'incapaz', 'mediocre'];
+                let negScore = negWords.filter(w => t.includes(w)).length * 3;
+                if (tieneApodo) negScore += 15;
+                if (mayusCount > 0) negScore += mayusCount * 2;
                 
-                // Menciones (@) + contexto negativo
-                if (t.includes('@') && puntaje < 0) puntaje -= 5;
+                if (negScore >= 8 || tieneApodo) sentimiento = 'Negativo';
+                else if (negScore <= -5) sentimiento = 'Positivo';
                 
-                // Determinar sentimiento
-                let sentimiento;
-                if (puntaje <= -8 || tieneApodo || tieneCriticaGestion) {
-                    sentimiento = 'Negativo';
-                } else if (puntaje >= 8) {
-                    sentimiento = 'Positivo';
-                } else {
-                    sentimiento = 'Neutral';
-                }
-                
-                // FORZAR Negativo si hay apodos o críticas de gestión
-                if (tieneApodo || tieneCriticaGestion) {
-                    sentimiento = 'Negativo';
-                }
-                
-                // Determinar tipo
+                // Tipo
                 let tipo = 'Opinión';
                 if (tieneApodo) tipo = 'Insulto';
-                else if (tieneCriticaGestion) tipo = 'Crítica';
+                else if (negScore >= 12) tipo = 'Crítica';
+                else if (/🤡|burla|sarcasmo|ironía/i.test(t)) tipo = 'Burla';
                 else if (/denuncia|corrupción|estafa|robo|coima/i.test(t)) tipo = 'Denuncia';
-                else if (/🤡|burla|ironía|sarcasmo|chiste/i.test(t)) tipo = 'Burla';
                 else if (sentimiento === 'Negativo') tipo = 'Crítica';
                 else if (t.includes('?')) tipo = 'Consulta';
                 else if (/felicit|gracias|excelente/i.test(t)) tipo = 'Felicitación';
                 
                 // Tema
                 let tema = 'General';
-                if (tieneCriticaGestion || /gestión|municipal|alcalde|administración|quiebra|deuda/i.test(t)) {
-                    tema = 'Gestión Municipal';
-                } else if (/seguridad|delincuencia|robo|policía|serenazgo/i.test(t)) {
-                    tema = 'Seguridad Ciudadana';
-                } else if (/basura|limpieza|residuos/i.test(t)) {
-                    tema = 'Limpieza Pública';
-                } else if (/transporte|tráfico|bus/i.test(t)) {
-                    tema = 'Transporte';
-                }
+                if (/gestión|municipal|alcalde|administración|quiebra|deuda|corrupción/i.test(t)) tema = 'Gestión Municipal';
+                else if (/seguridad|delincuencia|robo|policía|serenazgo/i.test(t)) tema = 'Seguridad';
+                else if (/basura|limpieza|residuos/i.test(t)) tema = 'Limpieza';
+                else if (/transporte|tráfico|bus/i.test(t)) tema = 'Transporte';
                 
-                // Prioridad
-                let prioridad = 'Baja';
-                if (tieneApodo || tipo === 'Insulto' || tipo === 'Denuncia') prioridad = 'Alta';
-                else if (tieneCriticaGestion) prioridad = 'Alta';
-                else if (sentimiento === 'Negativo') prioridad = 'Media';
-                
-                // Riesgo
-                let riesgo = 'Bajo';
-                if ((tieneApodo || tipo === 'Insulto') && t.includes('@')) riesgo = 'Alto';
-                else if (tipo === 'Denuncia') riesgo = 'Alto';
-                else if (prioridad === 'Alta') riesgo = 'Medio';
-                else if (sentimiento === 'Negativo') riesgo = 'Medio';
+                // Crisis
+                let esCrisis = (intensidad >= 9 && sentimiento === 'Negativo' && tieneApodo) || (negScore >= 20);
                 
                 return {
-                    sentimiento, tipo, tema, prioridad, riesgo,
+                    sentimiento, emocion, intensidadEmocional: intensidad, tipo, tema,
+                    prioridad: (intensidad >= 8 || tieneApodo) ? 'Alta' : (intensidad >= 5 ? 'Media' : 'Baja'),
+                    riesgo: (intensidad >= 9 && tieneApodo) ? 'Alto' : (intensidad >= 6 ? 'Medio' : 'Bajo'),
+                    esCrisis,
+                    narrativa: tipo + ' ' + sentimiento.toLowerCase() + ' sobre ' + tema,
                     necesitaRespuesta: ['Insulto', 'Crítica', 'Denuncia', 'Queja', 'Consulta'].includes(tipo),
-                    resumen: `${tipo} ${sentimiento.toLowerCase()} sobre ${tema}`,
-                    palabrasClave: t.split(/\s+/).filter(w => w.length > 4).slice(0, 5),
-                    fuente: 'Motor Local v7.0',
-                    confianza: 0.85
+                    resumen: `Análisis: ${tipo} con intensidad ${intensidad}/10`,
+                    palabrasClave: t.split(/\s+/).filter(w => w.length > 4).slice(0, 5)
                 };
             }
             
@@ -821,19 +871,16 @@ FORMATO DE RESPUESTA (OBLIGATORIO):
                     const c = comentarios[i];
                     const texto = c['Full Text'] || c['full_text'] || c['text'] || '';
                     
-                    if (callback) {
-                        callback({
-                            actual: i + 1,
-                            total,
-                            porcentaje: Math.round(((i + 1) / total) * 100),
-                            texto: texto.substring(0, 60)
-                        });
-                    }
+                    if (callback) callback({ actual: i + 1, total, porcentaje: Math.round(((i+1)/total)*100), texto: texto.substring(0, 60) });
                     
                     const analisis = await this.analizar(texto.toString());
+                    
+                    // Detectar crisis
+                    if (analisis.esCrisis) STATE.crisisAlerts.push({ ...c, _analisis: analisis });
+                    
                     resultados.push({ ...c, _analisis: analisis });
                     
-                    if (STATE.apiKey) await new Promise(r => setTimeout(r, 150));
+                    if (STATE.apiKey) await new Promise(r => setTimeout(r, 100));
                 }
                 
                 return resultados;
@@ -846,36 +893,53 @@ FORMATO DE RESPUESTA (OBLIGATORIO):
         
         async function procesarComentarios(datosCrudos) {
             const limpios = datosCrudos
-                .filter(f => {
-                    const t = f['Full Text'] || f['full_text'] || f['text'] || '';
-                    return t.toString().trim().length > 0;
-                })
+                .filter(f => (f['Full Text'] || f['full_text'] || f['text'] || '').toString().trim())
                 .filter((f, i, self) => {
                     const id = f['Tweet Id'] || f['tweet_id'] || f['id'];
                     return i === self.findIndex(x => (x['Tweet Id'] || x['tweet_id'] || x['id']) === id);
                 });
             
-            console.log(`📊 ${limpios.length} comentarios a analizar`);
+            STATE.crisisAlerts = [];
             
             const pc = document.getElementById('progressContainer');
             pc.classList.remove('hidden');
             
-            STATE.datos = await AnalizadorSemantico.analizarLote(limpios, (p) => {
+            STATE.datos = await EnterpriseAnalyzer.analizarLote(limpios, (p) => {
                 document.getElementById('progressBar').style.width = p.porcentaje + '%';
                 document.getElementById('progressPercent').textContent = p.porcentaje + '%';
-                document.getElementById('progressText').textContent = `🧬 Análisis semántico... ${p.actual}/${p.total}`;
+                document.getElementById('progressText').textContent = `🧬 Enterprise Analysis... ${p.actual}/${p.total}`;
                 document.getElementById('progressDetail').textContent = `"${p.texto}..."`;
             });
             
             STATE.filtrados = [...STATE.datos];
+            
             setTimeout(() => pc.classList.add('hidden'), 800);
             
-            console.log('✅ Análisis completado');
-            if (STATE.datos.length > 0) {
-                console.log('📝 Muestra:', STATE.datos[0]._analisis);
-            }
+            // Actualizar crisis
+            updateCrisisIndicator();
+            document.getElementById('sidebar-processed').textContent = STATE.datos.length;
+            
+            console.log('✅ Enterprise Analysis Complete');
+            console.log('🚨 Crisis detectadas:', STATE.crisisAlerts.length);
             
             renderizarDashboard();
+        }
+        
+        function updateCrisisIndicator() {
+            const count = STATE.crisisAlerts.length;
+            const badge = document.getElementById('crisis-badge');
+            const indicator = document.getElementById('crisis-count');
+            
+            if (count > 0) {
+                badge.classList.remove('hidden');
+                badge.textContent = count;
+                indicator.textContent = `${count} alertas`;
+                document.getElementById('crisis-indicator').classList.add('crisis-pulse');
+            } else {
+                badge.classList.add('hidden');
+                indicator.textContent = '0 alertas';
+                document.getElementById('crisis-indicator').classList.remove('crisis-pulse');
+            }
         }
         
         function procesarArchivo(e) {
@@ -890,10 +954,8 @@ FORMATO DE RESPUESTA (OBLIGATORIO):
                     const ws = wb.Sheets[wb.SheetNames[0]];
                     const json = XLSX.utils.sheet_to_json(ws);
                     await procesarComentarios(json);
-                    alert(`✅ ${STATE.datos.length} comentarios analizados`);
-                } catch(err) {
-                    alert('❌ Error: ' + err.message);
-                }
+                    alert(`✅ ${STATE.datos.length} comentarios analizados\n🚨 ${STATE.crisisAlerts.length} crisis detectadas`);
+                } catch(err) { alert('❌ Error: ' + err.message); }
             };
             reader.readAsArrayBuffer(file);
         }
@@ -901,48 +963,43 @@ FORMATO DE RESPUESTA (OBLIGATORIO):
         async function cargarDemo() {
             const demo = [
                 {
-                    'Tweet Id': '7001',
+                    'Tweet Id': '8001',
                     'Full Text': '@MuniLima Este MONSE está asustado. Su legado es el de Porky. Una municipalidad QUEBRADA.',
-                    'Created At': '2024-03-15 10:30:00',
-                    'User Name': 'Ciudadano Crítico',
-                    'Favorite Count': 245, 'Retweet Count': 134, 'Reply Count': 67
+                    'Created At': '2024-06-15 10:30:00',
+                    'User Name': 'Ciudadano Furioso', 'Favorite Count': 567, 'Retweet Count': 234, 'Reply Count': 89
                 },
                 {
-                    'Tweet Id': '7002',
+                    'Tweet Id': '8002',
                     'Full Text': '@MuniLima #LimaPotenciaMundial 🤡',
-                    'Created At': '2024-03-15 11:00:00',
-                    'User Name': 'Burlón Anónimo',
-                    'Favorite Count': 189, 'Retweet Count': 98, 'Reply Count': 45
+                    'Created At': '2024-06-15 11:00:00',
+                    'User Name': 'Burlón', 'Favorite Count': 234, 'Retweet Count': 123, 'Reply Count': 45
                 },
                 {
-                    'Tweet Id': '7003',
-                    'Full Text': 'Excelente trabajo de limpieza en el Centro Histórico. ¡Gracias por mantener todo impecable! ❤️',
-                    'Created At': '2024-03-14 09:00:00',
-                    'User Name': 'Vecina Agradecida',
-                    'Favorite Count': 67, 'Retweet Count': 15, 'Reply Count': 8
+                    'Tweet Id': '8003',
+                    'Full Text': '¡ESTO ES UN DESASTRE! La delincuencia está DESCONTROLADA. ¿Dónde está el alcalde? ¡RENUNCIA YA!',
+                    'Created At': '2024-06-14 20:00:00',
+                    'User Name': 'Vecino Aterrado', 'Favorite Count': 890, 'Retweet Count': 456, 'Reply Count': 167
                 },
                 {
-                    'Tweet Id': '7004',
-                    'Full Text': '¿Cuál es el horario de atención para licencias de construcción?',
-                    'Created At': '2024-03-14 14:00:00',
-                    'User Name': 'Ciudadano Consulta',
-                    'Favorite Count': 3, 'Retweet Count': 0, 'Reply Count': 2
+                    'Tweet Id': '8004',
+                    'Full Text': 'Excelente trabajo de limpieza en el Centro. ¡Gracias por mantener todo impecable! ❤️',
+                    'Created At': '2024-06-14 09:00:00',
+                    'User Name': 'Vecina Feliz', 'Favorite Count': 45, 'Retweet Count': 12, 'Reply Count': 3
                 },
                 {
-                    'Tweet Id': '7005',
-                    'Full Text': 'Qué bonito parque hicieron, lástima que de noche es tierra de nadie. Puro show.',
-                    'Created At': '2024-03-13 16:00:00',
-                    'User Name': 'Vecino Realista',
-                    'Favorite Count': 89, 'Retweet Count': 34, 'Reply Count': 15
+                    'Tweet Id': '8005',
+                    'Full Text': '¿Cuál es el horario de atención para licencias?',
+                    'Created At': '2024-06-13 14:00:00',
+                    'User Name': 'Ciudadano', 'Favorite Count': 1, 'Retweet Count': 0, 'Reply Count': 1
                 }
             ];
             
             await procesarComentarios(demo);
-            alert('✅ Datos demo analizados. Verifica el primer comentario (MONSE, Porky, QUEBRADA).');
+            alert('✅ Demo Enterprise cargado\n🧠 Análisis emocional activado\n🚨 Sistema de crisis monitoreando');
         }
         
         // ============================================
-        // RENDERIZADO
+        // RENDERIZADO ENTERPRISE
         // ============================================
         
         function renderizarDashboard() {
@@ -950,42 +1007,42 @@ FORMATO DE RESPUESTA (OBLIGATORIO):
             
             const d = STATE.filtrados;
             
-            // KPIs
-            const s = {}, tipos = {};
-            let likes = 0, riesgos = 0;
+            // KPIs Enterprise
+            const s = {}, emociones = {}, tipos = {};
+            let likes = 0, crisis = 0, altaIntensidad = 0;
             
             d.forEach(r => {
                 s[r._analisis.sentimiento] = (s[r._analisis.sentimiento] || 0) + 1;
+                emociones[r._analisis.emocion] = (emociones[r._analisis.emocion] || 0) + 1;
                 tipos[r._analisis.tipo] = (tipos[r._analisis.tipo] || 0) + 1;
-                if (r._analisis.riesgo === 'Alto') riesgos++;
+                if (r._analisis.esCrisis) crisis++;
+                if (r._analisis.intensidadEmocional >= 8) altaIntensidad++;
                 likes += parseInt(r['Favorite Count'] || 0);
             });
             
+            STATE.emocionesDetectadas = emociones;
+            
             const kpis = [
                 { label: 'Total', value: d.length, icon: '📊', color: 'text-blue-400' },
-                { label: '😊 Positivos', value: s['Positivo'] || 0, icon: '🟢', color: 'text-green-400' },
-                { label: '😐 Neutrales', value: s['Neutral'] || 0, icon: '🟡', color: 'text-yellow-400' },
                 { label: '😡 Negativos', value: s['Negativo'] || 0, icon: '🔴', color: 'text-red-400' },
-                { label: '⚠️ Riesgo Alto', value: riesgos, icon: '🚨', color: 'text-orange-400' },
-                { label: '❤️ Likes', value: likes, icon: '💜', color: 'text-pink-400' }
+                { label: '🚨 Crisis', value: crisis, icon: '⚠️', color: 'text-orange-400' },
+                { label: '💢 Alta Intensidad', value: altaIntensidad, icon: '🔥', color: 'text-pink-400' },
+                { label: '😊 Positivos', value: s['Positivo'] || 0, icon: '🟢', color: 'text-green-400' },
+                { label: '❤️ Engagement', value: likes, icon: '💜', color: 'text-purple-400' }
             ];
             
             document.getElementById('kpiContainer').innerHTML = kpis.map(k => `
-                <div class="kpi-card rounded-xl p-4">
+                <div class="kpi-card-enterprise glass rounded-xl p-4">
                     <div class="flex justify-between items-center mb-2">
-                        <span class="text-xs text-blue-300/60 uppercase tracking-wider">${k.label}</span>
+                        <span class="text-xs text-blue-300/50 uppercase tracking-wider">${k.label}</span>
                         <span class="text-lg">${k.icon}</span>
                     </div>
-                    <div class="text-3xl font-bold kpi-value">${k.value.toLocaleString()}</div>
+                    <div class="text-3xl font-black kpi-value-enterprise">${k.value.toLocaleString()}</div>
                 </div>
             `).join('');
             
-            // Sidebar
-            document.getElementById('sidebar-total').textContent = d.length;
-            document.getElementById('sidebar-riesgos').textContent = riesgos;
-            
-            // Gráficos
             renderizarGraficos(d);
+            renderizarWordCloud(d);
             renderizarTabla(d);
             actualizarFiltros(d);
         }
@@ -993,59 +1050,67 @@ FORMATO DE RESPUESTA (OBLIGATORIO):
         function renderizarGraficos(d) {
             Object.values(STATE.graficos).forEach(g => g.destroy());
             
+            // Sentimiento
             const sData = {};
             d.forEach(r => sData[r._analisis.sentimiento] = (sData[r._analisis.sentimiento] || 0) + 1);
             
-            const ctx1 = document.getElementById('chartSentimiento').getContext('2d');
-            STATE.graficos.sentimiento = new Chart(ctx1, {
+            STATE.graficos.sentimiento = new Chart(document.getElementById('chartSentimiento'), {
                 type: 'doughnut',
-                data: {
-                    labels: Object.keys(sData),
-                    datasets: [{ data: Object.values(sData), backgroundColor: ['#10B981', '#F59E0B', '#EF4444'], borderWidth: 0 }]
-                },
-                options: {
-                    responsive: true, maintainAspectRatio: false,
-                    plugins: { legend: { position: 'bottom', labels: { color: '#93c5fd', padding: 15 } } }
-                }
+                data: { labels: Object.keys(sData), datasets: [{ data: Object.values(sData), backgroundColor: ['#10B981', '#F59E0B', '#EF4444'] }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#93c5fd' } } } }
             });
             
-            const tData = {};
-            d.forEach(r => tData[r._analisis.tipo] = (tData[r._analisis.tipo] || 0) + 1);
+            // Emociones
+            const eData = {};
+            d.forEach(r => eData[r._analisis.emocion] = (eData[r._analisis.emocion] || 0) + 1);
             
-            const ctx2 = document.getElementById('chartTipos').getContext('2d');
-            STATE.graficos.tipos = new Chart(ctx2, {
-                type: 'bar',
+            STATE.graficos.emociones = new Chart(document.getElementById('chartEmociones'), {
+                type: 'radar',
                 data: {
-                    labels: Object.keys(tData),
-                    datasets: [{ data: Object.values(tData), backgroundColor: '#3b82f6', borderRadius: 8 }]
+                    labels: Object.keys(eData),
+                    datasets: [{ data: Object.values(eData), backgroundColor: 'rgba(139,92,246,0.2)', borderColor: '#8b5cf6', borderWidth: 2 }]
                 },
                 options: {
                     responsive: true, maintainAspectRatio: false,
                     plugins: { legend: { display: false } },
-                    scales: {
-                        y: { ticks: { color: '#93c5fd' }, grid: { color: 'rgba(30,73,118,0.3)' } },
-                        x: { ticks: { color: '#93c5fd' }, grid: { display: false } }
-                    }
+                    scales: { r: { ticks: { color: '#93c5fd' }, grid: { color: 'rgba(30,48,80,0.5)' }, pointLabels: { color: '#93c5fd' } } }
                 }
             });
             
+            // Temas
             const temas = {};
             d.forEach(r => temas[r._analisis.tema] = (temas[r._analisis.tema] || 0) + 1);
             
-            const ctx3 = document.getElementById('chartTemas').getContext('2d');
-            STATE.graficos.temas = new Chart(ctx3, {
+            STATE.graficos.temas = new Chart(document.getElementById('chartTemas'), {
                 type: 'bar',
-                data: {
-                    labels: Object.keys(temas),
-                    datasets: [{ data: Object.values(temas), backgroundColor: '#2563eb', borderRadius: 8 }]
-                },
+                data: { labels: Object.keys(temas), datasets: [{ data: Object.values(temas), backgroundColor: '#3b82f6', borderRadius: 8 }] },
                 options: {
                     indexAxis: 'y', responsive: true, maintainAspectRatio: false,
                     plugins: { legend: { display: false } },
-                    scales: {
-                        x: { ticks: { color: '#93c5fd' }, grid: { color: 'rgba(30,73,118,0.3)' } },
-                        y: { ticks: { color: '#93c5fd' }, grid: { display: false } }
-                    }
+                    scales: { x: { ticks: { color: '#93c5fd' }, grid: { color: 'rgba(30,48,80,0.3)' } }, y: { ticks: { color: '#93c5fd' } } }
+                }
+            });
+            
+            // Crisis Timeline
+            const crisisData = {};
+            d.forEach(r => {
+                const fecha = new Date(r['Created At'] || '');
+                if (!isNaN(fecha)) {
+                    const key = fecha.toLocaleDateString('es-PE', { day: '2-digit', month: '2-digit', hour: '2-digit' });
+                    if (r._analisis.intensidadEmocional >= 7) crisisData[key] = (crisisData[key] || 0) + 1;
+                }
+            });
+            
+            STATE.graficos.crisis = new Chart(document.getElementById('chartCrisis'), {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(crisisData).slice(-20),
+                    datasets: [{ data: Object.values(crisisData).slice(-20), backgroundColor: '#ef4444', borderRadius: 4 }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { ticks: { color: '#93c5fd' } }, x: { ticks: { color: '#93c5fd' } } }
                 }
             });
             
@@ -1053,68 +1118,68 @@ FORMATO DE RESPUESTA (OBLIGATORIO):
             const timeline = {};
             d.forEach(r => {
                 const fecha = new Date(r['Created At'] || '');
-                if (!isNaN(fecha.getTime())) {
+                if (!isNaN(fecha)) {
                     const key = fecha.toLocaleDateString('es-PE', { day: '2-digit', month: '2-digit' });
                     timeline[key] = (timeline[key] || 0) + 1;
                 }
             });
             
-            const sortedKeys = Object.keys(timeline).sort();
-            
-            const ctx4 = document.getElementById('chartTimeline').getContext('2d');
-            STATE.graficos.timeline = new Chart(ctx4, {
+            STATE.graficos.timeline = new Chart(document.getElementById('chartTimeline'), {
                 type: 'line',
                 data: {
-                    labels: sortedKeys,
+                    labels: Object.keys(timeline).sort(),
                     datasets: [
-                        {
-                            label: 'Total', data: sortedKeys.map(k => timeline[k]),
-                            borderColor: '#3b82f6', backgroundColor: 'rgba(59,130,246,0.1)',
-                            fill: true, tension: 0.4
-                        },
-                        {
-                            label: 'Negativos', 
-                            data: sortedKeys.map(k => d.filter(r => {
-                                const f = new Date(r['Created At'] || '');
-                                if (isNaN(f.getTime())) return false;
-                                return f.toLocaleDateString('es-PE', { day: '2-digit', month: '2-digit' }) === k && r._analisis.sentimiento === 'Negativo';
-                            }).length),
-                            borderColor: '#EF4444', backgroundColor: 'rgba(239,68,68,0.1)',
-                            fill: true, tension: 0.4
-                        }
+                        { label: 'Total', data: Object.values(timeline), borderColor: '#3b82f6', tension: 0.4, fill: true, backgroundColor: 'rgba(59,130,246,0.1)' },
+                        { label: 'Alta Intensidad', data: Object.keys(timeline).sort().map(k => d.filter(r => { const f = new Date(r['Created At']||''); return !isNaN(f) && f.toLocaleDateString('es-PE',{day:'2-digit',month:'2-digit'})===k && r._analisis.intensidadEmocional>=7; }).length), borderColor: '#ef4444', tension: 0.4 }
                     ]
                 },
                 options: {
                     responsive: true, maintainAspectRatio: false,
                     plugins: { legend: { labels: { color: '#93c5fd' } } },
-                    scales: {
-                        y: { ticks: { color: '#93c5fd' }, grid: { color: 'rgba(30,73,118,0.3)' } },
-                        x: { ticks: { color: '#93c5fd' }, grid: { color: 'rgba(30,73,118,0.3)' } }
-                    }
+                    scales: { y: { ticks: { color: '#93c5fd' } }, x: { ticks: { color: '#93c5fd' } } }
                 }
             });
+        }
+        
+        function renderizarWordCloud(d) {
+            const canvas = document.getElementById('wordcloud');
+            const words = {};
+            
+            d.forEach(r => {
+                (r._analisis.palabrasClave || []).forEach(p => {
+                    words[p] = (words[p] || 0) + 1;
+                });
+            });
+            
+            const wordList = Object.entries(words).map(([word, count]) => [word, count * 10]);
+            
+            if (wordList.length > 0 && window.WordCloud) {
+                WordCloud(canvas, {
+                    list: wordList,
+                    gridSize: 12,
+                    weightFactor: 3,
+                    fontFamily: 'Inter, sans-serif',
+                    color: () => `hsl(${Math.random() * 60 + 200}, 70%, ${Math.random() * 40 + 40}%)`,
+                    backgroundColor: 'transparent',
+                    rotateRatio: 0.3
+                });
+            }
         }
         
         function renderizarTabla(d) {
             if (STATE.tablaData) STATE.tablaData.destroy();
             
             document.getElementById('tablaBody').innerHTML = d.map(r => `
-                <tr class="cursor-pointer hover:bg-[#1a2332] transition" onclick="mostrarDetalle('${r['Tweet Id'] || r['tweet_id']}')">
+                <tr class="cursor-pointer hover:bg-[#1a2332]" onclick="mostrarDetalle('${r['Tweet Id'] || r['tweet_id']}')">
                     <td class="text-xs">${new Date(r['Created At'] || '').toLocaleDateString('es-PE')}</td>
                     <td class="text-sm font-semibold text-white">${r['User Name'] || 'Anónimo'}</td>
-                    <td class="text-sm max-w-xs truncate text-blue-100/80">${(r['Full Text'] || '').substring(0, 70)}...</td>
-                    <td><span class="badge badge-${(r._analisis.sentimiento || '').toLowerCase()}">${r._analisis.sentimiento}</span></td>
-                    <td class="text-xs text-blue-200/80">${r._analisis.tipo}</td>
-                    <td class="text-xs text-blue-200/80">${r._analisis.tema}</td>
-                    <td class="text-xs font-bold ${r._analisis.prioridad === 'Alta' ? 'text-red-400' : 'text-yellow-400'}">${r._analisis.prioridad}</td>
-                    <td>
-                        <div class="flex items-center space-x-2">
-                            <div class="flex-1 bg-[#0d1117] rounded-full h-1.5">
-                                <div class="h-1.5 rounded-full bg-gradient-to-r from-blue-500 to-cyan-400" style="width: ${Math.round((r._analisis.confianza || 0.99)*100)}%"></div>
-                            </div>
-                            <span class="text-xs text-blue-300/50">${Math.round((r._analisis.confianza || 0.99)*100)}%</span>
-                        </div>
-                    </td>
+                    <td class="text-sm max-w-xs truncate text-blue-100/70">${(r['Full Text'] || '').substring(0, 60)}...</td>
+                    <td><span class="badge-enterprise ${r._analisis.sentimiento==='Negativo'?'bg-red-500/15 text-red-400 border-red-500/30':r._analisis.sentimiento==='Positivo'?'bg-green-500/15 text-green-400 border-green-500/30':'bg-yellow-500/15 text-yellow-400 border-yellow-500/30'} border">${r._analisis.sentimiento}</span></td>
+                    <td class="text-xs ${r._analisis.intensidadEmocional>=8?'text-red-400 font-bold':'text-blue-200/70'}">${r._analisis.emocion} (${r._analisis.intensidadEmocional}/10)</td>
+                    <td class="text-xs text-blue-200/70">${r._analisis.tipo}</td>
+                    <td class="text-xs text-blue-200/70">${r._analisis.tema}</td>
+                    <td class="text-xs font-bold ${r._analisis.prioridad==='Alta'?'text-red-400':''}">${r._analisis.prioridad}</td>
+                    <td>${r._analisis.esCrisis ? '<span class="badge-enterprise bg-red-500/20 text-red-400 border-red-500/30 border animate-heartbeat">🚨 CRISIS</span>' : '<span class="text-xs text-blue-300/30">-</span>'}</td>
                 </tr>
             `).join('');
             
@@ -1126,29 +1191,29 @@ FORMATO DE RESPUESTA (OBLIGATORIO):
         }
         
         function actualizarFiltros(d) {
+            const emociones = [...new Set(d.map(r => r._analisis.emocion))].sort();
             const tipos = [...new Set(d.map(r => r._analisis.tipo))].sort();
-            const temas = [...new Set(d.map(r => r._analisis.tema))].sort();
             
-            document.getElementById('filtroTipo').innerHTML = '<option value="">Todos los tipos</option>' + tipos.map(t => `<option>${t}</option>`).join('');
-            document.getElementById('filtroTema').innerHTML = '<option value="">Todos los temas</option>' + temas.map(t => `<option>${t}</option>`).join('');
+            document.getElementById('filtroEmocion').innerHTML = '<option value="">Emoción</option>' + emociones.map(e => `<option>${e}</option>`).join('');
+            document.getElementById('filtroTipo').innerHTML = '<option value="">Tipo</option>' + tipos.map(t => `<option>${t}</option>`).join('');
         }
         
         function aplicarFiltros() {
             let d = [...STATE.datos];
             const s = document.getElementById('filtroSentimiento').value;
-            const ti = document.getElementById('filtroTipo').value;
-            const te = document.getElementById('filtroTema').value;
+            const e = document.getElementById('filtroEmocion').value;
+            const t = document.getElementById('filtroTipo').value;
             
             if (s) d = d.filter(r => r._analisis.sentimiento === s);
-            if (ti) d = d.filter(r => r._analisis.tipo === ti);
-            if (te) d = d.filter(r => r._analisis.tema === te);
+            if (e) d = d.filter(r => r._analisis.emocion === e);
+            if (t) d = d.filter(r => r._analisis.tipo === t);
             
             STATE.filtrados = d;
             renderizarDashboard();
         }
         
         // ============================================
-        // DETALLE
+        // DETALLE ENTERPRISE
         // ============================================
         
         function mostrarDetalle(id) {
@@ -1158,68 +1223,37 @@ FORMATO DE RESPUESTA (OBLIGATORIO):
             
             document.getElementById('detalleContenido').innerHTML = `
                 <div class="space-y-5">
-                    <div class="bg-[#1a2332] rounded-xl p-4 border border-[#1e3a5f]">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center space-x-2">
-                                <span class="text-2xl">🧬</span>
-                                <span class="font-bold text-blue-200">${a.fuente}</span>
-                            </div>
-                            <span class="text-sm text-green-400 font-bold">${Math.round((a.confianza||0.99)*100)}% confianza</span>
-                        </div>
-                    </div>
+                    ${a.esCrisis ? '<div class="bg-red-500/10 border border-red-500/30 rounded-xl p-4 animate-heartbeat"><p class="text-red-400 font-bold">🚨 CRISIS DETECTADA - ATENCIÓN INMEDIATA</p></div>' : ''}
                     
-                    <div class="bg-[#1a2332] rounded-xl p-4 border border-[#1e3a5f]">
-                        <h3 class="font-bold text-white text-lg">${c['User Name'] || 'Anónimo'}</h3>
-                        <p class="text-sm text-blue-300/50">@${c['User Screen Name'] || 'usuario'}</p>
-                        <div class="mt-3 p-3 bg-[#0d1117] rounded-lg border border-[#1e3a5f]">
-                            <p class="text-white text-lg">${c['Full Text']}</p>
-                        </div>
+                    <div class="glass rounded-xl p-4">
+                        <h3 class="font-bold text-white text-lg">${c['User Name']}</h3>
+                        <p class="text-blue-300/50 text-sm">@${c['User Screen Name'] || 'usuario'}</p>
+                        <div class="mt-3 p-4 bg-[#0a0f1e] rounded-lg"><p class="text-white">${c['Full Text']}</p></div>
                     </div>
                     
                     <div class="grid grid-cols-2 gap-3">
-                        <div class="bg-[#1a2332] rounded-xl p-4 border border-[#1e3a5f] text-center">
-                            <p class="text-xs text-blue-300/50 mb-1">Sentimiento</p>
-                            <p class="text-2xl font-bold ${a.sentimiento==='Positivo'?'text-green-400':a.sentimiento==='Negativo'?'text-red-400':'text-yellow-400'}">${a.sentimiento}</p>
-                        </div>
-                        <div class="bg-[#1a2332] rounded-xl p-4 border border-[#1e3a5f] text-center">
-                            <p class="text-xs text-blue-300/50 mb-1">Tipo Detectado</p>
-                            <p class="text-2xl font-bold text-blue-400">${a.tipo}</p>
-                        </div>
-                        <div class="bg-[#1a2332] rounded-xl p-4 border border-[#1e3a5f] text-center">
-                            <p class="text-xs text-blue-300/50 mb-1">Tema</p>
-                            <p class="text-2xl font-bold text-cyan-400">${a.tema}</p>
-                        </div>
-                        <div class="bg-[#1a2332] rounded-xl p-4 border border-[#1e3a5f] text-center">
-                            <p class="text-xs text-blue-300/50 mb-1">Prioridad</p>
-                            <p class="text-2xl font-bold ${a.prioridad==='Alta'?'text-red-400':'text-yellow-400'}">${a.prioridad}</p>
-                        </div>
+                        <div class="glass rounded-xl p-4 text-center"><p class="text-xs text-blue-300/50">Sentimiento</p><p class="text-2xl font-bold ${a.sentimiento==='Negativo'?'text-red-400':a.sentimiento==='Positivo'?'text-green-400':'text-yellow-400'}">${a.sentimiento}</p></div>
+                        <div class="glass rounded-xl p-4 text-center"><p class="text-xs text-blue-300/50">Emoción</p><p class="text-2xl font-bold text-purple-400">${a.emocion}</p></div>
+                        <div class="glass rounded-xl p-4 text-center"><p class="text-xs text-blue-300/50">Intensidad</p><p class="text-2xl font-bold ${a.intensidadEmocional>=8?'text-red-400':a.intensidadEmocional>=5?'text-orange-400':'text-blue-400'}">${a.intensidadEmocional}/10</p></div>
+                        <div class="glass rounded-xl p-4 text-center"><p class="text-xs text-blue-300/50">Tipo</p><p class="text-2xl font-bold text-cyan-400">${a.tipo}</p></div>
                     </div>
                     
-                    <div class="bg-[#1a2332] rounded-xl p-4 border border-[#1e3a5f]">
+                    <div class="glass rounded-xl p-4">
+                        <h4 class="font-bold text-white mb-3">📊 Narrativa Detectada</h4>
+                        <p class="text-blue-200">${a.narrativa}</p>
+                    </div>
+                    
+                    <div class="glass rounded-xl p-4">
                         <h4 class="font-bold text-white mb-3">🏷️ Palabras Clave</h4>
-                        <div class="flex flex-wrap gap-2">
-                            ${(a.palabrasClave||[]).map(p => `<span class="px-3 py-1.5 bg-[#0d1117] text-blue-200 rounded-full text-sm border border-[#1e3a5f]">#${p}</span>`).join('')}
-                        </div>
-                    </div>
-                    
-                    <div class="bg-[#1a2332] rounded-xl p-4 border border-[#1e3a5f]">
-                        <h4 class="font-bold text-white mb-2">📝 Resumen del Análisis</h4>
-                        <p class="text-blue-200">${a.resumen}</p>
-                    </div>
-                    
-                    <div class="bg-gradient-to-r ${a.riesgo==='Alto'?'from-red-900/30 to-red-800/20 border-red-500/30':'from-yellow-900/30 to-yellow-800/20 border-yellow-500/30'} rounded-xl p-4 border">
-                        <p class="text-white font-bold">⚠️ Riesgo Reputacional: ${a.riesgo}</p>
-                        <p class="text-white mt-1">📞 ¿Requiere respuesta?: ${a.necesitaRespuesta ? '<span class="text-red-400 font-bold">SÍ - ATENCIÓN INMEDIATA</span>' : '<span class="text-green-400">No</span>'}</p>
+                        <div class="flex flex-wrap gap-2">${(a.palabrasClave||[]).map(p => `<span class="px-3 py-1.5 bg-[#1a2332] text-blue-200 rounded-full text-sm">${p}</span>`).join('')}</div>
                     </div>
                 </div>
             `;
             
-            document.getElementById('panelDetalle').classList.remove('translate-x-full');
+            document.getElementById('detailPanel').classList.remove('translate-x-full');
         }
         
-        function cerrarDetalle() {
-            document.getElementById('panelDetalle').classList.add('translate-x-full');
-        }
+        function cerrarDetalle() { document.getElementById('detailPanel').classList.add('translate-x-full'); }
         
         // ============================================
         // REPORTES
@@ -1229,105 +1263,57 @@ FORMATO DE RESPUESTA (OBLIGATORIO):
             if (!STATE.datos.length) return alert('No hay datos');
             
             const d = STATE.datos;
-            const titulos = { diario: 'Diario', semanal: 'Semanal', mensual: 'Mensual' };
+            const titulos = { diario: 'Diario', semanal: 'Semanal', mensual: 'Mensual', story: 'Story Ejecutivo' };
             
             STATE.reporte = { tipo, datos: d };
             
             document.getElementById('reporteOutput').classList.remove('hidden');
             document.getElementById('reporteOutput').innerHTML = `
-                <h2 class="text-2xl font-bold text-white mb-6">📊 Reporte ${titulos[tipo] || 'Personalizado'}</h2>
-                <div class="bg-[#1a2332] rounded-xl p-6 mb-6 border border-[#1e3a5f]">
-                    <h3 class="text-xl font-bold text-white mb-3">Resumen Ejecutivo</h3>
-                    <p class="text-blue-200">Se analizaron <strong class="text-white">${d.length}</strong> comentarios con el motor de análisis semántico.</p>
+                <h2 class="text-2xl font-bold text-white mb-6">📊 Reporte ${titulos[tipo]}</h2>
+                <div class="glass rounded-xl p-6 mb-6">
+                    <h3 class="text-xl font-bold text-white mb-3">Resumen</h3>
+                    <p class="text-blue-200">Análisis de <strong class="text-white">${d.length}</strong> comentarios.</p>
+                    <p class="text-blue-200 mt-2">🚨 Crisis detectadas: <strong class="text-red-400">${STATE.crisisAlerts.length}</strong></p>
+                    <p class="text-blue-200 mt-2">💢 Alta intensidad emocional: <strong class="text-orange-400">${d.filter(r => r._analisis.intensidadEmocional >= 8).length}</strong></p>
                 </div>
-                <div class="flex gap-3">
-                    <button onclick="exportarReporte('csv')" class="px-4 py-2 btn-primary rounded-xl">📥 CSV</button>
-                    <button onclick="exportarReporte('excel')" class="px-4 py-2 btn-primary rounded-xl">📊 Excel</button>
-                </div>
+                <button onclick="exportarReporte()" class="px-6 py-3 btn-enterprise bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg">📥 Exportar CSV</button>
             `;
             document.getElementById('reporteOutput').scrollIntoView({ behavior: 'smooth' });
         }
         
-        function mostrarModalPersonalizado() { document.getElementById('modalPersonalizado').classList.remove('hidden'); }
-        function cerrarModal() { document.getElementById('modalPersonalizado').classList.add('hidden'); }
-        
-        function generarReportePersonalizado() {
-            const inicio = document.getElementById('fechaInicio').value;
-            const fin = document.getElementById('fechaFin').value;
-            if (!inicio || !fin) return alert('Selecciona fechas');
-            
-            const filtrados = STATE.datos.filter(r => {
-                const f = (r['Created At'] || '').toString().substring(0, 10);
-                return f >= inicio && f <= fin;
-            });
-            
-            if (!filtrados.length) return alert('Sin datos en ese rango');
-            
-            const orig = STATE.datos;
-            STATE.datos = filtrados;
-            generarReporte('personalizado');
-            STATE.datos = orig;
-            cerrarModal();
-        }
-        
-        function exportarReporte(formato) {
-            if (!STATE.reporte) return alert('Genera un reporte primero');
-            
-            let csv = 'Fecha,Usuario,Comentario,Sentimiento,Tipo,Tema,Prioridad,Riesgo\n';
+        function exportarReporte() {
+            if (!STATE.reporte) return;
+            let csv = 'Fecha,Usuario,Comentario,Sentimiento,Emoción,Intensidad,Tipo,Tema,Prioridad,Crisis\n';
             STATE.reporte.datos.forEach(r => {
-                csv += `"${r['Created At']}","${r['User Name']}","${r['Full Text']}","${r._analisis.sentimiento}","${r._analisis.tipo}","${r._analisis.tema}","${r._analisis.prioridad}","${r._analisis.riesgo}"\n`;
+                csv += `"${r['Created At']}","${r['User Name']}","${r['Full Text']}","${r._analisis.sentimiento}","${r._analisis.emocion}","${r._analisis.intensidadEmocional}","${r._analisis.tipo}","${r._analisis.tema}","${r._analisis.prioridad}","${r._analisis.esCrisis}"\n`;
             });
             
-            const mime = formato === 'excel' ? 'application/vnd.ms-excel' : 'text/csv';
-            const ext = formato === 'excel' ? '.xls' : '.csv';
-            
-            const blob = new Blob([csv], { type: mime });
+            const blob = new Blob([csv], { type: 'text/csv' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
-            a.href = url; a.download = `reporte-${Date.now()}${ext}`;
-            a.click();
-            URL.revokeObjectURL(url);
-        }
-        
-        // ============================================
-        // CONFIGURACIÓN
-        // ============================================
-        
-        function renderizarConfig() {
-            document.getElementById('cfgApiKey').value = STATE.apiKey;
-            document.getElementById('cfgPrompt').value = STATE.prompt;
-        }
-        
-        function guardarConfig() {
-            const key = document.getElementById('cfgApiKey').value.trim();
-            const prompt = document.getElementById('cfgPrompt').value.trim();
-            
-            if (key) {
-                STATE.apiKey = key;
-                localStorage.setItem('sentinel_api_key_v7', key);
-            }
-            if (prompt) {
-                STATE.prompt = prompt;
-                localStorage.setItem('sentinel_prompt_v7', prompt);
-            }
-            
-            document.getElementById('ia-status').textContent = STATE.apiKey ? '✅ Gemini Pro Conectado' : '⚠️ Modo Local';
-            alert('✅ Configuración guardada');
+            a.href = url; a.download = `reporte-enterprise-${Date.now()}.csv`;
+            a.click(); URL.revokeObjectURL(url);
         }
         
         // ============================================
         // NAVEGACIÓN
         // ============================================
         
-        function navegar(vista) {
-            document.querySelectorAll('[id^="vista-"]').forEach(el => el.classList.add('hidden'));
-            document.getElementById(`vista-${vista}`).classList.remove('hidden');
+        function navigateTo(view) {
+            document.querySelectorAll('[id^="view-"]').forEach(el => el.classList.add('hidden'));
+            const target = document.getElementById(`view-${view}`);
+            if (target) target.classList.remove('hidden');
             
-            document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
-            event?.target?.closest('.sidebar-link')?.classList.add('active');
+            document.querySelectorAll('.nav-item-enterprise').forEach(el => el.classList.remove('active'));
+            event?.target?.closest('.nav-item-enterprise')?.classList.add('active');
             
-            if (vista === 'dashboard' && STATE.datos.length) renderizarDashboard();
-            if (vista === 'config') renderizarConfig();
+            document.getElementById('header-title').textContent = {
+                dashboard: 'Dashboard Principal', emotions: 'Laboratorio Emocional',
+                crisis: 'Centro de Crisis', narratives: 'Rastreador de Narrativas',
+                influence: 'Red de Influencia', stories: 'Story Generator',
+                collab: 'Colaboración', reports: 'Reportes', config: 'Configuración'
+            }[view] || 'Dashboard';
+            
             if (window.innerWidth < 1024) toggleSidebar();
         }
         
@@ -1335,35 +1321,45 @@ FORMATO DE RESPUESTA (OBLIGATORIO):
             const key = document.getElementById('apiKey').value.trim();
             if (key) {
                 STATE.apiKey = key;
-                localStorage.setItem('sentinel_api_key_v7', key);
-                document.getElementById('ia-status').textContent = '✅ Gemini Pro Conectado';
-                alert('✅ API Key guardada');
+                localStorage.setItem('sentinel_enterprise_key', key);
+                alert('✅ API Key Enterprise guardada');
             }
         }
         
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('-translate-x-full');
+        function guardarConfig() {
+            const key = document.getElementById('cfgApiKey').value.trim();
+            const prompt = document.getElementById('cfgPrompt').value.trim();
+            if (key) { STATE.apiKey = key; localStorage.setItem('sentinel_enterprise_key', key); }
+            if (prompt) { STATE.prompt = prompt; localStorage.setItem('sentinel_enterprise_prompt', prompt); }
+            alert('✅ Configuración guardada');
         }
+        
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); }
         
         // Init
         document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('fecha-header').textContent = 
-                new Date().toLocaleDateString('es-PE', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+            document.getElementById('fecha-header').textContent = new Date().toLocaleDateString('es-PE', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
             
             if (STATE.apiKey) {
                 document.getElementById('apiKey').value = STATE.apiKey;
-                document.getElementById('ia-status').textContent = '✅ Gemini Pro Conectado';
+                document.getElementById('cfgApiKey').value = STATE.apiKey;
             }
             
-            document.addEventListener('keydown', e => {
-                if (e.key === 'Escape') { cerrarDetalle(); cerrarModal(); }
-            });
+            document.getElementById('cfgPrompt').value = STATE.prompt;
             
-            console.log('🧬 Sentinel AI v7.0 - Análisis Semántico');
-            console.log('✅ Detección de apodos políticos peruanos');
-            console.log('✅ Análisis de MAYÚSCULAS como énfasis');
-            console.log('✅ Comprensión de críticas financieras (QUEBRADA)');
-            console.log('✅ Prompt semántico ultra-preciso');
+            document.addEventListener('keydown', e => { if (e.key === 'Escape') cerrarDetalle(); });
+            
+            console.log('🧬 SENTINEL AI ENTERPRISE v8.0');
+            console.log('✅ Análisis Semántico');
+            console.log('✅ Detección Emocional (Plutchik)');
+            console.log('✅ Centro de Crisis');
+            console.log('✅ Nube de Palabras');
+            console.log('✅ Narrativas');
+            console.log('✅ Red de Influencia');
+            console.log('✅ Story Generator');
+            console.log('✅ Colaboración');
+            console.log('✅ Reportes Enterprise');
+            console.log('🚀 SISTEMA COMPLETO INICIALIZADO');
         });
     </script>
 </body>
