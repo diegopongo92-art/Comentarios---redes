@@ -2,470 +2,103 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Social Listening Dashboard | MML PRO</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>MML Enterprise Social Listening</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
-                    colors: {
-                        brand: { red: '#E31837', dark: '#1E293B', light: '#F8FAFC', gray: '#64748B' }
-                    }
-                }
-            }
-        }
-    </script>
-
-    <style>
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #F8FAFC; }
-        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
-        
-        table.dataTable.no-footer { border-bottom: 1px solid #E2E8F0; width: 100% !important; }
-        table.dataTable tbody td { vertical-align: top; padding: 16px 12px; }
-        .comment-cell { 
-            white-space: normal !important; 
-            word-wrap: break-word; 
-            min-width: 350px; 
-            line-height: 1.5;
-        }
-        
-        .tab-content { display: none; }
-        .tab-content.active { display: block; animation: fadeIn 0.3s ease-in; }
-        .dynamic-bg { transition: background-color 0.3s ease; }
-        .dynamic-text { transition: color 0.3s ease; }
-    </style>
-
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body class="bg-brand-light text-slate-800 font-sans antialiased overflow-hidden">
+<body class="bg-slate-100 font-sans p-6">
 
-    <!-- PANTALLA DE INICIO -->
-    <div id="home-view" class="fixed inset-0 z-50 bg-brand-light flex flex-col items-center justify-center p-6 transition-opacity duration-500">
-        <div class="max-w-5xl w-full text-center space-y-8">
-            <div class="mb-12">
-                <h1 class="text-4xl font-bold text-brand-dark tracking-tight mb-4">Social Listening <span class="text-brand-red">PRO</span></h1>
-                <p class="text-lg text-brand-gray">Motor NLP Avanzado con Detección de Ironía y Política (Lima).</p>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <button onclick="app.selectNetwork('X', '#0f1419', 'twitter')" class="group bg-white p-8 rounded-2xl shadow-sm border border-slate-200 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-                    <div class="h-20 w-20 mx-auto bg-[#0f1419] rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                        <i data-lucide="twitter" class="text-white w-10 h-10"></i>
-                    </div>
-                    <h2 class="text-2xl font-semibold mb-2">X (Twitter)</h2>
-                </button>
-                <button onclick="app.selectNetwork('Facebook', '#1877F2', 'facebook')" class="group bg-white p-8 rounded-2xl shadow-sm border border-slate-200 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-                    <div class="h-20 w-20 mx-auto bg-[#1877F2] rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                        <i data-lucide="facebook" class="text-white w-10 h-10"></i>
-                    </div>
-                    <h2 class="text-2xl font-semibold mb-2">Facebook</h2>
-                </button>
-                <button onclick="app.selectNetwork('Instagram', '#E1306C', 'instagram')" class="group bg-white p-8 rounded-2xl shadow-sm border border-slate-200 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-                    <div class="h-20 w-20 mx-auto bg-gradient-to-tr from-[#F58529] via-[#DD2A7B] to-[#8134AF] rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                        <i data-lucide="instagram" class="text-white w-10 h-10"></i>
-                    </div>
-                    <h2 class="text-2xl font-semibold mb-2">Instagram</h2>
-                </button>
-                <button onclick="app.selectNetwork('TikTok', '#000000', 'video')" class="group bg-white p-8 rounded-2xl shadow-sm border border-slate-200 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-                    <div class="h-20 w-20 mx-auto bg-black rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                        <i data-lucide="video" class="text-white w-10 h-10"></i>
-                    </div>
-                    <h2 class="text-2xl font-semibold mb-2">TikTok</h2>
-                </button>
-            </div>
-            
-            <div id="upload-zone" class="hidden mt-12 max-w-2xl mx-auto opacity-0 transition-opacity duration-500">
-                <div class="bg-white p-8 rounded-2xl shadow-sm border border-dashed border-slate-300">
-                    <i data-lucide="upload-cloud" id="upload-icon" class="w-12 h-12 dynamic-text mx-auto mb-4"></i>
-                    <h3 class="text-xl font-semibold mb-2">Cargar dataset de <span id="upload-network-name"></span></h3>
-                    <p class="text-sm text-slate-500 mb-6">Sube tu archivo .xlsx con los comentarios exportados.</p>
-                    <input type="file" id="file-upload" accept=".xlsx" class="hidden" onchange="app.processFile(event)">
-                    <label for="file-upload" id="upload-btn" class="cursor-pointer inline-flex items-center justify-center px-6 py-3 dynamic-bg text-white font-medium rounded-lg hover:opacity-90 transition-opacity">
-                        Seleccionar Archivo Excel
-                    </label>
-                </div>
-            </div>
+<div class="max-w-7xl mx-auto">
+    <div class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-black text-slate-900">MML SOCIAL LISTENING <span class="text-red-600">PRO</span></h1>
+        <input type="file" id="file-upload" class="bg-white border border-slate-300 p-2 rounded-lg shadow-sm cursor-pointer hover:bg-slate-50"/>
+    </div>
+
+    <!-- KPI Cards -->
+    <div class="grid grid-cols-4 gap-4 mb-8">
+        <div class="bg-white p-6 rounded-2xl border shadow-sm">
+            <p class="text-sm text-slate-500 font-bold uppercase">Total Menciones</p>
+            <p id="kpi-total" class="text-4xl font-black">0</p>
+        </div>
+        <div class="bg-white p-6 rounded-2xl border shadow-sm border-l-4 border-l-red-600">
+            <p class="text-sm text-slate-500 font-bold uppercase">Críticas/Quejas</p>
+            <p id="kpi-criticas" class="text-4xl font-black text-red-600">0</p>
+        </div>
+        <div class="bg-white p-6 rounded-2xl border shadow-sm border-l-4 border-l-green-600">
+            <p class="text-sm text-slate-500 font-bold uppercase">Positivos</p>
+            <p id="kpi-positivos" class="text-4xl font-black text-green-600">0</p>
+        </div>
+        <div class="bg-white p-6 rounded-2xl border shadow-sm border-l-4 border-l-blue-600">
+            <p class="text-sm text-slate-500 font-bold uppercase">Política</p>
+            <p id="kpi-politica" class="text-4xl font-black text-blue-600">0</p>
         </div>
     </div>
 
-    <!-- DASHBOARD PRINCIPAL -->
-    <div id="dashboard-view" class="hidden h-screen w-full flex">
-        <!-- Sidebar -->
-        <aside class="w-64 bg-white border-r border-slate-200 flex flex-col z-20">
-            <div class="h-16 flex items-center px-6 border-b border-slate-200">
-                <div class="flex items-center gap-3">
-                    <div id="sidebar-icon-container" class="w-8 h-8 dynamic-bg rounded flex items-center justify-center">
-                        <i id="sidebar-icon" data-lucide="twitter" class="text-white w-4 h-4"></i>
-                    </div>
-                    <span class="font-bold text-lg text-brand-dark">MML <span id="sidebar-net-name" class="text-xs text-slate-400 font-normal"></span></span>
-                </div>
-            </div>
-            <nav class="flex-1 overflow-y-auto py-4">
-                <ul class="space-y-1 px-3">
-                    <li>
-                        <button onclick="app.switchTab('dashboard')" id="nav-dashboard" class="nav-btn w-full flex items-center gap-3 px-3 py-2 dynamic-text bg-slate-50 rounded-lg font-medium transition-colors">
-                            <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
-                        </button>
-                    </li>
-                    <li>
-                        <button onclick="app.switchTab('data')" id="nav-data" class="nav-btn w-full flex items-center gap-3 px-3 py-2 text-slate-600 hover:bg-slate-50 rounded-lg font-medium transition-colors">
-                            <i data-lucide="table-2" class="w-5 h-5"></i> Base de Datos
-                        </button>
-                    </li>
-                    <li>
-                        <button onclick="app.switchTab('reports')" id="nav-reports" class="nav-btn w-full flex items-center gap-3 px-3 py-2 text-slate-600 hover:bg-slate-50 rounded-lg font-medium transition-colors">
-                            <i data-lucide="file-text" class="w-5 h-5"></i> Reportes & IA
-                        </button>
-                    </li>
-                </ul>
-            </nav>
-            <div class="p-4 border-t border-slate-200">
-                <button onclick="location.reload()" class="w-full flex items-center justify-center gap-2 px-3 py-2 text-sm text-slate-500 hover:text-red-500 transition-colors">
-                    <i data-lucide="log-out" class="w-4 h-4"></i> Cambiar Archivo
-                </button>
-            </div>
-        </aside>
-
-        <!-- Contenido -->
-        <main class="flex-1 flex flex-col h-screen overflow-hidden bg-brand-light relative">
-            <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 shadow-sm z-10">
-                <h2 class="text-xl font-semibold text-slate-800" id="header-title">Visión General</h2>
-                <div class="text-sm text-slate-500 flex items-center gap-4">
-                    <span>Registros analizados: <span id="record-count" class="font-bold text-slate-800">0</span></span>
-                </div>
-            </header>
-
-            <div class="flex-1 overflow-y-auto p-6 scroll-smooth" id="export-content">
-                
-                <!-- PESTAÑA: DASHBOARD -->
-                <div id="tab-dashboard" class="tab-content active space-y-6">
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                            <p class="text-sm text-slate-500 font-medium">Total Comentarios</p>
-                            <p class="text-3xl font-bold text-slate-800 mt-2" id="kpi-total">0</p>
-                        </div>
-                        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm border-b-4 border-b-green-500">
-                            <p class="text-sm text-slate-500 font-medium">Aprobación (Positivos)</p>
-                            <p class="text-3xl font-bold text-slate-800 mt-2" id="kpi-pos">0</p>
-                        </div>
-                        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm border-b-4 border-b-red-500">
-                            <p class="text-sm text-slate-500 font-medium">Críticas e Insultos</p>
-                            <p class="text-3xl font-bold text-slate-800 mt-2" id="kpi-neg">0</p>
-                        </div>
-                        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm border-b-4 border-b-purple-600">
-                            <p class="text-sm text-slate-500 font-medium">Ataques Políticos</p>
-                            <p class="text-3xl font-bold text-slate-800 mt-2" id="kpi-pol">0</p>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                            <h3 class="font-semibold text-slate-700 mb-4">Sentimiento Real de la Ciudadanía</h3>
-                            <div class="relative h-64 w-full"><canvas id="chart-sentiment"></canvas></div>
-                        </div>
-                        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                            <h3 class="font-semibold text-slate-700 mb-4">Top Temáticas de Discusión</h3>
-                            <div class="relative h-64 w-full"><canvas id="chart-themes"></canvas></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- PESTAÑA: BASE DE DATOS -->
-                <div id="tab-data" class="tab-content">
-                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-                        <table id="main-table" class="w-full text-left text-sm text-slate-600">
-                            <thead class="text-xs text-slate-700 uppercase bg-slate-50">
-                                <tr>
-                                    <th class="w-24">Fecha</th>
-                                    <th class="w-32">Usuario</th>
-                                    <th>Comentario Literal</th>
-                                    <th class="w-32">Clasificación NLP</th>
-                                    <th class="w-40">Tema Detectado</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- PESTAÑA: REPORTES -->
-                <div id="tab-reports" class="tab-content">
-                    <div class="flex justify-between items-center mb-6">
-                        <h3 class="text-2xl font-bold text-slate-800">Reporte Ejecutivo</h3>
-                        <button onclick="app.exportToPDF()" class="flex items-center gap-2 bg-slate-800 text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-slate-700 transition-colors shadow-sm">
-                            <i data-lucide="download" class="w-4 h-4"></i> Exportar PDF
-                        </button>
-                    </div>
-                    
-                    <div class="bg-white p-8 rounded-xl border border-slate-200 shadow-sm" id="pdf-container">
-                        <div class="border-b border-slate-200 pb-4 mb-6">
-                            <h1 class="text-3xl font-bold text-slate-900 mb-2">Reporte de Inteligencia Digital</h1>
-                            <p class="text-slate-500">Municipalidad Metropolitana de Lima | <span id="report-date"></span></p>
-                        </div>
-                        <div class="prose max-w-none text-slate-700">
-                            <h2 class="text-xl font-bold text-slate-800 mt-6 mb-3">1. Resumen de Percepción</h2>
-                            <p id="report-executive" class="leading-relaxed bg-slate-50 p-4 rounded-lg border border-slate-100"></p>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </main>
+    <div class="grid grid-cols-2 gap-6">
+        <div class="bg-white p-6 rounded-2xl shadow-sm"><canvas id="timelineChart"></canvas></div>
+        <div class="bg-white p-6 rounded-2xl shadow-sm"><canvas id="categoryChart"></canvas></div>
     </div>
 
-    <script>
-        // MOTOR DE NLP PRO ADAPTADO A POLÍTICA LIMEÑA Y SARCASMO
-        const Dictionaries = {
-            sentiment: {
-                // Se procesarán DESPUÉS de comprobar ironías
-                positive: ["excelente", "bueno", "buena", "bien", "gracias", "felicito", "felicitaciones", "apoyo", "mejora", "mejor", "gran trabajo", "genial", "maravilloso", "orgullo", "solución", "resuelto", "bacan", "bacán", "lo máximo", "chévere", "chevere", "buenazo", "obra de arte"],
-                negative: ["malo", "mala", "pésimo", "peor", "asco", "basura", "corrupción", "corrupto", "robo", "incompetentes", "desastre", "vergüenza", "inútil", "inútiles", "incapaz", "mentira", "estafa", "harto", "terrible", "horrible", "caos", "abandonado", "sucio", "peligro", "inepto", "ineptos", "decepcionante", "destruyendo", "destruido", "destruir", "vago", "vagos"]
-            },
+    <div class="mt-8 bg-white p-6 rounded-2xl shadow-sm overflow-x-auto">
+        <table id="main-table" class="w-full text-left">
+            <thead><tr class="border-b uppercase text-xs text-slate-500"><th>Fecha</th><th>Usuario</th><th>Comentario</th><th>Análisis</th></tr></thead>
+            <tbody id="table-body"></tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    const Engine = {
+        irony: ["gracias a", "gracias por", "genial", "excelente", "sigan así"],
+        bad: ["incendio", "ilegal", "inútil", "podrido", "basura", "corrupción", "destruido", "caos", "abandonado", "vago", "inepto", "medieval", "trikina", "chancho", "porky"],
+        politics: ["renovación", "alcalde", "muni", "lima", "reggiardo", "keiko", "panamericana"]
+    };
+
+    document.getElementById('file-upload').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const data = new Uint8Array(e.target.result);
+            const wb = XLSX.read(data, { type: 'array' });
+            const json = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
+            analyze(json);
+        };
+        reader.readAsArrayBuffer(file);
+    });
+
+    function analyze(data) {
+        let totals = { total: 0, criticas: 0, positivos: 0, politica: 0 };
+        const tbody = document.getElementById('table-body');
+        tbody.innerHTML = '';
+
+        data.forEach(row => {
+            const text = (row.Text || row.Comentario || "").toLowerCase();
+            let isCritica = Engine.bad.some(w => text.includes(w));
+            let isIronico = Engine.irony.some(w => text.includes(w));
+            let isPolitico = Engine.politics.some(w => text.includes(w));
             
-            // Sarcasmo y Reclamos Directos (Anula las palabras positivas)
-            sarcasm_and_demands: [
-                "gracias a uds", "gracias a ustedes", "gracias por nada", "gracias por destruir", "sigan así", "ponte a trabajar", "pónganse a trabajar", "hagan algo", "hasta cuándo", "dónde está", "qué hacen", "por qué no", "cuándo van a", "para cuándo", "no hacen nada", "puro show", "pura foto"
-            ],
+            let sentiment = (isIronico && isCritica) || isCritica ? "Negativo" : (isIronico ? "Positivo" : "Neutral");
+            
+            if(sentiment === "Negativo") totals.criticas++;
+            if(sentiment === "Positivo") totals.positivos++;
+            if(isPolitico) totals.politica++;
+            totals.total++;
 
-            // Insultos y Jerga Política Peruana (Peso destructivo alto)
-            insults_slang: [
-                "ctm", "csm", "mrd", "mierda", "webon", "huevon", "cojudo", "imbécil", "idiota", "estúpido", "lacra", "choro", "ratero", "cutra", "coimero", "asno", "rata",
-                "lactarsela", "chupamedias", "sobón", "mermelero", "chancho", "trikina", "porky", "miserable"
-            ],
+            tbody.innerHTML += `<tr>
+                <td class="p-4 border-b">${row.Fecha || 'N/A'}</td>
+                <td class="p-4 border-b font-bold">${row.User || 'Anónimo'}</td>
+                <td class="p-4 border-b">${text}</td>
+                <td class="p-4 border-b"><span class="px-2 py-1 rounded text-xs ${sentiment === 'Negativo' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}">${sentiment}</span></td>
+            </tr>`;
+        });
 
-            themes: {
-                "Política y Gestión Municipal": ["renzo reggiardo", "keiko fujimori", "keiko", "fujimori", "rafael lópez aliaga", "lópez aliaga", "rla", "porky", "chancho", "alcalde", "muni lima", "munilima", "gestión", "política", "regidores", "congreso", "votos", "elecciones", "promesas"],
-                "Transporte e Infraestructura": ["tráfico", "tránsito", "accidente", "semaforo", "semáforo", "metropolitano", "corredor", "pasaje", "bus", "combis", "rutas de lima", "peaje", "atu", "obra", "puente", "asfalto", "bache", "hueco", "pista", "vereda", "cierre", "bypass", "vía expresa", "panamericana", "panamericana sur"],
-                "Seguridad y Serenazgo": ["seguridad", "robo", "asalto", "delincuencia", "policía", "comisaría", "pnp", "crimen", "serenazgo", "sereno", "serenos", "patrullaje", "sicariato", "extorsión", "cupos", "terna"],
-                "Limpieza y Medio Ambiente": ["limpieza", "basura", "sucio", "contaminación", "desmontes", "barrido", "río rímac", "parque", "árbol", "áreas verdes"],
-                "Comercio Ambulatorio": ["ambulantes", "comercio informal", "informalidad", "gamarra", "mesa redonda", "mercado central", "fiscalizadores", "decomiso"]
-            },
-            risk: ["prensa", "noticiero", "escándalo", "viral", "muerte", "atv", "canal n", "cuarto poder", "panorama", "latina", "denuncia penal", "fiscalía"]
-        };
-
-        const state = { network: '', color: '', rawData: [], processedData: [], charts: {} };
-
-        const app = {
-            init() {
-                lucide.createIcons();
-                document.getElementById('report-date').innerText = new Date().toLocaleDateString('es-PE', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-            },
-
-            selectNetwork(network, color, iconName) {
-                state.network = network; state.color = color;
-                document.getElementById('upload-network-name').innerText = network;
-                document.getElementById('sidebar-net-name').innerText = network;
-                document.getElementById('upload-btn').style.backgroundColor = color;
-                document.getElementById('sidebar-icon-container').style.backgroundColor = color;
-                document.getElementById('upload-icon').style.color = color;
-                document.getElementById('sidebar-icon').outerHTML = `<i data-lucide="${iconName}" class="text-white w-4 h-4"></i>`;
-                
-                const uploadZone = document.getElementById('upload-zone');
-                uploadZone.classList.remove('hidden');
-                setTimeout(() => uploadZone.classList.remove('opacity-0'), 50);
-                lucide.createIcons();
-                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-            },
-
-            processFile(event) {
-                const file = event.target.files[0];
-                if (!file) return;
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const data = new Uint8Array(e.target.result);
-                    const workbook = XLSX.read(data, { type: 'array' });
-                    const json = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
-                    this.analyzeData(json);
-                };
-                reader.readAsArrayBuffer(file);
-            },
-
-            analyzeData(data) {
-                state.rawData = data;
-                state.processedData = data.map(row => {
-                    const text = String(row['Full Text'] || row['Text'] || row['comentario'] || row['Comentario'] || '').trim();
-                    const textLower = text.toLowerCase();
-                    const dateRaw = row['Created At'] || row['Date'] || row['fecha'] || '';
-                    const user = row['User Screen Name'] || row['Usuario'] || row['Username'] || 'Anónimo';
-                    
-                    if(!text) return null;
-
-                    // 1. ANÁLISIS DE SENTIMIENTO CORE
-                    let score = 0;
-                    let hasInsult = false;
-                    let isSarcasticOrDemanding = false;
-
-                    // A) Evaluar Sarcasmo e Ironía PRIMERO
-                    Dictionaries.sarcasm_and_demands.forEach(phrase => {
-                        if(textLower.includes(phrase)) {
-                            score -= 5; // Penalidad masiva, anula cualquier palabra positiva
-                            isSarcasticOrDemanding = true;
-                        }
-                    });
-
-                    // B) Evaluar Insultos y Jerga dura
-                    Dictionaries.insults_slang.forEach(w => { 
-                        if(textLower.includes(w) || new RegExp(`\\b${w}\\b`).test(textLower)) {
-                            score -= 4;
-                            hasInsult = true;
-                        }
-                    });
-
-                    // C) Evaluar Positivos (Condicionado a no ser sarcasmo)
-                    Dictionaries.sentiment.positive.forEach(w => { 
-                        // Si hay sarcasmo detectado, la palabra "gracias" o "felicitaciones" pierde su valor positivo
-                        if (isSarcasticOrDemanding && (w === "gracias" || w === "gran trabajo" || w === "obra de arte")) return;
-                        if(new RegExp(`\\b${w}\\b`).test(textLower)) score += 1; 
-                    });
-
-                    // D) Evaluar Negativos Base
-                    Dictionaries.sentiment.negative.forEach(w => { 
-                        if(new RegExp(`\\b${w}\\b`).test(textLower)) score -= 1.5; 
-                    }); 
-
-                    // 2. DETERMINAR CLASIFICACIÓN FINAL
-                    let sentiment = "Neutral";
-                    let type = "Opinión";
-                    
-                    if (score <= -1.5) sentiment = "Negativo";
-                    else if (score > 0) sentiment = "Positivo";
-
-                    if (hasInsult) type = "Insulto/Agresión";
-                    else if (isSarcasticOrDemanding && sentiment === "Negativo") type = "Crítica/Queja";
-                    else if (sentiment === "Positivo") type = "Aprobación";
-
-                    // 3. CLASIFICACIÓN DE TEMAS
-                    let theme = "Otro (No identificado)";
-                    let maxMatches = 0;
-                    for (const [key, words] of Object.entries(Dictionaries.themes)) {
-                        let matches = 0;
-                        words.forEach(w => {
-                            if(new RegExp(`\\b${w}\\b`).test(textLower) || textLower.includes(w)) matches++;
-                        });
-                        if(matches > maxMatches) { maxMatches = matches; theme = key; }
-                    }
-
-                    // Forzar categoría política si hay jerga política específica
-                    if (["porky", "chancho", "trikina", "keiko", "reggiardo"].some(w => textLower.includes(w))) {
-                        theme = "Política y Gestión Municipal";
-                    }
-
-                    let risk = (sentiment === "Negativo" && Dictionaries.risk.some(w => new RegExp(`\\b${w}\\b`).test(textLower))) ? "Alto" : "Bajo";
-                    
-                    let dateStr = dateRaw ? new Date(dateRaw).toISOString().split('T')[0] : "Sin fecha";
-
-                    return { date: dateStr, user: user.startsWith('@') ? user : `@${user}`, text, sentiment, type, theme, risk };
-                }).filter(Boolean);
-
-                this.showDashboard();
-            },
-
-            showDashboard() {
-                document.getElementById('home-view').classList.add('hidden');
-                document.getElementById('dashboard-view').classList.remove('hidden');
-                document.getElementById('record-count').innerText = state.processedData.length;
-                document.getElementById('nav-dashboard').style.color = state.color;
-                
-                this.updateKPIs();
-                this.renderCharts();
-                this.initTable();
-            },
-
-            updateKPIs() {
-                const data = state.processedData;
-                document.getElementById('kpi-total').innerText = data.length;
-                document.getElementById('kpi-pos').innerText = data.filter(d => d.sentiment === 'Positivo').length;
-                document.getElementById('kpi-neg').innerText = data.filter(d => d.sentiment === 'Negativo').length;
-                document.getElementById('kpi-pol').innerText = data.filter(d => d.theme === 'Política y Gestión Municipal' && d.sentiment === 'Negativo').length;
-            },
-
-            renderCharts() {
-                Object.values(state.charts).forEach(chart => chart.destroy());
-
-                const sentCounts = { Positivo: 0, Neutral: 0, Negativo: 0 };
-                const themeCounts = {};
-                state.processedData.forEach(d => {
-                    sentCounts[d.sentiment]++;
-                    themeCounts[d.theme] = (themeCounts[d.theme] || 0) + 1;
-                });
-
-                state.charts.sentiment = new Chart(document.getElementById('chart-sentiment'), {
-                    type: 'doughnut',
-                    data: { labels: ['Aprobación', 'Neutral', 'Rechazo/Crítica'], datasets: [{ data: [sentCounts.Positivo, sentCounts.Neutral, sentCounts.Negativo], backgroundColor: ['#22c55e', '#cbd5e1', '#ef4444'], borderWidth: 0 }] },
-                    options: { maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
-                });
-
-                let sortedThemes = Object.entries(themeCounts).sort((a,b) => b[1] - a[1]).filter(t => !t[0].includes("Otro")).slice(0, 5);
-                state.charts.themes = new Chart(document.getElementById('chart-themes'), {
-                    type: 'bar',
-                    data: { labels: sortedThemes.map(t => t[0]), datasets: [{ label: 'Menciones', data: sortedThemes.map(t => t[1]), backgroundColor: state.color, borderRadius: 4 }] },
-                    options: { maintainAspectRatio: false, plugins: { legend: { display: false } } }
-                });
-            },
-
-            initTable() {
-                if ($.fn.DataTable.isDataTable('#main-table')) $('#main-table').DataTable().destroy();
-
-                $('#main-table').DataTable({
-                    data: state.processedData,
-                    columns: [
-                        { data: 'date' },
-                        { data: 'user', render: data => `<span class="font-semibold text-slate-800">${data}</span>` },
-                        { data: 'text', className: 'comment-cell text-slate-700' },
-                        { data: 'sentiment', render: (data, type, row) => {
-                            let color = data === 'Positivo' ? 'text-green-700 bg-green-100' : (data === 'Negativo' ? 'text-red-700 bg-red-100' : 'text-slate-700 bg-slate-200');
-                            return `<span class="px-2.5 py-1 rounded-md text-xs font-bold block w-max mb-1.5 ${color}">${data}</span>
-                                    <span class="text-[11px] text-slate-500 uppercase font-semibold tracking-wider">${row.type}</span>`;
-                        }},
-                        { data: 'theme', render: (data, type, row) => {
-                            let isPol = data === 'Política y Gestión Municipal' ? 'text-purple-700 font-bold' : 'text-slate-600 font-medium';
-                            return `<span class="text-sm ${isPol}">${data}</span>`;
-                        }}
-                    ],
-                    language: { url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json' },
-                    pageLength: 25,
-                    order: [[0, 'desc']]
-                });
-            },
-
-            exportToPDF() {
-                html2canvas(document.getElementById('pdf-container'), { scale: 2 }).then(canvas => {
-                    const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
-                    pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, pdf.internal.pageSize.getWidth(), (canvas.height * pdf.internal.pageSize.getWidth()) / canvas.width);
-                    pdf.save(`MML_Social_Listening.pdf`);
-                });
-            },
-
-            switchTab(tabId) {
-                document.querySelectorAll('.nav-btn').forEach(btn => { btn.classList.remove('bg-slate-50'); btn.style.color = ''; });
-                document.getElementById(`nav-${tabId}`).classList.add('bg-slate-50');
-                document.getElementById(`nav-${tabId}`).style.color = state.color;
-                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-                document.getElementById(`tab-${tabId}`).classList.add('active');
-            }
-        };
-
-        document.addEventListener('DOMContentLoaded', () => app.init());
-    </script>
+        document.getElementById('kpi-total').innerText = totals.total;
+        document.getElementById('kpi-criticas').innerText = totals.criticas;
+        document.getElementById('kpi-positivos').innerText = totals.positivos;
+        document.getElementById('kpi-politica').innerText = totals.politica;
+    }
+</script>
 </body>
 </html>
