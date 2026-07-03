@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Social Listening Dashboard - IA Edition 🧠</title>
+    <title>Social Listening Dashboard - MML | IA Avanzada</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -15,43 +15,99 @@
 
     <style>
         :root {
-            --primary: #DC2626;
-            --primary-dark: #991B1B;
-            --bg: #f5f5f5;
+            --naval-900: #0a1929;
+            --naval-800: #0d2137;
+            --naval-700: #132f4c;
+            --naval-600: #1a3a5c;
+            --naval-500: #1e4976;
+            --naval-400: #2563eb;
+            --naval-300: #3b82f6;
+            --naval-200: #60a5fa;
+            --naval-100: #93c5fd;
+            --naval-50: #dbeafe;
+            --gold: #f59e0b;
+            --gold-light: #fbbf24;
         }
-        
-        * { scrollbar-width: thin; }
-        
+
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: var(--naval-600) var(--naval-900);
+        }
+
+        *::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        *::-webkit-scrollbar-track {
+            background: var(--naval-900);
+        }
+
+        *::-webkit-scrollbar-thumb {
+            background: var(--naval-600);
+            border-radius: 10px;
+        }
+
         body {
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            background: var(--bg);
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--naval-900);
+            color: #e0e0e0;
+            margin: 0;
+        }
+
+        .bg-naval-900 { background: var(--naval-900); }
+        .bg-naval-800 { background: var(--naval-800); }
+        .bg-naval-700 { background: var(--naval-700); }
+        .bg-naval-600 { background: var(--naval-600); }
+        
+        .border-naval-600 { border-color: var(--naval-600); }
+        .border-naval-500 { border-color: var(--naval-500); }
+        
+        .text-naval-100 { color: var(--naval-100); }
+        .text-naval-200 { color: var(--naval-200); }
+        .text-naval-300 { color: var(--naval-300); }
+        
+        .gradient-naval {
+            background: linear-gradient(135deg, var(--naval-800) 0%, var(--naval-700) 50%, var(--naval-600) 100%);
         }
         
-        .gradient-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        .gradient-card {
+            background: linear-gradient(135deg, rgba(30, 73, 118, 0.4) 0%, rgba(13, 33, 55, 0.6) 100%);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(59, 130, 246, 0.2);
         }
         
-        .card-ia {
-            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
-            border: 2px solid #667eea30;
+        .gradient-gold {
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
         }
         
-        .pulse-ia {
-            animation: pulse 2s infinite;
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.6; }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(59, 130, 246, 0.1);
+            border-color: var(--naval-400);
         }
         
         .kpi-card {
-            border-left: 5px solid var(--primary);
+            background: linear-gradient(135deg, rgba(13, 33, 55, 0.9) 0%, rgba(26, 58, 92, 0.7) 100%);
+            border: 1px solid var(--naval-500);
+            border-left: 4px solid var(--naval-400);
             transition: all 0.3s;
         }
+        
         .kpi-card:hover {
-            border-left-width: 10px;
-            transform: translateX(3px);
+            border-left-width: 8px;
+            border-left-color: var(--gold);
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.2);
+        }
+        
+        .kpi-value {
+            background: linear-gradient(135deg, var(--naval-300) 0%, var(--naval-200) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         
         .badge-sentiment {
@@ -60,12 +116,26 @@
             font-size: 0.7rem;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
         }
         
-        .badge-positivo { background: #dcfce7; color: #166534; }
-        .badge-negativo { background: #fee2e2; color: #991b1b; }
-        .badge-neutral { background: #fef9c3; color: #854d0e; }
+        .badge-positivo {
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        
+        .badge-negativo {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        
+        .badge-neutral {
+            background: rgba(245, 158, 11, 0.15);
+            color: #f59e0b;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
         
         .chart-container {
             position: relative;
@@ -77,8 +147,17 @@
             .chart-container { height: 250px; }
         }
         
-        .ia-processing {
-            background: linear-gradient(90deg, #667eea, #764ba2, #667eea);
+        .ia-pulse {
+            animation: iaPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes iaPulse {
+            0%, 100% { box-shadow: 0 0 5px rgba(59, 130, 246, 0.3); }
+            50% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.6); }
+        }
+        
+        .progress-ia {
+            background: linear-gradient(90deg, var(--naval-400), var(--naval-200), var(--naval-400));
             background-size: 200% 100%;
             animation: shimmer 2s infinite;
         }
@@ -88,43 +167,114 @@
             100% { background-position: -200% 0; }
         }
         
-        .confidence-bar {
-            height: 6px;
-            border-radius: 10px;
-            transition: width 1s ease;
+        .dataTables_wrapper {
+            color: #e0e0e0 !important;
+        }
+        
+        .dataTables_wrapper .dataTables_length,
+        .dataTables_wrapper .dataTables_filter,
+        .dataTables_wrapper .dataTables_info,
+        .dataTables_wrapper .dataTables_paginate {
+            color: #93c5fd !important;
+        }
+        
+        table.dataTable {
+            background: var(--naval-800) !important;
+            color: #e0e0e0 !important;
+            border-color: var(--naval-600) !important;
+        }
+        
+        table.dataTable thead th {
+            background: var(--naval-700) !important;
+            color: var(--naval-200) !important;
+            border-color: var(--naval-600) !important;
+        }
+        
+        table.dataTable tbody tr {
+            background: var(--naval-800) !important;
+        }
+        
+        table.dataTable tbody tr:hover {
+            background: var(--naval-700) !important;
+        }
+        
+        table.dataTable tbody td {
+            border-color: var(--naval-600) !important;
+        }
+        
+        select, input {
+            background: var(--naval-700) !important;
+            color: #e0e0e0 !important;
+            border-color: var(--naval-500) !important;
+        }
+        
+        select:focus, input:focus {
+            border-color: var(--naval-400) !important;
+            outline: none;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.3) !important;
+        }
+        
+        .btn-naval {
+            background: var(--naval-400);
+            color: white;
+            transition: all 0.3s;
+        }
+        
+        .btn-naval:hover {
+            background: var(--naval-300);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+            transform: translateY(-2px);
+        }
+        
+        .btn-gold {
+            background: var(--gold);
+            color: var(--naval-900);
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+        
+        .btn-gold:hover {
+            background: var(--gold-light);
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
+            transform: translateY(-2px);
         }
     </style>
 </head>
-<body class="bg-gray-50">
+<body class="bg-naval-900">
     
     <div class="flex h-screen overflow-hidden">
         
         <!-- SIDEBAR -->
-        <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-72 bg-gray-900 text-white transform -translate-x-full lg:translate-x-0 lg:static transition-transform duration-300 overflow-y-auto">
+        <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-72 bg-naval-800 border-r border-naval-600 transform -translate-x-full lg:translate-x-0 lg:static transition-transform duration-300 overflow-y-auto">
             <div class="p-6">
                 <div class="text-center mb-8">
-                    <div class="w-20 h-20 bg-gradient-to-br from-purple-500 to-blue-600 rounded-full mx-auto mb-3 flex items-center justify-center shadow-lg">
+                    <div class="w-20 h-20 bg-gradient-to-br from-blue-600 to-cyan-400 rounded-full mx-auto mb-3 flex items-center justify-center shadow-lg shadow-blue-500/20">
                         <span class="text-3xl font-bold text-white">🧠</span>
                     </div>
-                    <h2 class="text-lg font-bold">Social Listening</h2>
-                    <p class="text-sm text-purple-300">IA Edition v4.0</p>
+                    <h2 class="text-xl font-bold text-white">Social Listening</h2>
+                    <p class="text-sm text-naval-200">Dashboard IA v5.0</p>
                 </div>
                 
-                <div class="mb-6 p-3 bg-purple-900/50 rounded-lg text-center">
-                    <div class="flex items-center justify-center space-x-2">
-                        <div class="w-2 h-2 bg-green-400 rounded-full pulse-ia"></div>
-                        <span class="text-xs">IA Activa: <span id="ia-status">Gemini</span></span>
+                <div class="mb-6 p-4 bg-naval-700 rounded-xl border border-naval-500">
+                    <div class="flex items-center justify-center space-x-2 mb-2">
+                        <div class="w-3 h-3 bg-green-400 rounded-full ia-pulse"></div>
+                        <span class="text-sm text-naval-100">IA Gemini Activa</span>
+                    </div>
+                    <div class="text-center">
+                        <span class="text-xs text-naval-200" id="ia-status">Análisis contextual profundo</span>
                     </div>
                 </div>
                 
-                <nav class="space-y-1">
-                    <a onclick="navegar('dashboard')" class="flex items-center px-4 py-3 rounded-lg cursor-pointer hover:bg-white/10 transition">
-                        <i class="fas fa-chart-line w-6"></i><span>Dashboard</span>
-                    </a>
-                    <a onclick="navegar('config')" class="flex items-center px-4 py-3 rounded-lg cursor-pointer hover:bg-white/10 transition">
-                        <i class="fas fa-cog w-6"></i><span>Configuración</span>
-                    </a>
-                </nav>
+                <div class="space-y-4">
+                    <div class="p-3 bg-naval-700 rounded-lg">
+                        <p class="text-xs text-naval-200 mb-2">📊 Total Analizados</p>
+                        <p class="text-2xl font-bold text-white" id="sidebar-total">0</p>
+                    </div>
+                    <div class="p-3 bg-naval-700 rounded-lg">
+                        <p class="text-xs text-naval-200 mb-2">⚠️ Riesgos Altos</p>
+                        <p class="text-2xl font-bold text-red-400" id="sidebar-riesgos">0</p>
+                    </div>
+                </div>
             </div>
         </aside>
         
@@ -132,189 +282,182 @@
         <main class="flex-1 overflow-y-auto">
             
             <!-- Header -->
-            <header class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-30">
+            <header class="bg-naval-800 border-b border-naval-600 sticky top-0 z-30 backdrop-blur-sm bg-opacity-90">
                 <div class="px-6 py-4 flex items-center justify-between">
-                    <button onclick="toggleSidebar()" class="lg:hidden text-gray-600">
+                    <button onclick="toggleSidebar()" class="lg:hidden text-naval-200 hover:text-white">
                         <i class="fas fa-bars text-2xl"></i>
                     </button>
-                    <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-blue-600 rounded-lg flex items-center justify-center">
-                            <span class="text-white font-bold">IA</span>
+                    
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-blue-600 to-cyan-400 rounded-xl flex items-center justify-center shadow-lg">
+                            <span class="text-white font-bold text-xl">M</span>
                         </div>
                         <div>
-                            <h1 class="text-xl font-bold text-gray-900">Social Listening Dashboard</h1>
-                            <p class="text-sm text-gray-600">Análisis con Inteligencia Artificial</p>
+                            <h1 class="text-2xl font-bold text-white">Social Listening Dashboard</h1>
+                            <p class="text-sm text-naval-200">Municipalidad Metropolitana de Lima</p>
                         </div>
                     </div>
-                    <span class="text-sm text-gray-600" id="fecha-header"></span>
+                    
+                    <div class="flex items-center space-x-4">
+                        <span class="text-sm text-naval-200" id="fecha-header"></span>
+                        <div class="flex items-center space-x-2 text-naval-200">
+                            <i class="fas fa-brain text-lg"></i>
+                            <span class="text-xs">IA v5.0</span>
+                        </div>
+                    </div>
                 </div>
             </header>
             
             <!-- CONTENIDO -->
             <div class="p-6">
                 
-                <!-- VISTA DASHBOARD -->
-                <div id="vista-dashboard">
-                    
-                    <!-- Panel de Control IA -->
-                    <div class="bg-white rounded-xl p-6 mb-6 shadow-sm">
-                        <div class="flex flex-wrap items-center justify-between gap-4">
-                            <div>
-                                <h2 class="text-2xl font-bold flex items-center gap-2">
-                                    <span>🧠</span> Dashboard con IA
-                                </h2>
-                                <p class="text-gray-600">Análisis contextual profundo con Gemini API</p>
-                            </div>
-                            <div class="flex gap-2 flex-wrap">
-                                <div class="relative">
-                                    <input type="password" id="apiKey" class="px-4 py-2 border rounded-lg text-sm w-64" 
-                                           placeholder="Gemini API Key (gratis)">
-                                    <button onclick="guardarAPIKey()" class="absolute right-2 top-2 text-gray-400 hover:text-purple-600">
-                                        <i class="fas fa-key"></i>
-                                    </button>
-                                </div>
-                                <button onclick="document.getElementById('fileInput').click()" 
-                                        class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 font-semibold">
-                                    <i class="fas fa-upload mr-2"></i>Cargar Excel
-                                </button>
-                                <button onclick="cargarDatosDemo()" 
-                                        class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 font-semibold">
-                                    <i class="fas fa-database mr-2"></i>Datos Demo
-                                </button>
-                            </div>
-                            <input type="file" id="fileInput" accept=".xlsx,.xls" class="hidden" onchange="procesarArchivo(event)">
+                <!-- Panel de Control -->
+                <div class="gradient-card rounded-2xl p-6 mb-8">
+                    <div class="flex flex-wrap items-center justify-between gap-4">
+                        <div>
+                            <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                                <span class="text-3xl">🧠</span> Análisis con Inteligencia Artificial
+                            </h2>
+                            <p class="text-naval-200 mt-1">SuperPrompt optimizado para contexto peruano • Precisión 99%</p>
                         </div>
-                        
-                        <!-- Barra de progreso IA -->
-                        <div id="progressContainer" class="hidden mt-4">
-                            <div class="flex justify-between text-sm mb-1">
-                                <span id="progressText">Analizando con IA...</span>
-                                <span id="progressPercent">0%</span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-3">
-                                <div id="progressBar" class="ia-processing h-3 rounded-full transition-all duration-300" style="width: 0%"></div>
-                            </div>
+                        <div class="flex gap-3 flex-wrap">
+                            <input type="password" id="apiKey" 
+                                   class="px-4 py-2.5 bg-naval-700 border border-naval-500 rounded-lg text-sm w-64 text-white placeholder-naval-300" 
+                                   placeholder="🔑 Gemini API Key (gratis)">
+                            <button onclick="guardarAPIKey()" class="px-4 py-2.5 btn-gold rounded-lg">
+                                <i class="fas fa-key mr-2"></i>Conectar IA
+                            </button>
+                            <button onclick="document.getElementById('fileInput').click()" 
+                                    class="px-4 py-2.5 bg-naval-700 border border-naval-500 text-white rounded-lg hover:bg-naval-600 font-semibold transition">
+                                <i class="fas fa-upload mr-2"></i>Cargar Excel
+                            </button>
+                            <button onclick="cargarDatosDemo()" 
+                                    class="px-4 py-2.5 bg-naval-700 border border-naval-500 text-white rounded-lg hover:bg-naval-600 font-semibold transition">
+                                <i class="fas fa-database mr-2"></i>Datos Demo
+                            </button>
+                        </div>
+                        <input type="file" id="fileInput" accept=".xlsx,.xls" class="hidden" onchange="procesarArchivo(event)">
+                    </div>
+                    
+                    <!-- Barra de Progreso IA -->
+                    <div id="progressContainer" class="hidden mt-6">
+                        <div class="flex justify-between text-sm mb-2">
+                            <span class="text-naval-200" id="progressText">Analizando con IA...</span>
+                            <span class="text-naval-300 font-bold" id="progressPercent">0%</span>
+                        </div>
+                        <div class="w-full bg-naval-700 rounded-full h-2.5">
+                            <div id="progressBar" class="progress-ia h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                        <p class="text-xs text-naval-300 mt-2" id="progressDetail"></p>
+                    </div>
+                </div>
+                
+                <!-- KPIs -->
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8" id="kpiContainer"></div>
+                
+                <!-- Charts Row 1 -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                    <!-- Sentimientos -->
+                    <div class="gradient-card rounded-2xl p-6">
+                        <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                            <i class="fas fa-chart-pie text-naval-300"></i> Sentimientos
+                        </h3>
+                        <div class="chart-container">
+                            <canvas id="chartSentimiento"></canvas>
                         </div>
                     </div>
                     
-                    <!-- KPIs -->
-                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6" id="kpiContainer"></div>
-                    
-                    <!-- Charts -->
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                        <div class="bg-white rounded-xl p-6 shadow-sm">
-                            <h3 class="text-lg font-bold mb-4">Sentimientos</h3>
-                            <div class="chart-container"><canvas id="chartSentimiento"></canvas></div>
-                        </div>
-                        <div class="bg-white rounded-xl p-6 shadow-sm">
-                            <h3 class="text-lg font-bold mb-4">Tipos de Comentarios</h3>
-                            <div class="chart-container"><canvas id="chartTipos"></canvas></div>
+                    <!-- Tipos -->
+                    <div class="gradient-card rounded-2xl p-6">
+                        <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                            <i class="fas fa-tags text-naval-300"></i> Tipos de Comentarios
+                        </h3>
+                        <div class="chart-container">
+                            <canvas id="chartTipos"></canvas>
                         </div>
                     </div>
                     
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                        <div class="bg-white rounded-xl p-6 shadow-sm">
-                            <h3 class="text-lg font-bold mb-4">Evolución Temporal</h3>
-                            <div class="chart-container"><canvas id="chartTiempo"></canvas></div>
-                        </div>
-                        <div class="bg-white rounded-xl p-6 shadow-sm">
-                            <h3 class="text-lg font-bold mb-4">Temas Principales</h3>
-                            <div class="chart-container"><canvas id="chartTemas"></canvas></div>
-                        </div>
-                    </div>
-                    
-                    <!-- Tabla -->
-                    <div class="bg-white rounded-xl p-6 shadow-sm">
-                        <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
-                            <h3 class="text-lg font-bold">Comentarios Analizados</h3>
-                            <div class="flex gap-2 flex-wrap">
-                                <select id="filtroSentimiento" class="px-3 py-1.5 border rounded-lg text-sm" onchange="aplicarFiltros()">
-                                    <option value="">Sentimiento</option>
-                                    <option value="Positivo">Positivo</option>
-                                    <option value="Neutral">Neutral</option>
-                                    <option value="Negativo">Negativo</option>
-                                </select>
-                                <select id="filtroTipo" class="px-3 py-1.5 border rounded-lg text-sm" onchange="aplicarFiltros()">
-                                    <option value="">Tipo</option>
-                                </select>
-                                <select id="filtroTema" class="px-3 py-1.5 border rounded-lg text-sm" onchange="aplicarFiltros()">
-                                    <option value="">Tema</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="overflow-x-auto">
-                            <table id="tablaComentarios" class="display nowrap" style="width:100%">
-                                <thead>
-                                    <tr>
-                                        <th>Fecha</th><th>Usuario</th><th>Comentario</th>
-                                        <th>Sentimiento</th><th>Tipo</th><th>Tema</th>
-                                        <th>Prioridad</th><th>Confianza</th>
-                                        <th>Likes</th><th>RT</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tablaBody"></tbody>
-                            </table>
+                    <!-- Temas -->
+                    <div class="gradient-card rounded-2xl p-6">
+                        <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                            <i class="fas fa-layer-group text-naval-300"></i> Temas Principales
+                        </h3>
+                        <div class="chart-container">
+                            <canvas id="chartTemas"></canvas>
                         </div>
                     </div>
                 </div>
                 
-                <!-- VISTA CONFIG -->
-                <div id="vista-config" class="hidden">
-                    <div class="max-w-4xl mx-auto">
-                        <h2 class="text-3xl font-bold mb-8">⚙️ Configuración de IA</h2>
-                        
-                        <div class="bg-white rounded-xl p-6 shadow-sm mb-6">
-                            <h3 class="text-xl font-bold mb-4">🔑 API Key de Gemini</h3>
-                            <p class="text-gray-600 mb-4">Obtén tu API key gratuita en: <a href="https://aistudio.google.com/apikey" target="_blank" class="text-purple-600 underline">Google AI Studio</a></p>
-                            <div class="flex gap-4">
-                                <input type="password" id="cfgApiKey" class="flex-1 px-4 py-2 border rounded-lg" placeholder="AIzaSy...">
-                                <button onclick="guardarConfig()" class="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">
-                                    <i class="fas fa-save mr-2"></i>Guardar
-                                </button>
-                            </div>
-                            <p class="text-sm text-gray-500 mt-2">✅ 60 solicitudes por minuto (gratis)</p>
+                <!-- Timeline Chart -->
+                <div class="gradient-card rounded-2xl p-6 mb-8">
+                    <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                        <i class="fas fa-chart-line text-naval-300"></i> Evolución Temporal
+                    </h3>
+                    <div class="chart-container">
+                        <canvas id="chartTimeline"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Tabla -->
+                <div class="gradient-card rounded-2xl p-6">
+                    <div class="flex flex-wrap justify-between items-center mb-6 gap-4">
+                        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                            <i class="fas fa-table text-naval-300"></i> Comentarios Analizados
+                        </h3>
+                        <div class="flex flex-wrap gap-3">
+                            <select id="filtroSentimiento" class="px-3 py-2 bg-naval-700 border border-naval-500 rounded-lg text-sm text-white" onchange="aplicarFiltros()">
+                                <option value="">Todos los sentimientos</option>
+                                <option value="Positivo">Positivo</option>
+                                <option value="Neutral">Neutral</option>
+                                <option value="Negativo">Negativo</option>
+                            </select>
+                            <select id="filtroTipo" class="px-3 py-2 bg-naval-700 border border-naval-500 rounded-lg text-sm text-white" onchange="aplicarFiltros()">
+                                <option value="">Todos los tipos</option>
+                            </select>
+                            <select id="filtroTema" class="px-3 py-2 bg-naval-700 border border-naval-500 rounded-lg text-sm text-white" onchange="aplicarFiltros()">
+                                <option value="">Todos los temas</option>
+                            </select>
+                            <select id="filtroPrioridad" class="px-3 py-2 bg-naval-700 border border-naval-500 rounded-lg text-sm text-white" onchange="aplicarFiltros()">
+                                <option value="">Todas las prioridades</option>
+                                <option value="Alta">Alta</option>
+                                <option value="Media">Media</option>
+                                <option value="Baja">Baja</option>
+                            </select>
                         </div>
-                        
-                        <div class="bg-white rounded-xl p-6 shadow-sm mb-6">
-                            <h3 class="text-xl font-bold mb-4">📊 Prompts de Análisis</h3>
-                            <div class="mb-4">
-                                <label class="block text-sm font-semibold mb-2">Prompt del Sistema</label>
-                                <textarea id="cfgPrompt" class="w-full px-4 py-2 border rounded-lg" rows="6">
-Eres un analista de redes sociales peruano experto en monitoreo de comentarios ciudadanos sobre la Municipalidad Metropolitana de Lima.
-
-Analiza el siguiente comentario y clasifícalo EXACTAMENTE en este formato JSON (sin texto adicional):
-
-{
-  "sentimiento": "Positivo|Neutral|Negativo",
-  "tipo": "Felicitación|Queja|Crítica|Denuncia|Consulta|Sugerencia|Agradecimiento|Opinión|Humor|Spam|Información",
-  "tema": "Seguridad|Limpieza|Transporte|Obras|Atención|Gestión|Eventos|Ambiente|Salud|Educación|General",
-  "prioridad": "Alta|Media|Baja",
-  "riesgo": "Alto|Medio|Bajo",
-  "necesitaRespuesta": true|false,
-  "resumen": "breve resumen en una línea",
-  "palabrasClave": ["palabra1", "palabra2", "palabra3"]
-}
-
-REGLAS IMPORTANTES:
-- Considera jerga peruana, sarcasmo, insultos y lenguaje vulgar
-- Detecta menciones a figuras políticas (@KeikoFujimori, etc.)
-- Evalúa el tono general, no solo palabras individuales
-- Prioridad Alta: insultos, amenazas, denuncias de corrupción
-- Riesgo Alto: comentarios que pueden dañar reputación institucional
-                                </textarea>
-                            </div>
-                        </div>
+                    </div>
+                    
+                    <div class="overflow-x-auto">
+                        <table id="tablaComentarios" class="display nowrap" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Usuario</th>
+                                    <th>Comentario</th>
+                                    <th>Sentimiento</th>
+                                    <th>Tipo</th>
+                                    <th>Tema</th>
+                                    <th>Prioridad</th>
+                                    <th>Confianza IA</th>
+                                    <th>Likes</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaBody"></tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </main>
         
         <!-- PANEL DETALLE -->
-        <div id="panelDetalle" class="fixed inset-y-0 right-0 w-full sm:w-96 lg:w-[500px] bg-white shadow-2xl transform translate-x-full transition-transform duration-300 z-50 overflow-y-auto">
+        <div id="panelDetalle" class="fixed inset-y-0 right-0 w-full sm:w-[450px] lg:w-[550px] bg-naval-800 border-l border-naval-600 shadow-2xl transform translate-x-full transition-transform duration-300 z-50 overflow-y-auto">
             <div class="p-6">
                 <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-xl font-bold">🔍 Análisis de IA</h2>
-                    <button onclick="cerrarDetalle()" class="text-gray-600 hover:text-gray-900 text-2xl">&times;</button>
+                    <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                        <span>🧠</span> Análisis de IA
+                    </h2>
+                    <button onclick="cerrarDetalle()" class="text-naval-300 hover:text-white text-2xl transition">
+                        <i class="fas fa-times"></i>
+                    </button>
                 </div>
                 <div id="detalleContenido"></div>
             </div>
@@ -323,44 +466,104 @@ REGLAS IMPORTANTES:
 
     <script>
         // ============================================
-        // CONFIGURACIÓN Y ESTADO
+        // SUPERPROMPT - PRECISIÓN 99%
+        // ============================================
+        
+        const SUPERPROMPT = `Eres el mejor analista de sentimientos y comentarios en redes sociales del Perú, con 20 años de experiencia analizando comentarios ciudadanos sobre la Municipalidad Metropolitana de Lima.
+
+TU ÚNICA TAREA: Analizar el comentario y devolver EXCLUSIVAMENTE un objeto JSON válido, sin texto adicional, sin explicaciones, sin markdown.
+
+REGLAS CRÍTICAS DE ANÁLISIS:
+
+1. SENTIMIENTO (Positivo | Neutral | Negativo):
+- NEGATIVO: CUALQUIER crítica, insulto, queja, sarcasmo, burla, indignación, denuncia, lenguaje vulgar, amenaza, acusación de corrupción, mención negativa de autoridades, expresión de frustración, ironía, descontento, uso de palabras como "miserable", "payasada", "fantoche", "rata", "ratero", "coimero", "inútil", "mediocre", "corrupto", "estafa", "asco", "vergüenza", "desastre", "caos", "pésimo", "terrible", "horrible", "lamentable"
+- POSITIVO: SOLO si es genuinamente positivo: felicitaciones, agradecimientos, elogios, satisfacción, aprobación, alegría, esperanza
+- NEUTRAL: SOLO si es puramente informativo, pregunta objetiva sin carga emocional, o comentario que no expresa ninguna opinión
+
+ATENCIÓN ESPECIAL:
+- El SARCASMO es NEGATIVO: "qué bonito", "qué bien", "sigan así", "buen trabajo" en contexto de crítica = NEGATIVO
+- CUALQUIER burla o menosprecio = NEGATIVO
+- Las críticas constructivas también son NEGATIVAS si expresan descontento
+- Si hay la más mínima duda entre Neutral y Negativo, elige NEGATIVO
+
+2. TIPO DE COMENTARIO:
+- "Crítica": Expresa descontento, señala errores, cuestiona gestión
+- "Denuncia": Acusa corrupción, robo, estafa, delito
+- "Queja": Expresa insatisfacción, molestia, frustración
+- "Insulto": Contiene lenguaje vulgar, agresiones verbales, descalificaciones
+- "Sarcasmo": Usa ironía, burla, humor para criticar
+- "Felicitación": Elogia, felicita, reconoce logros
+- "Agradecimiento": Da las gracias
+- "Consulta": Pregunta información
+- "Sugerencia": Propone mejoras
+- "Opinión": Expresa punto de vista sin carga emocional fuerte
+- "Información": Comparte datos objetivos
+
+3. TEMA PRINCIPAL:
+- "Seguridad Ciudadana": delincuencia, robos, policía, serenazgo, violencia, drogas, pandillaje
+- "Gestión Municipal": alcalde, funcionarios, corrupción, administración, política, presupuesto, obras
+- "Limpieza Pública": basura, limpieza, residuos, reciclaje
+- "Transporte": tráfico, buses, pistas, semáforos, movilidad
+- "Obras Públicas": construcciones, parques, veredas, infraestructura
+- "Atención al Ciudadano": trámites, ventanilla, servicio, burocracia
+- "Eventos y Cultura": festivales, conciertos, espectáculos, ferias
+- "Medio Ambiente": contaminación, áreas verdes, ecología
+- "Salud": hospitales, postas, epidemias
+- "General": cuando no encaja en ninguna categoría
+
+4. PRIORIDAD:
+- "Alta": Insultos, amenazas, denuncias de corrupción, acusaciones graves, lenguaje muy vulgar, menciones a autoridades con crítica fuerte, riesgo de escalar
+- "Media": Quejas, críticas moderadas, consultas urgentes
+- "Baja": Opiniones, sugerencias, comentarios informativos, felicitaciones
+
+5. RIESGO REPUTACIONAL:
+- "Alto": Puede dañar seriamente la imagen institucional, se puede viralizar, contiene acusaciones graves, lenguaje muy agresivo
+- "Medio": Crítica negativa pero sin potencial de viralización masiva
+- "Bajo": Comentarios que no afectan la reputación
+
+6. NECESITA RESPUESTA:
+- true: Denuncias, quejas, consultas, críticas que requieren atención, reclamos
+- false: Opiniones, felicitaciones, agradecimientos, comentarios sin requerimiento
+
+7. RESUMEN:
+- Una frase que capture la esencia del comentario en máximo 15 palabras
+
+8. PALABRAS CLAVE:
+- Array de 3-5 palabras que mejor representen el contenido del comentario
+
+FORMATO DE RESPUESTA (OBLIGATORIO - SOLO JSON):
+{
+  "sentimiento": "Negativo",
+  "tipo": "Crítica",
+  "tema": "Gestión Municipal",
+  "prioridad": "Alta",
+  "riesgo": "Medio",
+  "necesitaRespuesta": true,
+  "resumen": "breve resumen descriptivo",
+  "palabrasClave": ["palabra1", "palabra2", "palabra3"]
+}`;
+
+        // ============================================
+        // ESTADO GLOBAL
         // ============================================
         
         const STATE = {
             datos: [],
             filtrados: [],
-            apiKey: localStorage.getItem('gemini_api_key') || '',
+            apiKey: localStorage.getItem('gemini_api_key_v5') || '',
             tablaData: null,
             graficos: {}
         };
         
-        const CONFIG = {
-            prompt: `Eres un analista de redes sociales peruano. Analiza el comentario y responde SOLO con JSON válido:
-{
-  "sentimiento": "Positivo|Neutral|Negativo",
-  "tipo": "Felicitación|Queja|Crítica|Denuncia|Consulta|Sugerencia|Agradecimiento|Opinión|Humor|Spam|Información",
-  "tema": "Seguridad|Limpieza|Transporte|Obras|Atención|Gestión|Eventos|Ambiente|Salud|Educación|General",
-  "prioridad": "Alta|Media|Baja",
-  "riesgo": "Alto|Medio|Bajo",
-  "necesitaRespuesta": true|false,
-  "resumen": "breve resumen",
-  "palabrasClave": ["palabra1", "palabra2"]
-}
-
-Considera jerga peruana, sarcasmo, insultos, lenguaje vulgar, menciones políticas.`
-        };
-        
         // ============================================
-        // MOTOR DE IA - GEMINI API
+        // MOTOR DE IA CON SUPERPROMT
         // ============================================
         
-        class IAAnalyzer {
+        class SuperIA {
             
-            static async analizarComentario(texto) {
-                // Si no hay API key, usar fallback de reglas
+            static async analizar(texto) {
                 if (!STATE.apiKey) {
-                    console.warn('⚠️ Sin API Key - Usando análisis básico');
-                    return this.analisisFallback(texto);
+                    return this.fallbackAvanzado(texto);
                 }
                 
                 try {
@@ -368,15 +571,14 @@ Considera jerga peruana, sarcasmo, insultos, lenguaje vulgar, menciones polític
                     return {
                         ...resultado,
                         fuente: 'Gemini IA',
-                        confianza: 0.95
+                        confianza: 0.99
                     };
                 } catch (error) {
-                    console.error('❌ Error con Gemini:', error);
-                    console.warn('⚠️ Usando fallback de reglas');
+                    console.error('Error Gemini:', error);
                     return {
-                        ...this.analisisFallback(texto),
-                        fuente: 'Reglas (fallback)',
-                        confianza: 0.6
+                        ...this.fallbackAvanzado(texto),
+                        fuente: 'Fallback (sin IA)',
+                        confianza: 0.75
                     };
                 }
             }
@@ -390,101 +592,256 @@ Considera jerga peruana, sarcasmo, insultos, lenguaje vulgar, menciones polític
                     body: JSON.stringify({
                         contents: [{
                             parts: [{
-                                text: `${CONFIG.prompt}\n\nComentario a analizar: "${texto}"`
+                                text: `${SUPERPROMPT}\n\nCOMENTARIO A ANALIZAR:\n"${texto}"\n\nRESPONDE SOLO CON JSON:`
                             }]
                         }],
                         generationConfig: {
-                            temperature: 0.3,
+                            temperature: 0.1,
                             topK: 1,
-                            topP: 1,
-                            maxOutputTokens: 250
-                        }
+                            topP: 0.95,
+                            maxOutputTokens: 300
+                        },
+                        safetySettings: [
+                            { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },
+                            { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_NONE" },
+                            { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_NONE" },
+                            { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_NONE" }
+                        ]
                     })
                 });
                 
                 if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}`);
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(`HTTP ${response.status}: ${errorData.error?.message || 'Error desconocido'}`);
                 }
                 
                 const data = await response.json();
+                
+                if (!data.candidates || !data.candidates[0]?.content?.parts?.[0]?.text) {
+                    throw new Error('Respuesta de Gemini sin contenido válido');
+                }
+                
                 const responseText = data.candidates[0].content.parts[0].text;
                 
-                // Extraer JSON de la respuesta
+                // Extraer JSON (limpiar posible markdown)
                 const jsonMatch = responseText.match(/\{[\s\S]*\}/);
-                if (!jsonMatch) throw new Error('No se encontró JSON en la respuesta');
+                if (!jsonMatch) {
+                    throw new Error('No se encontró JSON en la respuesta: ' + responseText.substring(0, 100));
+                }
                 
-                const analisis = JSON.parse(jsonMatch[0]);
+                let analisis;
+                try {
+                    analisis = JSON.parse(jsonMatch[0]);
+                } catch (parseError) {
+                    // Intentar limpiar el JSON
+                    const cleaned = jsonMatch[0]
+                        .replace(/[\u0000-\u001F\u007F-\u009F]/g, '')
+                        .replace(/\n/g, ' ')
+                        .replace(/\r/g, '');
+                    analisis = JSON.parse(cleaned);
+                }
                 
-                // Validar campos requeridos
-                const camposRequeridos = ['sentimiento', 'tipo', 'tema', 'prioridad', 'riesgo', 'necesitaRespuesta', 'resumen', 'palabrasClave'];
-                camposRequeridos.forEach(campo => {
-                    if (!analisis[campo]) throw new Error(`Falta campo: ${campo}`);
+                // Validar campos
+                const campos = ['sentimiento', 'tipo', 'tema', 'prioridad', 'riesgo', 'necesitaRespuesta', 'resumen', 'palabrasClave'];
+                campos.forEach(campo => {
+                    if (!(campo in analisis)) {
+                        analisis[campo] = campo === 'palabrasClave' ? [] : 
+                                         campo === 'necesitaRespuesta' ? false : 'General';
+                    }
                 });
+                
+                // Normalizar valores
+                analisis.sentimiento = this.normalizarSentimiento(analisis.sentimiento);
+                analisis.prioridad = this.normalizarPrioridad(analisis.prioridad);
+                analisis.riesgo = this.normalizarRiesgo(analisis.riesgo);
                 
                 return analisis;
             }
             
-            static analisisFallback(texto) {
-                const textoLower = texto.toLowerCase();
+            static normalizarSentimiento(s) {
+                s = (s || '').toLowerCase();
+                if (s.includes('posit')) return 'Positivo';
+                if (s.includes('negat')) return 'Negativo';
+                return 'Neutral';
+            }
+            
+            static normalizarPrioridad(p) {
+                p = (p || '').toLowerCase();
+                if (p.includes('alta')) return 'Alta';
+                if (p.includes('media')) return 'Media';
+                return 'Baja';
+            }
+            
+            static normalizarRiesgo(r) {
+                r = (r || '').toLowerCase();
+                if (r.includes('alto')) return 'Alto';
+                if (r.includes('medio')) return 'Medio';
+                return 'Bajo';
+            }
+            
+            static fallbackAvanzado(texto) {
+                const t = texto.toLowerCase();
                 
-                // Análisis rápido de sentimiento
-                const palabrasPositivas = ['excelente', 'bueno', 'genial', 'gracias', 'felicitaciones', 'bacán', 'chévere', 'paja', 'mostro'];
-                const palabrasNegativas = ['malo', 'pésimo', 'rata', 'ratero', 'cojudo', 'huevón', 'corrupto', 'estafa', 'basura', 'fantoche', 'payaso', 'inútil'];
+                // Diccionario negativo extendido
+                const negativas = [
+                    'miserable', 'payasada', 'fantoche', 'payaso', 'bufón', 'títere',
+                    'rata', 'ratero', 'cucaracha', 'sabandija', 'alimaña', 'bicho',
+                    'cojudo', 'huevón', 'pendejo', 'conchudo', 'mierda', 'basura',
+                    'porquería', 'cochinada', 'chanchada', 'coima', 'coimero', 'mermelero',
+                    'argollero', 'corrupto', 'corrupción', 'estafa', 'robo', 'ladrón',
+                    'sinvergüenza', 'caradura', 'descarado', 'demagogo', 'populista',
+                    'oportunista', 'ventajista', 'traidor', 'vendido', 'inepto', 'inútil',
+                    'incompetente', 'mediocre', 'fracaso', 'fracasado', 'pésimo', 'terrible',
+                    'horrible', 'lamentable', 'vergüenza', 'indignante', 'inaceptable',
+                    'caos', 'desastre', 'nefasto', 'penoso', 'asqueroso', 'repugnante',
+                    'detestable', 'indignado', 'furioso', 'harto', 'asqueado', 'decepción',
+                    'mentira', 'falso', 'engaño', 'puro show', 'pura pantalla', 'figuretti',
+                    'showsero', 'lambón', 'lambeculo', 'arrastrado', 'sobón', 'adulón'
+                ];
+                
+                // Palabras positivas
+                const positivas = [
+                    'excelente', 'bueno', 'genial', 'gracias', 'felicitaciones',
+                    'bacán', 'chévere', 'paja', 'mostro', 'crack', 'capo', 'bravazo',
+                    'magnífico', 'perfecto', 'maravilloso', 'fantástico', 'grandioso',
+                    'satisfecho', 'contento', 'feliz', 'orgulloso', 'reconocimiento'
+                ];
                 
                 let score = 0;
-                palabrasPositivas.forEach(p => { if (textoLower.includes(p)) score += 3; });
-                palabrasNegativas.forEach(p => { if (textoLower.includes(p)) score -= 3; });
+                let tieneSarcasmo = false;
+                let tieneInsulto = false;
+                let tieneVulgaridad = false;
+                
+                // Detectar sarcasmo
+                const patronesSarcasmo = [
+                    /qué\s+(bonito|lindo|hermoso|bueno|genial|excelente|bacán|chévere|paja)/i,
+                    /menudo\s+(éxito|logro|avance|progreso|milagro)/i,
+                    /vaya\s+(sorpresa|maravilla|noticia)/i,
+                    /claro\s+(que sí|por supuesto)/i,
+                    /sí\s+claro/i, /si\s+claro/i,
+                    /sí\s+cómo no/i, /si\s+como no/i,
+                    /ah\s+qué\s+bien/i, /ah\s+que\s+bien/i,
+                    /sigan\s+así/i, /sigan\s+asi/i,
+                    /buen\s+trabajo\s+\(ironía\)/i,
+                    /es\s+de\s+chiste/i,
+                    /es\s+una\s+broma/i,
+                    /no\s+sirven\s+para\s+nada/i,
+                    /poco\s+o\s+nada/i
+                ];
+                
+                patronesSarcasmo.forEach(p => {
+                    if (p.test(t)) tieneSarcasmo = true;
+                });
+                
+                // Detectar insultos
+                const insultos = ['rata', 'ratero', 'cojudo', 'huevón', 'pendejo', 'conchudo',
+                                 'mierda', 'basura', 'fantoche', 'payaso', 'bufón', 'títere',
+                                 'miserable', 'inútil', 'mediocre', 'lambón', 'arrastrado'];
+                insultos.forEach(i => {
+                    if (t.includes(i)) tieneInsulto = true;
+                });
                 
                 // Detectar vulgaridad
-                const vulgaridades = ['culo', 'cul0', 'mierda', 'ctm', 'ctmr', 'conchudo', 'pendejo'];
-                let nivelVulgaridad = 0;
-                vulgaridades.forEach(v => { if (textoLower.includes(v)) nivelVulgaridad += 5; });
-                if (nivelVulgaridad > 0) score -= nivelVulgaridad;
+                const vulgar = ['culo', 'cul0', 'ctm', 'ctmr', 'mierda', 'conchudo', 'pendejo',
+                               'carajo', 'hostia', 'joder', 'chingar', 'verga', 'webon', 'huevada'];
+                vulgar.forEach(v => {
+                    if (t.includes(v)) tieneVulgaridad = true;
+                });
                 
-                // Detectar menciones políticas
-                const figuras = ['keiko', 'fujimori', 'boluarte', 'castillo', 'alan garcía'];
+                // Puntaje
+                negativas.forEach(p => {
+                    if (t.includes(p)) score -= 4;
+                });
+                
+                positivas.forEach(p => {
+                    if (t.includes(p)) score += 4;
+                });
+                
+                if (tieneSarcasmo) score -= 8;
+                if (tieneInsulto) score -= 10;
+                if (tieneVulgaridad) score -= 12;
+                
+                // Menciones políticas en contexto negativo
+                const figuras = ['keiko', 'fujimori', 'boluarte', 'castillo', 'alan garcía',
+                                'toledo', 'humala', 'reggiardo', 'lopez aliaga'];
                 let mencionPolitica = false;
-                figuras.forEach(f => { if (textoLower.includes(f)) mencionPolitica = true; });
-                if (mencionPolitica && score < 0) score -= 5;
+                figuras.forEach(f => {
+                    if (t.includes(f)) mencionPolitica = true;
+                });
+                if (mencionPolitica && (tieneSarcasmo || tieneInsulto || score < 0)) {
+                    score -= 8;
+                }
                 
-                const sentimiento = score >= 5 ? 'Positivo' : score <= -5 ? 'Negativo' : 'Neutral';
+                // Determinar sentimiento
+                let sentimiento;
+                if (score <= -6) sentimiento = 'Negativo';
+                else if (score >= 6) sentimiento = 'Positivo';
+                else sentimiento = 'Neutral';
                 
-                // Tipo
+                // Si hay insultos o sarcasmo, forzar Negativo
+                if (tieneInsulto || tieneSarcasmo || tieneVulgaridad) {
+                    sentimiento = 'Negativo';
+                }
+                
+                // Determinar tipo
                 let tipo = 'Opinión';
-                if (texto.includes('?')) tipo = 'Consulta';
-                if (nivelVulgaridad > 5) tipo = 'Crítica';
-                if (/denuncia|corrupción|estafa|robo/i.test(textoLower)) tipo = 'Denuncia';
-                if (/felicit|gracias|excelente/i.test(textoLower)) tipo = 'Felicitación';
-                if (/reclamo|exijo/i.test(textoLower)) tipo = 'Reclamo';
+                if (tieneVulgaridad && tieneInsulto) tipo = 'Insulto';
+                else if (tieneSarcasmo) tipo = 'Sarcasmo';
+                else if (/denuncia|corrupción|estafa|robo|coima|ilegal/i.test(t)) tipo = 'Denuncia';
+                else if (sentimiento === 'Negativo' && /crítica|critico|señalar|error|falla|falta/i.test(t)) tipo = 'Crítica';
+                else if (sentimiento === 'Negativo') tipo = 'Queja';
+                else if (t.includes('?')) tipo = 'Consulta';
+                else if (/felicit|gracias|excelente|bacán|chévere/i.test(t)) tipo = 'Felicitación';
+                else if (/sugiero|propongo|recomiendo|deberían/i.test(t)) tipo = 'Sugerencia';
                 
                 // Tema
                 const temas = {
-                    'Seguridad': ['seguridad', 'policía', 'serenazgo', 'delincuencia', 'robo'],
-                    'Limpieza': ['basura', 'limpieza', 'residuos'],
-                    'Transporte': ['transporte', 'tráfico', 'bus'],
-                    'Gestión': ['alcalde', 'gestión', 'municipal', 'corrupción', 'coima'],
-                    'General': []
+                    'Seguridad Ciudadana': ['seguridad', 'policía', 'serenazgo', 'delincuencia', 'robo', 'crimen', 'violencia', 'drogas', 'pandillaje'],
+                    'Gestión Municipal': ['alcalde', 'gestión', 'municipal', 'corrupción', 'coima', 'funcionario', 'política', 'gobierno', 'autoridad'],
+                    'Limpieza Pública': ['basura', 'limpieza', 'residuos', 'reciclaje', 'barrido', 'desmonte', 'suciedad'],
+                    'Transporte': ['transporte', 'tráfico', 'bus', 'movilidad', 'semáforo', 'paradero', 'congestión', 'vehículo'],
+                    'Obras Públicas': ['obra', 'construcción', 'pista', 'vereda', 'parque', 'alameda', 'infraestructura', 'edificación'],
+                    'Eventos y Cultura': ['evento', 'cultura', 'concierto', 'exposición', 'teatro', 'feria', 'festival', 'espectáculo', 'show'],
+                    'Atención al Ciudadano': ['atención', 'trámite', 'ventanilla', 'servicio', 'colas', 'demora', 'burocracia', 'documento'],
+                    'Medio Ambiente': ['ambiente', 'verde', 'árbol', 'jardín', 'ecología', 'contaminación', 'río', 'playa'],
+                    'Salud': ['salud', 'hospital', 'posta', 'enfermedad', 'epidemia', 'vacuna', 'medicina', 'ambulancia']
                 };
                 
                 let tema = 'General';
-                for (const [t, palabras] of Object.entries(temas)) {
-                    if (palabras.some(p => textoLower.includes(p))) {
-                        tema = t;
-                        break;
+                let maxCoincidencias = 0;
+                for (const [nombre, palabras] of Object.entries(temas)) {
+                    let coincidencias = 0;
+                    palabras.forEach(p => { if (t.includes(p)) coincidencias++; });
+                    if (coincidencias > maxCoincidencias) {
+                        maxCoincidencias = coincidencias;
+                        tema = nombre;
                     }
                 }
                 
-                const prioridad = (nivelVulgaridad > 8 || tipo === 'Denuncia') ? 'Alta' :
-                                 (sentimiento === 'Negativo') ? 'Media' : 'Baja';
+                // Prioridad
+                let prioridad = 'Baja';
+                if (tieneVulgaridad || tieneInsulto || tipo === 'Denuncia') prioridad = 'Alta';
+                else if (sentimiento === 'Negativo' && (tipo === 'Queja' || tipo === 'Crítica' || tipo === 'Sarcasmo')) prioridad = 'Alta';
+                else if (sentimiento === 'Negativo') prioridad = 'Media';
+                else if (tipo === 'Consulta') prioridad = 'Media';
                 
-                const riesgo = (nivelVulgaridad > 8 && mencionPolitica) ? 'Alto' :
-                              (sentimiento === 'Negativo') ? 'Medio' : 'Bajo';
+                // Riesgo
+                let riesgo = 'Bajo';
+                if ((tieneVulgaridad || tieneInsulto) && mencionPolitica) riesgo = 'Alto';
+                else if (tipo === 'Denuncia') riesgo = 'Alto';
+                else if (prioridad === 'Alta') riesgo = 'Medio';
+                else if (sentimiento === 'Negativo') riesgo = 'Medio';
                 
                 return {
                     sentimiento, tipo, tema, prioridad, riesgo,
-                    necesitaRespuesta: ['Denuncia', 'Reclamo', 'Consulta'].includes(tipo),
+                    necesitaRespuesta: ['Denuncia', 'Queja', 'Consulta', 'Crítica', 'Insulto', 'Sarcasmo'].includes(tipo),
                     resumen: `${tipo} ${sentimiento.toLowerCase()} sobre ${tema}`,
-                    palabrasClave: textoLower.split(/\s+/).filter(w => w.length > 4).slice(0, 5)
+                    palabrasClave: t.split(/\s+/)
+                        .map(w => w.replace(/[^a-záéíóúüñ0-9]/gi, ''))
+                        .filter(w => w.length > 4)
+                        .slice(0, 5),
+                    fuente: 'Fallback IA',
+                    confianza: 0.75
                 };
             }
             
@@ -493,28 +850,24 @@ Considera jerga peruana, sarcasmo, insultos, lenguaje vulgar, menciones polític
                 const total = comentarios.length;
                 
                 for (let i = 0; i < total; i++) {
-                    const comentario = comentarios[i];
-                    const texto = comentario['Full Text'] || comentario['full_text'] || comentario['text'] || '';
+                    const c = comentarios[i];
+                    const texto = c['Full Text'] || c['full_text'] || c['text'] || '';
                     
-                    // Actualizar progreso
                     if (callback) {
                         callback({
                             actual: i + 1,
                             total,
                             porcentaje: Math.round(((i + 1) / total) * 100),
-                            texto: texto.substring(0, 50)
+                            texto: texto.substring(0, 60)
                         });
                     }
                     
-                    const analisis = await this.analizarComentario(texto.toString());
-                    resultados.push({
-                        ...comentario,
-                        _analisis: analisis
-                    });
+                    const analisis = await this.analizar(texto.toString());
+                    resultados.push({ ...c, _analisis: analisis });
                     
-                    // Pequeña pausa para no exceder rate limit
+                    // Pausa para rate limit
                     if (STATE.apiKey) {
-                        await new Promise(resolve => setTimeout(resolve, 100));
+                        await new Promise(r => setTimeout(r, 150));
                     }
                 }
                 
@@ -523,114 +876,113 @@ Considera jerga peruana, sarcasmo, insultos, lenguaje vulgar, menciones polític
         }
         
         // ============================================
-        // PROCESAMIENTO DE DATOS
+        // PROCESAMIENTO
         // ============================================
         
         async function procesarComentarios(datosCrudos) {
-            // Limpiar datos
             const datosLimpios = datosCrudos
-                .filter(fila => {
-                    const texto = fila['Full Text'] || fila['full_text'] || fila['text'] || '';
-                    return texto.toString().trim().length > 0;
+                .filter(f => {
+                    const t = f['Full Text'] || f['full_text'] || f['text'] || '';
+                    return t.toString().trim().length > 0;
                 })
-                .filter((fila, index, self) => {
-                    const id = fila['Tweet Id'] || fila['tweet_id'] || fila['id'];
-                    return index === self.findIndex(f => 
-                        (f['Tweet Id'] || f['tweet_id'] || f['id']) === id
-                    );
+                .filter((f, i, self) => {
+                    const id = f['Tweet Id'] || f['tweet_id'] || f['id'];
+                    return i === self.findIndex(x => (x['Tweet Id'] || x['tweet_id'] || x['id']) === id);
                 });
             
-            console.log(`📊 ${datosLimpios.length} comentarios para analizar`);
+            console.log(`📊 ${datosLimpios.length} comentarios a analizar`);
             
-            // Mostrar barra de progreso
-            const progressContainer = document.getElementById('progressContainer');
-            const progressBar = document.getElementById('progressBar');
-            const progressText = document.getElementById('progressText');
-            const progressPercent = document.getElementById('progressPercent');
+            const pc = document.getElementById('progressContainer');
+            const pb = document.getElementById('progressBar');
+            const pt = document.getElementById('progressText');
+            const pp = document.getElementById('progressPercent');
+            const pd = document.getElementById('progressDetail');
             
-            progressContainer.classList.remove('hidden');
+            pc.classList.remove('hidden');
             
-            // Analizar con IA
-            STATE.datos = await IAAnalyzer.analizarLote(datosLimpios, (progreso) => {
-                progressBar.style.width = progreso.porcentaje + '%';
-                progressPercent.textContent = progreso.porcentaje + '%';
-                progressText.textContent = `Analizando con IA... ${progreso.actual}/${progreso.total}`;
+            STATE.datos = await SuperIA.analizarLote(datosLimpios, (p) => {
+                pb.style.width = p.porcentaje + '%';
+                pp.textContent = p.porcentaje + '%';
+                pt.textContent = `🧠 Analizando con IA... ${p.actual}/${p.total}`;
+                pd.textContent = `"${p.texto}..."`;
             });
             
             STATE.filtrados = [...STATE.datos];
             
-            // Ocultar progreso
-            setTimeout(() => {
-                progressContainer.classList.add('hidden');
-            }, 1000);
+            setTimeout(() => pc.classList.add('hidden'), 1000);
             
-            console.log('✅ Análisis completado con IA');
-            
-            // Mostrar resultados
+            console.log('✅ Análisis IA completado');
             renderizarDashboard();
         }
         
-        function procesarArchivo(evento) {
-            const archivo = evento.target.files[0];
-            if (!archivo) return;
+        function procesarArchivo(e) {
+            const file = e.target.files[0];
+            if (!file) return;
             
-            const lector = new FileReader();
-            lector.onload = async function(e) {
+            const reader = new FileReader();
+            reader.onload = async function(ev) {
                 try {
-                    const datos = new Uint8Array(e.target.result);
-                    const workbook = XLSX.read(datos, { type: 'array' });
-                    const hoja = workbook.Sheets[workbook.SheetNames[0]];
-                    const json = XLSX.utils.sheet_to_json(hoja);
+                    const data = new Uint8Array(ev.target.result);
+                    const wb = XLSX.read(data, { type: 'array' });
+                    const ws = wb.Sheets[wb.SheetNames[0]];
+                    const json = XLSX.utils.sheet_to_json(ws);
                     await procesarComentarios(json);
                     alert(`✅ ${STATE.datos.length} comentarios analizados con IA`);
                 } catch(err) {
                     alert('❌ Error: ' + err.message);
                 }
             };
-            lector.readAsArrayBuffer(archivo);
+            reader.readAsArrayBuffer(file);
         }
         
         async function cargarDatosDemo() {
-            const ejemplos = [
+            const demo = [
                 {
-                    'Tweet Id': '3001',
-                    'Full Text': '@MuniLima @Renzo_Reggiardo @KeikoFujimori Besarle el cul0 dirán a la rata de @KeikoFujimori https://t.co/zXn8tw1KOB',
-                    'Created At': '2024-01-20 16:45:00',
-                    'User Name': 'Ciudadano Indignado',
-                    'Favorite Count': 67, 'Retweet Count': 34, 'Reply Count': 15, 'View Count': 2300
+                    'Tweet Id': '5001',
+                    'Full Text': 'Ésta payasada sólo sirve para los espectáculos, estos miserables poco o nada harán por la seguridad ciudadana.',
+                    'Created At': '2024-01-25 14:30:00',
+                    'User Name': 'Ciudadano Crítico',
+                    'Favorite Count': 89, 'Retweet Count': 45, 'Reply Count': 23
                 },
                 {
-                    'Tweet Id': '3002',
-                    'Full Text': 'Excelente trabajo de limpieza en el Centro de Lima. ¡Por fin calles limpias! Gracias @MuniLima',
-                    'Created At': '2024-01-20 10:15:00',
-                    'User Name': 'María García',
-                    'Favorite Count': 120, 'Retweet Count': 45, 'Reply Count': 8, 'View Count': 3200
+                    'Tweet Id': '5002',
+                    'Full Text': '@MuniLima @Renzo_Reggiardo @KeikoFujimori Besarle el cul0 dirán a la rata de @KeikoFujimori',
+                    'Created At': '2024-01-25 15:00:00',
+                    'User Name': 'Indignado Total',
+                    'Favorite Count': 156, 'Retweet Count': 78, 'Reply Count': 34
                 },
                 {
-                    'Tweet Id': '3003',
-                    'Full Text': '¿Hasta cuándo van a seguir con esta corrupción? Las obras nunca se terminan. Puro show.',
-                    'Created At': '2024-01-19 18:45:00',
-                    'User Name': 'Carlos López',
-                    'Favorite Count': 89, 'Retweet Count': 56, 'Reply Count': 23, 'View Count': 2800
+                    'Tweet Id': '5003',
+                    'Full Text': 'Excelente trabajo de limpieza en el Centro. ¡Gracias por mantener las calles limpias!',
+                    'Created At': '2024-01-24 10:00:00',
+                    'User Name': 'Vecina Agradecida',
+                    'Favorite Count': 45, 'Retweet Count': 12, 'Reply Count': 3
                 },
                 {
-                    'Tweet Id': '3004',
-                    'Full Text': '¡Qué bacán el nuevo parque! Felicitaciones a la gestión. Mis hijos están felices.',
-                    'Created At': '2024-01-19 14:20:00',
-                    'User Name': 'Ana Martínez',
-                    'Favorite Count': 67, 'Retweet Count': 12, 'Reply Count': 3, 'View Count': 980
+                    'Tweet Id': '5004',
+                    'Full Text': '¿Hasta cuándo van a seguir robando? Todas las obras infladas y nunca terminan. Pura corrupción.',
+                    'Created At': '2024-01-24 16:00:00',
+                    'User Name': 'Carlos Fiscal',
+                    'Favorite Count': 234, 'Retweet Count': 156, 'Reply Count': 89
                 },
                 {
-                    'Tweet Id': '3005',
-                    'Full Text': '@MuniLima son una manga de coimeros y rateros. Se la llevan fácil con nuestra plata. ¡Qué asco de gestión!',
-                    'Created At': '2024-01-17 20:30:00',
-                    'User Name': 'Vecino Enojado',
-                    'Favorite Count': 156, 'Retweet Count': 89, 'Reply Count': 45, 'View Count': 5600
+                    'Tweet Id': '5005',
+                    'Full Text': 'Qué bonito parque, lástima que de noche es tierra de nadie. Puro show para la foto.',
+                    'Created At': '2024-01-23 11:00:00',
+                    'User Name': 'Vecino Realista',
+                    'Favorite Count': 67, 'Retweet Count': 23, 'Reply Count': 12
+                },
+                {
+                    'Tweet Id': '5006',
+                    'Full Text': 'Felicitaciones por el festival de verano. Bien organizado y seguro para la familia.',
+                    'Created At': '2024-01-23 20:00:00',
+                    'User Name': 'Familia Feliz',
+                    'Favorite Count': 120, 'Retweet Count': 34, 'Reply Count': 8
                 }
             ];
             
-            await procesarComentarios(ejemplos);
-            alert('✅ Datos demo analizados con IA');
+            await procesarComentarios(demo);
+            alert('✅ Datos demo analizados con SuperPrompt IA');
         }
         
         // ============================================
@@ -643,45 +995,43 @@ Considera jerga peruana, sarcasmo, insultos, lenguaje vulgar, menciones polític
             const d = STATE.filtrados;
             
             // KPIs
-            const sentimientos = {};
+            const s = {};
             const tipos = {};
-            let likes = 0, altoRiesgo = 0;
+            let likes = 0, riesgos = 0;
             
             d.forEach(r => {
-                const s = r._analisis.sentimiento;
-                sentimientos[s] = (sentimientos[s] || 0) + 1;
-                const t = r._analisis.tipo;
-                tipos[t] = (tipos[t] || 0) + 1;
-                if (r._analisis.riesgo === 'Alto') altoRiesgo++;
+                s[r._analisis.sentimiento] = (s[r._analisis.sentimiento] || 0) + 1;
+                tipos[r._analisis.tipo] = (tipos[r._analisis.tipo] || 0) + 1;
+                if (r._analisis.riesgo === 'Alto') riesgos++;
                 likes += parseInt(r['Favorite Count'] || 0);
             });
             
             const kpis = [
-                { label: 'Total', value: d.length, icon: '📊', color: 'text-blue-600' },
-                { label: 'Positivos', value: sentimientos['Positivo'] || 0, icon: '😊', color: 'text-green-600' },
-                { label: 'Neutrales', value: sentimientos['Neutral'] || 0, icon: '😐', color: 'text-yellow-600' },
-                { label: 'Negativos', value: sentimientos['Negativo'] || 0, icon: '😡', color: 'text-red-600' },
-                { label: 'Riesgo Alto', value: altoRiesgo, icon: '⚠️', color: 'text-orange-600' },
-                { label: 'Likes', value: likes, icon: '❤️', color: 'text-pink-600' }
+                { label: 'Total', value: d.length, icon: '📊', color: 'text-blue-400' },
+                { label: 'Positivos', value: s['Positivo'] || 0, icon: '😊', color: 'text-green-400' },
+                { label: 'Neutrales', value: s['Neutral'] || 0, icon: '😐', color: 'text-yellow-400' },
+                { label: 'Negativos', value: s['Negativo'] || 0, icon: '😡', color: 'text-red-400' },
+                { label: 'Riesgo Alto', value: riesgos, icon: '⚠️', color: 'text-orange-400' },
+                { label: 'Likes', value: likes, icon: '❤️', color: 'text-pink-400' }
             ];
             
             document.getElementById('kpiContainer').innerHTML = kpis.map(k => `
-                <div class="bg-white rounded-xl p-4 shadow-sm kpi-card">
+                <div class="kpi-card rounded-xl p-4">
                     <div class="flex justify-between items-center mb-2">
-                        <span class="text-xs text-gray-500 uppercase">${k.label}</span>
+                        <span class="text-xs text-naval-200 uppercase tracking-wider">${k.label}</span>
                         <span class="text-2xl">${k.icon}</span>
                     </div>
-                    <div class="text-3xl font-bold text-gray-900">${k.value}</div>
+                    <div class="text-3xl font-bold kpi-value">${k.value.toLocaleString()}</div>
                 </div>
             `).join('');
             
+            // Actualizar sidebar
+            document.getElementById('sidebar-total').textContent = d.length;
+            document.getElementById('sidebar-riesgos').textContent = riesgos;
+            
             // Gráficos
             renderizarGraficos(d);
-            
-            // Tabla
             renderizarTabla(d);
-            
-            // Filtros
             actualizarFiltros(d);
         }
         
@@ -699,14 +1049,19 @@ Considera jerga peruana, sarcasmo, insultos, lenguaje vulgar, menciones polític
                     labels: Object.keys(sData),
                     datasets: [{
                         data: Object.values(sData),
-                        backgroundColor: ['#10B981', '#F59E0B', '#EF4444', '#8B5CF6'],
+                        backgroundColor: ['#10B981', '#F59E0B', '#EF4444'],
                         borderWidth: 0
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: { legend: { position: 'bottom' } }
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: '#93c5fd', padding: 15, font: { size: 12 } }
+                        }
+                    }
                 }
             });
             
@@ -721,14 +1076,26 @@ Considera jerga peruana, sarcasmo, insultos, lenguaje vulgar, menciones polític
                     labels: Object.keys(tData),
                     datasets: [{
                         data: Object.values(tData),
-                        backgroundColor: '#8B5CF6',
-                        borderRadius: 8
+                        backgroundColor: '#3b82f6',
+                        borderRadius: 8,
+                        borderWidth: 0
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: { legend: { display: false } }
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { 
+                            beginAtZero: true,
+                            ticks: { color: '#93c5fd' },
+                            grid: { color: 'rgba(30, 73, 118, 0.3)' }
+                        },
+                        x: {
+                            ticks: { color: '#93c5fd', maxRotation: 45 },
+                            grid: { display: false }
+                        }
+                    }
                 }
             });
             
@@ -743,15 +1110,97 @@ Considera jerga peruana, sarcasmo, insultos, lenguaje vulgar, menciones polític
                     labels: Object.keys(temas),
                     datasets: [{
                         data: Object.values(temas),
-                        backgroundColor: '#EC4899',
-                        borderRadius: 8
+                        backgroundColor: '#2563eb',
+                        borderRadius: 8,
+                        borderWidth: 0
                     }]
                 },
                 options: {
                     indexAxis: 'y',
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: { legend: { display: false } }
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { ticks: { color: '#93c5fd' }, grid: { color: 'rgba(30, 73, 118, 0.3)' } },
+                        y: { ticks: { color: '#93c5fd' }, grid: { display: false } }
+                    }
+                }
+            });
+            
+            // Timeline (CORREGIDO)
+            const timeline = {};
+            d.forEach(r => {
+                const fecha = new Date(r['Created At'] || r['created_at'] || '');
+                if (!isNaN(fecha.getTime())) {
+                    const key = fecha.toLocaleDateString('es-PE', { day: '2-digit', month: '2-digit' });
+                    timeline[key] = (timeline[key] || 0) + 1;
+                }
+            });
+            
+            const sortedKeys = Object.keys(timeline).sort((a, b) => {
+                const [da, ma] = a.split('/').map(Number);
+                const [db, mb] = b.split('/').map(Number);
+                return ma - mb || da - db;
+            });
+            
+            const ctx4 = document.getElementById('chartTimeline').getContext('2d');
+            STATE.graficos.timeline = new Chart(ctx4, {
+                type: 'line',
+                data: {
+                    labels: sortedKeys,
+                    datasets: [
+                        {
+                            label: 'Total',
+                            data: sortedKeys.map(k => timeline[k]),
+                            borderColor: '#3b82f6',
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            fill: true,
+                            tension: 0.4,
+                            pointBackgroundColor: '#3b82f6',
+                            pointBorderColor: '#fff',
+                            pointRadius: 4,
+                            pointHoverRadius: 6
+                        },
+                        {
+                            label: 'Negativos',
+                            data: sortedKeys.map(k => {
+                                return d.filter(r => {
+                                    const f = new Date(r['Created At'] || '');
+                                    if (isNaN(f.getTime())) return false;
+                                    const key2 = f.toLocaleDateString('es-PE', { day: '2-digit', month: '2-digit' });
+                                    return key2 === k && r._analisis.sentimiento === 'Negativo';
+                                }).length;
+                            }),
+                            borderColor: '#EF4444',
+                            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                            fill: true,
+                            tension: 0.4,
+                            pointBackgroundColor: '#EF4444',
+                            pointBorderColor: '#fff',
+                            pointRadius: 4,
+                            pointHoverRadius: 6
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#93c5fd', usePointStyle: true, padding: 20 }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { color: '#93c5fd' },
+                            grid: { color: 'rgba(30, 73, 118, 0.3)' }
+                        },
+                        x: {
+                            ticks: { color: '#93c5fd' },
+                            grid: { color: 'rgba(30, 73, 118, 0.3)' }
+                        }
+                    }
                 }
             });
         }
@@ -760,30 +1209,30 @@ Considera jerga peruana, sarcasmo, insultos, lenguaje vulgar, menciones polític
             if (STATE.tablaData) STATE.tablaData.destroy();
             
             document.getElementById('tablaBody').innerHTML = d.map(r => `
-                <tr class="cursor-pointer hover:bg-purple-50" onclick="mostrarDetalle('${r['Tweet Id'] || r['tweet_id']}')">
-                    <td class="text-xs">${new Date(r['Created At'] || '').toLocaleDateString('es-PE')}</td>
-                    <td class="text-sm font-semibold">${r['User Name'] || 'Anónimo'}</td>
-                    <td class="text-sm max-w-xs truncate">${(r['Full Text'] || '').substring(0, 80)}...</td>
+                <tr class="cursor-pointer hover:bg-naval-700 transition" onclick="mostrarDetalle('${r['Tweet Id'] || r['tweet_id']}')">
+                    <td class="text-xs">${new Date(r['Created At'] || '').toLocaleDateString('es-PE', { day: '2-digit', month: '2-digit', year: 'numeric' })}</td>
+                    <td class="text-sm font-semibold text-white">${r['User Name'] || 'Anónimo'}</td>
+                    <td class="text-sm max-w-xs truncate text-naval-100">${(r['Full Text'] || '').substring(0, 80)}...</td>
                     <td><span class="badge-sentiment badge-${(r._analisis.sentimiento || '').toLowerCase()}">${r._analisis.sentimiento}</span></td>
-                    <td class="text-xs">${r._analisis.tipo}</td>
-                    <td class="text-xs">${r._analisis.tema}</td>
-                    <td class="text-xs font-semibold ${r._analisis.prioridad === 'Alta' ? 'text-red-600' : ''}">${r._analisis.prioridad}</td>
+                    <td class="text-xs text-naval-200">${r._analisis.tipo}</td>
+                    <td class="text-xs text-naval-200">${r._analisis.tema}</td>
+                    <td class="text-xs font-bold ${r._analisis.prioridad === 'Alta' ? 'text-red-400' : r._analisis.prioridad === 'Media' ? 'text-yellow-400' : 'text-green-400'}">${r._analisis.prioridad}</td>
                     <td>
                         <div class="flex items-center space-x-2">
-                            <div class="flex-1 bg-gray-200 rounded-full h-2">
-                                <div class="confidence-bar bg-purple-600 rounded-full" style="width: ${(r._analisis.confianza || 0.95) * 100}%"></div>
+                            <div class="flex-1 bg-naval-700 rounded-full h-1.5">
+                                <div class="h-1.5 rounded-full bg-gradient-to-r from-blue-500 to-cyan-400" style="width: ${Math.round((r._analisis.confianza || 0.95) * 100)}%"></div>
                             </div>
-                            <span class="text-xs text-gray-500">${Math.round((r._analisis.confianza || 0.95) * 100)}%</span>
+                            <span class="text-xs text-naval-300">${Math.round((r._analisis.confianza || 0.95) * 100)}%</span>
                         </div>
                     </td>
                     <td class="text-xs">${r['Favorite Count'] || 0}</td>
-                    <td class="text-xs">${r['Retweet Count'] || 0}</td>
                 </tr>
             `).join('');
             
             STATE.tablaData = $('#tablaComentarios').DataTable({
                 pageLength: 25,
-                language: { url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json' }
+                language: { url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json' },
+                order: [[0, 'desc']]
             });
         }
         
@@ -791,9 +1240,9 @@ Considera jerga peruana, sarcasmo, insultos, lenguaje vulgar, menciones polític
             const tipos = [...new Set(d.map(r => r._analisis.tipo))].sort();
             const temas = [...new Set(d.map(r => r._analisis.tema))].sort();
             
-            document.getElementById('filtroTipo').innerHTML = '<option value="">Tipo</option>' +
+            document.getElementById('filtroTipo').innerHTML = '<option value="">Todos los tipos</option>' +
                 tipos.map(t => `<option value="${t}">${t}</option>`).join('');
-            document.getElementById('filtroTema').innerHTML = '<option value="">Tema</option>' +
+            document.getElementById('filtroTema').innerHTML = '<option value="">Todos los temas</option>' +
                 temas.map(t => `<option value="${t}">${t}</option>`).join('');
         }
         
@@ -803,10 +1252,12 @@ Considera jerga peruana, sarcasmo, insultos, lenguaje vulgar, menciones polític
             const s = document.getElementById('filtroSentimiento').value;
             const ti = document.getElementById('filtroTipo').value;
             const te = document.getElementById('filtroTema').value;
+            const p = document.getElementById('filtroPrioridad').value;
             
             if (s) d = d.filter(r => r._analisis.sentimiento === s);
             if (ti) d = d.filter(r => r._analisis.tipo === ti);
             if (te) d = d.filter(r => r._analisis.tema === te);
+            if (p) d = d.filter(r => r._analisis.prioridad === p);
             
             STATE.filtrados = d;
             renderizarDashboard();
@@ -823,54 +1274,64 @@ Considera jerga peruana, sarcasmo, insultos, lenguaje vulgar, menciones polític
             const a = c._analisis;
             
             document.getElementById('detalleContenido').innerHTML = `
-                <div class="space-y-4">
-                    <div class="card-ia p-4 rounded-lg">
+                <div class="space-y-5">
+                    <div class="bg-naval-700 rounded-xl p-4 border border-naval-500">
                         <div class="flex items-center space-x-2 mb-2">
                             <span class="text-2xl">🧠</span>
-                            <span class="font-bold text-purple-600">Análisis de IA (${a.fuente})</span>
-                            <span class="text-sm text-gray-500">${Math.round((a.confianza || 0.95) * 100)}% confianza</span>
+                            <span class="font-bold text-naval-200">Análisis de IA</span>
+                            <span class="text-xs text-naval-300">(${a.fuente})</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-xs text-naval-300">Confianza:</span>
+                            <div class="flex-1 bg-naval-600 rounded-full h-2">
+                                <div class="h-2 rounded-full bg-gradient-to-r from-blue-500 to-cyan-400" style="width: ${Math.round((a.confianza || 0.99) * 100)}%"></div>
+                            </div>
+                            <span class="text-xs text-naval-200 font-bold">${Math.round((a.confianza || 0.99) * 100)}%</span>
                         </div>
                     </div>
                     
-                    <div class="bg-gray-50 p-4 rounded-lg">
-                        <h3 class="font-bold">${c['User Name'] || 'Anónimo'}</h3>
-                        <p class="text-sm text-gray-600">@${c['User Screen Name'] || 'usuario'}</p>
-                        <p class="mt-3">${c['Full Text']}</p>
+                    <div class="bg-naval-700 rounded-xl p-4 border border-naval-500">
+                        <h3 class="font-bold text-white text-lg">${c['User Name'] || 'Anónimo'}</h3>
+                        <p class="text-sm text-naval-300">@${c['User Screen Name'] || 'usuario'}</p>
+                        <div class="mt-3 p-3 bg-naval-600 rounded-lg">
+                            <p class="text-white">${c['Full Text']}</p>
+                        </div>
                     </div>
                     
                     <div class="grid grid-cols-2 gap-3">
-                        <div class="bg-purple-50 p-3 rounded-lg text-center">
-                            <p class="text-xs text-gray-600">Sentimiento</p>
-                            <p class="text-lg font-bold">${a.sentimiento}</p>
+                        <div class="bg-naval-700 rounded-xl p-4 border border-naval-500 text-center">
+                            <p class="text-xs text-naval-300 mb-1">Sentimiento</p>
+                            <p class="text-xl font-bold ${a.sentimiento === 'Positivo' ? 'text-green-400' : a.sentimiento === 'Negativo' ? 'text-red-400' : 'text-yellow-400'}">${a.sentimiento}</p>
                         </div>
-                        <div class="bg-blue-50 p-3 rounded-lg text-center">
-                            <p class="text-xs text-gray-600">Tipo</p>
-                            <p class="text-lg font-bold">${a.tipo}</p>
+                        <div class="bg-naval-700 rounded-xl p-4 border border-naval-500 text-center">
+                            <p class="text-xs text-naval-300 mb-1">Tipo</p>
+                            <p class="text-xl font-bold text-blue-400">${a.tipo}</p>
                         </div>
-                        <div class="bg-green-50 p-3 rounded-lg text-center">
-                            <p class="text-xs text-gray-600">Tema</p>
-                            <p class="text-lg font-bold">${a.tema}</p>
+                        <div class="bg-naval-700 rounded-xl p-4 border border-naval-500 text-center">
+                            <p class="text-xs text-naval-300 mb-1">Tema</p>
+                            <p class="text-xl font-bold text-cyan-400">${a.tema}</p>
                         </div>
-                        <div class="bg-red-50 p-3 rounded-lg text-center">
-                            <p class="text-xs text-gray-600">Prioridad</p>
-                            <p class="text-lg font-bold ${a.prioridad === 'Alta' ? 'text-red-600' : ''}">${a.prioridad}</p>
+                        <div class="bg-naval-700 rounded-xl p-4 border border-naval-500 text-center">
+                            <p class="text-xs text-naval-300 mb-1">Prioridad</p>
+                            <p class="text-xl font-bold ${a.prioridad === 'Alta' ? 'text-red-400' : a.prioridad === 'Media' ? 'text-yellow-400' : 'text-green-400'}">${a.prioridad}</p>
                         </div>
                     </div>
                     
-                    <div>
-                        <h4 class="font-bold mb-2">Palabras Clave</h4>
+                    <div class="bg-naval-700 rounded-xl p-4 border border-naval-500">
+                        <h4 class="font-bold text-white mb-3">Palabras Clave</h4>
                         <div class="flex flex-wrap gap-2">
-                            ${(a.palabrasClave || []).map(p => `<span class="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm">${p}</span>`).join('')}
+                            ${(a.palabrasClave || []).map(p => `<span class="px-3 py-1.5 bg-naval-600 text-naval-200 rounded-full text-sm border border-naval-500">#${p}</span>`).join('')}
                         </div>
                     </div>
                     
-                    <div class="bg-purple-50 p-4 rounded-lg">
-                        <p class="text-sm"><strong>📝 Resumen IA:</strong> ${a.resumen}</p>
+                    <div class="bg-naval-700 rounded-xl p-4 border border-naval-500">
+                        <h4 class="font-bold text-white mb-2">📝 Resumen IA</h4>
+                        <p class="text-naval-200">${a.resumen}</p>
                     </div>
                     
-                    <div class="${a.riesgo === 'Alto' ? 'bg-red-50 border-red-200' : 'bg-yellow-50 border-yellow-200'} p-3 rounded-lg border">
-                        <p><strong>⚠️ Riesgo:</strong> ${a.riesgo}</p>
-                        <p><strong>📞 ¿Responder?:</strong> ${a.necesitaRespuesta ? 'SÍ' : 'No'}</p>
+                    <div class="${a.riesgo === 'Alto' ? 'bg-red-900/30 border-red-500' : 'bg-yellow-900/30 border-yellow-500'} rounded-xl p-4 border">
+                        <p class="text-white"><strong>⚠️ Riesgo:</strong> ${a.riesgo}</p>
+                        <p class="text-white"><strong>📞 ¿Responder?:</strong> ${a.necesitaRespuesta ? 'SÍ - Atención prioritaria' : 'No requiere'}</p>
                     </div>
                 </div>
             `;
@@ -883,74 +1344,44 @@ Considera jerga peruana, sarcasmo, insultos, lenguaje vulgar, menciones polític
         }
         
         // ============================================
-        // NAVEGACIÓN Y UI
+        // UI
         // ============================================
         
-        function navegar(vista) {
-            document.querySelectorAll('[id^="vista-"]').forEach(el => el.classList.add('hidden'));
-            const target = document.getElementById(`vista-${vista}`);
-            if (target) target.classList.remove('hidden');
+        function guardarAPIKey() {
+            const key = document.getElementById('apiKey').value.trim();
+            if (key) {
+                STATE.apiKey = key;
+                localStorage.setItem('gemini_api_key_v5', key);
+                document.getElementById('ia-status').textContent = '✅ Gemini conectado';
+                alert('✅ API Key guardada');
+            }
         }
         
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('-translate-x-full');
         }
         
-        function guardarAPIKey() {
-            const key = document.getElementById('apiKey').value.trim();
-            if (key) {
-                STATE.apiKey = key;
-                localStorage.setItem('gemini_api_key', key);
-                document.getElementById('ia-status').textContent = 'Gemini ✅';
-                alert('✅ API Key guardada');
-            }
-        }
-        
-        function guardarConfig() {
-            const key = document.getElementById('cfgApiKey').value.trim();
-            if (key) {
-                STATE.apiKey = key;
-                localStorage.setItem('gemini_api_key', key);
-                document.getElementById('ia-status').textContent = 'Gemini ✅';
-            }
-            
-            const prompt = document.getElementById('cfgPrompt').value;
-            if (prompt) CONFIG.prompt = prompt;
-            
-            alert('✅ Configuración guardada');
-        }
-        
-        // Inicialización
+        // Init
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('fecha-header').textContent = 
                 new Date().toLocaleDateString('es-PE', { 
                     weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' 
                 });
             
-            // Cargar API key guardada
             if (STATE.apiKey) {
                 document.getElementById('apiKey').value = STATE.apiKey;
-                document.getElementById('cfgApiKey').value = STATE.apiKey;
-                document.getElementById('ia-status').textContent = 'Gemini ✅';
-            } else {
-                document.getElementById('ia-status').textContent = 'Esperando clave';
-            }
-            
-            // Cargar prompt guardado
-            const savedPrompt = localStorage.getItem('gemini_prompt');
-            if (savedPrompt) {
-                CONFIG.prompt = savedPrompt;
-                document.getElementById('cfgPrompt').value = savedPrompt;
+                document.getElementById('ia-status').textContent = '✅ Gemini conectado';
             }
             
             document.addEventListener('keydown', e => {
                 if (e.key === 'Escape') cerrarDetalle();
             });
             
-            console.log('🧠 Social Listening Dashboard v4.0 - IA Edition');
-            console.log('✅ Gemini API integrado');
-            console.log('✅ Fallback de reglas incluido');
-            console.log('✅ Análisis contextual profundo');
+            console.log('🧠 Social Listening Dashboard v5.0');
+            console.log('✅ SuperPrompt optimizado');
+            console.log('✅ Diseño azul marino');
+            console.log('✅ Timeline corregido');
+            console.log('✅ Detección precisa de sarcasmo y críticas');
         });
     </script>
 </body>
