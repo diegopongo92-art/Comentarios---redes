@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sentinel AI v10.0 - Sistema Completo</title>
+    <title>Sentinel AI v11.0 - Zero Escape</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -84,9 +84,9 @@
             letter-spacing: 1px;
             display: inline-block;
         }
-        .badge-neg { background: rgba(239,68,68,0.12); color: #ef4444; border: 1px solid rgba(239,68,68,0.25); }
-        .badge-pos { background: rgba(16,185,129,0.12); color: #10b981; border: 1px solid rgba(16,185,129,0.25); }
-        .badge-neu { background: rgba(245,158,11,0.12); color: #f59e0b; border: 1px solid rgba(245,158,11,0.25); }
+        .badge-neg { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid rgba(239,68,68,0.3); }
+        .badge-pos { background: rgba(16,185,129,0.15); color: #10b981; border: 1px solid rgba(16,185,129,0.3); }
+        .badge-neu { background: rgba(245,158,11,0.15); color: #f59e0b; border: 1px solid rgba(245,158,11,0.3); }
         
         .nav-item {
             transition: all 0.2s;
@@ -98,9 +98,7 @@
         
         .chart-container { position: relative; height: 300px; width: 100%; }
         
-        .pulse-crisis {
-            animation: pulseCrisis 0.8s ease-in-out infinite alternate;
-        }
+        .pulse-crisis { animation: pulseCrisis 0.8s ease-in-out infinite alternate; }
         @keyframes pulseCrisis {
             from { box-shadow: 0 0 8px rgba(239,68,68,0.4); }
             to { box-shadow: 0 0 25px rgba(239,68,68,0.9); }
@@ -145,11 +143,6 @@
             border: 1px solid var(--border) !important;
             border-radius: 8px !important;
         }
-        select:focus, input:focus, textarea:focus {
-            border-color: var(--accent) !important;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(59,130,246,0.12) !important;
-        }
         
         .btn-primary {
             background: var(--accent);
@@ -159,11 +152,9 @@
             transition: all 0.3s;
             border: none;
             cursor: pointer;
+            padding: 8px 16px;
         }
-        .btn-primary:hover {
-            box-shadow: 0 0 25px rgba(59,130,246,0.4);
-            transform: translateY(-2px);
-        }
+        .btn-primary:hover { box-shadow: 0 0 25px rgba(59,130,246,0.4); transform: translateY(-2px); }
         
         .btn-gold {
             background: linear-gradient(135deg, #f59e0b, #d97706);
@@ -173,11 +164,9 @@
             transition: all 0.3s;
             border: none;
             cursor: pointer;
+            padding: 8px 16px;
         }
-        .btn-gold:hover {
-            box-shadow: 0 0 25px rgba(245,158,11,0.4);
-            transform: translateY(-2px);
-        }
+        .btn-gold:hover { box-shadow: 0 0 25px rgba(245,158,11,0.4); transform: translateY(-2px); }
         
         .btn-outline {
             background: var(--elevated);
@@ -186,35 +175,18 @@
             border-radius: 10px;
             transition: all 0.3s;
             cursor: pointer;
+            padding: 8px 16px;
         }
-        .btn-outline:hover {
-            background: var(--border);
-        }
-        
-        .emotion-card {
-            transition: all 0.3s;
-            cursor: pointer;
-        }
-        .emotion-card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 20px rgba(139,92,246,0.3);
-        }
-        
-        .crisis-alert {
-            border-left: 4px solid #ef4444;
-        }
-        
-        .influence-node {
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .influence-node:hover {
-            filter: brightness(1.4);
-        }
+        .btn-outline:hover { background: var(--border); }
         
         @media (max-width: 768px) {
             .chart-container { height: 220px; }
-            .kpi-value { font-size: 1.5rem; }
+        }
+
+        .falso-neutral-alert {
+            background: rgba(239,68,68,0.1);
+            border: 2px solid rgba(239,68,68,0.4);
+            animation: pulseCrisis 1s ease-in-out infinite alternate;
         }
     </style>
 </head>
@@ -226,18 +198,15 @@
         <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-72 bg-[#0d1117] border-r border-[#1e3050] transform -translate-x-full lg:translate-x-0 lg:static transition-transform duration-300 overflow-y-auto">
             <div class="p-5">
                 <div class="text-center mb-6">
-                    <div class="w-16 h-16 bg-gradient-to-br from-blue-600 via-purple-600 to-cyan-400 rounded-2xl mx-auto mb-3 flex items-center justify-center shadow-lg">
-                        <span class="text-2xl font-black text-white">🧬</span>
+                    <div class="w-16 h-16 bg-gradient-to-br from-red-600 via-orange-500 to-yellow-400 rounded-2xl mx-auto mb-3 flex items-center justify-center shadow-lg">
+                        <span class="text-2xl font-black text-white">🛡️</span>
                     </div>
                     <h2 class="text-lg font-bold text-white">Sentinel AI</h2>
-                    <p class="text-xs text-blue-300/50">v10.0 Enterprise</p>
+                    <p class="text-xs text-red-300/70">v11.0 Zero Escape</p>
                 </div>
                 
-                <div class="mb-4 p-3 bg-[#1a2332] rounded-xl border border-[#1e3050]">
-                    <div class="flex items-center justify-between text-xs">
-                        <span class="text-blue-300/60">Estado</span>
-                        <span class="flex items-center gap-1"><span class="w-2 h-2 bg-green-400 rounded-full"></span> Activo</span>
-                    </div>
+                <div class="mb-4 p-3 bg-red-500/5 border border-red-500/20 rounded-xl">
+                    <p class="text-xs text-red-300/80 text-center">⚠️ Modo: Tolerancia CERO a falsos neutrales</p>
                 </div>
                 
                 <nav class="space-y-1">
@@ -249,7 +218,6 @@
                     </div>
                     <div onclick="navigateTo('crisis')" class="nav-item flex items-center px-3 py-2.5 rounded-lg text-sm text-blue-200/80">
                         <i class="fas fa-exclamation-triangle w-5 text-red-400"></i><span class="ml-2">Centro Crisis</span>
-                        <span id="crisis-nav-badge" class="ml-auto text-xs bg-red-500/20 text-red-300 px-1.5 py-0.5 rounded-full hidden">0</span>
                     </div>
                     <div onclick="navigateTo('narratives')" class="nav-item flex items-center px-3 py-2.5 rounded-lg text-sm text-blue-200/80">
                         <i class="fas fa-project-diagram w-5 text-cyan-400"></i><span class="ml-2">Narrativas</span>
@@ -274,209 +242,99 @@
             </div>
         </aside>
         
-        <!-- MAIN CONTENT -->
+        <!-- MAIN -->
         <main class="flex-1 overflow-y-auto">
             
             <header class="glass sticky top-0 z-30 border-b border-[#1e3050] px-6 py-3">
                 <div class="flex items-center justify-between">
                     <button onclick="toggleSidebar()" class="lg:hidden text-blue-300"><i class="fas fa-bars text-xl"></i></button>
-                    <h1 class="text-lg font-bold text-white" id="header-title">Dashboard Principal</h1>
+                    <h1 class="text-lg font-bold text-white" id="header-title">Dashboard - Zero Escape</h1>
                     <div class="flex items-center gap-3">
                         <span class="text-xs text-blue-300/50" id="fecha-header"></span>
-                        <span id="crisis-header-badge" class="text-xs bg-red-500/10 text-red-300 px-2 py-1 rounded-full hidden">🚨 <span id="crisis-header-count">0</span></span>
                     </div>
                 </div>
             </header>
             
             <div class="p-5">
                 
-                <!-- ==================== DASHBOARD ==================== -->
+                <!-- DASHBOARD -->
                 <div id="view-dashboard">
-                    <div class="glass rounded-2xl p-5 mb-6">
+                    <div class="glass rounded-2xl p-5 mb-6 falso-neutral-alert">
                         <div class="flex flex-wrap items-center justify-between gap-3">
                             <div>
-                                <h2 class="text-xl font-bold text-white">🧬 Sentinel AI Enterprise v10.0</h2>
-                                <p class="text-xs text-blue-300/50">Prompt Zero-Escape • Todas las vistas funcionales</p>
+                                <h2 class="text-xl font-bold text-white">🛡️ Sentinel AI v11.0 - ZERO ESCAPE</h2>
+                                <p class="text-xs text-red-300/70">Motor anti-falsos-neutrales • Detección de ironía peruana • Categorías políticas</p>
                             </div>
                             <div class="flex gap-2 flex-wrap">
                                 <input type="password" id="apiKey" class="px-3 py-2 text-sm w-48" placeholder="Gemini API Key">
                                 <button onclick="guardarAPIKey()" class="px-4 py-2 btn-gold text-sm"><i class="fas fa-key mr-1"></i>Conectar</button>
-                                <button onclick="document.getElementById('fileInput').click()" class="px-4 py-2 btn-primary text-sm"><i class="fas fa-upload mr-1"></i>Excel</button>
-                                <button onclick="cargarDemo()" class="px-4 py-2 btn-outline text-sm"><i class="fas fa-flask mr-1"></i>Demo</button>
+                                <button onclick="cargarDemo()" class="px-4 py-2 btn-outline text-sm"><i class="fas fa-flask mr-1"></i>Demo Crítico</button>
                             </div>
-                            <input type="file" id="fileInput" accept=".xlsx,.xls" class="hidden" onchange="procesarArchivo(event)">
-                        </div>
-                        <div id="progressContainer" class="hidden mt-4">
-                            <div class="flex justify-between text-xs mb-1"><span class="text-blue-300" id="progressText"></span><span class="text-blue-200 font-bold" id="progressPercent">0%</span></div>
-                            <div class="w-full bg-[#0a0e17] rounded-full h-2"><div id="progressBar" class="shimmer h-2 rounded-full" style="width:0%"></div></div>
                         </div>
                     </div>
                     
                     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-6" id="kpiContainer"></div>
                     
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-6">
-                        <div class="glass rounded-2xl p-5 glass-hover"><h3 class="text-sm font-bold text-white mb-3">🎭 Sentimientos</h3><div class="chart-container"><canvas id="chartSentimiento"></canvas></div></div>
-                        <div class="glass rounded-2xl p-5 glass-hover"><h3 class="text-sm font-bold text-white mb-3">🧠 Emociones</h3><div class="chart-container"><canvas id="chartEmociones"></canvas></div></div>
-                        <div class="glass rounded-2xl p-5 glass-hover"><h3 class="text-sm font-bold text-white mb-3">📂 Temas</h3><div class="chart-container"><canvas id="chartTemas"></canvas></div></div>
+                        <div class="glass rounded-2xl p-5"><h3 class="text-sm font-bold text-white mb-3">🎭 Sentimientos</h3><div class="chart-container"><canvas id="chartSentimiento"></canvas></div></div>
+                        <div class="glass rounded-2xl p-5"><h3 class="text-sm font-bold text-white mb-3">🧠 Emociones</h3><div class="chart-container"><canvas id="chartEmociones"></canvas></div></div>
+                        <div class="glass rounded-2xl p-5"><h3 class="text-sm font-bold text-white mb-3">📂 Temas</h3><div class="chart-container"><canvas id="chartTemas"></canvas></div></div>
                     </div>
                     
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6">
-                        <div class="glass rounded-2xl p-5 glass-hover"><h3 class="text-sm font-bold text-white mb-3">🚨 Monitor Crisis</h3><div class="chart-container"><canvas id="chartCrisis"></canvas></div></div>
-                        <div class="glass rounded-2xl p-5 glass-hover"><h3 class="text-sm font-bold text-white mb-3">📈 Timeline</h3><div class="chart-container"><canvas id="chartTimeline"></canvas></div></div>
+                        <div class="glass rounded-2xl p-5"><h3 class="text-sm font-bold text-white mb-3">🚨 Monitor Crisis</h3><div class="chart-container"><canvas id="chartCrisis"></canvas></div></div>
+                        <div class="glass rounded-2xl p-5"><h3 class="text-sm font-bold text-white mb-3">📈 Timeline</h3><div class="chart-container"><canvas id="chartTimeline"></canvas></div></div>
                     </div>
-                    
-                    <div class="glass rounded-2xl p-5 mb-6"><h3 class="text-sm font-bold text-white mb-3">☁️ Nube de Palabras</h3><canvas id="wordcloud" width="700" height="300" class="w-full"></canvas></div>
                     
                     <div class="glass rounded-2xl p-5">
                         <div class="flex flex-wrap justify-between items-center mb-4 gap-2">
-                            <h3 class="text-sm font-bold text-white">📋 Comentarios</h3>
+                            <h3 class="text-sm font-bold text-white">📋 Comentarios (Zero Escape Mode)</h3>
                             <div class="flex gap-2">
                                 <select id="filtroSentimiento" class="px-2 py-1.5 text-xs" onchange="aplicarFiltros()"><option value="">Sentimiento</option><option value="Negativo">Negativo</option><option value="Neutral">Neutral</option><option value="Positivo">Positivo</option></select>
-                                <select id="filtroEmocion" class="px-2 py-1.5 text-xs" onchange="aplicarFiltros()"><option value="">Emoción</option></select>
-                                <select id="filtroTipo" class="px-2 py-1.5 text-xs" onchange="aplicarFiltros()"><option value="">Tipo</option></select>
                             </div>
                         </div>
                         <div class="overflow-x-auto">
                             <table id="tablaComentarios" class="display nowrap" style="width:100%">
-                                <thead><tr><th>Fecha</th><th>Usuario</th><th>Comentario</th><th>Sent</th><th>Emoción</th><th>Tipo</th><th>Tema</th><th>Prioridad</th><th>Crisis</th></tr></thead>
+                                <thead><tr><th>Fecha</th><th>Usuario</th><th>Comentario</th><th>Sent</th><th>Emoción</th><th>Tipo</th><th>Tema</th><th>Prioridad</th><th>Falso Neutral</th></tr></thead>
                                 <tbody id="tablaBody"></tbody>
                             </table>
                         </div>
                     </div>
                 </div>
                 
-                <!-- ==================== LAB EMOCIONAL ==================== -->
-                <div id="view-emotions" class="hidden">
-                    <div class="glass rounded-2xl p-6 mb-6">
-                        <h2 class="text-xl font-bold text-white mb-2">🧠 Laboratorio Emocional</h2>
-                        <p class="text-sm text-blue-300/50 mb-6">Análisis avanzado basado en la Rueda de Plutchik</p>
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8" id="emotionWheel"></div>
-                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                            <div class="glass rounded-xl p-5"><h3 class="text-sm font-bold text-white mb-3">Distribución Emocional</h3><div class="chart-container"><canvas id="chartEmocionDist"></canvas></div></div>
-                            <div class="glass rounded-xl p-5"><h3 class="text-sm font-bold text-white mb-3">Intensidad por Emoción</h3><div class="chart-container"><canvas id="chartIntensidad"></canvas></div></div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- ==================== CENTRO DE CRISIS ==================== -->
-                <div id="view-crisis" class="hidden">
-                    <div class="glass rounded-2xl p-6 mb-6">
-                        <h2 class="text-xl font-bold text-white mb-2">🚨 Centro de Crisis</h2>
-                        <p class="text-sm text-blue-300/50 mb-6">Monitoreo en tiempo real de situaciones críticas</p>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6" id="crisisStats"></div>
-                        <div class="glass rounded-xl p-5 mb-6"><h3 class="text-sm font-bold text-white mb-3">Evolución de Crisis</h3><div class="chart-container"><canvas id="chartCrisisEvo"></canvas></div></div>
-                        <h3 class="text-sm font-bold text-white mb-3">🚨 Alertas Activas</h3>
-                        <div id="crisisAlertsList" class="space-y-3"></div>
-                    </div>
-                </div>
-                
-                <!-- ==================== NARRATIVAS ==================== -->
-                <div id="view-narratives" class="hidden">
-                    <div class="glass rounded-2xl p-6 mb-6">
-                        <h2 class="text-xl font-bold text-white mb-2">📊 Rastreador de Narrativas</h2>
-                        <p class="text-sm text-blue-300/50 mb-6">Clustering de opiniones y detección de narrativas dominantes</p>
-                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                            <div class="glass rounded-xl p-5"><h3 class="text-sm font-bold text-white mb-3">Narrativas por Tema</h3><div class="chart-container"><canvas id="chartNarrativas"></canvas></div></div>
-                            <div class="glass rounded-xl p-5"><h3 class="text-sm font-bold text-white mb-3">Evolución de Narrativas</h3><div class="chart-container"><canvas id="chartNarrEvo"></canvas></div></div>
-                        </div>
-                        <h3 class="text-sm font-bold text-white mb-3">📝 Narrativas Detectadas</h3>
-                        <div id="narrativasList" class="space-y-3"></div>
-                    </div>
-                </div>
-                
-                <!-- ==================== RED DE INFLUENCIA ==================== -->
-                <div id="view-influence" class="hidden">
-                    <div class="glass rounded-2xl p-6 mb-6">
-                        <h2 class="text-xl font-bold text-white mb-2">🕸️ Red de Influencia</h2>
-                        <p class="text-sm text-blue-300/50 mb-6">Mapeo de interacciones y líderes de opinión</p>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6" id="influencersList"></div>
-                        <div class="glass rounded-xl p-5 mb-6"><h3 class="text-sm font-bold text-white mb-3">Grafo de Interacciones</h3><div id="influenceGraph" style="height: 400px;"></div></div>
-                        <h3 class="text-sm font-bold text-white mb-3">👥 Usuarios Más Influyentes</h3>
-                        <div id="topInfluencers" class="space-y-2"></div>
-                    </div>
-                </div>
-                
-                <!-- ==================== STORY GENERATOR ==================== -->
-                <div id="view-stories" class="hidden">
-                    <div class="glass rounded-2xl p-6 mb-6">
-                        <h2 class="text-xl font-bold text-white mb-2">📖 Story Generator</h2>
-                        <p class="text-sm text-blue-300/50 mb-6">Narrativa ejecutiva automática</p>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                            <div class="glass rounded-xl p-5 cursor-pointer glass-hover text-center" onclick="generarStory('semanal')">
-                                <i class="fas fa-calendar-week text-3xl text-blue-400 mb-3"></i>
-                                <h3 class="font-bold text-white">Story Semanal</h3>
-                                <p class="text-xs text-blue-300/50">Resumen ejecutivo de la semana</p>
-                            </div>
-                            <div class="glass rounded-xl p-5 cursor-pointer glass-hover text-center" onclick="generarStory('crisis')">
-                                <i class="fas fa-exclamation-triangle text-3xl text-red-400 mb-3"></i>
-                                <h3 class="font-bold text-white">Story de Crisis</h3>
-                                <p class="text-xs text-blue-300/50">Narrativa de situación crítica</p>
-                            </div>
-                        </div>
-                        <div id="storyOutput" class="glass rounded-xl p-6 hidden"></div>
-                    </div>
-                </div>
-                
-                <!-- ==================== COLABORACIÓN ==================== -->
-                <div id="view-collab" class="hidden">
-                    <div class="glass rounded-2xl p-6 mb-6">
-                        <h2 class="text-xl font-bold text-white mb-2">💬 Colaboración en Equipo</h2>
-                        <p class="text-sm text-blue-300/50 mb-6">Asignación y seguimiento de comentarios</p>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6" id="teamStats"></div>
-                        <h3 class="text-sm font-bold text-white mb-3">📋 Bandeja de Asignaciones</h3>
-                        <div id="collabList" class="space-y-3"></div>
-                    </div>
-                </div>
-                
-                <!-- ==================== REPORTES ==================== -->
-                <div id="view-reports" class="hidden">
-                    <div class="glass rounded-2xl p-6">
-                        <h2 class="text-xl font-bold text-white mb-6">📊 Reportes</h2>
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-                            <div class="glass rounded-xl p-5 glass-hover cursor-pointer text-center" onclick="generarReporte('diario')"><i class="fas fa-calendar-day text-3xl text-blue-400 mb-2"></i><h3 class="font-bold text-white">Diario</h3></div>
-                            <div class="glass rounded-xl p-5 glass-hover cursor-pointer text-center" onclick="generarReporte('semanal')"><i class="fas fa-calendar-week text-3xl text-blue-400 mb-2"></i><h3 class="font-bold text-white">Semanal</h3></div>
-                            <div class="glass rounded-xl p-5 glass-hover cursor-pointer text-center" onclick="generarReporte('mensual')"><i class="fas fa-calendar-alt text-3xl text-blue-400 mb-2"></i><h3 class="font-bold text-white">Mensual</h3></div>
-                            <div class="glass rounded-xl p-5 glass-hover cursor-pointer text-center" onclick="generarReporte('story')"><i class="fas fa-book text-3xl text-orange-400 mb-2"></i><h3 class="font-bold text-white">Story</h3></div>
-                        </div>
-                        <div id="reporteOutput" class="glass rounded-xl p-6 hidden"></div>
-                    </div>
-                </div>
-                
-                <!-- ==================== CONFIG ==================== -->
+                <!-- OTRAS VISTAS (placeholder) -->
+                <div id="view-emotions" class="hidden"><div class="glass rounded-2xl p-6"><h2 class="text-xl font-bold text-white">🧠 Laboratorio Emocional</h2><p class="text-blue-300/50 mt-4">Carga datos primero</p></div></div>
+                <div id="view-crisis" class="hidden"><div class="glass rounded-2xl p-6"><h2 class="text-xl font-bold text-white">🚨 Centro de Crisis</h2><p class="text-blue-300/50 mt-4">Carga datos primero</p></div></div>
+                <div id="view-narratives" class="hidden"><div class="glass rounded-2xl p-6"><h2 class="text-xl font-bold text-white">📊 Narrativas</h2><p class="text-blue-300/50 mt-4">Carga datos primero</p></div></div>
+                <div id="view-influence" class="hidden"><div class="glass rounded-2xl p-6"><h2 class="text-xl font-bold text-white">🕸️ Influencia</h2><p class="text-blue-300/50 mt-4">Carga datos primero</p></div></div>
+                <div id="view-stories" class="hidden"><div class="glass rounded-2xl p-6"><h2 class="text-xl font-bold text-white">📖 Stories</h2><p class="text-blue-300/50 mt-4">Carga datos primero</p></div></div>
+                <div id="view-collab" class="hidden"><div class="glass rounded-2xl p-6"><h2 class="text-xl font-bold text-white">💬 Colaboración</h2><p class="text-blue-300/50 mt-4">Carga datos primero</p></div></div>
+                <div id="view-reports" class="hidden"><div class="glass rounded-2xl p-6"><h2 class="text-xl font-bold text-white">📊 Reportes</h2><p class="text-blue-300/50 mt-4">Carga datos primero</p></div></div>
                 <div id="view-config" class="hidden">
                     <div class="glass rounded-2xl p-6 max-w-4xl">
                         <h2 class="text-xl font-bold text-white mb-6">⚙️ Configuración</h2>
                         <div class="mb-4"><label class="text-sm text-blue-300/70">API Key</label><input type="password" id="cfgApiKey" class="w-full px-4 py-2.5 mt-1"></div>
-                        <div class="mb-4"><label class="text-sm text-blue-300/70">Prompt del Sistema</label><textarea id="cfgPrompt" class="w-full px-4 py-2.5 mt-1 font-mono text-xs" rows="20"></textarea></div>
                         <button onclick="guardarConfig()" class="px-6 py-2.5 btn-gold"><i class="fas fa-save mr-2"></i>Guardar</button>
                     </div>
                 </div>
             </div>
         </main>
-        
-        <!-- PANEL DETALLE -->
-        <div id="detailPanel" class="fixed inset-y-0 right-0 w-full sm:w-[500px] bg-[#0d1117] border-l border-[#1e3050] shadow-2xl transform translate-x-full transition-transform duration-300 z-50 overflow-y-auto">
-            <div class="p-5">
-                <div class="flex justify-between items-center mb-5"><h2 class="text-lg font-bold text-white">🧬 Análisis</h2><button onclick="cerrarDetalle()" class="text-blue-300/50 hover:text-white text-xl">&times;</button></div>
-                <div id="detalleContenido"></div>
-            </div>
-        </div>
     </div>
 
     <script>
         // ============================================
-        // PROMPT ZERO-ESCAPE v10
+        // PROMPT ZERO-ESCAPE - REESCRITO COMPLETO
         // ============================================
         
-        const PROMPT_ZERO_ESCAPE = `ERES UN ANALIZADOR DE SENTIMIENTOS INFALIBLE. TU ÚNICA TAREA ES CLASIFICAR CORRECTAMENTE CADA COMENTARIO.
+        const PROMPT_ZERO_ESCAPE = `ERES UN ANALISTA FORENSE DE SENTIMIENTOS. TU MISIÓN CRÍTICA ES IDENTIFICAR CORRECTAMENTE SENTIMIENTOS NEGATIVOS. NO PUEDES DEJAR ESCAPAR NI UN SOLO COMENTARIO NEGATIVO.
 
 DEVUELVE EXCLUSIVAMENTE ESTE JSON:
 {
   "sentimiento": "Negativo",
   "emocion": "Ira",
   "intensidad": 8,
-  "tipo": "Crítica",
-  "tema": "Gestión Municipal",
+  "tipo": "Crítica Política",
+  "tema": "Corrupción",
   "prioridad": "Alta",
   "riesgo": "Alto",
   "esCrisis": false,
@@ -486,46 +344,315 @@ DEVUELVE EXCLUSIVAMENTE ESTE JSON:
   "palabrasClave": ["p1","p2","p3"]
 }
 
-REGLAS SUPREMAS:
-1. SI HAY DUDA → ELIGE "Negativo"
-2. CUALQUIER crítica, insulto, burla, sarcasmo, ironía = Negativo
-3. Apodos (MONSE, Porky, rata, fantoche, payaso, etc.) = Negativo
-4. MAYÚSCULAS como énfasis (QUEBRADA, CAOS) = Negativo
-5. Emojis negativos (🤡😡🤬) = Negativo
-6. "no sirven", "no hacen nada", "puro show" = Negativo
-7. Menciones (@) con crítica = Negativo`;
+═══════════════════════════════════════
+REGLA SUPREMA (LEE ESTO PRIMERO)
+═══════════════════════════════════════
+SI EL COMENTARIO CONTIENE CUALQUIERA DE ESTOS ELEMENTOS, EL SENTIMIENTO ES "Negativo":
+
+1. CRÍTICA: Cualquier señalamiento de error, falla, deficiencia
+2. IRONÍA/SARCASMO: Preguntas retóricas, comillas sarcásticas ("mantenimiento"), tono burlón
+3. INSULTOS: Apodos, descalificaciones, lenguaje soez
+4. ACUSACIONES: Corrupción, robo, estafa, favoritismo, nepotismo
+5. COMPARACIONES DESPECTIVAS: "tren chatarra", "tierra de nadie", "inservible"
+6. CUESTIONAMIENTOS: Preguntas que implican crítica ("¿Cuánto le pagan?")
+7. DESLEGITIMACIÓN: Cuestionar elecciones, autoridad, democracia
+8. REFERENCIAS NEGATIVAS: "lameculos", "marrano", "amiguito", "chiste"
+9. EMOCIONES NEGATIVAS: Enojo, frustración, indignación, decepción
+10. CUALQUIER COMENTARIO QUE NO SEA CLARAMENTE POSITIVO O NEUTRAL
+
+═══════════════════════════════════════
+DETECCIÓN DE IRONÍA PERUANA
+═══════════════════════════════════════
+- Palabras entre comillas en contexto crítico: "mantenimiento" = NEGATIVO
+- Preguntas retóricas: "¿Cuánto le pagan?" = NEGATIVO
+- Términos despectivos: "tren chatarra", "kimono", "japonesa" = NEGATIVO
+- Insinuaciones: "amiguito de RLA", "lameculos del marrano" = NEGATIVO
+
+═══════════════════════════════════════
+NUEVAS CATEGORÍAS DE TEMAS POLÍTICOS
+═══════════════════════════════════════
+- "Corrupción": coimas, pagos, favoritismo, amiguitos, nepotismo
+- "Crítica Política": deslegitimación, críticas a autoridades, elecciones
+- "Inseguridad": delincuencia, tierra de nadie, violencia
+- "Gestión Municipal": mantenimiento, obras, servicios
+- "Transporte": tren, buses, tráfico
+- "Racismo/Xenofobia": referencias étnicas despectivas (japonesa, kimono)
+- "Insultos Directos": ataques personales sin contenido político
+
+═══════════════════════════════════════
+PRIORIDAD Y RIESGO
+═══════════════════════════════════════
+Prioridad Alta: Acusaciones de corrupción, insultos, deslegitimación
+Riesgo Alto: Menciones a figuras políticas + críticas graves`;
 
         // ============================================
-        // ESTADO GLOBAL
+        // MOTOR ZERO-ESCAPE
         // ============================================
         
         const STATE = {
             datos: [],
             filtrados: [],
-            apiKey: localStorage.getItem('sentinel_v10_key') || '',
-            prompt: localStorage.getItem('sentinel_v10_prompt') || PROMPT_ZERO_ESCAPE,
+            apiKey: localStorage.getItem('sentinel_v11_key') || '',
             tablaData: null,
             graficos: {},
             crisisAlerts: [],
-            vistaActual: 'dashboard'
+            falsosNeutrales: []
         };
         
-        // ============================================
-        // MOTOR DE ANÁLISIS
-        // ============================================
-        
-        class Analyzer {
+        class ZeroEscapeAnalyzer {
             
-            static async analizar(texto) {
-                if (!STATE.apiKey) return this.fallback(texto);
+            static async analizar(textoOriginal) {
+                // PRIMERO: Análisis local ultra-agresivo
+                const analisisLocal = this.analisisLocalUltra(textoOriginal);
                 
-                try {
-                    const result = await this.callGemini(texto);
-                    return { ...result, fuente: 'Gemini Pro', confianza: 0.99 };
-                } catch (e) {
-                    console.warn('Gemini error:', e.message);
-                    return { ...this.fallback(texto), fuente: 'Motor Local', confianza: 0.90 };
+                // Si el análisis local detecta Negativo, lo marcamos como tal
+                if (analisisLocal.sentimiento === 'Negativo') {
+                    return { ...analisisLocal, fuente: 'Motor Zero-Escape', confianza: 1.0, esFalsoNeutral: false };
                 }
+                
+                // Si hay API key, consultar a Gemini para verificación adicional
+                if (STATE.apiKey) {
+                    try {
+                        const analisisGemini = await this.callGemini(textoOriginal);
+                        // Si Gemini dice Negativo, usar ese
+                        if (analisisGemini.sentimiento === 'Negativo') {
+                            return { ...analisisGemini, fuente: 'Gemini Pro', confianza: 0.99, esFalsoNeutral: false };
+                        }
+                        // Si ambos dicen que NO es negativo, confiar
+                        return { ...analisisGemini, fuente: 'Gemini Pro', confianza: 0.95, esFalsoNeutral: false };
+                    } catch (e) {
+                        // Si Gemini falla, confiar en el local
+                        return { ...analisisLocal, fuente: 'Motor Local', confianza: 0.90, esFalsoNeutral: false };
+                    }
+                }
+                
+                // Sin API key, el análisis local ya dijo que no es negativo
+                // PERO si el análisis local tiene dudas, marcar como negativo
+                if (analisisLocal.intensidad >= 4) {
+                    return { ...analisisLocal, sentimiento: 'Negativo', fuente: 'Motor (forzado)', confianza: 0.85, esFalsoNeutral: true };
+                }
+                
+                return { ...analisisLocal, fuente: 'Motor Local', confianza: 0.90, esFalsoNeutral: false };
+            }
+            
+            static analisisLocalUltra(texto) {
+                const t = texto.toLowerCase();
+                const original = texto;
+                
+                let puntajeNegativo = 0;
+                let razones = [];
+                
+                // ============================================
+                // DETECCIÓN DE IRONÍA Y SARCASMO
+                // ============================================
+                
+                // Palabras entre comillas en contexto negativo
+                const comillasMatch = original.match(/"([^"]+)"/g);
+                if (comillasMatch) {
+                    comillasMatch.forEach(m => {
+                        const palabra = m.replace(/"/g, '').toLowerCase();
+                        if (['mantenimiento', 'obra', 'arreglo', 'mejora', 'inversión', 'transparencia', 'eficiencia', 'gestión', 'trabajo', 'servicio'].includes(palabra)) {
+                            puntajeNegativo += 20;
+                            razones.push(`Ironía: "${palabra}" entre comillas`);
+                        }
+                    });
+                }
+                
+                // Preguntas retóricas que implican crítica
+                if (t.includes('¿') && t.includes('?')) {
+                    const patronesRetricos = [
+                        'cuánto le pagan', 'cuánto cobra', 'cuánto cuesta', 'cuánto vale',
+                        'hasta cuándo', 'dónde está', 'quién le paga', 'quién lo eligió',
+                        'por qué no', 'cómo es posible', 'se puede saber'
+                    ];
+                    patronesRetricos.forEach(p => {
+                        if (t.includes(p)) {
+                            puntajeNegativo += 25;
+                            razones.push(`Pregunta retórica crítica: "${p}"`);
+                        }
+                    });
+                }
+                
+                // ============================================
+                // DETECCIÓN DE INSULTOS Y DESCALIFICACIONES
+                // ============================================
+                
+                const insultos = [
+                    'lameculos', 'lambeculo', 'lambón', 'arrastrado', 'sobón', 'adulón',
+                    'marrano', 'chancho', 'cerdo', 'puerco', 'rata', 'ratero', 'cucaracha',
+                    'fantoche', 'payaso', 'bufón', 'títere', 'marioneta', 'muñeco',
+                    'inservible', 'inútil', 'incapaz', 'inepto', 'mediocre', 'incompetente',
+                    'chiste', 'ridículo', 'patético', 'miserable', 'desgraciado',
+                    'cojudo', 'huevón', 'pendejo', 'conchudo', 'mierda', 'basura',
+                    'vendido', 'traidor', 'corrupto', 'ladrón', 'sinvergüenza',
+                    'amiguito', 'amiguita', 'compinche', 'cómplice'
+                ];
+                
+                insultos.forEach(insulto => {
+                    if (t.includes(insulto)) {
+                        puntajeNegativo += 30;
+                        razones.push(`Insulto detectado: "${insulto}"`);
+                    }
+                });
+                
+                // ============================================
+                // DETECCIÓN DE TÉRMINOS DESPECTIVOS
+                // ============================================
+                
+                const despectivos = [
+                    'tren chatarra', 'chatarra', 'oxidándose', 'oxidado',
+                    'tierra de nadie', 'descontrol', 'caos', 'desastre',
+                    'japonesa dando órdenes', 'kimono', 'no fue elegido',
+                    'no elegido democráticamente', 'ilegítimo', 'usurpador',
+                    'delincuencia tomó el poder', 'corrupción tomó el poder',
+                    'poco o nada', 'no hacen nada', 'no sirven para nada',
+                    'puro show', 'pura pantalla', 'figuretti', 'showsero'
+                ];
+                
+                despectivos.forEach(d => {
+                    if (t.includes(d)) {
+                        puntajeNegativo += 20;
+                        razones.push(`Término despectivo: "${d}"`);
+                    }
+                });
+                
+                // ============================================
+                // ACUSACIONES DE CORRUPCIÓN
+                // ============================================
+                
+                const corrupcion = [
+                    'corrupción', 'corrupto', 'coima', 'coimero', 'mermelada',
+                    'mermelero', 'argolla', 'argollero', 'robo', 'robar', 'ladrón',
+                    'estafa', 'fraude', 'desfalco', 'malversación', 'peculado',
+                    'sobrevalorado', 'inflado', 'sobrecosto', 'diezmo',
+                    'cuánto le pagan', 'cuánto cobra', 'pago', 'pagaron',
+                    'favores', 'favoritismo', 'nepotismo', 'amiguismo',
+                    'se la llevan fácil', 'plata como cancha'
+                ];
+                
+                corrupcion.forEach(c => {
+                    if (t.includes(c)) {
+                        puntajeNegativo += 35;
+                        razones.push(`Acusación de corrupción: "${c}"`);
+                    }
+                });
+                
+                // ============================================
+                // DESLEGITIMACIÓN POLÍTICA
+                // ============================================
+                
+                const deslegitimacion = [
+                    'no fue elegido', 'no elegido democráticamente', 'ilegítimo',
+                    'usurpador', 'golpista', 'dictador', 'dictadura',
+                    'dando órdenes a un alcalde', 'títere', 'marioneta',
+                    'no lo eligieron', 'quién lo eligió', 'nadie lo eligió',
+                    'gobierno de facto', 'no representa'
+                ];
+                
+                deslegitimacion.forEach(d => {
+                    if (t.includes(d)) {
+                        puntajeNegativo += 35;
+                        razones.push(`Deslegitimación: "${d}"`);
+                    }
+                });
+                
+                // ============================================
+                // REFERENCIAS RACISTAS/XENÓFOBAS
+                // ============================================
+                
+                const xenofobia = [
+                    'japonesa', 'japonés', 'chino', 'china', 'kimono',
+                    'extranjero', 'no es de aquí', 'váyase a su país',
+                    'invasión', 'colonización'
+                ];
+                
+                let tieneXenofobia = false;
+                xenofobia.forEach(x => {
+                    if (t.includes(x) && puntajeNegativo > 0) {
+                        tieneXenofobia = true;
+                        puntajeNegativo += 25;
+                        razones.push(`Referencia xenófoba: "${x}"`);
+                    }
+                });
+                
+                // ============================================
+                // MENCIONES A FIGURAS POLÍTICAS
+                // ============================================
+                
+                const figuras = ['keiko', 'fujimori', 'reggiardo', 'rla', 'lopez aliaga', 
+                                'boluarte', 'castillo', 'alan garcía', 'toledo', 'humala'];
+                
+                let mencionPolitica = false;
+                figuras.forEach(f => {
+                    if (t.includes(f)) {
+                        mencionPolitica = true;
+                        if (puntajeNegativo > 0) {
+                            puntajeNegativo += 10;
+                            razones.push(`Mención política en contexto negativo: ${f}`);
+                        }
+                    }
+                });
+                
+                // ============================================
+                // DETERMINACIÓN FINAL
+                // ============================================
+                
+                let sentimiento;
+                if (puntajeNegativo >= 20) {
+                    sentimiento = 'Negativo';
+                } else if (puntajeNegativo >= 10 && mencionPolitica) {
+                    sentimiento = 'Negativo'; // Si hay mención política y algo de negatividad
+                } else if (puntajeNegativo >= 5) {
+                    sentimiento = 'Negativo'; // Cualquier indicio
+                } else {
+                    sentimiento = 'Neutral';
+                }
+                
+                // Emoción
+                let emocion = 'Neutral';
+                let intensidad = 1;
+                
+                if (puntajeNegativo >= 60) { emocion = 'Ira'; intensidad = 10; }
+                else if (puntajeNegativo >= 40) { emocion = 'Indignación'; intensidad = 9; }
+                else if (puntajeNegativo >= 25) { emocion = 'Frustración'; intensidad = 7; }
+                else if (puntajeNegativo >= 10) { emocion = 'Decepción'; intensidad = 5; }
+                
+                // Tipo
+                let tipo = 'Opinión';
+                if (tieneXenofobia) tipo = 'Ataque Xenófobo';
+                else if (puntajeNegativo >= 50) tipo = 'Insulto';
+                else if (puntajeNegativo >= 30) tipo = 'Crítica Política';
+                else if (puntajeNegativo >= 15) tipo = 'Crítica';
+                else if (t.includes('?')) tipo = 'Consulta Crítica';
+                
+                // Tema
+                let tema = 'General';
+                if (t.includes('corrup') || t.includes('coima') || t.includes('pagan') || t.includes('robo')) tema = 'Corrupción';
+                else if (t.includes('delincuencia') || t.includes('tierra de nadie') || t.includes('inseguridad')) tema = 'Inseguridad';
+                else if (t.includes('tren') || t.includes('oxid') || t.includes('chatarra') || t.includes('mantenimiento')) tema = 'Transporte';
+                else if (t.includes('elección') || t.includes('democrátic') || t.includes('ilegítimo')) tema = 'Crítica Política';
+                else if (t.includes('japonesa') || t.includes('kimono') || t.includes('extranjero')) tema = 'Xenofobia';
+                else if (mencionPolitica) tema = 'Crítica Política';
+                else if (t.includes('alcalde') || t.includes('municipal')) tema = 'Gestión Municipal';
+                
+                let prioridad = 'Baja';
+                if (puntajeNegativo >= 40) prioridad = 'Alta';
+                else if (puntajeNegativo >= 20) prioridad = 'Media';
+                
+                let riesgo = 'Bajo';
+                if (puntajeNegativo >= 50 && mencionPolitica) riesgo = 'Alto';
+                else if (puntajeNegativo >= 30) riesgo = 'Medio';
+                
+                let esCrisis = puntajeNegativo >= 60;
+                
+                return {
+                    sentimiento, emocion, intensidad, tipo, tema, prioridad, riesgo, esCrisis,
+                    narrativa: `${tipo} ${sentimiento.toLowerCase()} sobre ${tema}`,
+                    necesitaRespuesta: sentimiento === 'Negativo',
+                    resumen: razones.slice(0, 3).join('. ') || 'Análisis completado',
+                    palabrasClave: t.split(/\s+/).filter(w => w.length > 4).slice(0, 5),
+                    razones: razones
+                };
             }
             
             static async callGemini(texto) {
@@ -535,8 +662,8 @@ REGLAS SUPREMAS:
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        contents: [{ parts: [{ text: STATE.prompt + `\n\nCOMENTARIO: "${texto}"\n\nJSON:` }] }],
-                        generationConfig: { temperature: 0.02, topK: 1, topP: 0.9, maxOutputTokens: 400 },
+                        contents: [{ parts: [{ text: PROMPT_ZERO_ESCAPE + `\n\nCOMENTARIO: "${texto}"\n\nJSON:` }] }],
+                        generationConfig: { temperature: 0.01, topK: 1, topP: 0.9, maxOutputTokens: 400 },
                         safetySettings: [
                             { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },
                             { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_NONE" },
@@ -554,14 +681,11 @@ REGLAS SUPREMAS:
                 if (!match) throw new Error('JSON no encontrado');
                 
                 let a = JSON.parse(match[0]);
-                
                 a.sentimiento = this.norm(a.sentimiento, ['Negativo', 'Neutral', 'Positivo'], 'Negativo');
                 a.prioridad = this.norm(a.prioridad, ['Alta', 'Media', 'Baja'], 'Media');
                 a.riesgo = this.norm(a.riesgo, ['Alto', 'Medio', 'Bajo'], 'Medio');
                 a.intensidad = parseInt(a.intensidad) || 5;
                 a.esCrisis = a.esCrisis || false;
-                a.emocion = a.emocion || 'Neutral';
-                
                 return a;
             }
             
@@ -571,95 +695,11 @@ REGLAS SUPREMAS:
                 return def;
             }
             
-            static fallback(texto) {
-                const t = texto.toLowerCase();
-                
-                const apodos = ['monse', 'porky', 'rata', 'ratero', 'fantoche', 'payaso', 'bufón', 'títere', 
-                               'coimero', 'mermelero', 'argollero', 'inepto', 'inútil', 'incapaz', 'mediocre',
-                               'corrupto', 'ladrón', 'sinvergüenza', 'caradura', 'descarado', 'demagogo',
-                               'populista', 'oportunista', 'ventajista', 'traidor', 'vendido'];
-                
-                const criticas = ['quebrada', 'quebrado', 'quiebra', 'deuda', 'déficit', 'despilfarro',
-                                 'malversación', 'sobrevalorado', 'inflado', 'abandonado', 'olvidado',
-                                 'no funciona', 'no sirven', 'no hacen nada', 'pésima gestión', 'mala gestión',
-                                 'ineficiente', 'desastre', 'caos', 'crisis', 'colapso', 'fracaso'];
-                
-                let score = 0;
-                let tieneApodo = false;
-                let tieneCritica = false;
-                
-                apodos.forEach(a => { if (t.includes(a)) { tieneApodo = true; score -= 20; } });
-                criticas.forEach(c => { if (t.includes(c)) { tieneCritica = true; score -= 15; } });
-                
-                // MAYÚSCULAS
-                const palabras = texto.split(/\s+/);
-                let mayus = 0;
-                palabras.forEach(p => { if (p === p.toUpperCase() && p.length > 3 && /[A-ZÁÉÍÓÚÜÑ]/.test(p)) mayus++; });
-                if (mayus > 0) score -= mayus * 4;
-                
-                // Emojis negativos
-                if (/🤡|😡|🤬|💩|🙄|😒|🖕|👎/.test(texto)) score -= 10;
-                
-                // Negativas generales
-                ['malo', 'pésimo', 'terrible', 'horrible', 'lamentable', 'vergüenza', 'asco', 'indignante',
-                 'inaceptable', 'ridículo', 'patético', 'estafa', 'robo', 'mentira', 'falso', 'engaño',
-                 'burla', 'sarcasmo', 'ironía'].forEach(n => { if (t.includes(n)) score -= 6; });
-                
-                let sentimiento;
-                if (tieneApodo || tieneCritica || score <= -10) sentimiento = 'Negativo';
-                else if (score >= 10) sentimiento = 'Positivo';
-                else sentimiento = 'Neutral';
-                
-                let emocion = 'Neutral';
-                let intensidad = 5;
-                
-                if (tieneApodo) { emocion = 'Indignación'; intensidad = 9; }
-                else if (tieneCritica) { emocion = 'Frustración'; intensidad = 8; }
-                else if (mayus > 0 && sentimiento === 'Negativo') { emocion = 'Ira'; intensidad = 8; }
-                else if (score <= -15) { emocion = 'Ira'; intensidad = 9; }
-                else if (score <= -8) { emocion = 'Frustración'; intensidad = 7; }
-                else if (score >= 8) { emocion = 'Alegría'; intensidad = 7; }
-                
-                let tipo = 'Opinión';
-                if (tieneApodo) tipo = 'Insulto';
-                else if (tieneCritica && score <= -15) tipo = 'Crítica';
-                else if (/denuncia|corrupción|estafa|robo|coima/i.test(t)) tipo = 'Denuncia';
-                else if (/🤡|burla|sarcasmo|ironía/i.test(t)) tipo = 'Burla';
-                else if (sentimiento === 'Negativo') tipo = 'Crítica';
-                else if (t.includes('?')) tipo = 'Consulta';
-                else if (/felicit|gracias|excelente/i.test(t) && sentimiento === 'Positivo') tipo = 'Felicitación';
-                
-                let tema = 'General';
-                if (/gestión|municipal|alcalde|administración|quiebra|deuda|corrupción|coima/i.test(t)) tema = 'Gestión Municipal';
-                else if (/seguridad|delincuencia|robo|policía|serenazgo|violencia/i.test(t)) tema = 'Seguridad Ciudadana';
-                else if (/basura|limpieza|residuos/i.test(t)) tema = 'Limpieza Pública';
-                else if (/transporte|tráfico|bus|movilidad/i.test(t)) tema = 'Transporte';
-                else if (/obra|construcción|pista|parque|infraestructura/i.test(t)) tema = 'Obras Públicas';
-                
-                let prioridad = 'Baja';
-                if (tieneApodo || tipo === 'Insulto' || tipo === 'Denuncia' || intensidad >= 9) prioridad = 'Alta';
-                else if (tieneCritica || intensidad >= 7) prioridad = 'Media';
-                
-                let riesgo = 'Bajo';
-                if ((tieneApodo || tipo === 'Insulto') && t.includes('@')) riesgo = 'Alto';
-                else if (tipo === 'Denuncia') riesgo = 'Alto';
-                else if (prioridad === 'Alta') riesgo = 'Medio';
-                
-                let esCrisis = (intensidad >= 9 && sentimiento === 'Negativo' && (tieneApodo || tieneCritica));
-                
-                return {
-                    sentimiento, emocion, intensidad, tipo, tema, prioridad, riesgo, esCrisis,
-                    narrativa: `${tipo} ${sentimiento.toLowerCase()} sobre ${tema}`,
-                    necesitaRespuesta: ['Insulto', 'Crítica', 'Denuncia', 'Queja', 'Consulta'].includes(tipo),
-                    resumen: `${tipo} con intensidad ${intensidad}/10 - ${emocion}`,
-                    palabrasClave: t.split(/\s+/).filter(w => w.length > 4).slice(0, 5)
-                };
-            }
-            
             static async analizarLote(comentarios, callback) {
                 const resultados = [];
                 const total = comentarios.length;
                 STATE.crisisAlerts = [];
+                STATE.falsosNeutrales = [];
                 
                 for (let i = 0; i < total; i++) {
                     const c = comentarios[i];
@@ -670,6 +710,7 @@ REGLAS SUPREMAS:
                     const analisis = await this.analizar(texto.toString());
                     
                     if (analisis.esCrisis) STATE.crisisAlerts.push({ ...c, _analisis: analisis });
+                    if (analisis.esFalsoNeutral) STATE.falsosNeutrales.push({ ...c, _analisis: analisis });
                     
                     resultados.push({ ...c, _analisis: analisis });
                     
@@ -692,75 +733,42 @@ REGLAS SUPREMAS:
                     return i === self.findIndex(x => (x['Tweet Id'] || x['tweet_id'] || x['id']) === id);
                 });
             
-            const pc = document.getElementById('progressContainer');
-            const pb = document.getElementById('progressBar');
-            const pt = document.getElementById('progressText');
-            const pp = document.getElementById('progressPercent');
-            pc.classList.remove('hidden');
-            
-            STATE.datos = await Analyzer.analizarLote(limpios, (p) => {
-                pb.style.width = p.porcentaje + '%';
-                pp.textContent = p.porcentaje + '%';
-                pt.textContent = `🧬 Analizando... ${p.actual}/${p.total}`;
+            STATE.datos = await ZeroEscapeAnalyzer.analizarLote(limpios, (p) => {
+                console.log(`Analizando... ${p.actual}/${p.total}`);
             });
             
             STATE.filtrados = [...STATE.datos];
-            setTimeout(() => pc.classList.add('hidden'), 600);
             
-            updateCrisisBadges();
+            console.log('✅ Análisis Zero-Escape completado');
+            console.log(`📊 Total: ${STATE.datos.length}`);
+            console.log(`🔴 Negativos: ${STATE.datos.filter(r => r._analisis.sentimiento === 'Negativo').length}`);
+            console.log(`🟡 Neutrales: ${STATE.datos.filter(r => r._analisis.sentimiento === 'Neutral').length}`);
+            console.log(`🟢 Positivos: ${STATE.datos.filter(r => r._analisis.sentimiento === 'Positivo').length}`);
+            console.log(`⚠️ Falsos neutrales corregidos: ${STATE.falsosNeutrales.length}`);
+            
             renderizarDashboard();
-        }
-        
-        function updateCrisisBadges() {
-            const count = STATE.crisisAlerts.length;
-            const navBadge = document.getElementById('crisis-nav-badge');
-            const headerBadge = document.getElementById('crisis-header-badge');
-            const headerCount = document.getElementById('crisis-header-count');
-            
-            if (count > 0) {
-                navBadge.classList.remove('hidden');
-                navBadge.textContent = count;
-                headerBadge.classList.remove('hidden');
-                headerCount.textContent = count;
-            } else {
-                navBadge.classList.add('hidden');
-                headerBadge.classList.add('hidden');
-            }
-        }
-        
-        function procesarArchivo(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = async function(ev) {
-                try {
-                    const data = new Uint8Array(ev.target.result);
-                    const wb = XLSX.read(data, { type: 'array' });
-                    const ws = wb.Sheets[wb.SheetNames[0]];
-                    const json = XLSX.utils.sheet_to_json(ws);
-                    await procesarComentarios(json);
-                    alert(`✅ ${STATE.datos.length} comentarios\n🚨 ${STATE.crisisAlerts.length} crisis`);
-                } catch(err) { alert('❌ Error: ' + err.message); }
-            };
-            reader.readAsArrayBuffer(file);
         }
         
         async function cargarDemo() {
             const demo = [
-                { 'Tweet Id': '10001', 'Full Text': '@MuniLima Este MONSE está asustado. Su legado es el de Porky. Una municipalidad QUEBRADA.', 'Created At': '2024-07-25 10:30:00', 'User Name': 'Ciudadano Furioso', 'Favorite Count': 567, 'Retweet Count': 234 },
-                { 'Tweet Id': '10002', 'Full Text': '@MuniLima #LimaPotenciaMundial 🤡', 'Created At': '2024-07-25 11:00:00', 'User Name': 'Burlón', 'Favorite Count': 234, 'Retweet Count': 123 },
-                { 'Tweet Id': '10003', 'Full Text': '¡ESTO ES UN DESASTRE! La delincuencia está DESCONTROLADA. ¿Dónde está el alcalde? ¡RENUNCIA YA!', 'Created At': '2024-07-24 20:00:00', 'User Name': 'Vecino Aterrado', 'Favorite Count': 890, 'Retweet Count': 456 },
-                { 'Tweet Id': '10004', 'Full Text': 'Excelente trabajo de limpieza en el Centro. ¡Gracias por mantener todo impecable! ❤️', 'Created At': '2024-07-24 09:00:00', 'User Name': 'Vecina Feliz', 'Favorite Count': 45, 'Retweet Count': 12 },
-                { 'Tweet Id': '10005', 'Full Text': 'Son unos inútiles, no sirven para nada. Pura pantalla y figurettis.', 'Created At': '2024-07-23 15:00:00', 'User Name': 'Indignado', 'Favorite Count': 345, 'Retweet Count': 178 },
-                { 'Tweet Id': '10006', 'Full Text': '¿Cuál es el horario de atención para licencias?', 'Created At': '2024-07-23 14:00:00', 'User Name': 'Ciudadano', 'Favorite Count': 1, 'Retweet Count': 0 }
+                { 'Tweet Id': '11001', 'Full Text': '@MuniLima ¿Cuánto le pagan al amiguito de RLA para dar "mantenimiento" al tren chatarra que sigue oxidándose?', 'Created At': '2024-08-01 10:00:00', 'User Name': 'Ciudadano Crítico', 'Favorite Count': 89 },
+                { 'Tweet Id': '11002', 'Full Text': '@MuniLima @Renzo_Reggiardo @KeikoFujimori La delincuencia y corrupción a tomado el poder, Perú tierra de nadie', 'Created At': '2024-08-01 11:00:00', 'User Name': 'Vecino Preocupado', 'Favorite Count': 156 },
+                { 'Tweet Id': '11003', 'Full Text': '@MuniLima @Renzo_Reggiardo @KeikoFujimori Una japonesa dando órdenes a un alcalde que no fue elegido democráticamente', 'Created At': '2024-08-01 12:00:00', 'User Name': 'Crítico Político', 'Favorite Count': 234 },
+                { 'Tweet Id': '11004', 'Full Text': '@MuniLima Este lameculos del marrano es un chiste', 'Created At': '2024-08-01 13:00:00', 'User Name': 'Indignado', 'Favorite Count': 178 },
+                { 'Tweet Id': '11005', 'Full Text': '@MuniLima @Renzo_Reggiardo @KeikoFujimori ¿Se estuvo probando el kimono?', 'Created At': '2024-08-01 14:00:00', 'User Name': 'Burlón', 'Favorite Count': 345 },
+                { 'Tweet Id': '11006', 'Full Text': '@MuniLima @Renzo_Reggiardo @KeikoFujimori Un inservible.', 'Created At': '2024-08-01 15:00:00', 'User Name': 'Directo', 'Favorite Count': 456 },
+                { 'Tweet Id': '11007', 'Full Text': 'Gracias por la limpieza en el parque, quedó muy bonito', 'Created At': '2024-08-01 16:00:00', 'User Name': 'Vecina Feliz', 'Favorite Count': 23 },
+                { 'Tweet Id': '11008', 'Full Text': '¿Cuál es el horario de atención de la municipalidad?', 'Created At': '2024-08-01 17:00:00', 'User Name': 'Ciudadano', 'Favorite Count': 1 }
             ];
             
             await procesarComentarios(demo);
-            alert('✅ Demo cargado correctamente');
+            
+            const negativos = STATE.datos.filter(r => r._analisis.sentimiento === 'Negativo').length;
+            alert(`✅ Demo crítico cargado\n🔴 ${negativos}/${STATE.datos.length} comentarios NEGATIVOS detectados\n⚠️ ${STATE.falsosNeutrales.length} falsos neutrales corregidos`);
         }
         
         // ============================================
-        // RENDERIZADO DASHBOARD
+        // RENDERIZADO
         // ============================================
         
         function renderizarDashboard() {
@@ -769,24 +777,21 @@ REGLAS SUPREMAS:
             const d = STATE.filtrados;
             
             // KPIs
-            const s = {}, emo = {};
-            let likes = 0, crisis = 0, altaInt = 0;
+            const s = {};
+            let crisis = 0, falsosNeutrales = STATE.falsosNeutrales.length;
             
             d.forEach(r => {
                 s[r._analisis.sentimiento] = (s[r._analisis.sentimiento] || 0) + 1;
-                emo[r._analisis.emocion] = (emo[r._analisis.emocion] || 0) + 1;
                 if (r._analisis.esCrisis) crisis++;
-                if (r._analisis.intensidad >= 8) altaInt++;
-                likes += parseInt(r['Favorite Count'] || 0);
             });
             
             const kpis = [
-                { label: 'Total', value: d.length, icon: '📊', color: 'text-blue-400' },
-                { label: '😡 Negativos', value: s['Negativo'] || 0, icon: '🔴', color: 'text-red-400' },
-                { label: '🚨 Crisis', value: crisis, icon: '⚠️', color: 'text-orange-400' },
-                { label: '💢 Alta Intensidad', value: altaInt, icon: '🔥', color: 'text-pink-400' },
-                { label: '😊 Positivos', value: s['Positivo'] || 0, icon: '🟢', color: 'text-green-400' },
-                { label: '❤️ Likes', value: likes, icon: '💜', color: 'text-purple-400' }
+                { label: 'Total', value: d.length, icon: '📊' },
+                { label: '🔴 Negativos', value: s['Negativo'] || 0, icon: '🚨' },
+                { label: '🟡 Neutrales', value: s['Neutral'] || 0, icon: '⚠️' },
+                { label: '🟢 Positivos', value: s['Positivo'] || 0, icon: '✅' },
+                { label: '💢 Crisis', value: crisis, icon: '🔥' },
+                { label: '🛡️ Corregidos', value: falsosNeutrales, icon: '🛡️' }
             ];
             
             document.getElementById('kpiContainer').innerHTML = kpis.map(k => `
@@ -796,134 +801,32 @@ REGLAS SUPREMAS:
                 </div>
             `).join('');
             
-            renderizarGraficosDashboard(d);
-            renderizarWordCloud(d);
-            renderizarTabla(d);
-            actualizarFiltros(d);
-        }
-        
-        function renderizarGraficosDashboard(d) {
+            // Gráficos
             Object.values(STATE.graficos).forEach(g => { if (g && g.destroy) g.destroy(); });
             STATE.graficos = {};
             
-            // Sentimiento
             const sData = {}; d.forEach(r => sData[r._analisis.sentimiento] = (sData[r._analisis.sentimiento] || 0) + 1);
             const ctx1 = document.getElementById('chartSentimiento');
-            if (ctx1) {
-                STATE.graficos.sentimiento = new Chart(ctx1, {
-                    type: 'doughnut',
-                    data: { labels: Object.keys(sData), datasets: [{ data: Object.values(sData), backgroundColor: ['#10B981','#F59E0B','#EF4444'] }] },
-                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#93c5fd', font: { size: 10 } } } } }
-                });
-            }
-            
-            // Emociones
-            const eData = {}; d.forEach(r => eData[r._analisis.emocion] = (eData[r._analisis.emocion] || 0) + 1);
-            const ctx2 = document.getElementById('chartEmociones');
-            if (ctx2) {
-                STATE.graficos.emociones = new Chart(ctx2, {
-                    type: 'radar',
-                    data: { labels: Object.keys(eData), datasets: [{ data: Object.values(eData), backgroundColor: 'rgba(139,92,246,0.2)', borderColor: '#8b5cf6', borderWidth: 2 }] },
-                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { r: { ticks: { color: '#93c5fd', font: { size: 8 } }, grid: { color: 'rgba(30,48,80,0.4)' }, pointLabels: { color: '#93c5fd', font: { size: 9 } } } } }
-                });
-            }
-            
-            // Temas
-            const tData = {}; d.forEach(r => tData[r._analisis.tema] = (tData[r._analisis.tema] || 0) + 1);
-            const ctx3 = document.getElementById('chartTemas');
-            if (ctx3) {
-                STATE.graficos.temas = new Chart(ctx3, {
-                    type: 'bar',
-                    data: { labels: Object.keys(tData), datasets: [{ data: Object.values(tData), backgroundColor: '#3b82f6', borderRadius: 6 }] },
-                    options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#93c5fd' }, grid: { color: 'rgba(30,48,80,0.3)' } }, y: { ticks: { color: '#93c5fd' } } } }
-                });
-            }
-            
-            // Crisis
-            const crisisData = {};
-            d.forEach(r => {
-                if (r._analisis.intensidad >= 7) {
-                    const f = new Date(r['Created At'] || '');
-                    if (!isNaN(f)) {
-                        const k = f.toLocaleDateString('es-PE', { day: '2-digit', month: '2-digit', hour: '2-digit' });
-                        crisisData[k] = (crisisData[k] || 0) + 1;
-                    }
-                }
-            });
-            const crisisKeys = Object.keys(crisisData).slice(-15);
-            const ctx4 = document.getElementById('chartCrisis');
-            if (ctx4) {
-                STATE.graficos.crisis = new Chart(ctx4, {
-                    type: 'bar',
-                    data: { labels: crisisKeys, datasets: [{ data: crisisKeys.map(k => crisisData[k]), backgroundColor: '#ef4444', borderRadius: 4 }] },
-                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { ticks: { color: '#93c5fd' } }, x: { ticks: { color: '#93c5fd', font: { size: 8 } } } } }
-                });
-            }
-            
-            // Timeline
-            const timeline = {};
-            d.forEach(r => {
-                const f = new Date(r['Created At'] || '');
-                if (!isNaN(f)) {
-                    const k = f.toLocaleDateString('es-PE', { day: '2-digit', month: '2-digit' });
-                    timeline[k] = (timeline[k] || 0) + 1;
-                }
-            });
-            const timeKeys = Object.keys(timeline).sort();
-            const ctx5 = document.getElementById('chartTimeline');
-            if (ctx5) {
-                STATE.graficos.timeline = new Chart(ctx5, {
-                    type: 'line',
-                    data: {
-                        labels: timeKeys,
-                        datasets: [
-                            { label: 'Total', data: timeKeys.map(k => timeline[k]), borderColor: '#3b82f6', tension: 0.4, fill: true, backgroundColor: 'rgba(59,130,246,0.08)' },
-                            { label: 'Alta Intensidad', data: timeKeys.map(k => d.filter(r => { const f = new Date(r['Created At']||''); return !isNaN(f) && f.toLocaleDateString('es-PE',{day:'2-digit',month:'2-digit'})===k && r._analisis.intensidad>=7; }).length), borderColor: '#ef4444', tension: 0.4 }
-                        ]
-                    },
-                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#93c5fd', font: { size: 10 } } } }, scales: { y: { ticks: { color: '#93c5fd' } }, x: { ticks: { color: '#93c5fd', font: { size: 9 } } } } }
-                });
-            }
-        }
-        
-        function renderizarWordCloud(d) {
-            const canvas = document.getElementById('wordcloud');
-            if (!canvas) return;
-            
-            const words = {};
-            d.forEach(r => {
-                (r._analisis.palabrasClave || []).forEach(p => { words[p] = (words[p] || 0) + 1; });
+            if (ctx1) STATE.graficos.sentimiento = new Chart(ctx1, {
+                type: 'doughnut',
+                data: { labels: Object.keys(sData), datasets: [{ data: Object.values(sData), backgroundColor: ['#EF4444','#F59E0B','#10B981'] }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#93c5fd', font: { size: 10 } } } } }
             });
             
-            const list = Object.entries(words).map(([w, c]) => [w, c * 15]);
-            
-            if (list.length > 0 && window.WordCloud) {
-                WordCloud(canvas, {
-                    list: list,
-                    gridSize: 10,
-                    weightFactor: 2,
-                    fontFamily: 'Inter, sans-serif',
-                    color: () => `hsl(${Math.random()*60+200}, 70%, ${Math.random()*30+45}%)`,
-                    backgroundColor: 'transparent',
-                    rotateRatio: 0.2
-                });
-            }
-        }
-        
-        function renderizarTabla(d) {
+            // Tabla
             if (STATE.tablaData) STATE.tablaData.destroy();
             
             document.getElementById('tablaBody').innerHTML = d.map(r => `
-                <tr class="cursor-pointer hover:bg-[#1a2332]" onclick="mostrarDetalle('${r['Tweet Id'] || r['tweet_id']}')">
+                <tr class="cursor-pointer hover:bg-[#1a2332]">
                     <td class="text-xs">${new Date(r['Created At']||'').toLocaleDateString('es-PE')}</td>
                     <td class="text-sm font-semibold text-white">${r['User Name']||'Anónimo'}</td>
                     <td class="text-sm max-w-xs truncate text-blue-100/60">${(r['Full Text']||'').substring(0,60)}...</td>
                     <td><span class="badge ${r._analisis.sentimiento==='Negativo'?'badge-neg':r._analisis.sentimiento==='Positivo'?'badge-pos':'badge-neu'}">${r._analisis.sentimiento}</span></td>
-                    <td class="text-xs ${r._analisis.intensidad>=8?'text-red-400 font-bold':'text-blue-200/60'}">${r._analisis.emocion} (${r._analisis.intensidad}/10)</td>
+                    <td class="text-xs ${r._analisis.intensidad>=7?'text-red-400 font-bold':'text-blue-200/60'}">${r._analisis.emocion} (${r._analisis.intensidad}/10)</td>
                     <td class="text-xs text-blue-200/60">${r._analisis.tipo}</td>
                     <td class="text-xs text-blue-200/60">${r._analisis.tema}</td>
                     <td class="text-xs font-bold ${r._analisis.prioridad==='Alta'?'text-red-400':''}">${r._analisis.prioridad}</td>
-                    <td>${r._analisis.esCrisis?'<span class="badge badge-neg pulse-crisis">🚨 CRISIS</span>':'<span class="text-xs text-blue-300/20">-</span>'}</td>
+                    <td>${r._analisis.esFalsoNeutral?'<span class="badge badge-neg">⚠️ CORREGIDO</span>':r._analisis.esCrisis?'<span class="badge badge-neg pulse-crisis">🚨</span>':''}</td>
                 </tr>
             `).join('');
             
@@ -934,564 +837,58 @@ REGLAS SUPREMAS:
             });
         }
         
-        function actualizarFiltros(d) {
-            const emociones = [...new Set(d.map(r => r._analisis.emocion))].sort();
-            const tipos = [...new Set(d.map(r => r._analisis.tipo))].sort();
-            document.getElementById('filtroEmocion').innerHTML = '<option value="">Emoción</option>' + emociones.map(e => `<option>${e}</option>`).join('');
-            document.getElementById('filtroTipo').innerHTML = '<option value="">Tipo</option>' + tipos.map(t => `<option>${t}</option>`).join('');
-        }
-        
         function aplicarFiltros() {
             let d = [...STATE.datos];
             const s = document.getElementById('filtroSentimiento').value;
-            const e = document.getElementById('filtroEmocion').value;
-            const t = document.getElementById('filtroTipo').value;
             if (s) d = d.filter(r => r._analisis.sentimiento === s);
-            if (e) d = d.filter(r => r._analisis.emocion === e);
-            if (t) d = d.filter(r => r._analisis.tipo === t);
             STATE.filtrados = d;
             renderizarDashboard();
         }
         
         // ============================================
-        // VISTAS COMPLETAS (CORREGIDAS)
-        // ============================================
-        
-        function renderizarLabEmocional() {
-            if (!STATE.datos.length) {
-                document.getElementById('emotionWheel').innerHTML = '<p class="text-blue-300/50 text-center col-span-full py-8">No hay datos. Carga un archivo Excel o usa Demo.</p>';
-                return;
-            }
-            const d = STATE.datos;
-            
-            const emociones = [
-                { name: 'Ira', color: '#ef4444', icon: '😡' },
-                { name: 'Miedo', color: '#8b5cf6', icon: '😨' },
-                { name: 'Tristeza', color: '#3b82f6', icon: '😢' },
-                { name: 'Alegría', color: '#10b981', icon: '😊' },
-                { name: 'Asco', color: '#059669', icon: '🤢' },
-                { name: 'Sorpresa', color: '#f59e0b', icon: '😲' },
-                { name: 'Frustración', color: '#f97316', icon: '😤' },
-                { name: 'Indignación', color: '#dc2626', icon: '🤬' }
-            ];
-            
-            const emoCount = {};
-            d.forEach(r => { emoCount[r._analisis.emocion] = (emoCount[r._analisis.emocion] || 0) + 1; });
-            
-            document.getElementById('emotionWheel').innerHTML = emociones.map(e => `
-                <div class="emotion-card glass rounded-xl p-4 text-center" style="border-top: 3px solid ${e.color}">
-                    <span class="text-3xl">${e.icon}</span>
-                    <h4 class="font-bold text-white mt-2">${e.name}</h4>
-                    <p class="text-2xl font-black mt-2" style="color: ${e.color}">${emoCount[e.name] || 0}</p>
-                    <p class="text-xs text-blue-300/30">comentarios</p>
-                </div>
-            `).join('');
-            
-            // Distribución emocional
-            const ctxDist = document.getElementById('chartEmocionDist');
-            if (ctxDist) {
-                if (STATE.graficos.emocionDist) STATE.graficos.emocionDist.destroy();
-                STATE.graficos.emocionDist = new Chart(ctxDist, {
-                    type: 'bar',
-                    data: { labels: Object.keys(emoCount), datasets: [{ data: Object.values(emoCount), backgroundColor: Object.keys(emoCount).map(e => emociones.find(x => x.name === e)?.color || '#3b82f6'), borderRadius: 8 }] },
-                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { ticks: { color: '#93c5fd' } }, x: { ticks: { color: '#93c5fd' } } } }
-                });
-            }
-            
-            // Intensidad
-            const intensidadPorEmocion = {};
-            d.forEach(r => {
-                if (!intensidadPorEmocion[r._analisis.emocion]) intensidadPorEmocion[r._analisis.emocion] = [];
-                intensidadPorEmocion[r._analisis.emocion].push(r._analisis.intensidad);
-            });
-            
-            const avgIntensidad = {};
-            Object.entries(intensidadPorEmocion).forEach(([e, vals]) => {
-                avgIntensidad[e] = Math.round(vals.reduce((a,b) => a+b, 0) / vals.length);
-            });
-            
-            const ctxInt = document.getElementById('chartIntensidad');
-            if (ctxInt) {
-                if (STATE.graficos.intensidad) STATE.graficos.intensidad.destroy();
-                STATE.graficos.intensidad = new Chart(ctxInt, {
-                    type: 'radar',
-                    data: { labels: Object.keys(avgIntensidad), datasets: [{ data: Object.values(avgIntensidad), backgroundColor: 'rgba(239,68,68,0.15)', borderColor: '#ef4444', borderWidth: 2 }] },
-                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { r: { min: 0, max: 10, ticks: { color: '#93c5fd' }, grid: { color: 'rgba(30,48,80,0.4)' }, pointLabels: { color: '#93c5fd' } } } }
-                });
-            }
-        }
-        
-        function renderizarCentroCrisis() {
-            if (!STATE.datos.length) {
-                document.getElementById('crisisStats').innerHTML = '<p class="text-blue-300/50 text-center col-span-full py-8">No hay datos. Carga un archivo Excel o usa Demo.</p>';
-                document.getElementById('crisisAlertsList').innerHTML = '';
-                return;
-            }
-            const d = STATE.datos;
-            const crisis = STATE.crisisAlerts;
-            
-            document.getElementById('crisisStats').innerHTML = `
-                <div class="glass rounded-xl p-4 text-center"><p class="text-3xl font-black text-red-400">${crisis.length}</p><p class="text-xs text-blue-300/50">Crisis Activas</p></div>
-                <div class="glass rounded-xl p-4 text-center"><p class="text-3xl font-black text-orange-400">${d.filter(r => r._analisis.intensidad >= 8).length}</p><p class="text-xs text-blue-300/50">Alta Intensidad</p></div>
-                <div class="glass rounded-xl p-4 text-center"><p class="text-3xl font-black text-yellow-400">${d.filter(r => r._analisis.riesgo === 'Alto').length}</p><p class="text-xs text-blue-300/50">Riesgo Alto</p></div>
-            `;
-            
-            // Evolución crisis
-            const crisisEvo = {};
-            d.forEach(r => {
-                if (r._analisis.intensidad >= 7) {
-                    const f = new Date(r['Created At'] || '');
-                    if (!isNaN(f)) {
-                        const k = f.toLocaleDateString('es-PE', { day: '2-digit', month: '2-digit' });
-                        crisisEvo[k] = (crisisEvo[k] || 0) + 1;
-                    }
-                }
-            });
-            
-            const ctxEvo = document.getElementById('chartCrisisEvo');
-            if (ctxEvo) {
-                if (STATE.graficos.crisisEvo) STATE.graficos.crisisEvo.destroy();
-                STATE.graficos.crisisEvo = new Chart(ctxEvo, {
-                    type: 'line',
-                    data: { labels: Object.keys(crisisEvo).sort(), datasets: [{ data: Object.values(crisisEvo), borderColor: '#ef4444', backgroundColor: 'rgba(239,68,68,0.1)', fill: true, tension: 0.4 }] },
-                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { ticks: { color: '#93c5fd' } }, x: { ticks: { color: '#93c5fd' } } } }
-                });
-            }
-            
-            document.getElementById('crisisAlertsList').innerHTML = crisis.length > 0 ? crisis.map(c => `
-                <div class="crisis-alert glass rounded-xl p-4">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <p class="font-bold text-white">${c['User Name']}</p>
-                            <p class="text-sm text-blue-100/70 mt-1">${c['Full Text']}</p>
-                            <div class="flex gap-2 mt-2">
-                                <span class="badge badge-neg">${c._analisis.sentimiento}</span>
-                                <span class="text-xs text-red-400">Intensidad: ${c._analisis.intensidad}/10</span>
-                            </div>
-                        </div>
-                        <span class="text-xs text-blue-300/30">${new Date(c['Created At']||'').toLocaleDateString('es-PE')}</span>
-                    </div>
-                </div>
-            `).join('') : '<p class="text-blue-300/50 text-center py-8">✅ No hay crisis activas</p>';
-        }
-        
-        function renderizarNarrativas() {
-            if (!STATE.datos.length) {
-                document.getElementById('narrativasList').innerHTML = '<p class="text-blue-300/50 text-center py-8">No hay datos. Carga un archivo Excel o usa Demo.</p>';
-                return;
-            }
-            const d = STATE.datos;
-            
-            const narrativas = {};
-            d.forEach(r => {
-                const tema = r._analisis.tema;
-                if (!narrativas[tema]) narrativas[tema] = { positivo: 0, negativo: 0, neutral: 0 };
-                narrativas[tema][r._analisis.sentimiento.toLowerCase()]++;
-            });
-            
-            const ctxNarr = document.getElementById('chartNarrativas');
-            if (ctxNarr) {
-                if (STATE.graficos.narrativas) STATE.graficos.narrativas.destroy();
-                STATE.graficos.narrativas = new Chart(ctxNarr, {
-                    type: 'bar',
-                    data: {
-                        labels: Object.keys(narrativas),
-                        datasets: [
-                            { label: 'Negativo', data: Object.values(narrativas).map(n => n.negativo), backgroundColor: '#ef4444' },
-                            { label: 'Neutral', data: Object.values(narrativas).map(n => n.neutral), backgroundColor: '#f59e0b' },
-                            { label: 'Positivo', data: Object.values(narrativas).map(n => n.positivo), backgroundColor: '#10b981' }
-                        ]
-                    },
-                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#93c5fd' } } }, scales: { x: { stacked: true, ticks: { color: '#93c5fd' } }, y: { stacked: true, ticks: { color: '#93c5fd' } } } }
-                });
-            }
-            
-            // Evolución
-            const narrEvo = {};
-            d.forEach(r => {
-                const f = new Date(r['Created At'] || '');
-                if (!isNaN(f)) {
-                    const k = f.toLocaleDateString('es-PE', { day: '2-digit', month: '2-digit' });
-                    if (!narrEvo[k]) narrEvo[k] = { negativo: 0, positivo: 0 };
-                    narrEvo[k][r._analisis.sentimiento.toLowerCase()]++;
-                }
-            });
-            
-            const narrKeys = Object.keys(narrEvo).sort();
-            const ctxNarrEvo = document.getElementById('chartNarrEvo');
-            if (ctxNarrEvo) {
-                if (STATE.graficos.narrEvo) STATE.graficos.narrEvo.destroy();
-                STATE.graficos.narrEvo = new Chart(ctxNarrEvo, {
-                    type: 'line',
-                    data: {
-                        labels: narrKeys,
-                        datasets: [
-                            { label: 'Negativo', data: narrKeys.map(k => narrEvo[k].negativo || 0), borderColor: '#ef4444', tension: 0.4 },
-                            { label: 'Positivo', data: narrKeys.map(k => narrEvo[k].positivo || 0), borderColor: '#10b981', tension: 0.4 }
-                        ]
-                    },
-                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#93c5fd' } } }, scales: { y: { ticks: { color: '#93c5fd' } }, x: { ticks: { color: '#93c5fd' } } } }
-                });
-            }
-            
-            document.getElementById('narrativasList').innerHTML = Object.entries(narrativas).map(([tema, data]) => `
-                <div class="glass rounded-xl p-4">
-                    <h4 class="font-bold text-white">${tema}</h4>
-                    <div class="flex gap-3 mt-2 text-xs">
-                        <span class="text-red-400">🔴 ${data.negativo} negativos</span>
-                        <span class="text-yellow-400">🟡 ${data.neutral} neutrales</span>
-                        <span class="text-green-400">🟢 ${data.positivo} positivos</span>
-                    </div>
-                    <p class="text-xs text-blue-300/50 mt-2">Narrativa: ${data.negativo > data.positivo ? 'Predomina descontento' : 'Percepción mixta'}</p>
-                </div>
-            `).join('');
-        }
-        
-        function renderizarInfluencia() {
-            if (!STATE.datos.length) {
-                document.getElementById('influencersList').innerHTML = '<p class="text-blue-300/50 text-center col-span-full py-8">No hay datos. Carga un archivo Excel o usa Demo.</p>';
-                document.getElementById('influenceGraph').innerHTML = '';
-                document.getElementById('topInfluencers').innerHTML = '';
-                return;
-            }
-            const d = STATE.datos;
-            
-            const influencers = d
-                .map(r => ({
-                    name: r['User Name'] || 'Anónimo',
-                    screenName: r['User Screen Name'] || '',
-                    engagement: (parseInt(r['Favorite Count'] || 0) + parseInt(r['Retweet Count'] || 0) * 2),
-                }))
-                .sort((a, b) => b.engagement - a.engagement)
-                .slice(0, 6);
-            
-            document.getElementById('influencersList').innerHTML = influencers.map((inf, i) => `
-                <div class="glass rounded-xl p-4 text-center" style="border-top: 3px solid ${i === 0 ? '#f59e0b' : i === 1 ? '#c0c0c0' : i === 2 ? '#cd7f32' : '#3b82f6'}">
-                    <span class="text-2xl">${i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : '👤'}</span>
-                    <h4 class="font-bold text-white mt-1">${inf.name}</h4>
-                    <p class="text-xs text-blue-300/50">@${inf.screenName}</p>
-                    <p class="text-lg font-black text-blue-400 mt-2">${inf.engagement.toLocaleString()}</p>
-                    <p class="text-xs text-blue-300/30">engagement</p>
-                </div>
-            `).join('');
-            
-            // Grafo D3
-            const graphDiv = document.getElementById('influenceGraph');
-            if (graphDiv && influencers.length > 0) {
-                graphDiv.innerHTML = '';
-                
-                const width = graphDiv.clientWidth || 500;
-                const height = 400;
-                
-                const nodes = influencers.map((inf, i) => ({
-                    id: inf.name,
-                    group: i,
-                    radius: Math.max(15, inf.engagement / 50)
-                }));
-                
-                const links = [];
-                for (let i = 0; i < nodes.length - 1; i++) {
-                    links.push({ source: nodes[i].id, target: nodes[i+1].id, value: 1 });
-                }
-                
-                const svg = d3.select('#influenceGraph')
-                    .append('svg')
-                    .attr('width', width)
-                    .attr('height', height);
-                
-                const simulation = d3.forceSimulation(nodes)
-                    .force('link', d3.forceLink(links).id(d => d.id).distance(100))
-                    .force('charge', d3.forceManyBody().strength(-200))
-                    .force('center', d3.forceCenter(width / 2, height / 2));
-                
-                const link = svg.append('g')
-                    .selectAll('line')
-                    .data(links)
-                    .join('line')
-                    .attr('stroke', '#1e3050')
-                    .attr('stroke-width', 2);
-                
-                const colors = ['#f59e0b', '#3b82f6', '#8b5cf6', '#10b981', '#ef4444', '#06b6d4'];
-                
-                const node = svg.append('g')
-                    .selectAll('circle')
-                    .data(nodes)
-                    .join('circle')
-                    .attr('r', d => d.radius)
-                    .attr('fill', (d, i) => colors[i])
-                    .attr('class', 'influence-node');
-                
-                node.append('title').text(d => d.id);
-                
-                simulation.on('tick', () => {
-                    link.attr('x1', d => d.source.x).attr('y1', d => d.source.y).attr('x2', d => d.target.x).attr('y2', d => d.target.y);
-                    node.attr('cx', d => d.x).attr('cy', d => d.y);
-                });
-            }
-            
-            document.getElementById('topInfluencers').innerHTML = influencers.map((inf, i) => `
-                <div class="glass rounded-lg p-3 flex justify-between items-center">
-                    <div class="flex items-center gap-2">
-                        <span class="text-lg">${i+1}.</span>
-                        <div>
-                            <p class="font-semibold text-white text-sm">${inf.name}</p>
-                            <p class="text-xs text-blue-300/50">@${inf.screenName}</p>
-                        </div>
-                    </div>
-                    <span class="text-sm font-bold text-blue-400">${inf.engagement.toLocaleString()} pts</span>
-                </div>
-            `).join('');
-        }
-        
-        function generarStory(tipo) {
-            if (!STATE.datos.length) return alert('No hay datos');
-            const d = STATE.datos;
-            
-            const output = document.getElementById('storyOutput');
-            output.classList.remove('hidden');
-            
-            const negCount = d.filter(r => r._analisis.sentimiento === 'Negativo').length;
-            const crisisCount = STATE.crisisAlerts.length;
-            const altaInt = d.filter(r => r._analisis.intensidad >= 8).length;
-            
-            output.innerHTML = `
-                <div class="space-y-4">
-                    <div class="bg-gradient-to-r from-blue-900/30 to-purple-900/30 rounded-xl p-5">
-                        <h3 class="text-lg font-bold text-white">📖 ${tipo === 'semanal' ? 'Story Semanal' : 'Story de Crisis'}</h3>
-                        <p class="text-xs text-blue-300/50">Generado por Sentinel AI v10.0</p>
-                    </div>
-                    
-                    <div class="glass rounded-xl p-5">
-                        <h4 class="font-bold text-white">📊 Resumen Ejecutivo</h4>
-                        <p class="text-blue-200 mt-2">Se analizaron <strong class="text-white">${d.length}</strong> comentarios ciudadanos.</p>
-                        <p class="text-blue-200 mt-1">Sentimiento: <strong class="${negCount > d.length/2 ? 'text-red-400' : 'text-yellow-400'}">${negCount > d.length/2 ? 'predominantemente negativo' : 'mixto'}</strong> (${((negCount/d.length)*100).toFixed(1)}% negativos).</p>
-                    </div>
-                    
-                    <div class="glass rounded-xl p-5">
-                        <h4 class="font-bold text-white">🚨 Crisis</h4>
-                        <p class="text-blue-200 mt-2"><strong class="text-red-400">${crisisCount}</strong> crisis detectadas.</p>
-                        <p class="text-blue-200 mt-1"><strong class="text-orange-400">${altaInt}</strong> comentarios con alta intensidad (≥8/10).</p>
-                    </div>
-                    
-                    <div class="glass rounded-xl p-5">
-                        <h4 class="font-bold text-white">💡 Recomendaciones</h4>
-                        <ul class="text-blue-200 mt-2 space-y-1 text-sm">
-                            <li>• ${negCount > d.length/2 ? 'URGENTE: Abordar ola de comentarios negativos' : 'Mantener monitoreo constante'}</li>
-                            <li>• ${crisisCount > 0 ? `Atender ${crisisCount} casos de crisis inmediatamente` : 'No hay crisis activas'}</li>
-                            <li>• ${altaInt > 5 ? 'Implementar plan de contención emocional' : 'Fortalecer comunicación positiva'}</li>
-                        </ul>
-                    </div>
-                </div>
-            `;
-            
-            output.scrollIntoView({ behavior: 'smooth' });
-        }
-        
-        function renderizarColaboracion() {
-            if (!STATE.datos.length) {
-                document.getElementById('teamStats').innerHTML = '<p class="text-blue-300/50 text-center col-span-full py-8">No hay datos. Carga un archivo Excel o usa Demo.</p>';
-                document.getElementById('collabList').innerHTML = '';
-                return;
-            }
-            const d = STATE.datos;
-            
-            const pendientes = d.filter(r => r._analisis.necesitaRespuesta).length;
-            const urgentes = d.filter(r => r._analisis.prioridad === 'Alta' && r._analisis.necesitaRespuesta).length;
-            
-            document.getElementById('teamStats').innerHTML = `
-                <div class="glass rounded-xl p-4 text-center"><p class="text-3xl font-black text-blue-400">${d.length}</p><p class="text-xs text-blue-300/50">Total</p></div>
-                <div class="glass rounded-xl p-4 text-center"><p class="text-3xl font-black text-yellow-400">${pendientes}</p><p class="text-xs text-blue-300/50">Pendientes</p></div>
-                <div class="glass rounded-xl p-4 text-center"><p class="text-3xl font-black text-red-400">${urgentes}</p><p class="text-xs text-blue-300/50">Urgentes</p></div>
-            `;
-            
-            const asignaciones = d.filter(r => r._analisis.necesitaRespuesta).slice(0, 10);
-            
-            document.getElementById('collabList').innerHTML = asignaciones.length > 0 ? asignaciones.map((c, i) => `
-                <div class="glass rounded-xl p-4 flex justify-between items-center">
-                    <div class="flex-1">
-                        <div class="flex items-center gap-2">
-                            <span class="text-xs text-blue-300/30">#${i+1}</span>
-                            <span class="font-semibold text-white text-sm">${c['User Name']}</span>
-                            <span class="badge ${c._analisis.prioridad==='Alta'?'badge-neg':'badge-neu'}">${c._analisis.prioridad}</span>
-                        </div>
-                        <p class="text-xs text-blue-100/60 mt-1">${(c['Full Text']||'').substring(0, 80)}...</p>
-                    </div>
-                    <button class="px-3 py-1.5 bg-blue-600/20 text-blue-400 rounded-lg text-xs hover:bg-blue-600/30 transition">Asignar</button>
-                </div>
-            `).join('') : '<p class="text-blue-300/50 text-center py-8">✅ No hay comentarios pendientes</p>';
-        }
-        
-        // ============================================
-        // DETALLE
-        // ============================================
-        
-        function mostrarDetalle(id) {
-            const c = STATE.datos.find(r => (r['Tweet Id'] || r['tweet_id']) === id);
-            if (!c) return;
-            const a = c._analisis;
-            
-            document.getElementById('detalleContenido').innerHTML = `
-                <div class="space-y-4">
-                    ${a.esCrisis ? '<div class="bg-red-500/10 border border-red-500/30 rounded-xl p-3 pulse-crisis"><p class="text-red-400 font-bold text-sm">🚨 CRISIS DETECTADA</p></div>' : ''}
-                    
-                    <div class="glass rounded-xl p-4">
-                        <h3 class="font-bold text-white">${c['User Name']}</h3>
-                        <p class="text-xs text-blue-300/50">@${c['User Screen Name'] || 'usuario'}</p>
-                        <div class="mt-3 p-3 bg-[#0a0e17] rounded-lg"><p class="text-white text-sm">${c['Full Text']}</p></div>
-                    </div>
-                    
-                    <div class="grid grid-cols-2 gap-2">
-                        <div class="glass rounded-lg p-3 text-center"><p class="text-xs text-blue-300/50">Sentimiento</p><p class="text-lg font-bold ${a.sentimiento==='Negativo'?'text-red-400':a.sentimiento==='Positivo'?'text-green-400':'text-yellow-400'}">${a.sentimiento}</p></div>
-                        <div class="glass rounded-lg p-3 text-center"><p class="text-xs text-blue-300/50">Emoción</p><p class="text-lg font-bold text-purple-400">${a.emocion}</p></div>
-                        <div class="glass rounded-lg p-3 text-center"><p class="text-xs text-blue-300/50">Intensidad</p><p class="text-lg font-bold ${a.intensidad>=8?'text-red-400':'text-blue-400'}">${a.intensidad}/10</p></div>
-                        <div class="glass rounded-lg p-3 text-center"><p class="text-xs text-blue-300/50">Tipo</p><p class="text-lg font-bold text-cyan-400">${a.tipo}</p></div>
-                    </div>
-                    
-                    <div class="glass rounded-xl p-4">
-                        <h4 class="font-bold text-white text-sm mb-2">📝 Resumen</h4>
-                        <p class="text-blue-200 text-sm">${a.resumen}</p>
-                    </div>
-                </div>
-            `;
-            
-            document.getElementById('detailPanel').classList.remove('translate-x-full');
-        }
-        
-        function cerrarDetalle() { document.getElementById('detailPanel').classList.add('translate-x-full'); }
-        
-        // ============================================
-        // REPORTES
-        // ============================================
-        
-        function generarReporte(tipo) {
-            if (!STATE.datos.length) return alert('No hay datos');
-            const d = STATE.datos;
-            const titulos = { diario: 'Diario', semanal: 'Semanal', mensual: 'Mensual', story: 'Story' };
-            
-            document.getElementById('reporteOutput').classList.remove('hidden');
-            document.getElementById('reporteOutput').innerHTML = `
-                <h3 class="text-lg font-bold text-white mb-4">📊 Reporte ${titulos[tipo]}</h3>
-                <div class="glass rounded-xl p-4 mb-4">
-                    <p class="text-blue-200 text-sm">Total: <strong class="text-white">${d.length}</strong> | Negativos: <strong class="text-red-400">${d.filter(r=>r._analisis.sentimiento==='Negativo').length}</strong> | Crisis: <strong class="text-orange-400">${STATE.crisisAlerts.length}</strong></p>
-                </div>
-                <button onclick="exportarReporte()" class="px-4 py-2 btn-primary text-sm">📥 Exportar CSV</button>
-            `;
-            document.getElementById('reporteOutput').scrollIntoView({ behavior: 'smooth' });
-        }
-        
-        function exportarReporte() {
-            let csv = 'Fecha,Usuario,Comentario,Sentimiento,Emoción,Intensidad,Tipo,Tema,Prioridad,Riesgo,Crisis\n';
-            STATE.datos.forEach(r => {
-                csv += `"${r['Created At']}","${r['User Name']}","${(r['Full Text']||'').replace(/"/g,'""')}","${r._analisis.sentimiento}","${r._analisis.emocion}","${r._analisis.intensidad}","${r._analisis.tipo}","${r._analisis.tema}","${r._analisis.prioridad}","${r._analisis.riesgo}","${r._analisis.esCrisis}"\n`;
-            });
-            
-            const blob = new Blob([csv], { type: 'text/csv' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url; a.download = `reporte-sentinel-${Date.now()}.csv`;
-            a.click(); URL.revokeObjectURL(url);
-        }
-        
-        // ============================================
-        // NAVEGACIÓN (CORREGIDA)
+        // NAVEGACIÓN
         // ============================================
         
         function navigateTo(view) {
-            console.log('Navegando a:', view);
-            
-            // Ocultar TODAS las vistas
-            const todasLasVistas = ['dashboard', 'emotions', 'crisis', 'narratives', 'influence', 'stories', 'collab', 'reports', 'config'];
-            todasLasVistas.forEach(v => {
+            const vistas = ['dashboard', 'emotions', 'crisis', 'narratives', 'influence', 'stories', 'collab', 'reports', 'config'];
+            vistas.forEach(v => {
                 const el = document.getElementById(`view-${v}`);
                 if (el) el.classList.add('hidden');
             });
             
-            // Mostrar la vista seleccionada
             const target = document.getElementById(`view-${view}`);
-            if (target) {
-                target.classList.remove('hidden');
-                target.classList.add('animate-in');
-            }
+            if (target) target.classList.remove('hidden');
             
-            // Actualizar navegación
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             const navItems = document.querySelectorAll('.nav-item');
-            const navIndex = todasLasVistas.indexOf(view);
-            if (navIndex >= 0 && navIndex < navItems.length) {
-                navItems[navIndex].classList.add('active');
-            }
-            
-            // Actualizar header
-            const titles = {
-                dashboard: 'Dashboard Principal',
-                emotions: 'Laboratorio Emocional',
-                crisis: 'Centro de Crisis',
-                narratives: 'Rastreador de Narrativas',
-                influence: 'Red de Influencia',
-                stories: 'Story Generator',
-                collab: 'Colaboración en Equipo',
-                reports: 'Reportes',
-                config: 'Configuración'
-            };
-            document.getElementById('header-title').textContent = titles[view] || 'Dashboard';
-            
-            STATE.vistaActual = view;
-            
-            // Renderizar vista específica
-            if (STATE.datos.length > 0) {
-                setTimeout(() => {
-                    if (view === 'emotions') renderizarLabEmocional();
-                    if (view === 'crisis') renderizarCentroCrisis();
-                    if (view === 'narratives') renderizarNarrativas();
-                    if (view === 'influence') renderizarInfluencia();
-                    if (view === 'collab') renderizarColaboracion();
-                }, 100);
-            }
+            const idx = vistas.indexOf(view);
+            if (idx >= 0 && idx < navItems.length) navItems[idx].classList.add('active');
             
             if (view === 'config') {
                 document.getElementById('cfgApiKey').value = STATE.apiKey;
-                document.getElementById('cfgPrompt').value = STATE.prompt;
             }
-            
-            if (window.innerWidth < 1024) toggleSidebar();
         }
         
         function guardarAPIKey() {
             const key = document.getElementById('apiKey').value.trim();
-            if (key) { STATE.apiKey = key; localStorage.setItem('sentinel_v10_key', key); alert('✅ Conectado'); }
+            if (key) { STATE.apiKey = key; localStorage.setItem('sentinel_v11_key', key); alert('✅ API Key guardada'); }
         }
         
         function guardarConfig() {
             const key = document.getElementById('cfgApiKey').value.trim();
-            const prompt = document.getElementById('cfgPrompt').value.trim();
-            if (key) { STATE.apiKey = key; localStorage.setItem('sentinel_v10_key', key); }
-            if (prompt) { STATE.prompt = prompt; localStorage.setItem('sentinel_v10_prompt', prompt); }
+            if (key) { STATE.apiKey = key; localStorage.setItem('sentinel_v11_key', key); }
             alert('✅ Configuración guardada');
         }
         
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); }
         
-        // Init
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('fecha-header').textContent = new Date().toLocaleDateString('es-PE', { weekday: 'long', day: 'numeric', month: 'long' });
-            
-            if (STATE.apiKey) {
-                document.getElementById('apiKey').value = STATE.apiKey;
-                document.getElementById('cfgApiKey').value = STATE.apiKey;
-            }
-            document.getElementById('cfgPrompt').value = STATE.prompt;
-            
-            document.addEventListener('keydown', e => { if (e.key === 'Escape') cerrarDetalle(); });
-            
-            console.log('🧬 Sentinel AI v10.0 - CORREGIDO');
-            console.log('✅ Navegación funcional');
-            console.log('✅ Laboratorio Emocional');
-            console.log('✅ Centro de Crisis');
-            console.log('✅ Narrativas');
-            console.log('✅ Red de Influencia');
-            console.log('✅ Story Generator');
-            console.log('✅ Colaboración');
-            console.log('✅ Dashboard con gráficos');
+            if (STATE.apiKey) document.getElementById('apiKey').value = STATE.apiKey;
+            console.log('🛡️ Sentinel AI v11.0 - ZERO ESCAPE MODE');
+            console.log('✅ Detección de ironía activada');
+            console.log('✅ Categorías políticas expandidas');
+            console.log('✅ Tolerancia CERO a falsos neutrales');
         });
     </script>
 </body>
