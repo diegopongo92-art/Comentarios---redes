@@ -3,133 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sentinel Analytics - Sistema de Monitoreo de Comentarios</title>
+    <title>Social Listening Dashboard - MML</title>
     
-    <!-- Chart.js para gráficos -->
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">
     </script>
     
-    <!-- html2canvas para exportar PNG -->
+    <!-- SheetJS -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js">
+    </script>
+    
+    <!-- jQuery + DataTables -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js">
+    </script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js">
+    </script>
+    
+    <!-- html2canvas -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js">
+    </script>
+    
+    <!-- jsPDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
     </script>
 
     <style>
         /* ============================================
-           ESTILOS CSS COMPLETOS
+           ESTILOS PERSONALIZADOS
            ============================================ */
         
         :root {
-            --primary: #0056b3;
-            --secondary: #6c757d;
-            --success: #28a745;
-            --danger: #dc3545;
-            --warning: #ffc107;
-            --light: #f8f9fa;
-            --dark: #343a40;
-            --sidebar-width: 250px;
-            --panel-width: 450px;
-            --transition-speed: 0.3s;
+            --mml-red: #DC2626;
+            --mml-darkred: #991B1B;
+            --mml-white: #FFFFFF;
+            --mml-gray-50: #F9FAFB;
+            --mml-gray-100: #F3F4F6;
+            --mml-gray-200: #E5E7EB;
+            --mml-gray-300: #D1D5DB;
+            --mml-gray-400: #9CA3AF;
+            --mml-gray-500: #6B7280;
+            --mml-gray-600: #4B5563;
+            --mml-gray-700: #374151;
+            --mml-gray-800: #1F2937;
+            --mml-gray-900: #111827;
         }
 
         * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
+            scrollbar-width: thin;
+            scrollbar-color: var(--mml-gray-300) var(--mml-gray-100);
+        }
+
+        *::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        *::-webkit-scrollbar-track {
+            background: var(--mml-gray-100);
+        }
+
+        *::-webkit-scrollbar-thumb {
+            background-color: var(--mml-gray-300);
+            border-radius: 20px;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f0f2f5;
-            color: #333;
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--mml-gray-50);
         }
 
-        #app {
-            display: flex;
-            min-height: 100vh;
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-in-out;
         }
 
-        /* Barra lateral */
-        #sidebar {
-            width: var(--sidebar-width);
-            background: var(--dark);
-            color: white;
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 100vh;
-            z-index: 1000;
-            transition: transform var(--transition-speed);
-            overflow-y: auto;
+        .animate-slide-in {
+            animation: slideIn 0.3s ease-out;
         }
 
-        .sidebar-header {
-            padding: 25px 20px;
-            text-align: center;
-            border-bottom: 2px solid rgba(255,255,255,0.1);
-        }
-
-        .sidebar-header h1 {
-            font-size: 1.3em;
-            margin-top: 10px;
-        }
-
-        .sidebar-header img {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: white;
-            padding: 5px;
-        }
-
-        nav ul {
-            list-style: none;
-            padding: 20px 0;
-        }
-
-        .nav-btn {
-            display: block;
-            width: 100%;
-            padding: 15px 25px;
-            background: transparent;
-            border: none;
-            color: rgba(255,255,255,0.7);
-            text-align: left;
-            font-size: 1.05em;
-            cursor: pointer;
-            transition: all 0.2s;
-            border-left: 4px solid transparent;
-        }
-
-        .nav-btn:hover {
-            background: rgba(255,255,255,0.05);
-            color: white;
-        }
-
-        .nav-btn.active {
-            background: rgba(255,255,255,0.1);
-            color: white;
-            border-left-color: var(--primary);
-            font-weight: bold;
-        }
-
-        /* Contenido principal */
-        #main-content {
-            margin-left: var(--sidebar-width);
-            flex: 1;
-            padding: 30px;
-            transition: margin-left var(--transition-speed);
-        }
-
-        .view {
-            display: none;
-        }
-
-        .view.active {
-            display: block;
-            animation: fadeIn 0.3s;
+        .animate-pulse-soft {
+            animation: pulseSoft 2s infinite;
         }
 
         @keyframes fadeIn {
@@ -137,579 +96,1212 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Panel lateral de detalle */
-        #detail-panel {
-            position: fixed;
-            right: 0;
-            top: 0;
-            width: var(--panel-width);
-            height: 100vh;
-            background: white;
-            box-shadow: -5px 0 20px rgba(0,0,0,0.1);
-            transform: translateX(100%);
-            transition: transform var(--transition-speed);
-            z-index: 2000;
-            overflow-y: auto;
+        @keyframes slideIn {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
         }
 
-        #detail-panel.open {
-            transform: translateX(0);
+        @keyframes pulseSoft {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
         }
 
-        .panel-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px;
-            background: var(--primary);
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .gradient-red {
+            background: linear-gradient(135deg, #DC2626 0%, #991B1B 100%);
+        }
+
+        .gradient-light {
+            background: linear-gradient(135deg, #F9FAFB 0%, #E5E7EB 100%);
+        }
+
+        .kpi-card {
+            border-left: 4px solid var(--mml-red);
+            transition: all 0.3s ease;
+        }
+
+        .kpi-card:hover {
+            border-left-width: 8px;
+            background: linear-gradient(90deg, rgba(220, 38, 38, 0.05) 0%, transparent 100%);
+        }
+
+        .platform-card {
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .platform-card:hover {
+            border-color: var(--mml-red);
+            background: linear-gradient(135deg, rgba(220, 38, 38, 0.05) 0%, rgba(153, 27, 27, 0.02) 100%);
+        }
+
+        .platform-card.selected {
+            border-color: var(--mml-red);
+            background: linear-gradient(135deg, rgba(220, 38, 38, 0.1) 0%, rgba(153, 27, 27, 0.05) 100%);
+        }
+
+        .sidebar-link {
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-left-color: var(--mml-red);
+        }
+
+        .sidebar-link.active {
+            background: rgba(220, 38, 38, 0.2);
+            border-left-color: var(--mml-red);
+        }
+
+        .badge-mml {
+            background: var(--mml-red);
             color: white;
-        }
-
-        .close-btn {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5em;
-            cursor: pointer;
-        }
-
-        /* Tarjetas */
-        .card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            padding: 25px;
-            margin-bottom: 25px;
-        }
-
-        .card h2 {
-            margin-bottom: 20px;
-            color: var(--dark);
-            border-bottom: 3px solid var(--primary);
-            padding-bottom: 10px;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .stat-card {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            text-align: center;
-            transition: transform 0.2s;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-        }
-
-        .stat-value {
-            font-size: 2.5em;
-            font-weight: bold;
-            margin: 10px 0;
-        }
-
-        .stat-label {
-            color: var(--secondary);
-            font-size: 0.9em;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .text-success { color: var(--success); }
-        .text-danger { color: var(--danger); }
-        .text-warning { color: var(--warning); }
-
-        /* Tablas */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th {
-            background: #f8f9fa;
-            padding: 12px;
-            text-align: left;
-            font-weight: 600;
-            border-bottom: 2px solid #dee2e6;
-        }
-
-        td {
-            padding: 12px;
-            border-bottom: 1px solid #eee;
-        }
-
-        tr:hover {
-            background: #f8f9fa;
-            cursor: pointer;
-        }
-
-        /* Botones */
-        .btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.95em;
-            font-weight: 600;
-            transition: all 0.2s;
-            margin: 5px;
-        }
-
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-        }
-
-        .btn-success {
-            background: var(--success);
-            color: white;
-        }
-
-        .btn-danger {
-            background: var(--danger);
-            color: white;
-        }
-
-        .btn-warning {
-            background: var(--warning);
-            color: var(--dark);
-        }
-
-        .btn:hover {
-            opacity: 0.9;
-            transform: translateY(-1px);
-        }
-
-        /* Formularios */
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--dark);
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 1em;
-            transition: border-color 0.2s;
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-
-        textarea.form-control {
-            min-height: 100px;
-            font-family: monospace;
-        }
-
-        /* Badges */
-        .badge {
-            display: inline-block;
-            padding: 4px 12px;
+            padding: 2px 10px;
             border-radius: 20px;
-            font-size: 0.85em;
+            font-size: 0.75rem;
             font-weight: 600;
         }
 
-        .badge-success { background: #d4edda; color: #155724; }
-        .badge-danger { background: #f8d7da; color: #721c24; }
-        .badge-warning { background: #fff3cd; color: #856404; }
-        .badge-info { background: #d1ecf1; color: #0c5460; }
+        .dataTables_wrapper {
+            font-size: 0.875rem;
+        }
 
-        /* Gráficos */
         .chart-container {
             position: relative;
-            height: 300px;
-            margin: 20px 0;
+            height: 350px;
+            width: 100%;
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
-            #sidebar {
-                transform: translateX(-100%);
+            .chart-container {
+                height: 250px;
             }
             
-            #sidebar.mobile-open {
-                transform: translateX(0);
-            }
-            
-            #main-content {
-                margin-left: 0;
-            }
-            
-            #detail-panel {
-                width: 100%;
-            }
-            
-            .grid {
-                grid-template-columns: 1fr;
+            .kpi-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
 </head>
-<body>
-    <div id="app">
-        <!-- Sidebar -->
-        <aside id="sidebar">
-            <div class="sidebar-header">
-                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Crect width='80' height='80' fill='%230056b3'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='white' font-size='20' font-weight='bold'%3ESA%3C/text%3E%3C/svg%3E" alt="Logo" id="sidebar-logo">
-                <h1 id="institution-name-display">Sentinel Analytics</h1>
+<body class="bg-gray-50">
+    
+    <!-- Overlay móvil -->
+    <div id="mobile-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+    
+    <!-- Contenedor principal -->
+    <div class="flex h-screen overflow-hidden">
+        
+        <!-- SIDEBAR -->
+        <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-72 bg-gray-900 text-white transform -translate-x-full lg:translate-x-0 lg:static transition-transform duration-300 overflow-y-auto">
+            <div class="p-6">
+                <!-- Logo y nombre -->
+                <div class="text-center mb-8">
+                    <div class="w-20 h-20 bg-white rounded-full mx-auto mb-3 flex items-center justify-center">
+                        <span class="text-3xl font-bold text-red-700">MML</span>
+                    </div>
+                    <h2 class="text-lg font-bold">Social Listening</h2>
+                    <p class="text-sm text-gray-400">Dashboard v1.0</p>
+                </div>
+                
+                <!-- Red social seleccionada -->
+                <div id="sidebar-platform-badge" class="hidden mb-6 p-3 bg-gray-800 rounded-lg text-center">
+                    <i id="sidebar-platform-icon" class="text-2xl mb-1"></i>
+                    <p id="sidebar-platform-name" class="text-sm font-semibold"></p>
+                </div>
+                
+                <!-- Navegación -->
+                <nav class="space-y-1">
+                    <a href="#" onclick="navigateTo('platform-select')" class="sidebar-link flex items-center px-4 py-3 rounded-lg text-gray-300 hover:text-white cursor-pointer">
+                        <i class="fas fa-home w-6"></i>
+                        <span>Inicio</span>
+                    </a>
+                    <a href="#" onclick="navigateTo('dashboard')" class="sidebar-link flex items-center px-4 py-3 rounded-lg text-gray-300 hover:text-white cursor-pointer">
+                        <i class="fas fa-chart-line w-6"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="#" onclick="navigateTo('reports')" class="sidebar-link flex items-center px-4 py-3 rounded-lg text-gray-300 hover:text-white cursor-pointer">
+                        <i class="fas fa-file-alt w-6"></i>
+                        <span>Reportes</span>
+                    </a>
+                    <a href="#" onclick="navigateTo('config')" class="sidebar-link flex items-center px-4 py-3 rounded-lg text-gray-300 hover:text-white cursor-pointer">
+                        <i class="fas fa-cog w-6"></i>
+                        <span>Configuración</span>
+                    </a>
+                </nav>
             </div>
-            <nav>
-                <ul>
-                    <li><button class="nav-btn active" onclick="navigateTo('dashboard')">📊 Dashboard</button></li>
-                    <li><button class="nav-btn" onclick="navigateTo('reports')">📋 Reportes</button></li>
-                    <li><button class="nav-btn" onclick="navigateTo('config')">⚙️ Configuración</button></li>
-                </ul>
-            </nav>
         </aside>
-
-        <!-- Contenido Principal -->
-        <main id="main-content">
-            <!-- Vista Dashboard -->
-            <div id="view-dashboard" class="view active">
-                <div class="card">
-                    <h2>Resumen Ejecutivo</h2>
-                    <p id="executive-summary" style="font-size: 1.1em; line-height: 1.6;"></p>
-                </div>
-                
-                <div class="grid" id="indicators-grid"></div>
-                
-                <div class="card">
-                    <h2>Distribución de Sentimientos</h2>
-                    <div class="chart-container">
-                        <canvas id="sentimentChart"></canvas>
-                    </div>
-                </div>
-                
-                <div class="card">
-                    <h2>Principales Temas</h2>
-                    <div class="chart-container">
-                        <canvas id="topicsChart"></canvas>
-                    </div>
-                </div>
-                
-                <div class="card">
-                    <h2>Últimos Comentarios Analizados</h2>
-                    <table id="comments-table">
-                        <thead>
-                            <tr>
-                                <th>Usuario</th>
-                                <th>Plataforma</th>
-                                <th>Comentario</th>
-                                <th>Sentimiento</th>
-                                <th>Riesgo</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Vista Reportes -->
-            <div id="view-reports" class="view">
-                <div class="card">
-                    <h2>Generador de Reportes Automáticos</h2>
-                    <p style="margin-bottom: 20px;">Selecciona el tipo de reporte que deseas generar:</p>
-                    
-                    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;">
-                        <button class="btn btn-primary" onclick="generateReport('daily')">📅 Reporte Diario</button>
-                        <button class="btn btn-success" onclick="generateReport('weekly')">📊 Reporte Semanal</button>
-                        <button class="btn btn-warning" onclick="generateReport('monthly')">📈 Reporte Mensual</button>
-                        <button class="btn btn-danger" onclick="showCustomReportModal()">🔍 Reporte Personalizado</button>
-                    </div>
-                    
-                    <div id="report-output" style="margin-top: 30px;"></div>
-                    
-                    <div id="export-buttons" style="margin-top: 20px; display: none;">
-                        <h3>Exportar Reporte:</h3>
-                        <button class="btn btn-primary" onclick="exportReport('pdf')">📄 PDF</button>
-                        <button class="btn btn-success" onclick="exportReport('excel')">📊 Excel</button>
-                        <button class="btn btn-info" onclick="exportReport('csv')">📝 CSV</button>
-                        <button class="btn btn-warning" onclick="exportReport('html')">🌐 HTML</button>
-                        <button class="btn btn-danger" onclick="exportChart('sentimentChart')">📸 PNG Gráfico</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Vista Configuración -->
-            <div id="view-config" class="view">
-                <div class="card">
-                    <h2>Configuración General</h2>
-                    
-                    <div class="form-group">
-                        <label>Nombre de la Institución:</label>
-                        <input type="text" id="config-institution-name" class="form-control" onchange="updateConfig()">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>URL del Logotipo:</label>
-                        <input type="text" id="config-logo-url" class="form-control" onchange="updateConfig()" placeholder="https://ejemplo.com/logo.png">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Color Principal:</label>
-                        <input type="color" id="config-primary-color" class="form-control" onchange="updateConfig()">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Color Secundario:</label>
-                        <input type="color" id="config-secondary-color" class="form-control" onchange="updateConfig()">
-                    </div>
-                    
-                    <div class="card" style="background: #f8f9fa;">
-                        <h3>Palabras Clave - Sentimiento Positivo</h3>
-                        <textarea id="config-positive-keywords" class="form-control" onchange="updateConfig()" rows="3"></textarea>
+        
+        <!-- CONTENIDO PRINCIPAL -->
+        <main class="flex-1 overflow-y-auto bg-gray-50">
+            
+            <!-- Header -->
+            <header class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-30">
+                <div class="px-6 py-4">
+                    <div class="flex items-center justify-between">
+                        <button onclick="toggleSidebar()" class="lg:hidden text-gray-600 hover:text-gray-900">
+                            <i class="fas fa-bars text-2xl"></i>
+                        </button>
                         
-                        <h3>Palabras Clave - Sentimiento Negativo</h3>
-                        <textarea id="config-negative-keywords" class="form-control" onchange="updateConfig()" rows="3"></textarea>
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-red-700 rounded-lg flex items-center justify-center">
+                                <span class="text-white font-bold">M</span>
+                            </div>
+                            <div>
+                                <h1 class="text-xl font-bold text-gray-900">Social Listening Dashboard</h1>
+                                <p class="text-sm text-gray-600">Municipalidad Metropolitana de Lima</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center space-x-4">
+                            <span id="header-date" class="text-sm text-gray-600"></span>
+                            <button onclick="location.reload()" class="p-2 hover:bg-gray-100 rounded-lg transition">
+                                <i class="fas fa-sync-alt text-gray-600"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Vistas -->
+            <div class="p-6">
+                
+                <!-- VISTA 1: SELECCIÓN DE PLATAFORMA -->
+                <div id="view-platform-select" class="animate-fade-in">
+                    <div class="max-w-7xl mx-auto">
+                        <div class="text-center mb-12 mt-8">
+                            <div class="w-24 h-24 bg-gradient-to-br from-red-600 to-red-800 rounded-2xl mx-auto mb-6 flex items-center justify-center shadow-lg">
+                                <span class="text-4xl font-bold text-white">MML</span>
+                            </div>
+                            <h2 class="text-4xl font-bold text-gray-900 mb-4">Social Listening Dashboard</h2>
+                            <p class="text-xl text-gray-600">Selecciona la red social para comenzar el análisis</p>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="platform-cards">
+                            <!-- X/Twitter -->
+                            <div class="platform-card bg-white rounded-xl p-8 text-center cursor-pointer shadow-lg" onclick="selectPlatform('twitter')">
+                                <i class="fab fa-twitter text-6xl text-blue-400 mb-4"></i>
+                                <h3 class="text-2xl font-bold text-gray-900 mb-2">X (Twitter)</h3>
+                                <p class="text-gray-600">Análisis de tweets y menciones</p>
+                            </div>
+                            
+                            <!-- Facebook -->
+                            <div class="platform-card bg-white rounded-xl p-8 text-center cursor-pointer shadow-lg opacity-60">
+                                <i class="fab fa-facebook text-6xl text-blue-600 mb-4"></i>
+                                <h3 class="text-2xl font-bold text-gray-900 mb-2">Facebook</h3>
+                                <p class="text-gray-600">Próximamente</p>
+                            </div>
+                            
+                            <!-- Instagram -->
+                            <div class="platform-card bg-white rounded-xl p-8 text-center cursor-pointer shadow-lg opacity-60">
+                                <i class="fab fa-instagram text-6xl text-pink-600 mb-4"></i>
+                                <h3 class="text-2xl font-bold text-gray-900 mb-2">Instagram</h3>
+                                <p class="text-gray-600">Próximamente</p>
+                            </div>
+                            
+                            <!-- TikTok -->
+                            <div class="platform-card bg-white rounded-xl p-8 text-center cursor-pointer shadow-lg opacity-60">
+                                <i class="fab fa-tiktok text-6xl text-gray-900 mb-4"></i>
+                                <h3 class="text-2xl font-bold text-gray-900 mb-2">TikTok</h3>
+                                <p class="text-gray-600">Próximamente</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- VISTA 2: DASHBOARD -->
+                <div id="view-dashboard" class="hidden animate-fade-in">
+                    <!-- Controles superiores -->
+                    <div class="bg-white rounded-xl p-6 mb-6 shadow-sm">
+                        <div class="flex flex-wrap items-center justify-between gap-4">
+                            <div class="flex items-center space-x-4">
+                                <i id="dashboard-platform-icon" class="text-3xl"></i>
+                                <div>
+                                    <h2 class="text-2xl font-bold text-gray-900">Dashboard de Análisis</h2>
+                                    <p id="dashboard-platform-name" class="text-gray-600"></p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex flex-wrap gap-2">
+                                <button onclick="showFileUpload()" class="px-4 py-2 bg-red-700 text-white rounded-lg hover:bg-red-800 transition">
+                                    <i class="fas fa-upload mr-2"></i>Cargar Excel
+                                </button>
+                                <button onclick="loadSampleData()" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">
+                                    <i class="fas fa-database mr-2"></i>Datos de Ejemplo
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Área de carga de archivos -->
+                        <div id="file-upload-area" class="hidden mt-6 p-8 border-2 border-dashed border-gray-300 rounded-xl text-center hover:border-red-500 transition cursor-pointer">
+                            <input type="file" id="excel-file-input" accept=".xlsx,.xls" class="hidden" onchange="handleFileUpload(event)">
+                            <i class="fas fa-cloud-upload-alt text-5xl text-gray-400 mb-4"></i>
+                            <p class="text-lg text-gray-600">Arrastra tu archivo Excel aquí o haz clic para seleccionar</p>
+                            <p class="text-sm text-gray-500 mt-2">Formatos soportados: .xlsx, .xls</p>
+                        </div>
                     </div>
                     
-                    <div class="card" style="background: #f8f9fa; margin-top: 20px;">
-                        <h3>Categorías de Temas</h3>
-                        <div id="topics-config-container"></div>
-                        <button class="btn btn-primary" onclick="addTopicCategory()">+ Agregar Categoría</button>
+                    <!-- KPIs -->
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6" id="kpi-container">
+                        <!-- Se llena dinámicamente -->
                     </div>
                     
-                    <div class="card" style="background: #f8f9fa; margin-top: 20px;">
-                        <h3>Indicadores Visibles en Dashboard</h3>
-                        <div id="indicators-config-container"></div>
+                    <!-- Gráficos - Fila 1 -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                        <div class="bg-white rounded-xl p-6 shadow-sm">
+                            <h3 class="text-lg font-bold text-gray-900 mb-4">Distribución de Sentimientos</h3>
+                            <div class="chart-container">
+                                <canvas id="chart-sentiment"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl p-6 shadow-sm">
+                            <h3 class="text-lg font-bold text-gray-900 mb-4">Tipos de Comentarios</h3>
+                            <div class="chart-container">
+                                <canvas id="chart-types"></canvas>
+                            </div>
+                        </div>
                     </div>
                     
-                    <button class="btn btn-success" onclick="saveConfig()" style="margin-top: 20px;">💾 Guardar Configuración</button>
-                    <button class="btn btn-warning" onclick="resetConfig()">🔄 Restablecer Valores Predeterminados</button>
+                    <!-- Gráficos - Fila 2 -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                        <div class="bg-white rounded-xl p-6 shadow-sm">
+                            <h3 class="text-lg font-bold text-gray-900 mb-4">Comentarios por Día</h3>
+                            <div class="chart-container">
+                                <canvas id="chart-daily"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl p-6 shadow-sm">
+                            <h3 class="text-lg font-bold text-gray-900 mb-4">Principales Temas</h3>
+                            <div class="chart-container">
+                                <canvas id="chart-topics"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tabla de datos -->
+                    <div class="bg-white rounded-xl p-6 shadow-sm">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-bold text-gray-900">Comentarios Analizados</h3>
+                            
+                            <!-- Filtros rápidos -->
+                            <div class="flex flex-wrap gap-2">
+                                <select id="filter-sentiment" class="px-3 py-1 border rounded-lg text-sm" onchange="applyFilters()">
+                                    <option value="">Todos los sentimientos</option>
+                                    <option value="Positivo">Positivo</option>
+                                    <option value="Neutral">Neutral</option>
+                                    <option value="Negativo">Negativo</option>
+                                </select>
+                                
+                                <select id="filter-type" class="px-3 py-1 border rounded-lg text-sm" onchange="applyFilters()">
+                                    <option value="">Todos los tipos</option>
+                                </select>
+                                
+                                <select id="filter-topic" class="px-3 py-1 border rounded-lg text-sm" onchange="applyFilters()">
+                                    <option value="">Todos los temas</option>
+                                </select>
+                                
+                                <select id="filter-priority" class="px-3 py-1 border rounded-lg text-sm" onchange="applyFilters()">
+                                    <option value="">Todas las prioridades</option>
+                                    <option value="Alta">Alta</option>
+                                    <option value="Media">Media</option>
+                                    <option value="Baja">Baja</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="overflow-x-auto">
+                            <table id="comments-table" class="display nowrap" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Usuario</th>
+                                        <th>Comentario</th>
+                                        <th>Sentimiento</th>
+                                        <th>Tipo</th>
+                                        <th>Tema</th>
+                                        <th>Prioridad</th>
+                                        <th>Riesgo</th>
+                                        <th>Likes</th>
+                                        <th>RT/Resp</th>
+                                        <th>Vistas</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="comments-table-body">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- VISTA 3: REPORTES -->
+                <div id="view-reports" class="hidden animate-fade-in">
+                    <div class="max-w-7xl mx-auto">
+                        <h2 class="text-3xl font-bold text-gray-900 mb-8">Generador de Reportes</h2>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                            <div class="bg-white rounded-xl p-6 shadow-sm card-hover cursor-pointer" onclick="generateReport('daily')">
+                                <i class="fas fa-calendar-day text-4xl text-red-700 mb-4"></i>
+                                <h3 class="text-xl font-bold text-gray-900 mb-2">Reporte Diario</h3>
+                                <p class="text-gray-600">Resumen de las últimas 24 horas</p>
+                            </div>
+                            
+                            <div class="bg-white rounded-xl p-6 shadow-sm card-hover cursor-pointer" onclick="generateReport('weekly')">
+                                <i class="fas fa-calendar-week text-4xl text-red-700 mb-4"></i>
+                                <h3 class="text-xl font-bold text-gray-900 mb-2">Reporte Semanal</h3>
+                                <p class="text-gray-600">Análisis de los últimos 7 días</p>
+                            </div>
+                            
+                            <div class="bg-white rounded-xl p-6 shadow-sm card-hover cursor-pointer" onclick="generateReport('monthly')">
+                                <i class="fas fa-calendar-alt text-4xl text-red-700 mb-4"></i>
+                                <h3 class="text-xl font-bold text-gray-900 mb-2">Reporte Mensual</h3>
+                                <p class="text-gray-600">Tendencias del último mes</p>
+                            </div>
+                            
+                            <div class="bg-white rounded-xl p-6 shadow-sm card-hover cursor-pointer" onclick="showCustomReportModal()">
+                                <i class="fas fa-calendar-check text-4xl text-red-700 mb-4"></i>
+                                <h3 class="text-xl font-bold text-gray-900 mb-2">Personalizado</h3>
+                                <p class="text-gray-600">Selecciona el rango de fechas</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Área de visualización del reporte -->
+                        <div id="report-output" class="bg-white rounded-xl p-8 shadow-sm hidden">
+                            <div class="flex justify-between items-center mb-6">
+                                <h2 id="report-title" class="text-2xl font-bold text-gray-900"></h2>
+                                <div class="flex gap-2">
+                                    <button onclick="exportReport('pdf')" class="px-4 py-2 bg-red-700 text-white rounded-lg hover:bg-red-800">
+                                        <i class="fas fa-file-pdf mr-2"></i>PDF
+                                    </button>
+                                    <button onclick="exportReport('excel')" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+                                        <i class="fas fa-file-excel mr-2"></i>Excel
+                                    </button>
+                                    <button onclick="exportReport('csv')" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                                        <i class="fas fa-file-csv mr-2"></i>CSV
+                                    </button>
+                                    <button onclick="exportReport('html')" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">
+                                        <i class="fas fa-code mr-2"></i>HTML
+                                    </button>
+                                </div>
+                            </div>
+                            <div id="report-content"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- VISTA 4: CONFIGURACIÓN -->
+                <div id="view-config" class="hidden animate-fade-in">
+                    <div class="max-w-4xl mx-auto">
+                        <h2 class="text-3xl font-bold text-gray-900 mb-8">Configuración del Sistema</h2>
+                        
+                        <div class="bg-white rounded-xl p-8 shadow-sm mb-6">
+                            <h3 class="text-xl font-bold text-gray-900 mb-6">Información de la Institución</h3>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Nombre de la Institución</label>
+                                    <input type="text" id="config-name" class="w-full px-4 py-2 border rounded-lg" value="Municipalidad Metropolitana de Lima">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Color Principal</label>
+                                    <input type="color" id="config-color" class="w-full h-10 border rounded-lg" value="#DC2626">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl p-8 shadow-sm mb-6">
+                            <h3 class="text-xl font-bold text-gray-900 mb-6">Palabras Clave - Sentimientos</h3>
+                            
+                            <div class="mb-4">
+                                <label class="block text-sm font-semibold text-green-700 mb-2">Palabras Positivas (separadas por coma)</label>
+                                <textarea id="config-positive-words" class="w-full px-4 py-2 border rounded-lg" rows="3">excelente, bueno, genial, gracias, felicitaciones, rápido, eficiente, increíble, útil, magnífico, perfecto, maravilloso, fantástico, grandioso, positivo, satisfecho, contento, feliz, bien, mejor</textarea>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-semibold text-red-700 mb-2">Palabras Negativas (separadas por coma)</label>
+                                <textarea id="config-negative-words" class="w-full px-4 py-2 border rounded-lg" rows="3">malo, pésimo, decepción, lento, error, queja, terrible, horrible, inútil, estafa, basura, desastre, fatal, nefasto, penoso, lamentable, vergüenza, indignante, inaceptable, caos</textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl p-8 shadow-sm mb-6">
+                            <h3 class="text-xl font-bold text-gray-900 mb-6">Temas y Categorías</h3>
+                            <div id="topics-config">
+                                <!-- Generado dinámicamente -->
+                            </div>
+                            <button onclick="addTopic()" class="mt-4 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300">
+                                <i class="fas fa-plus mr-2"></i>Agregar Tema
+                            </button>
+                        </div>
+                        
+                        <button onclick="saveConfig()" class="px-6 py-3 bg-red-700 text-white rounded-lg hover:bg-red-800 font-bold">
+                            <i class="fas fa-save mr-2"></i>Guardar Configuración
+                        </button>
+                    </div>
                 </div>
             </div>
         </main>
-
-        <!-- Panel Lateral de Detalle -->
-        <aside id="detail-panel">
-            <div class="panel-header">
-                <h2>Detalle del Comentario</h2>
-                <button class="close-btn" onclick="closeDetailPanel()">✕</button>
+        
+        <!-- PANEL LATERAL DE DETALLE -->
+        <div id="detail-panel" class="fixed inset-y-0 right-0 w-full sm:w-96 lg:w-[500px] bg-white shadow-2xl transform translate-x-full transition-transform duration-300 z-50 overflow-y-auto">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-bold text-gray-900">Detalle del Comentario</h2>
+                    <button onclick="closeDetailPanel()" class="text-gray-600 hover:text-gray-900">
+                        <i class="fas fa-times text-2xl"></i>
+                    </button>
+                </div>
+                <div id="detail-content"></div>
             </div>
-            <div style="padding: 20px;" id="detail-content"></div>
-        </aside>
-    </div>
-
-    <!-- Modal para reporte personalizado -->
-    <div id="custom-report-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 3000; justify-content: center; align-items: center;">
-        <div style="background: white; padding: 30px; border-radius: 12px; max-width: 500px; width: 90%;">
-            <h2>Reporte Personalizado</h2>
-            <div class="form-group">
-                <label>Fecha Inicio:</label>
-                <input type="date" id="custom-start-date" class="form-control">
-            </div>
-            <div class="form-group">
-                <label>Fecha Fin:</label>
-                <input type="date" id="custom-end-date" class="form-control">
-            </div>
-            <div style="display: flex; gap: 10px; justify-content: flex-end;">
-                <button class="btn btn-secondary" onclick="closeCustomReportModal()">Cancelar</button>
-                <button class="btn btn-primary" onclick="generateCustomReport()">Generar</button>
+        </div>
+        
+        <!-- MODAL REPORTE PERSONALIZADO -->
+        <div id="custom-report-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
+            <div class="bg-white rounded-xl p-8 max-w-md w-full mx-4">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6">Reporte Personalizado</h2>
+                
+                <div class="mb-4">
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Fecha Inicio</label>
+                    <input type="date" id="custom-start-date" class="w-full px-4 py-2 border rounded-lg">
+                </div>
+                
+                <div class="mb-6">
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Fecha Fin</label>
+                    <input type="date" id="custom-end-date" class="w-full px-4 py-2 border rounded-lg">
+                </div>
+                
+                <div class="flex gap-4">
+                    <button onclick="closeCustomReportModal()" class="flex-1 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300">
+                        Cancelar
+                    </button>
+                    <button onclick="generateCustomReport()" class="flex-1 px-4 py-2 bg-red-700 text-white rounded-lg hover:bg-red-800">
+                        Generar Reporte
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
         // ============================================
-        // DATOS Y CONFIGURACIÓN INICIAL
+        // DATOS GLOBALES Y ESTADO DE LA APLICACIÓN
         // ============================================
         
-        // Configuración por defecto (se carga desde localStorage si existe)
-        let appConfig = {
-            institution: {
-                name: 'Sentinel Analytics',
-                logoPath: 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'80\' height=\'80\'%3E%3Crect width=\'80\' height=\'80\' fill=\'%230056b3\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' text-anchor=\'middle\' dy=\'.3em\' fill=\'white\' font-size=\'20\' font-weight=\'bold\'%3ESA%3C/text%3E%3C/svg%3E'
+        const APP_STATE = {
+            currentPlatform: null,
+            currentView: 'platform-select',
+            analyzedData: [],
+            filteredData: [],
+            dataTable: null,
+            charts: {},
+            currentReport: null
+        };
+        
+        // ============================================
+        // CONFIGURACIÓN POR DEFECTO
+        // ============================================
+        
+        const DEFAULT_CONFIG = {
+            institutionName: 'Municipalidad Metropolitana de Lima',
+            primaryColor: '#DC2626',
+            sentimentWords: {
+                positive: ['excelente', 'bueno', 'genial', 'gracias', 'felicitaciones', 'rápido', 'eficiente', 'increíble', 'útil', 'magnífico', 'perfecto', 'maravilloso', 'fantástico', 'grandioso', 'positivo', 'satisfecho', 'contento', 'feliz', 'bien', 'mejor'],
+                negative: ['malo', 'pésimo', 'decepción', 'lento', 'error', 'queja', 'terrible', 'horrible', 'inútil', 'estafa', 'basura', 'desastre', 'fatal', 'nefasto', 'penoso', 'lamentable', 'vergüenza', 'indignante', 'inaceptable', 'caos']
             },
-            branding: {
-                primaryColor: '#0056b3',
-                secondaryColor: '#6c757d',
-                successColor: '#28a745',
-                dangerColor: '#dc3545',
-                warningColor: '#ffc107'
-            },
-            dashboard: {
-                visibleIndicators: ['totalComments', 'positiveSentiment', 'neutralSentiment', 'negativeSentiment', 'mainTopics', 'mainCriticisms', 'frequentQueries', 'congratulations', 'reputationalRisks', 'trends']
-            },
-            keywords: {
-                positive: ['excelente', 'bueno', 'genial', 'felicitaciones', 'gracias', 'rápido', 'eficiente', 'me encanta', 'increíble', 'útil'],
-                negative: ['malo', 'pésimo', 'decepción', 'lento', 'no funciona', 'error', 'queja', 'terrible', 'horrible', 'inútil', 'estafa']
-            },
-            topicCategories: [
-                { name: 'Servicio al Cliente', keywords: ['atención', 'soporte', 'ayuda', 'servicio', 'llamada', 'operador', 'agente'] },
-                { name: 'Producto', keywords: ['producto', 'calidad', 'falla', 'defecto', 'garantía', 'empaque'] },
-                { name: 'Plataforma Web', keywords: ['web', 'online', 'página', 'navegación', 'login', 'cuenta', 'acceso'] },
-                { name: 'Precios y Facturación', keywords: ['precio', 'costo', 'caro', 'barato', 'factura', 'cobro', 'pago', 'descuento'] }
+            topics: [
+                { name: 'Seguridad Ciudadana', keywords: ['seguridad', 'policía', 'serenazgo', 'delincuencia', 'robo', 'crimen', 'patrullaje', 'vigilancia'] },
+                { name: 'Limpieza Pública', keywords: ['basura', 'limpieza', 'residuos', 'reciclaje', 'barrido', 'desmonte', 'contaminación'] },
+                { name: 'Transporte', keywords: ['transporte', 'bus', 'tráfico', 'movilidad', 'semáforo', 'paradero', 'congestión'] },
+                { name: 'Obras Públicas', keywords: ['obra', 'construcción', 'pista', 'vereda', 'parque', 'alameda', 'infraestructura'] },
+                { name: 'Atención al Ciudadano', keywords: ['atención', 'trámite', 'ventanilla', 'servicio', 'colas', 'demora', 'burocracia'] },
+                { name: 'Eventos y Cultura', keywords: ['evento', 'cultura', 'concierto', 'exposición', 'teatro', 'feria', 'festival'] },
+                { name: 'Medio Ambiente', keywords: ['ambiente', 'áreas verdes', 'árboles', 'jardín', 'ecología', 'sostenible'] },
+                { name: 'Fiscalización', keywords: ['fiscalización', 'clausura', 'multa', 'inspección', 'sanción', 'infracción'] }
             ]
         };
-
-        // Datos de ejemplo
-        let sampleComments = [
-            { id: 1, user: 'Maria Garcia', platform: 'X', date: '2026-06-25T10:30:00Z', text: 'Excelente atención al cliente, me resolvieron el problema muy rápido. ¡Gracias!', likes: 12, shares: 2 },
-            { id: 2, user: 'Carlos Lopez', platform: 'Facebook', date: '2026-06-25T11:45:00Z', text: 'La página web es un desastre, no puedo acceder a mi cuenta. Llevo días intentándolo.', likes: 5, shares: 0 },
-            { id: 3, user: 'Ana Martinez', platform: 'Instagram', date: '2026-06-25T09:15:00Z', text: '¿Cuál es el horario de atención? No lo encuentro por ningún lado.', likes: 1, shares: 0 },
-            { id: 4, user: 'Pedro Sanchez', platform: 'X', date: '2026-06-24T16:20:00Z', text: 'Me encanta la nueva actualización, funciona mucho mejor ahora.', likes: 8, shares: 3 },
-            { id: 5, user: 'Laura Diaz', platform: 'TikTok', date: '2026-06-24T14:00:00Z', text: 'Esto es una estafa, me cobraron dos veces y no me dan solución. Terrible servicio.', likes: 25, shares: 10 },
-            { id: 6, user: 'Roberto Fernandez', platform: 'Facebook', date: '2026-06-23T08:55:00Z', text: 'Buenos precios, aunque la entrega tardó un poco más de lo esperado.', likes: 3, shares: 0 }
-        ];
-
-        let analyzedComments = [];
-        let currentReport = null;
-        let sentimentChartInstance = null;
-        let topicsChartInstance = null;
-
+        
+        let appConfig = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+        
+        // Cargar configuración guardada
+        const savedConfig = localStorage.getItem('mml-social-listening-config');
+        if (savedConfig) {
+            appConfig = { ...DEFAULT_CONFIG, ...JSON.parse(savedConfig) };
+        }
+        
         // ============================================
-        // FUNCIONES DE ANÁLISIS
+        // SISTEMA DE NAVEGACIÓN
         // ============================================
         
-        function analyzeComments() {
-            analyzedComments = sampleComments.map(comment => analyzeComment(comment));
-            return analyzedComments;
+        function navigateTo(view) {
+            APP_STATE.currentView = view;
+            
+            // Ocultar todas las vistas
+            document.querySelectorAll('[id^="view-"]').forEach(el => {
+                el.classList.add('hidden');
+            });
+            
+            // Mostrar la vista seleccionada
+            const targetView = document.getElementById(`view-${view}`);
+            if (targetView) {
+                targetView.classList.remove('hidden');
+                targetView.classList.add('animate-fade-in');
+            }
+            
+            // Actualizar sidebar activo
+            document.querySelectorAll('.sidebar-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // Inicializar vista
+            switch(view) {
+                case 'dashboard':
+                    if (APP_STATE.analyzedData.length > 0) {
+                        renderDashboard();
+                    }
+                    break;
+                case 'config':
+                    renderConfigPanel();
+                    break;
+            }
+            
+            // Cerrar sidebar en móvil
+            if (window.innerWidth < 1024) {
+                closeSidebar();
+            }
         }
-
-        function analyzeComment(comment) {
-            const text = comment.text.toLowerCase();
-            const sentiment = getSentiment(text);
-            const topics = getTopics(text);
-            const riskLevel = assessRisk(sentiment, text);
-            const isQuery = text.includes('?') || /cómo|cuál|cuándo|dónde|quién|horario|información/.test(text);
-            const isCongratulation = /felicit|gracias|excelente|buen trabajo|enhorabuena/.test(text);
-
+        
+        // ============================================
+        // SELECCIÓN DE PLATAFORMA
+        // ============================================
+        
+        function selectPlatform(platform) {
+            if (platform !== 'twitter') {
+                alert('Esta plataforma estará disponible próximamente');
+                return;
+            }
+            
+            APP_STATE.currentPlatform = platform;
+            
+            // Actualizar UI
+            document.getElementById('sidebar-platform-badge').classList.remove('hidden');
+            document.getElementById('sidebar-platform-icon').className = 'fab fa-twitter text-2xl text-blue-400 mb-1';
+            document.getElementById('sidebar-platform-name').textContent = 'X (Twitter)';
+            
+            // Navegar al dashboard
+            navigateTo('dashboard');
+            
+            // Mostrar área de carga
+            document.getElementById('file-upload-area').classList.remove('hidden');
+        }
+        
+        // ============================================
+        // CARGA DE ARCHIVOS EXCEL
+        // ============================================
+        
+        function showFileUpload() {
+            document.getElementById('excel-file-input').click();
+        }
+        
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                    const jsonData = XLSX.utils.sheet_to_json(firstSheet);
+                    
+                    processExcelData(jsonData);
+                } catch (error) {
+                    alert('Error al procesar el archivo: ' + error.message);
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        }
+        
+        function processExcelData(rawData) {
+            // Limpieza de datos
+            const cleanData = rawData
+                .filter(row => row['Full Text'] && row['Full Text'].toString().trim() !== '')
+                .filter((row, index, self) => 
+                    index === self.findIndex(r => r['Tweet Id'] === row['Tweet Id'])
+                );
+            
+            // Análisis de cada comentario
+            APP_STATE.analyzedData = cleanData.map(row => analyzeComment(row));
+            
+            // Renderizar dashboard
+            renderDashboard();
+            
+            alert(`✅ ${APP_STATE.analyzedData.length} comentarios analizados exitosamente`);
+        }
+        
+        function loadSampleData() {
+            const sampleData = [
+                { 'Tweet Id': '123456789', 'Full Text': 'Excelente trabajo de la municipalidad en la limpieza de calles. ¡Gracias!', 'Created At': '2024-01-15 10:30:00', 'User Name': 'María García', 'Reply Count': 2, 'Retweet Count': 5, 'Favorite Count': 12, 'View Count': 150 },
+                { 'Tweet Id': '123456790', 'Full Text': 'El tráfico en la Av. Abancay es un caos total. No hay semáforos funcionando.', 'Created At': '2024-01-15 11:00:00', 'User Name': 'Carlos López', 'Reply Count': 3, 'Retweet Count': 8, 'Favorite Count': 5, 'View Count': 200 },
+                { 'Tweet Id': '123456791', 'Full Text': '¿Cuál es el horario de atención para trámites? No lo encuentro en la web.', 'Created At': '2024-01-15 09:15:00', 'User Name': 'Ana Martínez', 'Reply Count': 1, 'Retweet Count': 0, 'Favorite Count': 2, 'View Count': 80 },
+                { 'Tweet Id': '123456792', 'Full Text': 'Felicitaciones por el Festival de Verano, estuvo increíble. Bien organizado.', 'Created At': '2024-01-14 18:00:00', 'User Name': 'Pedro Sánchez', 'Reply Count': 0, 'Retweet Count': 15, 'Favorite Count': 30, 'View Count': 500 },
+                { 'Tweet Id': '123456793', 'Full Text': 'Esto es una vergüenza, la basura lleva días acumulada en mi calle.', 'Created At': '2024-01-14 14:30:00', 'User Name': 'Laura Díaz', 'Reply Count': 5, 'Retweet Count': 12, 'Favorite Count': 8, 'View Count': 300 },
+                { 'Tweet Id': '123456794', 'Full Text': 'Los parques están muy bonitos con las nuevas remodelaciones.', 'Created At': '2024-01-14 12:00:00', 'User Name': 'Roberto Fernández', 'Reply Count': 0, 'Retweet Count': 3, 'Favorite Count': 10, 'View Count': 120 }
+            ];
+            
+            processExcelData(sampleData);
+        }
+        
+        // ============================================
+        // MOTOR DE ANÁLISIS DE COMENTARIOS
+        // ============================================
+        
+        function analyzeComment(row) {
+            const text = (row['Full Text'] || '').toString().toLowerCase().trim();
+            
+            // Análisis de sentimiento
+            const sentiment = analyzeSentiment(text);
+            
+            // Clasificación del tipo
+            const type = classifyCommentType(text, sentiment);
+            
+            // Detección de tema
+            const topic = detectTopic(text);
+            
+            // Prioridad
+            const priority = calculatePriority(sentiment, type, text);
+            
+            // Riesgo reputacional
+            const risk = calculateRisk(sentiment, type, priority);
+            
+            // ¿Necesita respuesta?
+            const needsResponse = type === 'Queja' || type === 'Reclamo' || type === 'Denuncia' || type === 'Consulta';
+            
+            // Palabras clave
+            const keywords = extractKeywords(text);
+            
+            // Resumen
+            const summary = generateSummary(text, sentiment, type, topic);
+            
             return {
-                ...comment,
+                ...row,
                 analysis: {
                     sentiment,
-                    topics,
-                    riskLevel,
-                    isQuery,
-                    isCongratulation
+                    type,
+                    topic,
+                    priority,
+                    risk,
+                    needsResponse,
+                    keywords,
+                    summary
                 }
             };
         }
-
-        function getSentiment(text) {
+        
+        function analyzeSentiment(text) {
             let score = 0;
             const words = text.split(/\s+/);
             
             words.forEach(word => {
-                if (appConfig.keywords.positive.includes(word)) score++;
-                if (appConfig.keywords.negative.includes(word)) score--;
+                const cleanWord = word.replace(/[.,!?¡¿]/g, '');
+                if (appConfig.sentimentWords.positive.includes(cleanWord)) score += 2;
+                if (appConfig.sentimentWords.negative.includes(cleanWord)) score -= 2;
             });
-
-            if (score > 0) return 'positive';
-            if (score < 0) return 'negative';
-            return 'neutral';
+            
+            // Análisis contextual adicional
+            if (text.includes('!') && score > 0) score += 1;
+            if (text.includes('¡') && score > 0) score += 1;
+            if (text.match(/!!+/)) score -= 1;
+            
+            if (score >= 3) return 'Positivo';
+            if (score <= -3) return 'Negativo';
+            return 'Neutral';
         }
-
-        function getTopics(text) {
-            const foundTopics = [];
-            appConfig.topicCategories.forEach(category => {
-                const hasKeyword = category.keywords.some(keyword => text.includes(keyword));
-                if (hasKeyword) foundTopics.push(category.name);
-            });
-            return foundTopics.length > 0 ? foundTopics : ['General'];
+        
+        function classifyCommentType(text, sentiment) {
+            if (text.includes('?') || /cómo|cuál|cuándo|dónde|quién|información|horario|consulta/.test(text)) {
+                return 'Consulta';
+            }
+            if (/excelente|felicit|gracias|buen trabajo|enhorabuena|magnífico/.test(text)) {
+                return 'Felicitación';
+            }
+            if (/gracias|agradecido|agradecer/.test(text)) {
+                return 'Agradecimiento';
+            }
+            if (/denuncia|denuncio|corrupción|ilegal|delito/.test(text)) {
+                return 'Denuncia';
+            }
+            if (/reclamo|exijo|reclamo formal/.test(text)) {
+                return 'Reclamo';
+            }
+            if (/sugiero|sugerencia|propongo|podrían|deberían/.test(text)) {
+                return 'Sugerencia';
+            }
+            if (sentiment === 'Negativo' && /mal|pésimo|terrible|horrible|caos|desastre/.test(text)) {
+                return 'Crítica';
+            }
+            if (sentiment === 'Negativo') {
+                return 'Queja';
+            }
+            if (/humor|jaja|chiste|broma|😂|🤣/.test(text)) {
+                return 'Humor';
+            }
+            if (/spam|oferta|descuento|compra|vendo|publicidad/.test(text)) {
+                return 'Spam';
+            }
+            return 'Opinión';
         }
-
-        function assessRisk(sentiment, text) {
-            if (sentiment === 'negative' && /estafa|fraude|denuncia|abogado/.test(text)) return 'Alto';
-            if (sentiment === 'negative' && /queja|reclamo|compensación/.test(text)) return 'Medio';
+        
+        function detectTopic(text) {
+            for (const topic of appConfig.topics) {
+                if (topic.keywords.some(keyword => text.includes(keyword.toLowerCase()))) {
+                    return topic.name;
+                }
+            }
+            return 'Otro';
+        }
+        
+        function calculatePriority(sentiment, type, text) {
+            if (type === 'Denuncia' || type === 'Reclamo') return 'Alta';
+            if (sentiment === 'Negativo' && (type === 'Queja' || type === 'Crítica')) return 'Alta';
+            if (text.includes('urgente') || text.includes('emergencia') || text.includes('peligro')) return 'Alta';
+            if (type === 'Consulta') return 'Media';
+            if (sentiment === 'Negativo') return 'Media';
+            return 'Baja';
+        }
+        
+        function calculateRisk(sentiment, type, priority) {
+            if (priority === 'Alta' && sentiment === 'Negativo') return 'Alto';
+            if (type === 'Denuncia') return 'Alto';
+            if (sentiment === 'Negativo' && type === 'Queja') return 'Medio';
+            if (sentiment === 'Negativo') return 'Medio';
             return 'Bajo';
         }
-
-        function generateSummary() {
-            const total = analyzedComments.length;
-            const sentiments = { positive: 0, neutral: 0, negative: 0 };
-            const topicCount = {};
-            const criticisms = [];
-            const queries = [];
-            const congratulations = [];
-            const risks = [];
-
-            analyzedComments.forEach(comment => {
-                const { sentiment, topics, riskLevel, isQuery, isCongratulation } = comment.analysis;
-                sentiments[sentiment]++;
-
-                topics.forEach(topic => {
-                    topicCount[topic] = (topicCount[topic] || 0) + 1;
-                });
-
-                if (sentiment === 'negative') criticisms.push(comment);
-                if (isQuery) queries.push(comment);
-                if (isCongratulation) congratulations.push(comment);
-                if (riskLevel !== 'Bajo') risks.push(comment);
-            });
-
-            const sortedTopics = Object.entries(topicCount)
-                .sort(([, a], [, b]) => b - a)
-                .map(([topic, count]) => ({ topic, count }));
-
-            return {
-                totalComments: total,
-                sentiments,
-                mainTopics: sortedTopics,
-                mainCriticisms: criticisms.slice(0, 5),
-                frequentQueries: queries.slice(0, 5),
-                congratulations: congratulations.slice(0, 5),
-                reputationalRisks: risks,
-                trends: {
-                    sentimentTrend: sentiments.negative > sentiments.positive ? 'negative' : 'positive',
-                    commentVolumeTrend: 'stable',
-                    mainEmergingTopic: sortedTopics[0]?.topic || 'General'
-                }
-            };
+        
+        function extractKeywords(text) {
+            const words = text.split(/\s+/).map(w => w.replace(/[.,!?¡¿]/g, ''));
+            const stopWords = ['de', 'la', 'que', 'el', 'en', 'y', 'a', 'los', 'del', 'se', 'las', 'por', 'un', 'para', 'con', 'no', 'una', 'su', 'al', 'lo', 'como', 'más', 'pero', 'sus', 'le', 'ya', 'o', 'este', 'sí', 'porque', 'esta', 'entre', 'cuando', 'muy', 'sin', 'sobre', 'también', 'me', 'hasta', 'hay', 'donde', 'quien', 'todo', 'nos', 'durante', 'todos', 'uno', 'les', 'ni', 'contra', 'otros', 'ese', 'eso', 'ante', 'ellos', 'e', 'esto', 'mí', 'antes', 'algunos', 'qué', 'unos', 'yo', 'otro', 'otras', 'otra', 'él', 'tanto', 'esa', 'estos', 'mucho', 'quienes', 'nada', 'muchos', 'cual', 'poco', 'ella', 'estar', 'estas', 'algunas', 'algo', 'nosotros', 'mi', 'mis', 'tú', 'te', 'ti', 'tu', 'tus', 'ellas', 'nosotras', 'vosotros', 'vosotras', 'os', 'mío', 'mía', 'míos', 'mías', 'tuyo', 'tuya', 'tuyos', 'tuyas', 'suyo', 'suya', 'suyos', 'suyas', 'nuestro', 'nuestra', 'nuestros', 'nuestras'];
+            
+            const keywords = words
+                .filter(word => word.length > 3 && !stopWords.includes(word))
+                .slice(0, 5);
+            
+            return keywords;
         }
-
+        
+        function generateSummary(text, sentiment, type, topic) {
+            const shortText = text.length > 100 ? text.substring(0, 97) + '...' : text;
+            return `${type} ${sentiment.toLowerCase()} sobre ${topic}: "${shortText}"`;
+        }
+        
+        // ============================================
+        // RENDERIZADO DEL DASHBOARD
+        // ============================================
+        
+        function renderDashboard() {
+            if (APP_STATE.analyzedData.length === 0) return;
+            
+            const data = APP_STATE.analyzedData;
+            APP_STATE.filteredData = data;
+            
+            // Actualizar KPIs
+            renderKPIs(data);
+            
+            // Renderizar gráficos
+            renderCharts(data);
+            
+            // Renderizar tabla
+            renderDataTable(data);
+            
+            // Actualizar filtros
+            updateFilterOptions(data);
+        }
+        
+        function renderKPIs(data) {
+            const sentiments = { Positivo: 0, Neutral: 0, Negativo: 0 };
+            const types = {};
+            let totalLikes = 0, totalReplies = 0, totalViews = 0, highRisk = 0;
+            
+            data.forEach(row => {
+                sentiments[row.analysis.sentiment]++;
+                types[row.analysis.type] = (types[row.analysis.type] || 0) + 1;
+                if (row.analysis.risk === 'Alto') highRisk++;
+                totalLikes += parseInt(row['Favorite Count'] || 0);
+                totalReplies += parseInt(row['Reply Count'] || 0);
+                totalViews += parseInt(row['View Count'] || 0);
+            });
+            
+            const kpis = [
+                { label: 'Total', value: data.length, icon: 'fa-comments', color: 'text-blue-600' },
+                { label: 'Positivos', value: sentiments.Positivo, icon: 'fa-smile', color: 'text-green-600' },
+                { label: 'Neutrales', value: sentiments.Neutral, icon: 'fa-meh', color: 'text-yellow-600' },
+                { label: 'Negativos', value: sentiments.Negativo, icon: 'fa-frown', color: 'text-red-600' },
+                { label: 'Riesgo Alto', value: highRisk, icon: 'fa-exclamation-triangle', color: 'text-orange-600' },
+                { label: 'Likes', value: totalLikes, icon: 'fa-heart', color: 'text-pink-600' }
+            ];
+            
+            document.getElementById('kpi-container').innerHTML = kpis.map(kpi => `
+                <div class="bg-white rounded-xl p-4 shadow-sm kpi-card animate-fade-in">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-sm text-gray-600">${kpi.label}</span>
+                        <i class="fas ${kpi.icon} ${kpi.color} text-xl"></i>
+                    </div>
+                    <div class="text-3xl font-bold text-gray-900">${kpi.value.toLocaleString()}</div>
+                </div>
+            `).join('');
+        }
+        
+        function renderCharts(data) {
+            // Destruir gráficos existentes
+            Object.values(APP_STATE.charts).forEach(chart => chart.destroy());
+            APP_STATE.charts = {};
+            
+            // 1. Gráfico de Sentimientos
+            const sentimentCtx = document.getElementById('chart-sentiment').getContext('2d');
+            const sentimentData = {
+                Positivo: data.filter(r => r.analysis.sentiment === 'Positivo').length,
+                Neutral: data.filter(r => r.analysis.sentiment === 'Neutral').length,
+                Negativo: data.filter(r => r.analysis.sentiment === 'Negativo').length
+            };
+            
+            APP_STATE.charts.sentiment = new Chart(sentimentCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(sentimentData),
+                    datasets: [{
+                        data: Object.values(sentimentData),
+                        backgroundColor: ['#10B981', '#F59E0B', '#EF4444']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom' } }
+                }
+            });
+            
+            // 2. Gráfico de Tipos
+            const typesCtx = document.getElementById('chart-types').getContext('2d');
+            const typeCount = {};
+            data.forEach(r => { typeCount[r.analysis.type] = (typeCount[r.analysis.type] || 0) + 1; });
+            
+            APP_STATE.charts.types = new Chart(typesCtx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(typeCount),
+                    datasets: [{
+                        label: 'Cantidad',
+                        data: Object.values(typeCount),
+                        backgroundColor: '#DC2626'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } }
+                }
+            });
+            
+            // 3. Gráfico por Día
+            const dailyCtx = document.getElementById('chart-daily').getContext('2d');
+            const dailyData = {};
+            data.forEach(r => {
+                const date = (r['Created At'] || '').toString().substring(0, 10);
+                dailyData[date] = (dailyData[date] || 0) + 1;
+            });
+            
+            APP_STATE.charts.daily = new Chart(dailyCtx, {
+                type: 'line',
+                data: {
+                    labels: Object.keys(dailyData).sort(),
+                    datasets: [{
+                        label: 'Comentarios',
+                        data: Object.values(dailyData),
+                        borderColor: '#DC2626',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+            
+            // 4. Gráfico de Temas
+            const topicsCtx = document.getElementById('chart-topics').getContext('2d');
+            const topicCount = {};
+            data.forEach(r => { topicCount[r.analysis.topic] = (topicCount[r.analysis.topic] || 0) + 1; });
+            
+            APP_STATE.charts.topics = new Chart(topicsCtx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(topicCount),
+                    datasets: [{
+                        label: 'Menciones',
+                        data: Object.values(topicCount),
+                        backgroundColor: '#991B1B'
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+        
+        function renderDataTable(data) {
+            if (APP_STATE.dataTable) {
+                APP_STATE.dataTable.destroy();
+            }
+            
+            const tbody = document.getElementById('comments-table-body');
+            tbody.innerHTML = data.map(row => `
+                <tr class="cursor-pointer hover:bg-gray-50" onclick="showCommentDetail('${row['Tweet Id']}')">
+                    <td class="text-sm">${(row['Created At'] || '').toString().substring(0, 10)}</td>
+                    <td class="text-sm font-semibold">${row['User Name'] || 'Anónimo'}</td>
+                    <td class="text-sm">${(row['Full Text'] || '').toString().substring(0, 80)}...</td>
+                    <td><span class="px-2 py-1 rounded-full text-xs font-semibold ${getSentimentBadge(row.analysis.sentiment)}">${row.analysis.sentiment}</span></td>
+                    <td class="text-sm">${row.analysis.type}</td>
+                    <td class="text-sm">${row.analysis.topic}</td>
+                    <td><span class="px-2 py-1 rounded-full text-xs font-semibold ${getPriorityBadge(row.analysis.priority)}">${row.analysis.priority}</span></td>
+                    <td><span class="px-2 py-1 rounded-full text-xs font-semibold ${getRiskBadge(row.analysis.risk)}">${row.analysis.risk}</span></td>
+                    <td class="text-sm">${row['Favorite Count'] || 0}</td>
+                    <td class="text-sm">${row['Reply Count'] || 0}</td>
+                    <td class="text-sm">${row['View Count'] || 0}</td>
+                </tr>
+            `).join('');
+            
+            APP_STATE.dataTable = $('#comments-table').DataTable({
+                pageLength: 25,
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+                }
+            });
+        }
+        
+        function updateFilterOptions(data) {
+            const types = [...new Set(data.map(r => r.analysis.type))];
+            const topics = [...new Set(data.map(r => r.analysis.topic))];
+            
+            document.getElementById('filter-type').innerHTML = '<option value="">Todos los tipos</option>' +
+                types.map(t => `<option value="${t}">${t}</option>`).join('');
+            
+            document.getElementById('filter-topic').innerHTML = '<option value="">Todos los temas</option>' +
+                topics.map(t => `<option value="${t}">${t}</option>`).join('');
+        }
+        
+        function applyFilters() {
+            let data = APP_STATE.analyzedData;
+            
+            const sentimentFilter = document.getElementById('filter-sentiment').value;
+            const typeFilter = document.getElementById('filter-type').value;
+            const topicFilter = document.getElementById('filter-topic').value;
+            const priorityFilter = document.getElementById('filter-priority').value;
+            
+            if (sentimentFilter) data = data.filter(r => r.analysis.sentiment === sentimentFilter);
+            if (typeFilter) data = data.filter(r => r.analysis.type === typeFilter);
+            if (topicFilter) data = data.filter(r => r.analysis.topic === topicFilter);
+            if (priorityFilter) data = data.filter(r => r.analysis.priority === priorityFilter);
+            
+            APP_STATE.filteredData = data;
+            renderDataTable(data);
+        }
+        
+        // ============================================
+        // PANEL DE DETALLE
+        // ============================================
+        
+        function showCommentDetail(tweetId) {
+            const comment = APP_STATE.analyzedData.find(r => r['Tweet Id'] === tweetId);
+            if (!comment) return;
+            
+            document.getElementById('detail-content').innerHTML = `
+                <div class="space-y-4">
+                    <div>
+                        <h3 class="text-lg font-bold text-gray-900">${comment['User Name'] || 'Anónimo'}</h3>
+                        <p class="text-sm text-gray-600">@${comment['User Screen Name'] || 'usuario'}</p>
+                    </div>
+                    
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <p class="text-gray-800">${comment['Full Text']}</p>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-blue-50 rounded-lg p-3 text-center">
+                            <p class="text-sm text-gray-600">Sentimiento</p>
+                            <p class="text-lg font-bold ${comment.analysis.sentiment === 'Positivo' ? 'text-green-600' : comment.analysis.sentiment === 'Negativo' ? 'text-red-600' : 'text-yellow-600'}">${comment.analysis.sentiment}</p>
+                        </div>
+                        <div class="bg-purple-50 rounded-lg p-3 text-center">
+                            <p class="text-sm text-gray-600">Tipo</p>
+                            <p class="text-lg font-bold text-purple-600">${comment.analysis.type}</p>
+                        </div>
+                        <div class="bg-orange-50 rounded-lg p-3 text-center">
+                            <p class="text-sm text-gray-600">Tema</p>
+                            <p class="text-lg font-bold text-orange-600">${comment.analysis.topic}</p>
+                        </div>
+                        <div class="bg-red-50 rounded-lg p-3 text-center">
+                            <p class="text-sm text-gray-600">Prioridad</p>
+                            <p class="text-lg font-bold text-red-600">${comment.analysis.priority}</p>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-bold text-gray-900 mb-2">Métricas</h4>
+                        <div class="flex space-x-4 text-sm">
+                            <span><i class="fas fa-heart text-red-500"></i> ${comment['Favorite Count'] || 0}</span>
+                            <span><i class="fas fa-retweet text-green-500"></i> ${comment['Retweet Count'] || 0}</span>
+                            <span><i class="fas fa-comment text-blue-500"></i> ${comment['Reply Count'] || 0}</span>
+                            <span><i class="fas fa-eye text-gray-500"></i> ${comment['View Count'] || 0}</span>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-bold text-gray-900 mb-2">Palabras Clave</h4>
+                        <div class="flex flex-wrap gap-2">
+                            ${comment.analysis.keywords.map(k => `<span class="px-2 py-1 bg-gray-200 rounded-full text-xs">${k}</span>`).join('')}
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-50 rounded-lg p-3">
+                        <p class="text-sm text-gray-600">📝 ${comment.analysis.summary}</p>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('detail-panel').classList.add('translate-x-0');
+            document.getElementById('detail-panel').classList.remove('translate-x-full');
+        }
+        
+        function closeDetailPanel() {
+            document.getElementById('detail-panel').classList.add('translate-x-full');
+            document.getElementById('detail-panel').classList.remove('translate-x-0');
+        }
+        
         // ============================================
         // GENERACIÓN DE REPORTES
         // ============================================
         
         function generateReport(type) {
-            const summary = generateSummary();
-            let reportTitle = '';
-            
-            switch(type) {
-                case 'daily':
-                    reportTitle = 'Reporte Diario';
-                    break;
-                case 'weekly':
-                    reportTitle = 'Reporte Semanal';
-                    break;
-                case 'monthly':
-                    reportTitle = 'Reporte Mensual';
-                    break;
-                default:
-                    reportTitle = 'Reporte';
+            if (APP_STATE.analyzedData.length === 0) {
+                alert('No hay datos para generar el reporte');
+                return;
             }
-
-            currentReport = {
-                title: reportTitle,
-                date: new Date().toLocaleDateString('es-ES'),
-                summary,
-                type
+            
+            const data = APP_STATE.analyzedData;
+            const summary = {
+                total: data.length,
+                sentiments: {
+                    Positivo: data.filter(r => r.analysis.sentiment === 'Positivo').length,
+                    Neutral: data.filter(r => r.analysis.sentiment === 'Neutral').length,
+                    Negativo: data.filter(r => r.analysis.sentiment === 'Negativo').length
+                },
+                topics: {},
+                types: {},
+                highRisks: data.filter(r => r.analysis.risk === 'Alto').length
             };
-
-            displayReport(currentReport);
-            document.getElementById('export-buttons').style.display = 'block';
+            
+            data.forEach(r => {
+                summary.topics[r.analysis.topic] = (summary.topics[r.analysis.topic] || 0) + 1;
+                summary.types[r.analysis.type] = (summary.types[r.analysis.type] || 0) + 1;
+            });
+            
+            const mainTopics = Object.entries(summary.topics).sort((a, b) => b[1] - a[1]).slice(0, 3);
+            const mainTypes = Object.entries(summary.types).sort((a, b) => b[1] - a[1]).slice(0, 3);
+            
+            APP_STATE.currentReport = { type, summary };
+            
+            document.getElementById('report-output').classList.remove('hidden');
+            document.getElementById('report-title').textContent = 
+                type === 'daily' ? 'Reporte Diario' :
+                type === 'weekly' ? 'Reporte Semanal' :
+                type === 'monthly' ? 'Reporte Mensual' : 'Reporte Personalizado';
+            
+            document.getElementById('report-content').innerHTML = `
+                <div class="prose max-w-none">
+                    <div class="bg-gradient-to-r from-red-50 to-white rounded-xl p-6 mb-6">
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">Resumen Ejecutivo</h3>
+                        <p class="text-gray-700 leading-relaxed">
+                            Durante el período analizado, se procesaron <strong>${summary.total}</strong> comentarios 
+                            provenientes de la plataforma <strong>X (Twitter)</strong>. 
+                            El sentimiento general fue <strong>${summary.sentiments.Positivo > summary.sentiments.Negativo ? 'mayoritariamente positivo' : 'predominantemente negativo'}</strong>, 
+                            con un <strong>${((summary.sentiments.Positivo / summary.total) * 100).toFixed(1)}%</strong> de comentarios positivos 
+                            y un <strong>${((summary.sentiments.Negativo / summary.total) * 100).toFixed(1)}%</strong> de comentarios negativos.
+                        </p>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                        <div class="bg-white border rounded-xl p-6 text-center">
+                            <i class="fas fa-comments text-3xl text-blue-500 mb-2"></i>
+                            <p class="text-3xl font-bold text-gray-900">${summary.total}</p>
+                            <p class="text-gray-600">Total Comentarios</p>
+                        </div>
+                        <div class="bg-white border rounded-xl p-6 text-center">
+                            <i class="fas fa-smile text-3xl text-green-500 mb-2"></i>
+                            <p class="text-3xl font-bold text-green-600">${summary.sentiments.Positivo}</p>
+                            <p class="text-gray-600">Positivos</p>
+                        </div>
+                        <div class="bg-white border rounded-xl p-6 text-center">
+                            <i class="fas fa-frown text-3xl text-red-500 mb-2"></i>
+                            <p class="text-3xl font-bold text-red-600">${summary.sentiments.Negativo}</p>
+                            <p class="text-gray-600">Negativos</p>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div class="bg-white border rounded-xl p-6">
+                            <h4 class="font-bold text-gray-900 mb-3">Principales Temas</h4>
+                            <ul class="space-y-2">
+                                ${mainTopics.map(([topic, count]) => `<li class="flex justify-between"><span>${topic}</span><span class="font-bold">${count}</span></li>`).join('')}
+                            </ul>
+                        </div>
+                        <div class="bg-white border rounded-xl p-6">
+                            <h4 class="font-bold text-gray-900 mb-3">Tipos de Comentarios</h4>
+                            <ul class="space-y-2">
+                                ${mainTypes.map(([type, count]) => `<li class="flex justify-between"><span>${type}</span><span class="font-bold">${count}</span></li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-red-50 border border-red-200 rounded-xl p-6 mb-6">
+                        <h4 class="font-bold text-red-900 mb-3">⚠️ Riesgos Reputacionales</h4>
+                        <p class="text-red-800">Se identificaron <strong>${summary.highRisks}</strong> comentarios con riesgo reputacional alto que requieren atención inmediata.</p>
+                    </div>
+                    
+                    <div class="bg-white border rounded-xl p-6">
+                        <h4 class="font-bold text-gray-900 mb-3">Conclusiones y Recomendaciones</h4>
+                        <ul class="space-y-2 text-gray-700">
+                            <li>• Se recomienda fortalecer la atención en los temas de <strong>${mainTopics[0]?.[0] || 'interés general'}</strong>.</li>
+                            <li>• Implementar un protocolo de respuesta rápida para ${mainTypes[0]?.[0] || 'consultas'}.</li>
+                            <li>• Monitorear de cerca los comentarios negativos para prevenir crisis reputacionales.</li>
+                        </ul>
+                    </div>
+                </div>
+            `;
+            
+            // Scroll al reporte
+            document.getElementById('report-output').scrollIntoView({ behavior: 'smooth' });
         }
-
+        
+        function showCustomReportModal() {
+            document.getElementById('custom-report-modal').classList.remove('hidden');
+        }
+        
+        function closeCustomReportModal() {
+            document.getElementById('custom-report-modal').classList.add('hidden');
+        }
+        
         function generateCustomReport() {
             const startDate = document.getElementById('custom-start-date').value;
             const endDate = document.getElementById('custom-end-date').value;
@@ -718,96 +1310,65 @@
                 alert('Por favor selecciona ambas fechas');
                 return;
             }
-
+            
+            // Filtrar datos por fecha
+            const filtered = APP_STATE.analyzedData.filter(row => {
+                const date = (row['Created At'] || '').toString().substring(0, 10);
+                return date >= startDate && date <= endDate;
+            });
+            
+            if (filtered.length === 0) {
+                alert('No hay datos en el rango de fechas seleccionado');
+                return;
+            }
+            
+            const originalData = APP_STATE.analyzedData;
+            APP_STATE.analyzedData = filtered;
             generateReport('custom');
+            APP_STATE.analyzedData = originalData;
+            
             closeCustomReportModal();
         }
-
-        function displayReport(report) {
-            const summary = report.summary;
-            const html = `
-                <div class="card">
-                    <h2>${report.title} - ${report.date}</h2>
-                    
-                    <h3>Resumen Ejecutivo</h3>
-                    <p style="font-size: 1.1em; line-height: 1.6; margin: 20px 0;">
-                        Durante el período analizado, se procesaron <strong>${summary.totalComments}</strong> comentarios. 
-                        El sentimiento general fue <strong>${summary.sentiments.positive > summary.sentiments.negative ? 'mayoritariamente positivo' : 'predominantemente negativo'}</strong>, 
-                        con un <strong>${((summary.sentiments.positive / summary.totalComments) * 100).toFixed(1)}%</strong> de comentarios positivos 
-                        y un <strong>${((summary.sentiments.negative / summary.totalComments) * 100).toFixed(1)}%</strong> de comentarios negativos.
-                    </p>
-
-                    <h3>Indicadores Clave</h3>
-                    <table>
-                        <tr><td>Total Comentarios</td><td><strong>${summary.totalComments}</strong></td></tr>
-                        <tr><td>Positivos</td><td><strong class="text-success">${summary.sentiments.positive}</strong></td></tr>
-                        <tr><td>Neutrales</td><td><strong>${summary.sentiments.neutral}</strong></td></tr>
-                        <tr><td>Negativos</td><td><strong class="text-danger">${summary.sentiments.negative}</strong></td></tr>
-                    </table>
-
-                    <h3 style="margin-top: 30px;">Principales Temas</h3>
-                    <ul>
-                        ${summary.mainTopics.map(t => `<li><strong>${t.topic}</strong>: ${t.count} menciones</li>`).join('')}
-                    </ul>
-
-                    ${summary.mainCriticisms.length > 0 ? `
-                        <h3 style="margin-top: 30px;">Principales Críticas</h3>
-                        <ul>
-                            ${summary.mainCriticisms.map(c => `<li>"${c.text}" - ${c.user}</li>`).join('')}
-                        </ul>
-                    ` : ''}
-
-                    <h3 style="margin-top: 30px;">Conclusiones y Recomendaciones</h3>
-                    <p style="line-height: 1.6;">
-                        Basado en el análisis de los comentarios, se recomienda:
-                        <ul>
-                            <li>Fortalecer la atención al cliente para reducir los comentarios negativos.</li>
-                            <li>Mejorar la comunicación sobre horarios y servicios disponibles.</li>
-                            <li>Monitorear de cerca los temas emergentes: <strong>${summary.trends.mainEmergingTopic}</strong>.</li>
-                            ${summary.reputationalRisks.length > 0 ? '<li><strong>ATENCIÓN:</strong> Se detectaron riesgos reputacionales que requieren acción inmediata.</li>' : ''}
-                        </ul>
-                    </p>
-                </div>
-            `;
-
-            document.getElementById('report-output').innerHTML = html;
-        }
-
-        // ============================================
-        // FUNCIONES DE EXPORTACIÓN
-        // ============================================
         
         function exportReport(format) {
-            if (!currentReport) {
+            if (!APP_STATE.currentReport) {
                 alert('Primero genera un reporte');
                 return;
             }
-
-            let content = '';
-            let filename = `reporte-${currentReport.type}-${Date.now()}`;
-            let mimeType = '';
-
+            
+            const reportContent = document.getElementById('report-content').innerText;
+            const reportTitle = document.getElementById('report-title').textContent;
+            let filename = `reporte-${Date.now()}`;
+            let content, mimeType;
+            
             switch(format) {
-                case 'csv':
-                    content = generateCSV();
-                    mimeType = 'text/csv';
-                    filename += '.csv';
-                    break;
-                case 'html':
-                    content = document.getElementById('report-output').innerHTML;
-                    mimeType = 'text/html';
-                    filename += '.html';
-                    break;
+                case 'pdf':
+                    const { jsPDF } = window.jspdf;
+                    const doc = new jsPDF();
+                    doc.text(reportTitle, 20, 20);
+                    doc.text(reportContent.substring(0, 1000), 20, 30);
+                    doc.save(`${filename}.pdf`);
+                    return;
+                
                 case 'excel':
                     content = generateCSV();
                     mimeType = 'application/vnd.ms-excel';
                     filename += '.xls';
                     break;
-                case 'pdf':
-                    window.print();
-                    return;
+                
+                case 'csv':
+                    content = generateCSV();
+                    mimeType = 'text/csv';
+                    filename += '.csv';
+                    break;
+                
+                case 'html':
+                    content = document.getElementById('report-output').outerHTML;
+                    mimeType = 'text/html';
+                    filename += '.html';
+                    break;
             }
-
+            
             const blob = new Blob([content], { type: mimeType });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -816,303 +1377,139 @@
             a.click();
             URL.revokeObjectURL(url);
         }
-
+        
         function generateCSV() {
-            let csv = 'Usuario,Plataforma,Fecha,Comentario,Sentimiento,Temas,Riesgo\n';
-            analyzedComments.forEach(c => {
-                csv += `"${c.user}","${c.platform}","${c.date}","${c.text}","${c.analysis.sentiment}","${c.analysis.topics.join('; ')}","${c.analysis.riskLevel}"\n`;
+            let csv = 'Fecha,Usuario,Comentario,Sentimiento,Tipo,Tema,Prioridad,Riesgo\n';
+            APP_STATE.analyzedData.forEach(row => {
+                csv += `"${row['Created At']}","${row['User Name']}","${row['Full Text']}","${row.analysis.sentiment}","${row.analysis.type}","${row.analysis.topic}","${row.analysis.priority}","${row.analysis.risk}"\n`;
             });
             return csv;
         }
-
-        function exportChart(chartId) {
-            const canvas = document.getElementById(chartId);
-            html2canvas(canvas).then(canvas => {
-                const link = document.createElement('a');
-                link.download = `grafico-${Date.now()}.png`;
-                link.href = canvas.toDataURL();
-                link.click();
-            });
-        }
-
-        // ============================================
-        // VISUALIZACIÓN Y DASHBOARD
-        // ============================================
         
-        function renderDashboard() {
-            const summary = generateSummary();
-            
-            // Resumen ejecutivo
-            document.getElementById('executive-summary').innerHTML = `
-                Durante el período analizado, se procesaron <strong>${summary.totalComments}</strong> comentarios. 
-                El sentimiento general es <strong>${summary.sentiments.positive > summary.sentiments.negative ? 'mayoritariamente positivo' : 'predominantemente negativo'}</strong>. 
-                Los temas más mencionados son: <strong>${summary.mainTopics.slice(0, 3).map(t => t.topic).join(', ')}</strong>.
-            `;
-
-            // Indicadores
-            const indicatorsGrid = document.getElementById('indicators-grid');
-            indicatorsGrid.innerHTML = `
-                <div class="stat-card">
-                    <div class="stat-label">Total Comentarios</div>
-                    <div class="stat-value">${summary.totalComments}</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Positivos</div>
-                    <div class="stat-value text-success">${summary.sentiments.positive}</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Neutrales</div>
-                    <div class="stat-value text-warning">${summary.sentiments.neutral}</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Negativos</div>
-                    <div class="stat-value text-danger">${summary.sentiments.negative}</div>
-                </div>
-            `;
-
-            // Gráfico de sentimientos
-            renderSentimentChart(summary);
-            
-            // Gráfico de temas
-            renderTopicsChart(summary);
-
-            // Tabla de comentarios
-            renderCommentsTable();
-        }
-
-        function renderSentimentChart(summary) {
-            const ctx = document.getElementById('sentimentChart').getContext('2d');
-            
-            if (sentimentChartInstance) {
-                sentimentChartInstance.destroy();
-            }
-
-            sentimentChartInstance = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Positivos', 'Neutrales', 'Negativos'],
-                    datasets: [{
-                        data: [summary.sentiments.positive, summary.sentiments.neutral, summary.sentiments.negative],
-                        backgroundColor: ['#28a745', '#ffc107', '#dc3545']
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false
-                }
-            });
-        }
-
-        function renderTopicsChart(summary) {
-            const ctx = document.getElementById('topicsChart').getContext('2d');
-            
-            if (topicsChartInstance) {
-                topicsChartInstance.destroy();
-            }
-
-            topicsChartInstance = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: summary.mainTopics.map(t => t.topic),
-                    datasets: [{
-                        label: 'Menciones',
-                        data: summary.mainTopics.map(t => t.count),
-                        backgroundColor: '#0056b3'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false
-                }
-            });
-        }
-
-        function renderCommentsTable() {
-            const tbody = document.querySelector('#comments-table tbody');
-            tbody.innerHTML = analyzedComments.map(c => `
-                <tr onclick="openCommentDetail(${c.id})" style="cursor: pointer;">
-                    <td>${c.user}</td>
-                    <td>${c.platform}</td>
-                    <td>${c.text.substring(0, 50)}...</td>
-                    <td><span class="badge badge-${c.analysis.sentiment === 'positive' ? 'success' : c.analysis.sentiment === 'negative' ? 'danger' : 'warning'}">${c.analysis.sentiment}</span></td>
-                    <td><span class="badge badge-${c.analysis.riskLevel === 'Alto' ? 'danger' : c.analysis.riskLevel === 'Medio' ? 'warning' : 'info'}">${c.analysis.riskLevel}</span></td>
-                </tr>
-            `).join('');
-        }
-
-        function openCommentDetail(id) {
-            const comment = analyzedComments.find(c => c.id === id);
-            if (!comment) return;
-
-            document.getElementById('detail-content').innerHTML = `
-                <div class="card">
-                    <h3>${comment.user}</h3>
-                    <p><strong>Plataforma:</strong> ${comment.platform}</p>
-                    <p><strong>Fecha:</strong> ${new Date(comment.date).toLocaleDateString('es-ES')}</p>
-                    <p><strong>Comentario:</strong></p>
-                    <blockquote style="background: #f8f9fa; padding: 15px; border-left: 4px solid #0056b3; margin: 10px 0;">
-                        ${comment.text}
-                    </blockquote>
-                    
-                    <h3>Análisis</h3>
-                    <table>
-                        <tr><td>Sentimiento</td><td><span class="badge badge-${comment.analysis.sentiment === 'positive' ? 'success' : comment.analysis.sentiment === 'negative' ? 'danger' : 'warning'}">${comment.analysis.sentiment}</span></td></tr>
-                        <tr><td>Temas</td><td>${comment.analysis.topics.join(', ')}</td></tr>
-                        <tr><td>Riesgo Reputacional</td><td><span class="badge badge-${comment.analysis.riskLevel === 'Alto' ? 'danger' : comment.analysis.riskLevel === 'Medio' ? 'warning' : 'info'}">${comment.analysis.riskLevel}</span></td></tr>
-                        <tr><td>¿Es consulta?</td><td>${comment.analysis.isQuery ? '✅ Sí' : '❌ No'}</td></tr>
-                        <tr><td>¿Es felicitación?</td><td>${comment.analysis.isCongratulation ? '✅ Sí' : '❌ No'}</td></tr>
-                    </table>
-                    
-                    <h3>Métricas</h3>
-                    <p>👍 Likes: ${comment.likes} | 🔄 Shares: ${comment.shares}</p>
-                </div>
-            `;
-
-            document.getElementById('detail-panel').classList.add('open');
-        }
-
-        function closeDetailPanel() {
-            document.getElementById('detail-panel').classList.remove('open');
-        }
-
         // ============================================
         // CONFIGURACIÓN
         // ============================================
         
-        function loadConfig() {
-            const savedConfig = localStorage.getItem('appConfig');
-            if (savedConfig) {
-                appConfig = JSON.parse(savedConfig);
-            }
-            updateConfigUI();
-        }
-
-        function updateConfigUI() {
-            document.getElementById('config-institution-name').value = appConfig.institution.name;
-            document.getElementById('config-logo-url').value = appConfig.institution.logoPath;
-            document.getElementById('config-primary-color').value = appConfig.branding.primaryColor;
-            document.getElementById('config-secondary-color').value = appConfig.branding.secondaryColor;
-            document.getElementById('config-positive-keywords').value = appConfig.keywords.positive.join(', ');
-            document.getElementById('config-negative-keywords').value = appConfig.keywords.negative.join(', ');
+        function renderConfigPanel() {
+            document.getElementById('config-name').value = appConfig.institutionName;
+            document.getElementById('config-color').value = appConfig.primaryColor;
+            document.getElementById('config-positive-words').value = appConfig.sentimentWords.positive.join(', ');
+            document.getElementById('config-negative-words').value = appConfig.sentimentWords.negative.join(', ');
             
-            // Categorías de temas
-            const topicsContainer = document.getElementById('topics-config-container');
-            topicsContainer.innerHTML = appConfig.topicCategories.map((cat, index) => `
-                <div class="form-group">
-                    <label>Categoría ${index + 1}:</label>
-                    <input type="text" class="form-control topic-name" value="${cat.name}" data-index="${index}">
-                    <label>Palabras clave (separadas por coma):</label>
-                    <input type="text" class="form-control topic-keywords" value="${cat.keywords.join(', ')}" data-index="${index}">
+            const topicsConfig = document.getElementById('topics-config');
+            topicsConfig.innerHTML = appConfig.topics.map((topic, index) => `
+                <div class="mb-4 p-4 bg-gray-50 rounded-lg">
+                    <div class="flex justify-between items-center mb-2">
+                        <input type="text" class="topic-name font-bold bg-transparent border-b-2 border-gray-300 focus:border-red-500 outline-none" value="${topic.name}" data-index="${index}">
+                        <button onclick="removeTopic(${index})" class="text-red-600 hover:text-red-800">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                    <input type="text" class="topic-keywords w-full px-3 py-2 border rounded-lg text-sm" value="${topic.keywords.join(', ')}" data-index="${index}" placeholder="Palabras clave separadas por coma">
                 </div>
             `).join('');
-
-            // Indicadores visibles
-            const indicatorsContainer = document.getElementById('indicators-config-container');
-            const allIndicators = ['totalComments', 'positiveSentiment', 'neutralSentiment', 'negativeSentiment', 'mainTopics', 'mainCriticisms', 'frequentQueries', 'congratulations', 'reputationalRisks', 'trends'];
-            indicatorsContainer.innerHTML = allIndicators.map(indicator => `
-                <div style="margin: 5px 0;">
-                    <label>
-                        <input type="checkbox" class="indicator-checkbox" value="${indicator}" 
-                            ${appConfig.dashboard.visibleIndicators.includes(indicator) ? 'checked' : ''}>
-                        ${indicator}
-                    </label>
-                </div>
-            `).join('');
-
-            // Actualizar UI
-            document.getElementById('institution-name-display').textContent = appConfig.institution.name;
-            document.documentElement.style.setProperty('--primary', appConfig.branding.primaryColor);
-            document.documentElement.style.setProperty('--secondary', appConfig.branding.secondaryColor);
         }
-
-        function saveConfig() {
-            appConfig.institution.name = document.getElementById('config-institution-name').value;
-            appConfig.institution.logoPath = document.getElementById('config-logo-url').value;
-            appConfig.branding.primaryColor = document.getElementById('config-primary-color').value;
-            appConfig.branding.secondaryColor = document.getElementById('config-secondary-color').value;
-            appConfig.keywords.positive = document.getElementById('config-positive-keywords').value.split(',').map(k => k.trim());
-            appConfig.keywords.negative = document.getElementById('config-negative-keywords').value.split(',').map(k => k.trim());
-            
-            // Guardar categorías de temas
-            const topicNames = document.querySelectorAll('.topic-name');
-            const topicKeywords = document.querySelectorAll('.topic-keywords');
-            appConfig.topicCategories = [];
-            topicNames.forEach((nameInput, index) => {
-                appConfig.topicCategories.push({
-                    name: nameInput.value,
-                    keywords: topicKeywords[index].value.split(',').map(k => k.trim())
-                });
-            });
-
-            // Guardar indicadores visibles
-            const checkedIndicators = document.querySelectorAll('.indicator-checkbox:checked');
-            appConfig.dashboard.visibleIndicators = Array.from(checkedIndicators).map(cb => cb.value);
-
-            localStorage.setItem('appConfig', JSON.stringify(appConfig));
-            updateConfigUI();
-            alert('✅ Configuración guardada exitosamente');
-            analyzeComments();
-            renderDashboard();
-        }
-
-        function resetConfig() {
-            if (confirm('¿Estás seguro de restablecer la configuración predeterminada?')) {
-                localStorage.removeItem('appConfig');
-                location.reload();
-            }
-        }
-
-        function addTopicCategory() {
-            appConfig.topicCategories.push({ name: 'Nueva Categoría', keywords: [] });
-            updateConfigUI();
-        }
-
-        function updateConfig() {
-            // Actualización en tiempo real
-            saveConfig();
-        }
-
-        // ============================================
-        // NAVEGACIÓN
-        // ============================================
         
-        function navigateTo(view) {
-            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        function addTopic() {
+            appConfig.topics.push({ name: 'Nuevo Tema', keywords: [] });
+            renderConfigPanel();
+        }
+        
+        function removeTopic(index) {
+            appConfig.topics.splice(index, 1);
+            renderConfigPanel();
+        }
+        
+        function saveConfig() {
+            appConfig.institutionName = document.getElementById('config-name').value;
+            appConfig.primaryColor = document.getElementById('config-color').value;
+            appConfig.sentimentWords.positive = document.getElementById('config-positive-words').value.split(',').map(s => s.trim().toLowerCase());
+            appConfig.sentimentWords.negative = document.getElementById('config-negative-words').value.split(',').map(s => s.trim().toLowerCase());
             
-            document.getElementById(`view-${view}`).classList.add('active');
-            event.target.classList.add('active');
+            // Guardar temas
+            document.querySelectorAll('.topic-name').forEach((input, index) => {
+                appConfig.topics[index].name = input.value;
+            });
             
-            if (view === 'dashboard') {
+            document.querySelectorAll('.topic-keywords').forEach((input, index) => {
+                appConfig.topics[index].keywords = input.value.split(',').map(s => s.trim().toLowerCase());
+            });
+            
+            localStorage.setItem('mml-social-listening-config', JSON.stringify(appConfig));
+            
+            // Reanalizar datos si existen
+            if (APP_STATE.analyzedData.length > 0) {
+                APP_STATE.analyzedData = APP_STATE.analyzedData.map(row => analyzeComment(row));
                 renderDashboard();
             }
             
-            if (view === 'config') {
-                loadConfig();
-                updateConfigUI();
-            }
+            alert('✅ Configuración guardada exitosamente');
         }
-
-        function showCustomReportModal() {
-            document.getElementById('custom-report-modal').style.display = 'flex';
-        }
-
-        function closeCustomReportModal() {
-            document.getElementById('custom-report-modal').style.display = 'none';
-        }
-
+        
         // ============================================
-        // INICIALIZACIÓN
+        // UTILIDADES DE UI
         // ============================================
         
-        function init() {
-            loadConfig();
-            analyzeComments();
-            renderDashboard();
+        function getSentimentBadge(sentiment) {
+            return sentiment === 'Positivo' ? 'bg-green-100 text-green-800' :
+                   sentiment === 'Negativo' ? 'bg-red-100 text-red-800' :
+                   'bg-yellow-100 text-yellow-800';
         }
-
-        // Iniciar la aplicación cuando el DOM esté listo
-        document.addEventListener('DOMContentLoaded', init);
+        
+        function getPriorityBadge(priority) {
+            return priority === 'Alta' ? 'bg-red-100 text-red-800' :
+                   priority === 'Media' ? 'bg-yellow-100 text-yellow-800' :
+                   'bg-green-100 text-green-800';
+        }
+        
+        function getRiskBadge(risk) {
+            return risk === 'Alto' ? 'bg-red-100 text-red-800' :
+                   risk === 'Medio' ? 'bg-orange-100 text-orange-800' :
+                   'bg-blue-100 text-blue-800';
+        }
+        
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('mobile-overlay');
+            
+            if (sidebar.classList.contains('-translate-x-full')) {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+            } else {
+                closeSidebar();
+            }
+        }
+        
+        function closeSidebar() {
+            document.getElementById('sidebar').classList.add('-translate-x-full');
+            document.getElementById('mobile-overlay').classList.add('hidden');
+        }
+        
+        // Cerrar sidebar al hacer clic en overlay
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('mobile-overlay').addEventListener('click', closeSidebar);
+            
+            // Cerrar panel de detalle con ESC
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeDetailPanel();
+                    closeCustomReportModal();
+                }
+            });
+            
+            // Hacer clic en área de carga
+            document.getElementById('file-upload-area').addEventListener('click', showFileUpload);
+            
+            // Fecha actual en header
+            const now = new Date();
+            document.getElementById('header-date').textContent = now.toLocaleDateString('es-PE', {
+                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+            });
+            
+            console.log('🚀 Social Listening Dashboard v1.0 inicializado');
+            console.log('📊 Desarrollado para la Municipalidad Metropolitana de Lima');
+            console.log('💡 Arquitectura preparada para futuras integraciones con APIs de IA');
+        });
     </script>
 </body>
 </html>
