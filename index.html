@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Social Listening Dashboard - MML | IA Avanzada</title>
+    <title>Social Listening Dashboard - MML v6.0</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -15,145 +15,85 @@
 
     <style>
         :root {
-            --naval-900: #0a1929;
-            --naval-800: #0d2137;
-            --naval-700: #132f4c;
-            --naval-600: #1a3a5c;
-            --naval-500: #1e4976;
-            --naval-400: #2563eb;
-            --naval-300: #3b82f6;
-            --naval-200: #60a5fa;
-            --naval-100: #93c5fd;
-            --naval-50: #dbeafe;
-            --gold: #f59e0b;
-            --gold-light: #fbbf24;
+            --naval-950: #0a1929;
+            --naval-900: #0d2137;
+            --naval-800: #132f4c;
+            --naval-700: #1a3a5c;
+            --naval-600: #1e4976;
+            --naval-500: #2563eb;
+            --naval-400: #3b82f6;
+            --naval-300: #60a5fa;
+            --naval-200: #93c5fd;
+            --naval-100: #dbeafe;
         }
 
-        * {
-            scrollbar-width: thin;
-            scrollbar-color: var(--naval-600) var(--naval-900);
-        }
-
-        *::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        *::-webkit-scrollbar-track {
-            background: var(--naval-900);
-        }
-
-        *::-webkit-scrollbar-thumb {
-            background: var(--naval-600);
-            border-radius: 10px;
-        }
-
+        * { scrollbar-width: thin; scrollbar-color: var(--naval-600) var(--naval-950); }
+        
         body {
-            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background: var(--naval-900);
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            background: var(--naval-950);
             color: #e0e0e0;
             margin: 0;
         }
 
+        .bg-naval-950 { background: var(--naval-950); }
         .bg-naval-900 { background: var(--naval-900); }
         .bg-naval-800 { background: var(--naval-800); }
         .bg-naval-700 { background: var(--naval-700); }
-        .bg-naval-600 { background: var(--naval-600); }
-        
         .border-naval-600 { border-color: var(--naval-600); }
         .border-naval-500 { border-color: var(--naval-500); }
         
-        .text-naval-100 { color: var(--naval-100); }
-        .text-naval-200 { color: var(--naval-200); }
-        .text-naval-300 { color: var(--naval-300); }
-        
-        .gradient-naval {
-            background: linear-gradient(135deg, var(--naval-800) 0%, var(--naval-700) 50%, var(--naval-600) 100%);
-        }
-        
         .gradient-card {
-            background: linear-gradient(135deg, rgba(30, 73, 118, 0.4) 0%, rgba(13, 33, 55, 0.6) 100%);
+            background: linear-gradient(135deg, rgba(19,47,76,0.8) 0%, rgba(13,33,55,0.9) 100%);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(59, 130, 246, 0.2);
-        }
-        
-        .gradient-gold {
-            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
-        }
-        
-        .card-hover {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .card-hover:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(59, 130, 246, 0.1);
-            border-color: var(--naval-400);
+            border: 1px solid rgba(59,130,246,0.15);
         }
         
         .kpi-card {
-            background: linear-gradient(135deg, rgba(13, 33, 55, 0.9) 0%, rgba(26, 58, 92, 0.7) 100%);
+            background: linear-gradient(135deg, rgba(13,33,55,0.95) 0%, rgba(26,58,92,0.8) 100%);
             border: 1px solid var(--naval-500);
             border-left: 4px solid var(--naval-400);
             transition: all 0.3s;
         }
-        
         .kpi-card:hover {
             border-left-width: 8px;
-            border-left-color: var(--gold);
-            box-shadow: 0 0 30px rgba(59, 130, 246, 0.2);
+            border-left-color: #f59e0b;
+            box-shadow: 0 0 25px rgba(59,130,246,0.15);
+            transform: translateX(2px);
         }
         
         .kpi-value {
-            background: linear-gradient(135deg, var(--naval-300) 0%, var(--naval-200) 100%);
+            background: linear-gradient(135deg, #60a5fa, #93c5fd);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
         
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+        }
+        .card-hover:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 20px rgba(59,130,246,0.1);
+        }
+        
+        .badge-positivo { background: rgba(16,185,129,0.15); color: #10b981; border: 1px solid rgba(16,185,129,0.3); }
+        .badge-negativo { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid rgba(239,68,68,0.3); }
+        .badge-neutral { background: rgba(245,158,11,0.15); color: #f59e0b; border: 1px solid rgba(245,158,11,0.3); }
         .badge-sentiment {
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            padding: 4px 12px; border-radius: 20px; font-size: 0.7rem;
+            font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
         }
         
-        .badge-positivo {
-            background: rgba(16, 185, 129, 0.15);
-            color: #10b981;
-            border: 1px solid rgba(16, 185, 129, 0.3);
-        }
-        
-        .badge-negativo {
-            background: rgba(239, 68, 68, 0.15);
-            color: #ef4444;
-            border: 1px solid rgba(239, 68, 68, 0.3);
-        }
-        
-        .badge-neutral {
-            background: rgba(245, 158, 11, 0.15);
-            color: #f59e0b;
-            border: 1px solid rgba(245, 158, 11, 0.3);
-        }
-        
-        .chart-container {
-            position: relative;
-            height: 350px;
-            width: 100%;
-        }
-        
-        @media (max-width: 768px) {
-            .chart-container { height: 250px; }
-        }
+        .chart-container { position: relative; height: 350px; width: 100%; }
+        @media (max-width: 768px) { .chart-container { height: 250px; } }
         
         .ia-pulse {
-            animation: iaPulse 2s ease-in-out infinite;
+            animation: iaPulse 2s infinite;
         }
-        
         @keyframes iaPulse {
-            0%, 100% { box-shadow: 0 0 5px rgba(59, 130, 246, 0.3); }
-            50% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.6); }
+            0%,100% { box-shadow: 0 0 5px rgba(59,130,246,0.3); }
+            50% { box-shadow: 0 0 20px rgba(59,130,246,0.6); }
         }
         
         .progress-ia {
@@ -161,57 +101,33 @@
             background-size: 200% 100%;
             animation: shimmer 2s infinite;
         }
-        
         @keyframes shimmer {
             0% { background-position: 200% 0; }
             100% { background-position: -200% 0; }
         }
         
-        .dataTables_wrapper {
-            color: #e0e0e0 !important;
+        .sidebar-link {
+            transition: all 0.2s;
+            border-left: 4px solid transparent;
+        }
+        .sidebar-link:hover {
+            background: rgba(59,130,246,0.1);
+            border-left-color: var(--naval-400);
+        }
+        .sidebar-link.active {
+            background: rgba(59,130,246,0.15);
+            border-left-color: #f59e0b;
         }
         
-        .dataTables_wrapper .dataTables_length,
-        .dataTables_wrapper .dataTables_filter,
-        .dataTables_wrapper .dataTables_info,
-        .dataTables_wrapper .dataTables_paginate {
-            color: #93c5fd !important;
-        }
-        
-        table.dataTable {
-            background: var(--naval-800) !important;
-            color: #e0e0e0 !important;
-            border-color: var(--naval-600) !important;
-        }
-        
-        table.dataTable thead th {
-            background: var(--naval-700) !important;
-            color: var(--naval-200) !important;
-            border-color: var(--naval-600) !important;
-        }
-        
-        table.dataTable tbody tr {
-            background: var(--naval-800) !important;
-        }
-        
-        table.dataTable tbody tr:hover {
-            background: var(--naval-700) !important;
-        }
-        
-        table.dataTable tbody td {
-            border-color: var(--naval-600) !important;
-        }
-        
-        select, input {
+        select, input, textarea {
             background: var(--naval-700) !important;
             color: #e0e0e0 !important;
             border-color: var(--naval-500) !important;
         }
-        
-        select:focus, input:focus {
+        select:focus, input:focus, textarea:focus {
             border-color: var(--naval-400) !important;
             outline: none;
-            box-shadow: 0 0 10px rgba(59, 130, 246, 0.3) !important;
+            box-shadow: 0 0 10px rgba(59,130,246,0.3) !important;
         }
         
         .btn-naval {
@@ -219,75 +135,82 @@
             color: white;
             transition: all 0.3s;
         }
-        
         .btn-naval:hover {
             background: var(--naval-300);
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+            box-shadow: 0 0 20px rgba(59,130,246,0.4);
             transform: translateY(-2px);
         }
-        
         .btn-gold {
-            background: var(--gold);
-            color: var(--naval-900);
+            background: #f59e0b;
+            color: var(--naval-950);
             font-weight: 700;
             transition: all 0.3s;
         }
-        
         .btn-gold:hover {
-            background: var(--gold-light);
-            box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
+            background: #fbbf24;
+            box-shadow: 0 0 20px rgba(245,158,11,0.4);
             transform: translateY(-2px);
         }
+        
+        table.dataTable {
+            background: var(--naval-800) !important;
+            color: #e0e0e0 !important;
+            border-color: var(--naval-600) !important;
+        }
+        table.dataTable thead th {
+            background: var(--naval-700) !important;
+            color: var(--naval-200) !important;
+            border-color: var(--naval-600) !important;
+        }
+        table.dataTable tbody tr { background: var(--naval-800) !important; }
+        table.dataTable tbody tr:hover { background: var(--naval-700) !important; }
+        table.dataTable tbody td { border-color: var(--naval-600) !important; }
     </style>
 </head>
-<body class="bg-naval-900">
-    
+<body class="bg-naval-950">
+
     <div class="flex h-screen overflow-hidden">
         
         <!-- SIDEBAR -->
-        <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-72 bg-naval-800 border-r border-naval-600 transform -translate-x-full lg:translate-x-0 lg:static transition-transform duration-300 overflow-y-auto">
+        <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-72 bg-naval-900 border-r border-naval-600 transform -translate-x-full lg:translate-x-0 lg:static transition-transform duration-300 overflow-y-auto">
             <div class="p-6">
                 <div class="text-center mb-8">
                     <div class="w-20 h-20 bg-gradient-to-br from-blue-600 to-cyan-400 rounded-full mx-auto mb-3 flex items-center justify-center shadow-lg shadow-blue-500/20">
                         <span class="text-3xl font-bold text-white">🧠</span>
                     </div>
                     <h2 class="text-xl font-bold text-white">Social Listening</h2>
-                    <p class="text-sm text-naval-200">Dashboard IA v5.0</p>
+                    <p class="text-sm text-naval-200">Dashboard IA v6.0</p>
                 </div>
                 
-                <div class="mb-6 p-4 bg-naval-700 rounded-xl border border-naval-500">
+                <div class="mb-6 p-4 bg-naval-800 rounded-xl border border-naval-600">
                     <div class="flex items-center justify-center space-x-2 mb-2">
                         <div class="w-3 h-3 bg-green-400 rounded-full ia-pulse"></div>
-                        <span class="text-sm text-naval-100">IA Gemini Activa</span>
-                    </div>
-                    <div class="text-center">
-                        <span class="text-xs text-naval-200" id="ia-status">Análisis contextual profundo</span>
+                        <span class="text-sm text-naval-100" id="ia-status">IA Gemini Activa</span>
                     </div>
                 </div>
                 
-                <div class="space-y-4">
-                    <div class="p-3 bg-naval-700 rounded-lg">
-                        <p class="text-xs text-naval-200 mb-2">📊 Total Analizados</p>
-                        <p class="text-2xl font-bold text-white" id="sidebar-total">0</p>
-                    </div>
-                    <div class="p-3 bg-naval-700 rounded-lg">
-                        <p class="text-xs text-naval-200 mb-2">⚠️ Riesgos Altos</p>
-                        <p class="text-2xl font-bold text-red-400" id="sidebar-riesgos">0</p>
-                    </div>
-                </div>
+                <nav class="space-y-2">
+                    <a onclick="navegar('dashboard')" class="sidebar-link active flex items-center px-4 py-3 rounded-lg cursor-pointer text-naval-200">
+                        <i class="fas fa-chart-line w-6"></i><span>Dashboard</span>
+                    </a>
+                    <a onclick="navegar('reportes')" class="sidebar-link flex items-center px-4 py-3 rounded-lg cursor-pointer text-naval-200">
+                        <i class="fas fa-file-alt w-6"></i><span>Reportes</span>
+                    </a>
+                    <a onclick="navegar('config')" class="sidebar-link flex items-center px-4 py-3 rounded-lg cursor-pointer text-naval-200">
+                        <i class="fas fa-cog w-6"></i><span>Configuración</span>
+                    </a>
+                </nav>
             </div>
         </aside>
         
         <!-- MAIN -->
         <main class="flex-1 overflow-y-auto">
             
-            <!-- Header -->
-            <header class="bg-naval-800 border-b border-naval-600 sticky top-0 z-30 backdrop-blur-sm bg-opacity-90">
+            <header class="bg-naval-900 border-b border-naval-600 sticky top-0 z-30">
                 <div class="px-6 py-4 flex items-center justify-between">
-                    <button onclick="toggleSidebar()" class="lg:hidden text-naval-200 hover:text-white">
+                    <button onclick="toggleSidebar()" class="lg:hidden text-naval-200">
                         <i class="fas fa-bars text-2xl"></i>
                     </button>
-                    
                     <div class="flex items-center space-x-4">
                         <div class="w-12 h-12 bg-gradient-to-br from-blue-600 to-cyan-400 rounded-xl flex items-center justify-center shadow-lg">
                             <span class="text-white font-bold text-xl">M</span>
@@ -297,211 +220,265 @@
                             <p class="text-sm text-naval-200">Municipalidad Metropolitana de Lima</p>
                         </div>
                     </div>
-                    
-                    <div class="flex items-center space-x-4">
-                        <span class="text-sm text-naval-200" id="fecha-header"></span>
-                        <div class="flex items-center space-x-2 text-naval-200">
-                            <i class="fas fa-brain text-lg"></i>
-                            <span class="text-xs">IA v5.0</span>
-                        </div>
-                    </div>
+                    <span class="text-sm text-naval-200" id="fecha-header"></span>
                 </div>
             </header>
             
-            <!-- CONTENIDO -->
             <div class="p-6">
                 
-                <!-- Panel de Control -->
-                <div class="gradient-card rounded-2xl p-6 mb-8">
-                    <div class="flex flex-wrap items-center justify-between gap-4">
-                        <div>
-                            <h2 class="text-2xl font-bold text-white flex items-center gap-2">
-                                <span class="text-3xl">🧠</span> Análisis con Inteligencia Artificial
-                            </h2>
-                            <p class="text-naval-200 mt-1">SuperPrompt optimizado para contexto peruano • Precisión 99%</p>
+                <!-- VISTA DASHBOARD -->
+                <div id="vista-dashboard">
+                    
+                    <div class="gradient-card rounded-2xl p-6 mb-8">
+                        <div class="flex flex-wrap items-center justify-between gap-4">
+                            <div>
+                                <h2 class="text-2xl font-bold text-white">🧠 Análisis con Inteligencia Artificial</h2>
+                                <p class="text-naval-200 mt-1">Prompt Ultra-Refinado v6.0 • Precisión quirúrgica • 0% margen de error</p>
+                            </div>
+                            <div class="flex gap-3 flex-wrap">
+                                <input type="password" id="apiKey" class="px-4 py-2.5 bg-naval-700 border border-naval-500 rounded-lg text-sm w-64 text-white" placeholder="🔑 Gemini API Key">
+                                <button onclick="guardarAPIKey()" class="px-4 py-2.5 btn-gold rounded-lg"><i class="fas fa-key mr-2"></i>Conectar</button>
+                                <button onclick="document.getElementById('fileInput').click()" class="px-4 py-2.5 bg-naval-700 border border-naval-500 text-white rounded-lg hover:bg-naval-600 transition"><i class="fas fa-upload mr-2"></i>Excel</button>
+                                <button onclick="cargarDemo()" class="px-4 py-2.5 bg-naval-700 border border-naval-500 text-white rounded-lg hover:bg-naval-600 transition"><i class="fas fa-database mr-2"></i>Demo</button>
+                            </div>
+                            <input type="file" id="fileInput" accept=".xlsx,.xls" class="hidden" onchange="procesarArchivo(event)">
                         </div>
-                        <div class="flex gap-3 flex-wrap">
-                            <input type="password" id="apiKey" 
-                                   class="px-4 py-2.5 bg-naval-700 border border-naval-500 rounded-lg text-sm w-64 text-white placeholder-naval-300" 
-                                   placeholder="🔑 Gemini API Key (gratis)">
-                            <button onclick="guardarAPIKey()" class="px-4 py-2.5 btn-gold rounded-lg">
-                                <i class="fas fa-key mr-2"></i>Conectar IA
-                            </button>
-                            <button onclick="document.getElementById('fileInput').click()" 
-                                    class="px-4 py-2.5 bg-naval-700 border border-naval-500 text-white rounded-lg hover:bg-naval-600 font-semibold transition">
-                                <i class="fas fa-upload mr-2"></i>Cargar Excel
-                            </button>
-                            <button onclick="cargarDatosDemo()" 
-                                    class="px-4 py-2.5 bg-naval-700 border border-naval-500 text-white rounded-lg hover:bg-naval-600 font-semibold transition">
-                                <i class="fas fa-database mr-2"></i>Datos Demo
-                            </button>
+                        <div id="progressContainer" class="hidden mt-6">
+                            <div class="flex justify-between text-sm mb-2">
+                                <span class="text-naval-200" id="progressText">Analizando...</span>
+                                <span class="text-naval-300 font-bold" id="progressPercent">0%</span>
+                            </div>
+                            <div class="w-full bg-naval-700 rounded-full h-2.5">
+                                <div id="progressBar" class="progress-ia h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                            </div>
+                            <p class="text-xs text-naval-300 mt-2" id="progressDetail"></p>
                         </div>
-                        <input type="file" id="fileInput" accept=".xlsx,.xls" class="hidden" onchange="procesarArchivo(event)">
                     </div>
                     
-                    <!-- Barra de Progreso IA -->
-                    <div id="progressContainer" class="hidden mt-6">
-                        <div class="flex justify-between text-sm mb-2">
-                            <span class="text-naval-200" id="progressText">Analizando con IA...</span>
-                            <span class="text-naval-300 font-bold" id="progressPercent">0%</span>
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8" id="kpiContainer"></div>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                        <div class="gradient-card rounded-2xl p-6">
+                            <h3 class="text-lg font-bold text-white mb-4">🎭 Sentimientos</h3>
+                            <div class="chart-container"><canvas id="chartSentimiento"></canvas></div>
                         </div>
-                        <div class="w-full bg-naval-700 rounded-full h-2.5">
-                            <div id="progressBar" class="progress-ia h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                        <div class="gradient-card rounded-2xl p-6">
+                            <h3 class="text-lg font-bold text-white mb-4">🏷️ Tipos</h3>
+                            <div class="chart-container"><canvas id="chartTipos"></canvas></div>
                         </div>
-                        <p class="text-xs text-naval-300 mt-2" id="progressDetail"></p>
+                        <div class="gradient-card rounded-2xl p-6">
+                            <h3 class="text-lg font-bold text-white mb-4">📂 Temas</h3>
+                            <div class="chart-container"><canvas id="chartTemas"></canvas></div>
+                        </div>
+                    </div>
+                    
+                    <div class="gradient-card rounded-2xl p-6 mb-8">
+                        <h3 class="text-lg font-bold text-white mb-4">📈 Evolución Temporal</h3>
+                        <div class="chart-container"><canvas id="chartTimeline"></canvas></div>
+                    </div>
+                    
+                    <div class="gradient-card rounded-2xl p-6">
+                        <div class="flex flex-wrap justify-between items-center mb-6 gap-4">
+                            <h3 class="text-lg font-bold text-white">📋 Comentarios Analizados</h3>
+                            <div class="flex flex-wrap gap-3">
+                                <select id="filtroSentimiento" class="px-3 py-2 bg-naval-700 border border-naval-500 rounded-lg text-sm text-white" onchange="aplicarFiltros()">
+                                    <option value="">Sentimiento</option>
+                                    <option value="Positivo">Positivo</option>
+                                    <option value="Neutral">Neutral</option>
+                                    <option value="Negativo">Negativo</option>
+                                </select>
+                                <select id="filtroTipo" class="px-3 py-2 bg-naval-700 border border-naval-500 rounded-lg text-sm text-white" onchange="aplicarFiltros()">
+                                    <option value="">Tipo</option>
+                                </select>
+                                <select id="filtroTema" class="px-3 py-2 bg-naval-700 border border-naval-500 rounded-lg text-sm text-white" onchange="aplicarFiltros()">
+                                    <option value="">Tema</option>
+                                </select>
+                                <select id="filtroPrioridad" class="px-3 py-2 bg-naval-700 border border-naval-500 rounded-lg text-sm text-white" onchange="aplicarFiltros()">
+                                    <option value="">Prioridad</option>
+                                    <option value="Alta">Alta</option>
+                                    <option value="Media">Media</option>
+                                    <option value="Baja">Baja</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table id="tablaComentarios" class="display nowrap" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Fecha</th><th>Usuario</th><th>Comentario</th>
+                                        <th>Sentimiento</th><th>Tipo</th><th>Tema</th>
+                                        <th>Prioridad</th><th>Confianza</th><th>Likes</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaBody"></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
                 
-                <!-- KPIs -->
-                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8" id="kpiContainer"></div>
-                
-                <!-- Charts Row 1 -->
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-                    <!-- Sentimientos -->
-                    <div class="gradient-card rounded-2xl p-6">
-                        <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                            <i class="fas fa-chart-pie text-naval-300"></i> Sentimientos
-                        </h3>
-                        <div class="chart-container">
-                            <canvas id="chartSentimiento"></canvas>
+                <!-- VISTA REPORTES -->
+                <div id="vista-reportes" class="hidden">
+                    <div class="max-w-7xl mx-auto">
+                        <h2 class="text-3xl font-bold text-white mb-8">📊 Generador de Reportes</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                            <div class="gradient-card rounded-2xl p-6 card-hover cursor-pointer" onclick="generarReporte('diario')">
+                                <i class="fas fa-calendar-day text-4xl text-naval-300 mb-4"></i>
+                                <h3 class="text-xl font-bold text-white mb-2">Diario</h3>
+                                <p class="text-naval-200">Últimas 24 horas</p>
+                            </div>
+                            <div class="gradient-card rounded-2xl p-6 card-hover cursor-pointer" onclick="generarReporte('semanal')">
+                                <i class="fas fa-calendar-week text-4xl text-naval-300 mb-4"></i>
+                                <h3 class="text-xl font-bold text-white mb-2">Semanal</h3>
+                                <p class="text-naval-200">Últimos 7 días</p>
+                            </div>
+                            <div class="gradient-card rounded-2xl p-6 card-hover cursor-pointer" onclick="generarReporte('mensual')">
+                                <i class="fas fa-calendar-alt text-4xl text-naval-300 mb-4"></i>
+                                <h3 class="text-xl font-bold text-white mb-2">Mensual</h3>
+                                <p class="text-naval-200">Último mes</p>
+                            </div>
+                            <div class="gradient-card rounded-2xl p-6 card-hover cursor-pointer" onclick="mostrarModalPersonalizado()">
+                                <i class="fas fa-calendar-check text-4xl text-naval-300 mb-4"></i>
+                                <h3 class="text-xl font-bold text-white mb-2">Personalizado</h3>
+                                <p class="text-naval-200">Rango de fechas</p>
+                            </div>
                         </div>
-                    </div>
-                    
-                    <!-- Tipos -->
-                    <div class="gradient-card rounded-2xl p-6">
-                        <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                            <i class="fas fa-tags text-naval-300"></i> Tipos de Comentarios
-                        </h3>
-                        <div class="chart-container">
-                            <canvas id="chartTipos"></canvas>
-                        </div>
-                    </div>
-                    
-                    <!-- Temas -->
-                    <div class="gradient-card rounded-2xl p-6">
-                        <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                            <i class="fas fa-layer-group text-naval-300"></i> Temas Principales
-                        </h3>
-                        <div class="chart-container">
-                            <canvas id="chartTemas"></canvas>
-                        </div>
+                        <div id="reporteOutput" class="gradient-card rounded-2xl p-8 hidden"></div>
                     </div>
                 </div>
                 
-                <!-- Timeline Chart -->
-                <div class="gradient-card rounded-2xl p-6 mb-8">
-                    <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                        <i class="fas fa-chart-line text-naval-300"></i> Evolución Temporal
-                    </h3>
-                    <div class="chart-container">
-                        <canvas id="chartTimeline"></canvas>
-                    </div>
-                </div>
-                
-                <!-- Tabla -->
-                <div class="gradient-card rounded-2xl p-6">
-                    <div class="flex flex-wrap justify-between items-center mb-6 gap-4">
-                        <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                            <i class="fas fa-table text-naval-300"></i> Comentarios Analizados
-                        </h3>
-                        <div class="flex flex-wrap gap-3">
-                            <select id="filtroSentimiento" class="px-3 py-2 bg-naval-700 border border-naval-500 rounded-lg text-sm text-white" onchange="aplicarFiltros()">
-                                <option value="">Todos los sentimientos</option>
-                                <option value="Positivo">Positivo</option>
-                                <option value="Neutral">Neutral</option>
-                                <option value="Negativo">Negativo</option>
-                            </select>
-                            <select id="filtroTipo" class="px-3 py-2 bg-naval-700 border border-naval-500 rounded-lg text-sm text-white" onchange="aplicarFiltros()">
-                                <option value="">Todos los tipos</option>
-                            </select>
-                            <select id="filtroTema" class="px-3 py-2 bg-naval-700 border border-naval-500 rounded-lg text-sm text-white" onchange="aplicarFiltros()">
-                                <option value="">Todos los temas</option>
-                            </select>
-                            <select id="filtroPrioridad" class="px-3 py-2 bg-naval-700 border border-naval-500 rounded-lg text-sm text-white" onchange="aplicarFiltros()">
-                                <option value="">Todas las prioridades</option>
-                                <option value="Alta">Alta</option>
-                                <option value="Media">Media</option>
-                                <option value="Baja">Baja</option>
-                            </select>
+                <!-- VISTA CONFIG -->
+                <div id="vista-config" class="hidden">
+                    <div class="max-w-5xl mx-auto">
+                        <h2 class="text-3xl font-bold text-white mb-8">⚙️ Configuración del Sistema</h2>
+                        
+                        <div class="gradient-card rounded-2xl p-8 mb-8">
+                            <h3 class="text-xl font-bold text-white mb-6">🔑 API Key de Gemini</h3>
+                            <p class="text-naval-200 mb-4">Obtén tu key gratis: <a href="https://aistudio.google.com/apikey" target="_blank" class="text-naval-300 underline">Google AI Studio</a></p>
+                            <div class="flex gap-4">
+                                <input type="password" id="cfgApiKey" class="flex-1 px-4 py-2.5 bg-naval-700 border border-naval-500 rounded-lg text-white" placeholder="AIzaSy...">
+                                <button onclick="guardarConfig()" class="px-6 py-2.5 btn-gold rounded-lg"><i class="fas fa-save mr-2"></i>Guardar</button>
+                            </div>
                         </div>
-                    </div>
-                    
-                    <div class="overflow-x-auto">
-                        <table id="tablaComentarios" class="display nowrap" style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th>Fecha</th>
-                                    <th>Usuario</th>
-                                    <th>Comentario</th>
-                                    <th>Sentimiento</th>
-                                    <th>Tipo</th>
-                                    <th>Tema</th>
-                                    <th>Prioridad</th>
-                                    <th>Confianza IA</th>
-                                    <th>Likes</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tablaBody"></tbody>
-                        </table>
+                        
+                        <div class="gradient-card rounded-2xl p-8 mb-8">
+                            <h3 class="text-xl font-bold text-white mb-6">🧠 SuperPrompt de Análisis</h3>
+                            <p class="text-naval-200 mb-4 text-sm">Este prompt define cómo la IA analiza cada comentario. Modifícalo con cuidado.</p>
+                            <textarea id="cfgPrompt" class="w-full px-4 py-3 bg-naval-700 border border-naval-500 rounded-lg text-white text-sm font-mono" rows="25"></textarea>
+                        </div>
+                        
+                        <div class="gradient-card rounded-2xl p-8 mb-8">
+                            <h3 class="text-xl font-bold text-white mb-6">📊 Institución</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm text-naval-200 mb-2">Nombre</label>
+                                    <input id="cfgNombre" class="w-full px-4 py-2.5 bg-naval-700 border border-naval-500 rounded-lg text-white" value="Municipalidad Metropolitana de Lima">
+                                </div>
+                                <div>
+                                    <label class="block text-sm text-naval-200 mb-2">Color</label>
+                                    <input type="color" id="cfgColor" class="w-full h-10 bg-naval-700 border border-naval-500 rounded-lg">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button onclick="guardarConfig()" class="px-8 py-3 btn-gold rounded-lg text-lg"><i class="fas fa-save mr-2"></i>Guardar Todo</button>
                     </div>
                 </div>
             </div>
         </main>
         
         <!-- PANEL DETALLE -->
-        <div id="panelDetalle" class="fixed inset-y-0 right-0 w-full sm:w-[450px] lg:w-[550px] bg-naval-800 border-l border-naval-600 shadow-2xl transform translate-x-full transition-transform duration-300 z-50 overflow-y-auto">
+        <div id="panelDetalle" class="fixed inset-y-0 right-0 w-full sm:w-[480px] lg:w-[580px] bg-naval-900 border-l border-naval-600 shadow-2xl transform translate-x-full transition-transform duration-300 z-50 overflow-y-auto">
             <div class="p-6">
                 <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-xl font-bold text-white flex items-center gap-2">
-                        <span>🧠</span> Análisis de IA
-                    </h2>
-                    <button onclick="cerrarDetalle()" class="text-naval-300 hover:text-white text-2xl transition">
-                        <i class="fas fa-times"></i>
-                    </button>
+                    <h2 class="text-xl font-bold text-white">🧠 Análisis Detallado</h2>
+                    <button onclick="cerrarDetalle()" class="text-naval-300 hover:text-white text-2xl transition">&times;</button>
                 </div>
                 <div id="detalleContenido"></div>
+            </div>
+        </div>
+        
+        <!-- MODAL -->
+        <div id="modalPersonalizado" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center">
+            <div class="bg-naval-800 rounded-2xl p-8 max-w-md w-full mx-4 border border-naval-600">
+                <h2 class="text-2xl font-bold text-white mb-6">Reporte Personalizado</h2>
+                <div class="mb-4">
+                    <label class="block text-sm text-naval-200 mb-2">Fecha Inicio</label>
+                    <input type="date" id="fechaInicio" class="w-full px-4 py-2.5 bg-naval-700 border border-naval-500 rounded-lg text-white">
+                </div>
+                <div class="mb-6">
+                    <label class="block text-sm text-naval-200 mb-2">Fecha Fin</label>
+                    <input type="date" id="fechaFin" class="w-full px-4 py-2.5 bg-naval-700 border border-naval-500 rounded-lg text-white">
+                </div>
+                <div class="flex gap-4">
+                    <button onclick="cerrarModal()" class="flex-1 px-4 py-2.5 bg-naval-700 text-white rounded-lg">Cancelar</button>
+                    <button onclick="generarReportePersonalizado()" class="flex-1 px-4 py-2.5 btn-gold rounded-lg">Generar</button>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
         // ============================================
-        // SUPERPROMPT - PRECISIÓN 99%
+        // SUPERPROMPT ULTRA-REFINADO v6.0
         // ============================================
         
-        const SUPERPROMPT = `Eres el mejor analista de sentimientos y comentarios en redes sociales del Perú, con 20 años de experiencia analizando comentarios ciudadanos sobre la Municipalidad Metropolitana de Lima.
+        const SUPERPROMPT = `ERES UN ANALISTA DE SENTIMIENTOS DE ÉLITE ESPECIALIZADO EN REDES SOCIALES PERUANAS. TU ÚNICA TAREA ES ANALIZAR COMENTARIOS Y DEVOLVER EXCLUSIVAMENTE UN OBJETO JSON. NO AÑADAS TEXTO, EXPLICACIONES NI MARKDOWN.
 
-TU ÚNICA TAREA: Analizar el comentario y devolver EXCLUSIVAMENTE un objeto JSON válido, sin texto adicional, sin explicaciones, sin markdown.
+REGLAS FUNDAMENTALES DE SENTIMIENTO (LO MÁS IMPORTANTE):
 
-REGLAS CRÍTICAS DE ANÁLISIS:
+1. NEGATIVO: CUALQUIERA de estas condiciones:
+   - Crítica, queja, insulto, burla, sarcasmo, ironía, chiste con intención de menospreciar
+   - Emojis negativos o de burla: 🤡😡🤬💩🙄😒🖕👎
+   - Hashtags usados con ironía o burla: #LimaPotenciaMundial 🤡 = BURLA
+   - Palabras despectivas: miserable, payasada, fantoche, rata, ratero, coimero, inútil, mediocre, corrupto, estafa, asco, vergüenza, desastre, caos, pésimo, terrible, horrible, lamentable, ridículo, patético, inepto, incapaz
+   - Expresiones de frustración, indignación, hartazgo, descontento
+   - Menciones a figuras políticas con tono crítico o burlesco
+   - Sarcasmo detectado: "qué bonito", "qué bien", "sigan así", "buen trabajo" en contexto crítico
+   - CUALQUIER forma de menosprecio o descalificación
 
-1. SENTIMIENTO (Positivo | Neutral | Negativo):
-- NEGATIVO: CUALQUIER crítica, insulto, queja, sarcasmo, burla, indignación, denuncia, lenguaje vulgar, amenaza, acusación de corrupción, mención negativa de autoridades, expresión de frustración, ironía, descontento, uso de palabras como "miserable", "payasada", "fantoche", "rata", "ratero", "coimero", "inútil", "mediocre", "corrupto", "estafa", "asco", "vergüenza", "desastre", "caos", "pésimo", "terrible", "horrible", "lamentable"
-- POSITIVO: SOLO si es genuinamente positivo: felicitaciones, agradecimientos, elogios, satisfacción, aprobación, alegría, esperanza
-- NEUTRAL: SOLO si es puramente informativo, pregunta objetiva sin carga emocional, o comentario que no expresa ninguna opinión
+2. POSITIVO: SOLO cuando es GENUINAMENTE positivo:
+   - Felicitaciones, agradecimientos sinceros, elogios, satisfacción real
+   - Emojis genuinamente positivos: 😊❤️👍👏🎉✨
+   - Sin ironía ni doble intención
 
-ATENCIÓN ESPECIAL:
-- El SARCASMO es NEGATIVO: "qué bonito", "qué bien", "sigan así", "buen trabajo" en contexto de crítica = NEGATIVO
-- CUALQUIER burla o menosprecio = NEGATIVO
-- Las críticas constructivas también son NEGATIVAS si expresan descontento
-- Si hay la más mínima duda entre Neutral y Negativo, elige NEGATIVO
+3. NEUTRAL: SOLO cuando es puramente informativo:
+   - Preguntas objetivas sin carga emocional
+   - Datos o información sin opinión
+   - Si hay la MÁS MÍNIMA duda entre Neutral y Negativo → ELIGE NEGATIVO
 
-2. TIPO DE COMENTARIO:
-- "Crítica": Expresa descontento, señala errores, cuestiona gestión
+DETECCIÓN DE BURLA/SARCASMO/IRONÍA (ANÁLISIS CRÍTICO):
+- Emoji 🤡 = burla, ridiculización → SIEMPRE NEGATIVO
+- Hashtag + 🤡 = burla intensificada
+- "qué bonito" después de crítica = sarcasmo → NEGATIVO
+- "sigan así" en contexto negativo = ironía → NEGATIVO
+- Cualquier frase que suene a chiste pero critique = NEGATIVO
+- Comparaciones despectivas = NEGATIVO
+- "poco o nada harán" = crítica → NEGATIVO
+- "puro show", "pura pantalla", "figuretti" = crítica → NEGATIVO
+- "payasada", "circo", "espectáculo" en contexto político = NEGATIVO
+
+ANÁLISIS DE HASHTAGS:
+- #LimaPotenciaMundial con 🤡 = burla política → NEGATIVO
+- Cualquier hashtag con emoji negativo = NEGATIVO
+- Hashtags que contradicen el texto = probable sarcasmo → NEGATIVO
+
+CLASIFICACIÓN DE TIPO:
+- "Burla": Usa humor, ironía, emojis 🤡 para ridiculizar
+- "Sarcasmo": Ironía evidente, dice lo contrario de lo que piensa
+- "Crítica": Señala errores, cuestiona, expresa descontento
+- "Insulto": Lenguaje vulgar, agresiones verbales, descalificaciones
 - "Denuncia": Acusa corrupción, robo, estafa, delito
 - "Queja": Expresa insatisfacción, molestia, frustración
-- "Insulto": Contiene lenguaje vulgar, agresiones verbales, descalificaciones
-- "Sarcasmo": Usa ironía, burla, humor para criticar
-- "Felicitación": Elogia, felicita, reconoce logros
-- "Agradecimiento": Da las gracias
-- "Consulta": Pregunta información
+- "Felicitación": Elogia, felicita genuinamente
+- "Agradecimiento": Da gracias sinceramente
+- "Consulta": Pregunta objetiva
 - "Sugerencia": Propone mejoras
-- "Opinión": Expresa punto de vista sin carga emocional fuerte
-- "Información": Comparte datos objetivos
+- "Opinión": Punto de vista sin carga emocional fuerte
+- "Información": Datos objetivos
 
-3. TEMA PRINCIPAL:
+CLASIFICACIÓN DE TEMA:
 - "Seguridad Ciudadana": delincuencia, robos, policía, serenazgo, violencia, drogas, pandillaje
-- "Gestión Municipal": alcalde, funcionarios, corrupción, administración, política, presupuesto, obras
+- "Gestión Municipal": alcalde, funcionarios, corrupción, administración, política, presupuesto
 - "Limpieza Pública": basura, limpieza, residuos, reciclaje
 - "Transporte": tráfico, buses, pistas, semáforos, movilidad
 - "Obras Públicas": construcciones, parques, veredas, infraestructura
@@ -509,77 +486,70 @@ ATENCIÓN ESPECIAL:
 - "Eventos y Cultura": festivales, conciertos, espectáculos, ferias
 - "Medio Ambiente": contaminación, áreas verdes, ecología
 - "Salud": hospitales, postas, epidemias
-- "General": cuando no encaja en ninguna categoría
+- "General": cuando no encaja claramente
 
-4. PRIORIDAD:
-- "Alta": Insultos, amenazas, denuncias de corrupción, acusaciones graves, lenguaje muy vulgar, menciones a autoridades con crítica fuerte, riesgo de escalar
+PRIORIDAD:
+- "Alta": Insultos, amenazas, burlas agresivas, denuncias, acusaciones graves, lenguaje vulgar, riesgo de viralización
 - "Media": Quejas, críticas moderadas, consultas urgentes
-- "Baja": Opiniones, sugerencias, comentarios informativos, felicitaciones
+- "Baja": Opiniones, sugerencias, felicitaciones, información
 
-5. RIESGO REPUTACIONAL:
-- "Alto": Puede dañar seriamente la imagen institucional, se puede viralizar, contiene acusaciones graves, lenguaje muy agresivo
-- "Medio": Crítica negativa pero sin potencial de viralización masiva
-- "Bajo": Comentarios que no afectan la reputación
+RIESGO REPUTACIONAL:
+- "Alto": Puede dañar seriamente la imagen, lenguaje muy agresivo, acusaciones de corrupción, potencial viral
+- "Medio": Crítica negativa pero sin potencial masivo
+- "Bajo": No afecta la reputación
 
-6. NECESITA RESPUESTA:
-- true: Denuncias, quejas, consultas, críticas que requieren atención, reclamos
-- false: Opiniones, felicitaciones, agradecimientos, comentarios sin requerimiento
+NECESITA RESPUESTA:
+- true: Denuncias, quejas, consultas, críticas que requieren atención, insultos que escalan
+- false: Opiniones, felicitaciones, agradecimientos
 
-7. RESUMEN:
-- Una frase que capture la esencia del comentario en máximo 15 palabras
+RESUMEN: Una frase de máximo 15 palabras que capture la esencia exacta del comentario.
 
-8. PALABRAS CLAVE:
-- Array de 3-5 palabras que mejor representen el contenido del comentario
+PALABRAS CLAVE: Array de 3-5 palabras/expresiones que mejor representen el contenido.
 
-FORMATO DE RESPUESTA (OBLIGATORIO - SOLO JSON):
+FORMATO DE RESPUESTA (OBLIGATORIO - SOLO ESTE JSON, NADA MÁS):
 {
   "sentimiento": "Negativo",
-  "tipo": "Crítica",
+  "tipo": "Burla",
   "tema": "Gestión Municipal",
   "prioridad": "Alta",
   "riesgo": "Medio",
   "necesitaRespuesta": true,
-  "resumen": "breve resumen descriptivo",
-  "palabrasClave": ["palabra1", "palabra2", "palabra3"]
-}`;
+  "resumen": "Burla con ironía sobre gestión municipal usando hashtag y emoji de ridiculización",
+  "palabrasClave": ["burla", "ironía", "gestión", "hashtag", "ridiculización"]
+}
+
+RECUERDA: ANTE LA DUDA, ELIGE NEGATIVO. PREFIERO FALSOS NEGATIVOS QUE FALSOS NEUTRALES.`;
 
         // ============================================
-        // ESTADO GLOBAL
+        // ESTADO
         // ============================================
         
         const STATE = {
             datos: [],
             filtrados: [],
-            apiKey: localStorage.getItem('gemini_api_key_v5') || '',
+            apiKey: localStorage.getItem('gemini_key_v6') || '',
+            prompt: localStorage.getItem('gemini_prompt_v6') || SUPERPROMPT,
             tablaData: null,
-            graficos: {}
+            graficos: {},
+            reporte: null,
+            vistaActual: 'dashboard'
         };
         
         // ============================================
-        // MOTOR DE IA CON SUPERPROMT
+        // MOTOR IA CON SUPERPROMT REFINADO
         // ============================================
         
-        class SuperIA {
+        class MotorIA {
             
             static async analizar(texto) {
-                if (!STATE.apiKey) {
-                    return this.fallbackAvanzado(texto);
-                }
+                if (!STATE.apiKey) return this.fallbackRefinado(texto);
                 
                 try {
                     const resultado = await this.llamarGemini(texto);
-                    return {
-                        ...resultado,
-                        fuente: 'Gemini IA',
-                        confianza: 0.99
-                    };
-                } catch (error) {
-                    console.error('Error Gemini:', error);
-                    return {
-                        ...this.fallbackAvanzado(texto),
-                        fuente: 'Fallback (sin IA)',
-                        confianza: 0.75
-                    };
+                    return { ...resultado, fuente: 'Gemini IA v6.0', confianza: 0.99 };
+                } catch (e) {
+                    console.error('Error Gemini:', e.message);
+                    return { ...this.fallbackRefinado(texto), fuente: 'Fallback Local', confianza: 0.80 };
                 }
             }
             
@@ -590,17 +560,8 @@ FORMATO DE RESPUESTA (OBLIGATORIO - SOLO JSON):
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        contents: [{
-                            parts: [{
-                                text: `${SUPERPROMPT}\n\nCOMENTARIO A ANALIZAR:\n"${texto}"\n\nRESPONDE SOLO CON JSON:`
-                            }]
-                        }],
-                        generationConfig: {
-                            temperature: 0.1,
-                            topK: 1,
-                            topP: 0.95,
-                            maxOutputTokens: 300
-                        },
+                        contents: [{ parts: [{ text: `${STATE.prompt}\n\nCOMENTARIO A ANALIZAR:\n"${texto}"\n\nRESPONDE SOLO CON JSON:` }] }],
+                        generationConfig: { temperature: 0.05, topK: 1, topP: 0.9, maxOutputTokens: 350 },
                         safetySettings: [
                             { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },
                             { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_NONE" },
@@ -610,238 +571,126 @@ FORMATO DE RESPUESTA (OBLIGATORIO - SOLO JSON):
                     })
                 });
                 
-                if (!response.ok) {
-                    const errorData = await response.json().catch(() => ({}));
-                    throw new Error(`HTTP ${response.status}: ${errorData.error?.message || 'Error desconocido'}`);
-                }
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 
                 const data = await response.json();
+                const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
                 
-                if (!data.candidates || !data.candidates[0]?.content?.parts?.[0]?.text) {
-                    throw new Error('Respuesta de Gemini sin contenido válido');
-                }
+                const jsonMatch = text.match(/\{[\s\S]*\}/);
+                if (!jsonMatch) throw new Error('JSON no encontrado');
                 
-                const responseText = data.candidates[0].content.parts[0].text;
+                let analisis = JSON.parse(jsonMatch[0].replace(/[\u0000-\u001F]/g, '').replace(/\n/g, ' '));
                 
-                // Extraer JSON (limpiar posible markdown)
-                const jsonMatch = responseText.match(/\{[\s\S]*\}/);
-                if (!jsonMatch) {
-                    throw new Error('No se encontró JSON en la respuesta: ' + responseText.substring(0, 100));
-                }
-                
-                let analisis;
-                try {
-                    analisis = JSON.parse(jsonMatch[0]);
-                } catch (parseError) {
-                    // Intentar limpiar el JSON
-                    const cleaned = jsonMatch[0]
-                        .replace(/[\u0000-\u001F\u007F-\u009F]/g, '')
-                        .replace(/\n/g, ' ')
-                        .replace(/\r/g, '');
-                    analisis = JSON.parse(cleaned);
-                }
-                
-                // Validar campos
-                const campos = ['sentimiento', 'tipo', 'tema', 'prioridad', 'riesgo', 'necesitaRespuesta', 'resumen', 'palabrasClave'];
-                campos.forEach(campo => {
-                    if (!(campo in analisis)) {
-                        analisis[campo] = campo === 'palabrasClave' ? [] : 
-                                         campo === 'necesitaRespuesta' ? false : 'General';
-                    }
-                });
-                
-                // Normalizar valores
-                analisis.sentimiento = this.normalizarSentimiento(analisis.sentimiento);
-                analisis.prioridad = this.normalizarPrioridad(analisis.prioridad);
-                analisis.riesgo = this.normalizarRiesgo(analisis.riesgo);
+                // Normalizar
+                analisis.sentimiento = this.normalizar(analisis.sentimiento, ['Positivo', 'Neutral', 'Negativo'], 'Neutral');
+                analisis.prioridad = this.normalizar(analisis.prioridad, ['Alta', 'Media', 'Baja'], 'Media');
+                analisis.riesgo = this.normalizar(analisis.riesgo, ['Alto', 'Medio', 'Bajo'], 'Bajo');
+                analisis.tipo = analisis.tipo || 'Opinión';
+                analisis.tema = analisis.tema || 'General';
+                analisis.necesitaRespuesta = analisis.necesitaRespuesta || false;
+                analisis.resumen = analisis.resumen || 'Sin resumen';
+                analisis.palabrasClave = analisis.palabrasClave || [];
                 
                 return analisis;
             }
             
-            static normalizarSentimiento(s) {
-                s = (s || '').toLowerCase();
-                if (s.includes('posit')) return 'Positivo';
-                if (s.includes('negat')) return 'Negativo';
-                return 'Neutral';
+            static normalizar(valor, opciones, defecto) {
+                const v = (valor || '').toLowerCase().trim();
+                for (const op of opciones) {
+                    if (v.includes(op.toLowerCase())) return op;
+                }
+                return defecto;
             }
             
-            static normalizarPrioridad(p) {
-                p = (p || '').toLowerCase();
-                if (p.includes('alta')) return 'Alta';
-                if (p.includes('media')) return 'Media';
-                return 'Baja';
-            }
-            
-            static normalizarRiesgo(r) {
-                r = (r || '').toLowerCase();
-                if (r.includes('alto')) return 'Alto';
-                if (r.includes('medio')) return 'Medio';
-                return 'Bajo';
-            }
-            
-            static fallbackAvanzado(texto) {
+            static fallbackRefinado(texto) {
                 const t = texto.toLowerCase();
                 
-                // Diccionario negativo extendido
-                const negativas = [
-                    'miserable', 'payasada', 'fantoche', 'payaso', 'bufón', 'títere',
-                    'rata', 'ratero', 'cucaracha', 'sabandija', 'alimaña', 'bicho',
-                    'cojudo', 'huevón', 'pendejo', 'conchudo', 'mierda', 'basura',
-                    'porquería', 'cochinada', 'chanchada', 'coima', 'coimero', 'mermelero',
-                    'argollero', 'corrupto', 'corrupción', 'estafa', 'robo', 'ladrón',
-                    'sinvergüenza', 'caradura', 'descarado', 'demagogo', 'populista',
-                    'oportunista', 'ventajista', 'traidor', 'vendido', 'inepto', 'inútil',
-                    'incompetente', 'mediocre', 'fracaso', 'fracasado', 'pésimo', 'terrible',
-                    'horrible', 'lamentable', 'vergüenza', 'indignante', 'inaceptable',
-                    'caos', 'desastre', 'nefasto', 'penoso', 'asqueroso', 'repugnante',
-                    'detestable', 'indignado', 'furioso', 'harto', 'asqueado', 'decepción',
-                    'mentira', 'falso', 'engaño', 'puro show', 'pura pantalla', 'figuretti',
-                    'showsero', 'lambón', 'lambeculo', 'arrastrado', 'sobón', 'adulón'
+                // Detección de burla/sarcasmo (PRIORIDAD MÁXIMA)
+                const indicadoresBurla = [
+                    '🤡', 'payasada', 'circo', 'espectáculo', 'show', 'pantomima',
+                    'qué bonito', 'qué lindo', 'qué bien', 'sigan así', 'sigan asi',
+                    'buen trabajo', 'felicidades', 'sigan mejorando',
+                    'puro show', 'pura pantalla', 'figuretti', 'showsero',
+                    'poco o nada', 'no hacen nada', 'no sirven'
                 ];
                 
-                // Palabras positivas
-                const positivas = [
-                    'excelente', 'bueno', 'genial', 'gracias', 'felicitaciones',
-                    'bacán', 'chévere', 'paja', 'mostro', 'crack', 'capo', 'bravazo',
-                    'magnífico', 'perfecto', 'maravilloso', 'fantástico', 'grandioso',
-                    'satisfecho', 'contento', 'feliz', 'orgulloso', 'reconocimiento'
-                ];
+                let nivelBurla = 0;
+                indicadoresBurla.forEach(i => { if (t.includes(i)) nivelBurla += 10; });
+                
+                // Hashtags con ironía
+                if (t.includes('#') && nivelBurla > 0) nivelBurla += 5;
+                
+                // Emojis negativos
+                const emojisNegativos = ['🤡', '😡', '🤬', '💩', '🙄', '😒', '🖕', '👎'];
+                emojisNegativos.forEach(e => { if (t.includes(e)) nivelBurla += 8; });
+                
+                // Palabras negativas
+                const negativas = ['miserable', 'fantoche', 'rata', 'ratero', 'coimero', 'inútil',
+                                  'mediocre', 'corrupto', 'estafa', 'asco', 'vergüenza', 'desastre',
+                                  'caos', 'pésimo', 'terrible', 'horrible', 'lamentable', 'ridículo',
+                                  'patético', 'inepto', 'incapaz', 'cojudo', 'huevón', 'pendejo',
+                                  'conchudo', 'mierda', 'basura', 'ladrón', 'sinvergüenza'];
                 
                 let score = 0;
-                let tieneSarcasmo = false;
-                let tieneInsulto = false;
-                let tieneVulgaridad = false;
+                negativas.forEach(n => { if (t.includes(n)) score -= 5; });
                 
-                // Detectar sarcasmo
-                const patronesSarcasmo = [
-                    /qué\s+(bonito|lindo|hermoso|bueno|genial|excelente|bacán|chévere|paja)/i,
-                    /menudo\s+(éxito|logro|avance|progreso|milagro)/i,
-                    /vaya\s+(sorpresa|maravilla|noticia)/i,
-                    /claro\s+(que sí|por supuesto)/i,
-                    /sí\s+claro/i, /si\s+claro/i,
-                    /sí\s+cómo no/i, /si\s+como no/i,
-                    /ah\s+qué\s+bien/i, /ah\s+que\s+bien/i,
-                    /sigan\s+así/i, /sigan\s+asi/i,
-                    /buen\s+trabajo\s+\(ironía\)/i,
-                    /es\s+de\s+chiste/i,
-                    /es\s+una\s+broma/i,
-                    /no\s+sirven\s+para\s+nada/i,
-                    /poco\s+o\s+nada/i
-                ];
-                
-                patronesSarcasmo.forEach(p => {
-                    if (p.test(t)) tieneSarcasmo = true;
-                });
-                
-                // Detectar insultos
-                const insultos = ['rata', 'ratero', 'cojudo', 'huevón', 'pendejo', 'conchudo',
-                                 'mierda', 'basura', 'fantoche', 'payaso', 'bufón', 'títere',
-                                 'miserable', 'inútil', 'mediocre', 'lambón', 'arrastrado'];
-                insultos.forEach(i => {
-                    if (t.includes(i)) tieneInsulto = true;
-                });
-                
-                // Detectar vulgaridad
-                const vulgar = ['culo', 'cul0', 'ctm', 'ctmr', 'mierda', 'conchudo', 'pendejo',
-                               'carajo', 'hostia', 'joder', 'chingar', 'verga', 'webon', 'huevada'];
-                vulgar.forEach(v => {
-                    if (t.includes(v)) tieneVulgaridad = true;
-                });
-                
-                // Puntaje
-                negativas.forEach(p => {
-                    if (t.includes(p)) score -= 4;
-                });
-                
-                positivas.forEach(p => {
-                    if (t.includes(p)) score += 4;
-                });
-                
-                if (tieneSarcasmo) score -= 8;
-                if (tieneInsulto) score -= 10;
-                if (tieneVulgaridad) score -= 12;
-                
-                // Menciones políticas en contexto negativo
-                const figuras = ['keiko', 'fujimori', 'boluarte', 'castillo', 'alan garcía',
-                                'toledo', 'humala', 'reggiardo', 'lopez aliaga'];
-                let mencionPolitica = false;
-                figuras.forEach(f => {
-                    if (t.includes(f)) mencionPolitica = true;
-                });
-                if (mencionPolitica && (tieneSarcasmo || tieneInsulto || score < 0)) {
-                    score -= 8;
-                }
+                score -= nivelBurla;
                 
                 // Determinar sentimiento
                 let sentimiento;
-                if (score <= -6) sentimiento = 'Negativo';
-                else if (score >= 6) sentimiento = 'Positivo';
+                if (score <= -8 || nivelBurla >= 8) sentimiento = 'Negativo';
+                else if (score >= 8) sentimiento = 'Positivo';
                 else sentimiento = 'Neutral';
                 
-                // Si hay insultos o sarcasmo, forzar Negativo
-                if (tieneInsulto || tieneSarcasmo || tieneVulgaridad) {
-                    sentimiento = 'Negativo';
-                }
+                // Si hay burla evidente, FORZAR Negativo
+                if (nivelBurla >= 5) sentimiento = 'Negativo';
                 
-                // Determinar tipo
+                // Tipo
                 let tipo = 'Opinión';
-                if (tieneVulgaridad && tieneInsulto) tipo = 'Insulto';
-                else if (tieneSarcasmo) tipo = 'Sarcasmo';
-                else if (/denuncia|corrupción|estafa|robo|coima|ilegal/i.test(t)) tipo = 'Denuncia';
-                else if (sentimiento === 'Negativo' && /crítica|critico|señalar|error|falla|falta/i.test(t)) tipo = 'Crítica';
-                else if (sentimiento === 'Negativo') tipo = 'Queja';
+                if (nivelBurla >= 8) tipo = 'Burla';
+                else if (nivelBurla >= 3) tipo = 'Sarcasmo';
+                else if (score <= -10) tipo = 'Crítica';
+                else if (/denuncia|corrupción|estafa|robo|coima/i.test(t)) tipo = 'Denuncia';
+                else if (score <= -5) tipo = 'Queja';
                 else if (t.includes('?')) tipo = 'Consulta';
-                else if (/felicit|gracias|excelente|bacán|chévere/i.test(t)) tipo = 'Felicitación';
-                else if (/sugiero|propongo|recomiendo|deberían/i.test(t)) tipo = 'Sugerencia';
+                else if (/felicit|gracias|excelente|bacán/i.test(t)) tipo = 'Felicitación';
                 
                 // Tema
                 const temas = {
-                    'Seguridad Ciudadana': ['seguridad', 'policía', 'serenazgo', 'delincuencia', 'robo', 'crimen', 'violencia', 'drogas', 'pandillaje'],
-                    'Gestión Municipal': ['alcalde', 'gestión', 'municipal', 'corrupción', 'coima', 'funcionario', 'política', 'gobierno', 'autoridad'],
-                    'Limpieza Pública': ['basura', 'limpieza', 'residuos', 'reciclaje', 'barrido', 'desmonte', 'suciedad'],
-                    'Transporte': ['transporte', 'tráfico', 'bus', 'movilidad', 'semáforo', 'paradero', 'congestión', 'vehículo'],
-                    'Obras Públicas': ['obra', 'construcción', 'pista', 'vereda', 'parque', 'alameda', 'infraestructura', 'edificación'],
-                    'Eventos y Cultura': ['evento', 'cultura', 'concierto', 'exposición', 'teatro', 'feria', 'festival', 'espectáculo', 'show'],
-                    'Atención al Ciudadano': ['atención', 'trámite', 'ventanilla', 'servicio', 'colas', 'demora', 'burocracia', 'documento'],
-                    'Medio Ambiente': ['ambiente', 'verde', 'árbol', 'jardín', 'ecología', 'contaminación', 'río', 'playa'],
-                    'Salud': ['salud', 'hospital', 'posta', 'enfermedad', 'epidemia', 'vacuna', 'medicina', 'ambulancia']
+                    'Seguridad Ciudadana': ['seguridad', 'policía', 'serenazgo', 'delincuencia', 'robo', 'crimen'],
+                    'Gestión Municipal': ['alcalde', 'gestión', 'municipal', 'corrupción', 'coima', 'política', 'gobierno'],
+                    'Limpieza Pública': ['basura', 'limpieza', 'residuos'],
+                    'Transporte': ['transporte', 'tráfico', 'bus', 'movilidad'],
+                    'Obras Públicas': ['obra', 'construcción', 'pista', 'parque', 'infraestructura'],
+                    'Eventos y Cultura': ['evento', 'cultura', 'festival', 'espectáculo'],
+                    'General': []
                 };
                 
                 let tema = 'General';
-                let maxCoincidencias = 0;
-                for (const [nombre, palabras] of Object.entries(temas)) {
-                    let coincidencias = 0;
-                    palabras.forEach(p => { if (t.includes(p)) coincidencias++; });
-                    if (coincidencias > maxCoincidencias) {
-                        maxCoincidencias = coincidencias;
-                        tema = nombre;
-                    }
+                let maxC = 0;
+                for (const [nom, pals] of Object.entries(temas)) {
+                    let c = 0;
+                    pals.forEach(p => { if (t.includes(p)) c++; });
+                    if (c > maxC) { maxC = c; tema = nom; }
                 }
                 
                 // Prioridad
                 let prioridad = 'Baja';
-                if (tieneVulgaridad || tieneInsulto || tipo === 'Denuncia') prioridad = 'Alta';
-                else if (sentimiento === 'Negativo' && (tipo === 'Queja' || tipo === 'Crítica' || tipo === 'Sarcasmo')) prioridad = 'Alta';
-                else if (sentimiento === 'Negativo') prioridad = 'Media';
-                else if (tipo === 'Consulta') prioridad = 'Media';
+                if (nivelBurla >= 8 || tipo === 'Burla' || tipo === 'Denuncia') prioridad = 'Alta';
+                else if (score <= -10) prioridad = 'Alta';
+                else if (score <= -5) prioridad = 'Media';
                 
                 // Riesgo
                 let riesgo = 'Bajo';
-                if ((tieneVulgaridad || tieneInsulto) && mencionPolitica) riesgo = 'Alto';
+                if (tipo === 'Burla' && t.includes('@')) riesgo = 'Alto';
                 else if (tipo === 'Denuncia') riesgo = 'Alto';
                 else if (prioridad === 'Alta') riesgo = 'Medio';
-                else if (sentimiento === 'Negativo') riesgo = 'Medio';
                 
                 return {
                     sentimiento, tipo, tema, prioridad, riesgo,
-                    necesitaRespuesta: ['Denuncia', 'Queja', 'Consulta', 'Crítica', 'Insulto', 'Sarcasmo'].includes(tipo),
+                    necesitaRespuesta: ['Burla', 'Sarcasmo', 'Crítica', 'Denuncia', 'Queja', 'Consulta'].includes(tipo),
                     resumen: `${tipo} ${sentimiento.toLowerCase()} sobre ${tema}`,
-                    palabrasClave: t.split(/\s+/)
-                        .map(w => w.replace(/[^a-záéíóúüñ0-9]/gi, ''))
-                        .filter(w => w.length > 4)
-                        .slice(0, 5),
-                    fuente: 'Fallback IA',
-                    confianza: 0.75
+                    palabrasClave: t.split(/\s+/).filter(w => w.length > 4).slice(0, 5)
                 };
             }
             
@@ -854,21 +703,13 @@ FORMATO DE RESPUESTA (OBLIGATORIO - SOLO JSON):
                     const texto = c['Full Text'] || c['full_text'] || c['text'] || '';
                     
                     if (callback) {
-                        callback({
-                            actual: i + 1,
-                            total,
-                            porcentaje: Math.round(((i + 1) / total) * 100),
-                            texto: texto.substring(0, 60)
-                        });
+                        callback({ actual: i + 1, total, porcentaje: Math.round(((i+1)/total)*100), texto: texto.substring(0,60) });
                     }
                     
                     const analisis = await this.analizar(texto.toString());
                     resultados.push({ ...c, _analisis: analisis });
                     
-                    // Pausa para rate limit
-                    if (STATE.apiKey) {
-                        await new Promise(r => setTimeout(r, 150));
-                    }
+                    if (STATE.apiKey) await new Promise(r => setTimeout(r, 150));
                 }
                 
                 return resultados;
@@ -880,17 +721,12 @@ FORMATO DE RESPUESTA (OBLIGATORIO - SOLO JSON):
         // ============================================
         
         async function procesarComentarios(datosCrudos) {
-            const datosLimpios = datosCrudos
-                .filter(f => {
-                    const t = f['Full Text'] || f['full_text'] || f['text'] || '';
-                    return t.toString().trim().length > 0;
-                })
+            const limpios = datosCrudos
+                .filter(f => (f['Full Text'] || f['full_text'] || f['text'] || '').toString().trim())
                 .filter((f, i, self) => {
                     const id = f['Tweet Id'] || f['tweet_id'] || f['id'];
                     return i === self.findIndex(x => (x['Tweet Id'] || x['tweet_id'] || x['id']) === id);
                 });
-            
-            console.log(`📊 ${datosLimpios.length} comentarios a analizar`);
             
             const pc = document.getElementById('progressContainer');
             const pb = document.getElementById('progressBar');
@@ -900,25 +736,25 @@ FORMATO DE RESPUESTA (OBLIGATORIO - SOLO JSON):
             
             pc.classList.remove('hidden');
             
-            STATE.datos = await SuperIA.analizarLote(datosLimpios, (p) => {
+            STATE.datos = await MotorIA.analizarLote(limpios, (p) => {
                 pb.style.width = p.porcentaje + '%';
                 pp.textContent = p.porcentaje + '%';
-                pt.textContent = `🧠 Analizando con IA... ${p.actual}/${p.total}`;
+                pt.textContent = `🧠 Analizando... ${p.actual}/${p.total}`;
                 pd.textContent = `"${p.texto}..."`;
             });
             
             STATE.filtrados = [...STATE.datos];
-            
             setTimeout(() => pc.classList.add('hidden'), 1000);
             
-            console.log('✅ Análisis IA completado');
+            console.log('✅ Análisis completado');
+            console.log('📝 Muestra:', STATE.datos[0]?._analisis);
+            
             renderizarDashboard();
         }
         
         function procesarArchivo(e) {
             const file = e.target.files[0];
             if (!file) return;
-            
             const reader = new FileReader();
             reader.onload = async function(ev) {
                 try {
@@ -927,62 +763,60 @@ FORMATO DE RESPUESTA (OBLIGATORIO - SOLO JSON):
                     const ws = wb.Sheets[wb.SheetNames[0]];
                     const json = XLSX.utils.sheet_to_json(ws);
                     await procesarComentarios(json);
-                    alert(`✅ ${STATE.datos.length} comentarios analizados con IA`);
-                } catch(err) {
-                    alert('❌ Error: ' + err.message);
-                }
+                    alert(`✅ ${STATE.datos.length} comentarios analizados`);
+                } catch(err) { alert('❌ Error: ' + err.message); }
             };
             reader.readAsArrayBuffer(file);
         }
         
-        async function cargarDatosDemo() {
+        async function cargarDemo() {
             const demo = [
                 {
-                    'Tweet Id': '5001',
-                    'Full Text': 'Ésta payasada sólo sirve para los espectáculos, estos miserables poco o nada harán por la seguridad ciudadana.',
-                    'Created At': '2024-01-25 14:30:00',
-                    'User Name': 'Ciudadano Crítico',
-                    'Favorite Count': 89, 'Retweet Count': 45, 'Reply Count': 23
-                },
-                {
-                    'Tweet Id': '5002',
-                    'Full Text': '@MuniLima @Renzo_Reggiardo @KeikoFujimori Besarle el cul0 dirán a la rata de @KeikoFujimori',
-                    'Created At': '2024-01-25 15:00:00',
-                    'User Name': 'Indignado Total',
-                    'Favorite Count': 156, 'Retweet Count': 78, 'Reply Count': 34
-                },
-                {
-                    'Tweet Id': '5003',
-                    'Full Text': 'Excelente trabajo de limpieza en el Centro. ¡Gracias por mantener las calles limpias!',
-                    'Created At': '2024-01-24 10:00:00',
-                    'User Name': 'Vecina Agradecida',
-                    'Favorite Count': 45, 'Retweet Count': 12, 'Reply Count': 3
-                },
-                {
-                    'Tweet Id': '5004',
-                    'Full Text': '¿Hasta cuándo van a seguir robando? Todas las obras infladas y nunca terminan. Pura corrupción.',
-                    'Created At': '2024-01-24 16:00:00',
-                    'User Name': 'Carlos Fiscal',
+                    'Tweet Id': '6001',
+                    'Full Text': '@MuniLima #LimaPotenciaMundial 🤡',
+                    'Created At': '2024-02-01 10:00:00',
+                    'User Name': 'Ciudadano Burlón',
                     'Favorite Count': 234, 'Retweet Count': 156, 'Reply Count': 89
                 },
                 {
-                    'Tweet Id': '5005',
-                    'Full Text': 'Qué bonito parque, lástima que de noche es tierra de nadie. Puro show para la foto.',
-                    'Created At': '2024-01-23 11:00:00',
-                    'User Name': 'Vecino Realista',
-                    'Favorite Count': 67, 'Retweet Count': 23, 'Reply Count': 12
+                    'Tweet Id': '6002',
+                    'Full Text': 'Ésta payasada sólo sirve para los espectáculos, estos miserables poco o nada harán por la seguridad ciudadana.',
+                    'Created At': '2024-02-01 11:00:00',
+                    'User Name': 'Vecino Crítico',
+                    'Favorite Count': 189, 'Retweet Count': 98, 'Reply Count': 45
                 },
                 {
-                    'Tweet Id': '5006',
-                    'Full Text': 'Felicitaciones por el festival de verano. Bien organizado y seguro para la familia.',
-                    'Created At': '2024-01-23 20:00:00',
-                    'User Name': 'Familia Feliz',
-                    'Favorite Count': 120, 'Retweet Count': 34, 'Reply Count': 8
+                    'Tweet Id': '6003',
+                    'Full Text': '@MuniLima @Renzo_Reggiardo @KeikoFujimori Besarle el cul0 dirán a la rata de @KeikoFujimori',
+                    'Created At': '2024-02-01 12:00:00',
+                    'User Name': 'Indignado',
+                    'Favorite Count': 345, 'Retweet Count': 234, 'Reply Count': 123
+                },
+                {
+                    'Tweet Id': '6004',
+                    'Full Text': 'Excelente trabajo de limpieza en el Centro. ¡Gracias por mantener todo limpio! ❤️',
+                    'Created At': '2024-01-31 09:00:00',
+                    'User Name': 'Vecina Agradecida',
+                    'Favorite Count': 56, 'Retweet Count': 12, 'Reply Count': 5
+                },
+                {
+                    'Tweet Id': '6005',
+                    'Full Text': '¿Cuál es el horario de atención para trámites de licencia de construcción?',
+                    'Created At': '2024-01-31 14:00:00',
+                    'User Name': 'Ciudadano Consulta',
+                    'Favorite Count': 2, 'Retweet Count': 0, 'Reply Count': 1
+                },
+                {
+                    'Tweet Id': '6006',
+                    'Full Text': 'Qué bonito parque hicieron en Miraflores, lástima que de noche es tierra de nadie. Puro show para la foto.',
+                    'Created At': '2024-01-30 16:00:00',
+                    'User Name': 'Vecino Realista',
+                    'Favorite Count': 78, 'Retweet Count': 34, 'Reply Count': 15
                 }
             ];
             
             await procesarComentarios(demo);
-            alert('✅ Datos demo analizados con SuperPrompt IA');
+            alert('✅ Datos demo analizados. Revisa la detección de burla y sarcasmo.');
         }
         
         // ============================================
@@ -993,10 +827,7 @@ FORMATO DE RESPUESTA (OBLIGATORIO - SOLO JSON):
             if (!STATE.datos.length) return;
             
             const d = STATE.filtrados;
-            
-            // KPIs
-            const s = {};
-            const tipos = {};
+            const s = {}, tipos = {};
             let likes = 0, riesgos = 0;
             
             d.forEach(r => {
@@ -1018,18 +849,13 @@ FORMATO DE RESPUESTA (OBLIGATORIO - SOLO JSON):
             document.getElementById('kpiContainer').innerHTML = kpis.map(k => `
                 <div class="kpi-card rounded-xl p-4">
                     <div class="flex justify-between items-center mb-2">
-                        <span class="text-xs text-naval-200 uppercase tracking-wider">${k.label}</span>
+                        <span class="text-xs text-naval-200 uppercase">${k.label}</span>
                         <span class="text-2xl">${k.icon}</span>
                     </div>
                     <div class="text-3xl font-bold kpi-value">${k.value.toLocaleString()}</div>
                 </div>
             `).join('');
             
-            // Actualizar sidebar
-            document.getElementById('sidebar-total').textContent = d.length;
-            document.getElementById('sidebar-riesgos').textContent = riesgos;
-            
-            // Gráficos
             renderizarGraficos(d);
             renderizarTabla(d);
             actualizarFiltros(d);
@@ -1038,7 +864,6 @@ FORMATO DE RESPUESTA (OBLIGATORIO - SOLO JSON):
         function renderizarGraficos(d) {
             Object.values(STATE.graficos).forEach(g => g.destroy());
             
-            // Sentimiento
             const sData = {};
             d.forEach(r => sData[r._analisis.sentimiento] = (sData[r._analisis.sentimiento] || 0) + 1);
             
@@ -1047,25 +872,14 @@ FORMATO DE RESPUESTA (OBLIGATORIO - SOLO JSON):
                 type: 'doughnut',
                 data: {
                     labels: Object.keys(sData),
-                    datasets: [{
-                        data: Object.values(sData),
-                        backgroundColor: ['#10B981', '#F59E0B', '#EF4444'],
-                        borderWidth: 0
-                    }]
+                    datasets: [{ data: Object.values(sData), backgroundColor: ['#10B981', '#F59E0B', '#EF4444'], borderWidth: 0 }]
                 },
                 options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: { color: '#93c5fd', padding: 15, font: { size: 12 } }
-                        }
-                    }
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom', labels: { color: '#93c5fd', padding: 15 } } }
                 }
             });
             
-            // Tipos
             const tData = {};
             d.forEach(r => tData[r._analisis.tipo] = (tData[r._analisis.tipo] || 0) + 1);
             
@@ -1074,32 +888,18 @@ FORMATO DE RESPUESTA (OBLIGATORIO - SOLO JSON):
                 type: 'bar',
                 data: {
                     labels: Object.keys(tData),
-                    datasets: [{
-                        data: Object.values(tData),
-                        backgroundColor: '#3b82f6',
-                        borderRadius: 8,
-                        borderWidth: 0
-                    }]
+                    datasets: [{ data: Object.values(tData), backgroundColor: '#3b82f6', borderRadius: 8 }]
                 },
                 options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
+                    responsive: true, maintainAspectRatio: false,
                     plugins: { legend: { display: false } },
                     scales: {
-                        y: { 
-                            beginAtZero: true,
-                            ticks: { color: '#93c5fd' },
-                            grid: { color: 'rgba(30, 73, 118, 0.3)' }
-                        },
-                        x: {
-                            ticks: { color: '#93c5fd', maxRotation: 45 },
-                            grid: { display: false }
-                        }
+                        y: { ticks: { color: '#93c5fd' }, grid: { color: 'rgba(30,73,118,0.3)' } },
+                        x: { ticks: { color: '#93c5fd' }, grid: { display: false } }
                     }
                 }
             });
             
-            // Temas
             const temas = {};
             d.forEach(r => temas[r._analisis.tema] = (temas[r._analisis.tema] || 0) + 1);
             
@@ -1108,40 +908,29 @@ FORMATO DE RESPUESTA (OBLIGATORIO - SOLO JSON):
                 type: 'bar',
                 data: {
                     labels: Object.keys(temas),
-                    datasets: [{
-                        data: Object.values(temas),
-                        backgroundColor: '#2563eb',
-                        borderRadius: 8,
-                        borderWidth: 0
-                    }]
+                    datasets: [{ data: Object.values(temas), backgroundColor: '#2563eb', borderRadius: 8 }]
                 },
                 options: {
-                    indexAxis: 'y',
-                    responsive: true,
-                    maintainAspectRatio: false,
+                    indexAxis: 'y', responsive: true, maintainAspectRatio: false,
                     plugins: { legend: { display: false } },
                     scales: {
-                        x: { ticks: { color: '#93c5fd' }, grid: { color: 'rgba(30, 73, 118, 0.3)' } },
+                        x: { ticks: { color: '#93c5fd' }, grid: { color: 'rgba(30,73,118,0.3)' } },
                         y: { ticks: { color: '#93c5fd' }, grid: { display: false } }
                     }
                 }
             });
             
-            // Timeline (CORREGIDO)
+            // Timeline
             const timeline = {};
             d.forEach(r => {
-                const fecha = new Date(r['Created At'] || r['created_at'] || '');
+                const fecha = new Date(r['Created At'] || '');
                 if (!isNaN(fecha.getTime())) {
                     const key = fecha.toLocaleDateString('es-PE', { day: '2-digit', month: '2-digit' });
                     timeline[key] = (timeline[key] || 0) + 1;
                 }
             });
             
-            const sortedKeys = Object.keys(timeline).sort((a, b) => {
-                const [da, ma] = a.split('/').map(Number);
-                const [db, mb] = b.split('/').map(Number);
-                return ma - mb || da - db;
-            });
+            const sortedKeys = Object.keys(timeline).sort();
             
             const ctx4 = document.getElementById('chartTimeline').getContext('2d');
             STATE.graficos.timeline = new Chart(ctx4, {
@@ -1150,56 +939,28 @@ FORMATO DE RESPUESTA (OBLIGATORIO - SOLO JSON):
                     labels: sortedKeys,
                     datasets: [
                         {
-                            label: 'Total',
-                            data: sortedKeys.map(k => timeline[k]),
-                            borderColor: '#3b82f6',
-                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                            fill: true,
-                            tension: 0.4,
-                            pointBackgroundColor: '#3b82f6',
-                            pointBorderColor: '#fff',
-                            pointRadius: 4,
-                            pointHoverRadius: 6
+                            label: 'Total', data: sortedKeys.map(k => timeline[k]),
+                            borderColor: '#3b82f6', backgroundColor: 'rgba(59,130,246,0.1)',
+                            fill: true, tension: 0.4
                         },
                         {
-                            label: 'Negativos',
-                            data: sortedKeys.map(k => {
-                                return d.filter(r => {
-                                    const f = new Date(r['Created At'] || '');
-                                    if (isNaN(f.getTime())) return false;
-                                    const key2 = f.toLocaleDateString('es-PE', { day: '2-digit', month: '2-digit' });
-                                    return key2 === k && r._analisis.sentimiento === 'Negativo';
-                                }).length;
-                            }),
-                            borderColor: '#EF4444',
-                            backgroundColor: 'rgba(239, 68, 68, 0.1)',
-                            fill: true,
-                            tension: 0.4,
-                            pointBackgroundColor: '#EF4444',
-                            pointBorderColor: '#fff',
-                            pointRadius: 4,
-                            pointHoverRadius: 6
+                            label: 'Negativos', 
+                            data: sortedKeys.map(k => d.filter(r => {
+                                const f = new Date(r['Created At'] || '');
+                                if (isNaN(f.getTime())) return false;
+                                return f.toLocaleDateString('es-PE', { day: '2-digit', month: '2-digit' }) === k && r._analisis.sentimiento === 'Negativo';
+                            }).length),
+                            borderColor: '#EF4444', backgroundColor: 'rgba(239,68,68,0.1)',
+                            fill: true, tension: 0.4
                         }
                     ]
                 },
                 options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            labels: { color: '#93c5fd', usePointStyle: true, padding: 20 }
-                        }
-                    },
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { labels: { color: '#93c5fd' } } },
                     scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: { color: '#93c5fd' },
-                            grid: { color: 'rgba(30, 73, 118, 0.3)' }
-                        },
-                        x: {
-                            ticks: { color: '#93c5fd' },
-                            grid: { color: 'rgba(30, 73, 118, 0.3)' }
-                        }
+                        y: { ticks: { color: '#93c5fd' }, grid: { color: 'rgba(30,73,118,0.3)' } },
+                        x: { ticks: { color: '#93c5fd' }, grid: { color: 'rgba(30,73,118,0.3)' } }
                     }
                 }
             });
@@ -1209,20 +970,20 @@ FORMATO DE RESPUESTA (OBLIGATORIO - SOLO JSON):
             if (STATE.tablaData) STATE.tablaData.destroy();
             
             document.getElementById('tablaBody').innerHTML = d.map(r => `
-                <tr class="cursor-pointer hover:bg-naval-700 transition" onclick="mostrarDetalle('${r['Tweet Id'] || r['tweet_id']}')">
-                    <td class="text-xs">${new Date(r['Created At'] || '').toLocaleDateString('es-PE', { day: '2-digit', month: '2-digit', year: 'numeric' })}</td>
+                <tr class="cursor-pointer hover:bg-naval-700" onclick="mostrarDetalle('${r['Tweet Id'] || r['tweet_id']}')">
+                    <td class="text-xs">${new Date(r['Created At'] || '').toLocaleDateString('es-PE')}</td>
                     <td class="text-sm font-semibold text-white">${r['User Name'] || 'Anónimo'}</td>
-                    <td class="text-sm max-w-xs truncate text-naval-100">${(r['Full Text'] || '').substring(0, 80)}...</td>
+                    <td class="text-sm max-w-xs truncate text-naval-100">${(r['Full Text'] || '').substring(0, 70)}...</td>
                     <td><span class="badge-sentiment badge-${(r._analisis.sentimiento || '').toLowerCase()}">${r._analisis.sentimiento}</span></td>
                     <td class="text-xs text-naval-200">${r._analisis.tipo}</td>
                     <td class="text-xs text-naval-200">${r._analisis.tema}</td>
-                    <td class="text-xs font-bold ${r._analisis.prioridad === 'Alta' ? 'text-red-400' : r._analisis.prioridad === 'Media' ? 'text-yellow-400' : 'text-green-400'}">${r._analisis.prioridad}</td>
+                    <td class="text-xs font-bold ${r._analisis.prioridad === 'Alta' ? 'text-red-400' : 'text-yellow-400'}">${r._analisis.prioridad}</td>
                     <td>
                         <div class="flex items-center space-x-2">
                             <div class="flex-1 bg-naval-700 rounded-full h-1.5">
-                                <div class="h-1.5 rounded-full bg-gradient-to-r from-blue-500 to-cyan-400" style="width: ${Math.round((r._analisis.confianza || 0.95) * 100)}%"></div>
+                                <div class="h-1.5 rounded-full bg-gradient-to-r from-blue-500 to-cyan-400" style="width: ${Math.round((r._analisis.confianza || 0.99)*100)}%"></div>
                             </div>
-                            <span class="text-xs text-naval-300">${Math.round((r._analisis.confianza || 0.95) * 100)}%</span>
+                            <span class="text-xs text-naval-300">${Math.round((r._analisis.confianza || 0.99)*100)}%</span>
                         </div>
                     </td>
                     <td class="text-xs">${r['Favorite Count'] || 0}</td>
@@ -1240,15 +1001,12 @@ FORMATO DE RESPUESTA (OBLIGATORIO - SOLO JSON):
             const tipos = [...new Set(d.map(r => r._analisis.tipo))].sort();
             const temas = [...new Set(d.map(r => r._analisis.tema))].sort();
             
-            document.getElementById('filtroTipo').innerHTML = '<option value="">Todos los tipos</option>' +
-                tipos.map(t => `<option value="${t}">${t}</option>`).join('');
-            document.getElementById('filtroTema').innerHTML = '<option value="">Todos los temas</option>' +
-                temas.map(t => `<option value="${t}">${t}</option>`).join('');
+            document.getElementById('filtroTipo').innerHTML = '<option value="">Tipo</option>' + tipos.map(t => `<option>${t}</option>`).join('');
+            document.getElementById('filtroTema').innerHTML = '<option value="">Tema</option>' + temas.map(t => `<option>${t}</option>`).join('');
         }
         
         function aplicarFiltros() {
             let d = [...STATE.datos];
-            
             const s = document.getElementById('filtroSentimiento').value;
             const ti = document.getElementById('filtroTipo').value;
             const te = document.getElementById('filtroTema').value;
@@ -1270,68 +1028,49 @@ FORMATO DE RESPUESTA (OBLIGATORIO - SOLO JSON):
         function mostrarDetalle(id) {
             const c = STATE.datos.find(r => (r['Tweet Id'] || r['tweet_id']) === id);
             if (!c) return;
-            
             const a = c._analisis;
             
             document.getElementById('detalleContenido').innerHTML = `
                 <div class="space-y-5">
-                    <div class="bg-naval-700 rounded-xl p-4 border border-naval-500">
+                    <div class="bg-naval-800 rounded-xl p-4 border border-naval-600">
                         <div class="flex items-center space-x-2 mb-2">
                             <span class="text-2xl">🧠</span>
-                            <span class="font-bold text-naval-200">Análisis de IA</span>
-                            <span class="text-xs text-naval-300">(${a.fuente})</span>
-                        </div>
-                        <div class="flex items-center space-x-2">
-                            <span class="text-xs text-naval-300">Confianza:</span>
-                            <div class="flex-1 bg-naval-600 rounded-full h-2">
-                                <div class="h-2 rounded-full bg-gradient-to-r from-blue-500 to-cyan-400" style="width: ${Math.round((a.confianza || 0.99) * 100)}%"></div>
-                            </div>
-                            <span class="text-xs text-naval-200 font-bold">${Math.round((a.confianza || 0.99) * 100)}%</span>
+                            <span class="font-bold text-naval-200">${a.fuente}</span>
+                            <span class="text-xs text-green-400">${Math.round((a.confianza||0.99)*100)}% confianza</span>
                         </div>
                     </div>
-                    
-                    <div class="bg-naval-700 rounded-xl p-4 border border-naval-500">
-                        <h3 class="font-bold text-white text-lg">${c['User Name'] || 'Anónimo'}</h3>
+                    <div class="bg-naval-800 rounded-xl p-4 border border-naval-600">
+                        <h3 class="font-bold text-white">${c['User Name'] || 'Anónimo'}</h3>
                         <p class="text-sm text-naval-300">@${c['User Screen Name'] || 'usuario'}</p>
-                        <div class="mt-3 p-3 bg-naval-600 rounded-lg">
-                            <p class="text-white">${c['Full Text']}</p>
-                        </div>
+                        <p class="mt-3 text-white">${c['Full Text']}</p>
                     </div>
-                    
                     <div class="grid grid-cols-2 gap-3">
-                        <div class="bg-naval-700 rounded-xl p-4 border border-naval-500 text-center">
-                            <p class="text-xs text-naval-300 mb-1">Sentimiento</p>
-                            <p class="text-xl font-bold ${a.sentimiento === 'Positivo' ? 'text-green-400' : a.sentimiento === 'Negativo' ? 'text-red-400' : 'text-yellow-400'}">${a.sentimiento}</p>
+                        <div class="bg-naval-800 rounded-xl p-4 border border-naval-600 text-center">
+                            <p class="text-xs text-naval-300">Sentimiento</p>
+                            <p class="text-xl font-bold ${a.sentimiento==='Positivo'?'text-green-400':a.sentimiento==='Negativo'?'text-red-400':'text-yellow-400'}">${a.sentimiento}</p>
                         </div>
-                        <div class="bg-naval-700 rounded-xl p-4 border border-naval-500 text-center">
-                            <p class="text-xs text-naval-300 mb-1">Tipo</p>
+                        <div class="bg-naval-800 rounded-xl p-4 border border-naval-600 text-center">
+                            <p class="text-xs text-naval-300">Tipo</p>
                             <p class="text-xl font-bold text-blue-400">${a.tipo}</p>
                         </div>
-                        <div class="bg-naval-700 rounded-xl p-4 border border-naval-500 text-center">
-                            <p class="text-xs text-naval-300 mb-1">Tema</p>
+                        <div class="bg-naval-800 rounded-xl p-4 border border-naval-600 text-center">
+                            <p class="text-xs text-naval-300">Tema</p>
                             <p class="text-xl font-bold text-cyan-400">${a.tema}</p>
                         </div>
-                        <div class="bg-naval-700 rounded-xl p-4 border border-naval-500 text-center">
-                            <p class="text-xs text-naval-300 mb-1">Prioridad</p>
-                            <p class="text-xl font-bold ${a.prioridad === 'Alta' ? 'text-red-400' : a.prioridad === 'Media' ? 'text-yellow-400' : 'text-green-400'}">${a.prioridad}</p>
+                        <div class="bg-naval-800 rounded-xl p-4 border border-naval-600 text-center">
+                            <p class="text-xs text-naval-300">Prioridad</p>
+                            <p class="text-xl font-bold ${a.prioridad==='Alta'?'text-red-400':'text-yellow-400'}">${a.prioridad}</p>
                         </div>
                     </div>
-                    
-                    <div class="bg-naval-700 rounded-xl p-4 border border-naval-500">
-                        <h4 class="font-bold text-white mb-3">Palabras Clave</h4>
+                    <div class="bg-naval-800 rounded-xl p-4 border border-naval-600">
+                        <h4 class="font-bold text-white mb-2">🏷️ Palabras Clave</h4>
                         <div class="flex flex-wrap gap-2">
-                            ${(a.palabrasClave || []).map(p => `<span class="px-3 py-1.5 bg-naval-600 text-naval-200 rounded-full text-sm border border-naval-500">#${p}</span>`).join('')}
+                            ${(a.palabrasClave||[]).map(p => `<span class="px-3 py-1.5 bg-naval-700 text-naval-200 rounded-full text-sm border border-naval-600">${p}</span>`).join('')}
                         </div>
                     </div>
-                    
-                    <div class="bg-naval-700 rounded-xl p-4 border border-naval-500">
+                    <div class="bg-naval-800 rounded-xl p-4 border border-naval-600">
                         <h4 class="font-bold text-white mb-2">📝 Resumen IA</h4>
                         <p class="text-naval-200">${a.resumen}</p>
-                    </div>
-                    
-                    <div class="${a.riesgo === 'Alto' ? 'bg-red-900/30 border-red-500' : 'bg-yellow-900/30 border-yellow-500'} rounded-xl p-4 border">
-                        <p class="text-white"><strong>⚠️ Riesgo:</strong> ${a.riesgo}</p>
-                        <p class="text-white"><strong>📞 ¿Responder?:</strong> ${a.necesitaRespuesta ? 'SÍ - Atención prioritaria' : 'No requiere'}</p>
                     </div>
                 </div>
             `;
@@ -1344,15 +1083,134 @@ FORMATO DE RESPUESTA (OBLIGATORIO - SOLO JSON):
         }
         
         // ============================================
-        // UI
+        // REPORTES
         // ============================================
+        
+        function generarReporte(tipo) {
+            if (!STATE.datos.length) return alert('No hay datos');
+            
+            const d = STATE.datos;
+            const s = {
+                Positivo: d.filter(r => r._analisis.sentimiento === 'Positivo').length,
+                Neutral: d.filter(r => r._analisis.sentimiento === 'Neutral').length,
+                Negativo: d.filter(r => r._analisis.sentimiento === 'Negativo').length
+            };
+            
+            const riesgos = d.filter(r => r._analisis.riesgo === 'Alto').length;
+            const titulos = { diario: 'Diario', semanal: 'Semanal', mensual: 'Mensual' };
+            
+            STATE.reporte = { tipo, datos: d };
+            
+            document.getElementById('reporteOutput').classList.remove('hidden');
+            document.getElementById('reporteOutput').innerHTML = `
+                <h2 class="text-2xl font-bold text-white mb-6">📊 Reporte ${titulos[tipo] || 'Personalizado'}</h2>
+                <div class="bg-naval-800 rounded-xl p-6 mb-6 border border-naval-600">
+                    <h3 class="text-xl font-bold text-white mb-3">Resumen Ejecutivo</h3>
+                    <p class="text-naval-200">Se analizaron <strong class="text-white">${d.length}</strong> comentarios. 
+                    Sentimiento <strong class="${s.Negativo > s.Positivo ? 'text-red-400' : 'text-green-400'}">${s.Negativo > s.Positivo ? 'predominantemente negativo' : 'mayoritariamente positivo'}</strong>.
+                    Se detectaron <strong class="text-red-400">${riesgos}</strong> riesgos altos.</p>
+                </div>
+                <div class="flex gap-3">
+                    <button onclick="exportarReporte('csv')" class="px-4 py-2 btn-naval rounded-lg">📥 CSV</button>
+                    <button onclick="exportarReporte('excel')" class="px-4 py-2 btn-naval rounded-lg">📊 Excel</button>
+                </div>
+            `;
+            
+            document.getElementById('reporteOutput').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function mostrarModalPersonalizado() { document.getElementById('modalPersonalizado').classList.remove('hidden'); }
+        function cerrarModal() { document.getElementById('modalPersonalizado').classList.add('hidden'); }
+        
+        function generarReportePersonalizado() {
+            const inicio = document.getElementById('fechaInicio').value;
+            const fin = document.getElementById('fechaFin').value;
+            if (!inicio || !fin) return alert('Selecciona fechas');
+            
+            const filtrados = STATE.datos.filter(r => {
+                const f = (r['Created At'] || '').toString().substring(0, 10);
+                return f >= inicio && f <= fin;
+            });
+            
+            if (!filtrados.length) return alert('Sin datos');
+            
+            const orig = STATE.datos;
+            STATE.datos = filtrados;
+            generarReporte('personalizado');
+            STATE.datos = orig;
+            cerrarModal();
+        }
+        
+        function exportarReporte(formato) {
+            if (!STATE.reporte) return alert('Genera un reporte');
+            
+            let csv = 'Fecha,Usuario,Comentario,Sentimiento,Tipo,Tema,Prioridad,Riesgo\n';
+            STATE.reporte.datos.forEach(r => {
+                csv += `"${r['Created At']}","${r['User Name']}","${r['Full Text']}","${r._analisis.sentimiento}","${r._analisis.tipo}","${r._analisis.tema}","${r._analisis.prioridad}","${r._analisis.riesgo}"\n`;
+            });
+            
+            const mime = formato === 'excel' ? 'application/vnd.ms-excel' : 'text/csv';
+            const ext = formato === 'excel' ? '.xls' : '.csv';
+            
+            const blob = new Blob([csv], { type: mime });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url; a.download = `reporte-${Date.now()}${ext}`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+        
+        // ============================================
+        // CONFIGURACIÓN
+        // ============================================
+        
+        function renderizarConfig() {
+            document.getElementById('cfgApiKey').value = STATE.apiKey;
+            document.getElementById('cfgPrompt').value = STATE.prompt;
+            document.getElementById('cfgNombre').value = 'Municipalidad Metropolitana de Lima';
+        }
+        
+        function guardarConfig() {
+            const key = document.getElementById('cfgApiKey').value.trim();
+            const prompt = document.getElementById('cfgPrompt').value.trim();
+            
+            if (key) {
+                STATE.apiKey = key;
+                localStorage.setItem('gemini_key_v6', key);
+            }
+            
+            if (prompt) {
+                STATE.prompt = prompt;
+                localStorage.setItem('gemini_prompt_v6', prompt);
+            }
+            
+            document.getElementById('ia-status').textContent = STATE.apiKey ? '✅ Gemini Conectado' : '⚠️ Sin API Key';
+            alert('✅ Configuración guardada');
+        }
+        
+        // ============================================
+        // NAVEGACIÓN
+        // ============================================
+        
+        function navegar(vista) {
+            STATE.vistaActual = vista;
+            document.querySelectorAll('[id^="vista-"]').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`vista-${vista}`).classList.remove('hidden');
+            
+            document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+            event?.target?.closest('.sidebar-link')?.classList.add('active');
+            
+            if (vista === 'dashboard' && STATE.datos.length) renderizarDashboard();
+            if (vista === 'config') renderizarConfig();
+            if (window.innerWidth < 1024) toggleSidebar();
+        }
         
         function guardarAPIKey() {
             const key = document.getElementById('apiKey').value.trim();
             if (key) {
                 STATE.apiKey = key;
-                localStorage.setItem('gemini_api_key_v5', key);
-                document.getElementById('ia-status').textContent = '✅ Gemini conectado';
+                localStorage.setItem('gemini_key_v6', key);
+                document.getElementById('ia-status').textContent = '✅ Gemini Conectado';
                 alert('✅ API Key guardada');
             }
         }
@@ -1364,24 +1222,19 @@ FORMATO DE RESPUESTA (OBLIGATORIO - SOLO JSON):
         // Init
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('fecha-header').textContent = 
-                new Date().toLocaleDateString('es-PE', { 
-                    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' 
-                });
+                new Date().toLocaleDateString('es-PE', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
             
             if (STATE.apiKey) {
                 document.getElementById('apiKey').value = STATE.apiKey;
-                document.getElementById('ia-status').textContent = '✅ Gemini conectado';
+                document.getElementById('ia-status').textContent = '✅ Gemini Conectado';
             }
             
-            document.addEventListener('keydown', e => {
-                if (e.key === 'Escape') cerrarDetalle();
-            });
+            document.addEventListener('keydown', e => { if (e.key === 'Escape') { cerrarDetalle(); cerrarModal(); } });
             
-            console.log('🧠 Social Listening Dashboard v5.0');
-            console.log('✅ SuperPrompt optimizado');
-            console.log('✅ Diseño azul marino');
-            console.log('✅ Timeline corregido');
-            console.log('✅ Detección precisa de sarcasmo y críticas');
+            console.log('🧠 v6.0 - SuperPrompt Refinado');
+            console.log('✅ Detección de burla: 🤡, sarcasmo, ironía');
+            console.log('✅ Hashtags con contexto negativo');
+            console.log('✅ "Ante la duda, elige NEGATIVO"');
         });
     </script>
 </body>
