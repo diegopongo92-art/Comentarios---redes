@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sentinel AI v11.0 - Zero Escape</title>
+    <title>Sentinel AI v12.0 - Zero Escape Completo</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -143,6 +143,11 @@
             border: 1px solid var(--border) !important;
             border-radius: 8px !important;
         }
+        select:focus, input:focus, textarea:focus {
+            border-color: var(--accent) !important;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.12) !important;
+        }
         
         .btn-primary {
             background: var(--accent);
@@ -179,14 +184,32 @@
         }
         .btn-outline:hover { background: var(--border); }
         
+        .emotion-card {
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .emotion-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(139,92,246,0.3);
+        }
+        
+        .crisis-alert { border-left: 4px solid #ef4444; }
+        
+        .influence-node {
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .influence-node:hover { filter: brightness(1.4); }
+        
+        .zero-escape-badge {
+            background: rgba(239,68,68,0.2);
+            border: 2px solid rgba(239,68,68,0.5);
+            animation: pulseCrisis 1.5s ease-in-out infinite alternate;
+        }
+        
         @media (max-width: 768px) {
             .chart-container { height: 220px; }
-        }
-
-        .falso-neutral-alert {
-            background: rgba(239,68,68,0.1);
-            border: 2px solid rgba(239,68,68,0.4);
-            animation: pulseCrisis 1s ease-in-out infinite alternate;
+            .kpi-value { font-size: 1.5rem; }
         }
     </style>
 </head>
@@ -202,11 +225,12 @@
                         <span class="text-2xl font-black text-white">🛡️</span>
                     </div>
                     <h2 class="text-lg font-bold text-white">Sentinel AI</h2>
-                    <p class="text-xs text-red-300/70">v11.0 Zero Escape</p>
+                    <p class="text-xs text-red-300/70">v12.0 Zero Escape</p>
                 </div>
                 
-                <div class="mb-4 p-3 bg-red-500/5 border border-red-500/20 rounded-xl">
-                    <p class="text-xs text-red-300/80 text-center">⚠️ Modo: Tolerancia CERO a falsos neutrales</p>
+                <div class="mb-4 p-3 bg-red-500/5 border border-red-500/20 rounded-xl zero-escape-badge">
+                    <p class="text-xs text-red-300/80 text-center font-bold">🛡️ ZERO ESCAPE MODE</p>
+                    <p class="text-xs text-red-300/50 text-center mt-1">Tolerancia CERO a falsos neutrales</p>
                 </div>
                 
                 <nav class="space-y-1">
@@ -218,6 +242,7 @@
                     </div>
                     <div onclick="navigateTo('crisis')" class="nav-item flex items-center px-3 py-2.5 rounded-lg text-sm text-blue-200/80">
                         <i class="fas fa-exclamation-triangle w-5 text-red-400"></i><span class="ml-2">Centro Crisis</span>
+                        <span id="crisis-nav-badge" class="ml-auto text-xs bg-red-500/20 text-red-300 px-1.5 py-0.5 rounded-full hidden">0</span>
                     </div>
                     <div onclick="navigateTo('narratives')" class="nav-item flex items-center px-3 py-2.5 rounded-lg text-sm text-blue-200/80">
                         <i class="fas fa-project-diagram w-5 text-cyan-400"></i><span class="ml-2">Narrativas</span>
@@ -248,85 +273,200 @@
             <header class="glass sticky top-0 z-30 border-b border-[#1e3050] px-6 py-3">
                 <div class="flex items-center justify-between">
                     <button onclick="toggleSidebar()" class="lg:hidden text-blue-300"><i class="fas fa-bars text-xl"></i></button>
-                    <h1 class="text-lg font-bold text-white" id="header-title">Dashboard - Zero Escape</h1>
+                    <h1 class="text-lg font-bold text-white" id="header-title">Dashboard Principal</h1>
                     <div class="flex items-center gap-3">
                         <span class="text-xs text-blue-300/50" id="fecha-header"></span>
+                        <span id="crisis-header-badge" class="text-xs bg-red-500/10 text-red-300 px-2 py-1 rounded-full hidden">🚨 <span id="crisis-header-count">0</span></span>
                     </div>
                 </div>
             </header>
             
             <div class="p-5">
                 
-                <!-- DASHBOARD -->
+                <!-- ==================== DASHBOARD ==================== -->
                 <div id="view-dashboard">
-                    <div class="glass rounded-2xl p-5 mb-6 falso-neutral-alert">
+                    
+                    <!-- Panel de Control -->
+                    <div class="glass rounded-2xl p-5 mb-6">
                         <div class="flex flex-wrap items-center justify-between gap-3">
                             <div>
-                                <h2 class="text-xl font-bold text-white">🛡️ Sentinel AI v11.0 - ZERO ESCAPE</h2>
-                                <p class="text-xs text-red-300/70">Motor anti-falsos-neutrales • Detección de ironía peruana • Categorías políticas</p>
+                                <h2 class="text-xl font-bold text-white">🛡️ Sentinel AI v12.0 - Zero Escape</h2>
+                                <p class="text-xs text-blue-300/50">Detección de ironía • Categorías políticas • CERO falsos neutrales</p>
                             </div>
                             <div class="flex gap-2 flex-wrap">
                                 <input type="password" id="apiKey" class="px-3 py-2 text-sm w-48" placeholder="Gemini API Key">
                                 <button onclick="guardarAPIKey()" class="px-4 py-2 btn-gold text-sm"><i class="fas fa-key mr-1"></i>Conectar</button>
+                                <button onclick="document.getElementById('fileInput').click()" class="px-4 py-2 btn-primary text-sm"><i class="fas fa-upload mr-1"></i>Cargar Excel</button>
                                 <button onclick="cargarDemo()" class="px-4 py-2 btn-outline text-sm"><i class="fas fa-flask mr-1"></i>Demo Crítico</button>
                             </div>
+                            <input type="file" id="fileInput" accept=".xlsx,.xls" class="hidden" onchange="procesarArchivo(event)">
+                        </div>
+                        <div id="progressContainer" class="hidden mt-4">
+                            <div class="flex justify-between text-xs mb-1"><span class="text-blue-300" id="progressText"></span><span class="text-blue-200 font-bold" id="progressPercent">0%</span></div>
+                            <div class="w-full bg-[#0a0e17] rounded-full h-2"><div id="progressBar" class="shimmer h-2 rounded-full" style="width:0%"></div></div>
                         </div>
                     </div>
                     
+                    <!-- KPIs -->
                     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-6" id="kpiContainer"></div>
                     
+                    <!-- Charts Row 1 -->
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-6">
-                        <div class="glass rounded-2xl p-5"><h3 class="text-sm font-bold text-white mb-3">🎭 Sentimientos</h3><div class="chart-container"><canvas id="chartSentimiento"></canvas></div></div>
-                        <div class="glass rounded-2xl p-5"><h3 class="text-sm font-bold text-white mb-3">🧠 Emociones</h3><div class="chart-container"><canvas id="chartEmociones"></canvas></div></div>
-                        <div class="glass rounded-2xl p-5"><h3 class="text-sm font-bold text-white mb-3">📂 Temas</h3><div class="chart-container"><canvas id="chartTemas"></canvas></div></div>
+                        <div class="glass rounded-2xl p-5 glass-hover"><h3 class="text-sm font-bold text-white mb-3">🎭 Sentimientos</h3><div class="chart-container"><canvas id="chartSentimiento"></canvas></div></div>
+                        <div class="glass rounded-2xl p-5 glass-hover"><h3 class="text-sm font-bold text-white mb-3">🧠 Emociones</h3><div class="chart-container"><canvas id="chartEmociones"></canvas></div></div>
+                        <div class="glass rounded-2xl p-5 glass-hover"><h3 class="text-sm font-bold text-white mb-3">📂 Temas</h3><div class="chart-container"><canvas id="chartTemas"></canvas></div></div>
                     </div>
                     
+                    <!-- Charts Row 2 -->
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6">
-                        <div class="glass rounded-2xl p-5"><h3 class="text-sm font-bold text-white mb-3">🚨 Monitor Crisis</h3><div class="chart-container"><canvas id="chartCrisis"></canvas></div></div>
-                        <div class="glass rounded-2xl p-5"><h3 class="text-sm font-bold text-white mb-3">📈 Timeline</h3><div class="chart-container"><canvas id="chartTimeline"></canvas></div></div>
+                        <div class="glass rounded-2xl p-5 glass-hover"><h3 class="text-sm font-bold text-white mb-3">🚨 Monitor Crisis</h3><div class="chart-container"><canvas id="chartCrisis"></canvas></div></div>
+                        <div class="glass rounded-2xl p-5 glass-hover"><h3 class="text-sm font-bold text-white mb-3">📈 Timeline</h3><div class="chart-container"><canvas id="chartTimeline"></canvas></div></div>
                     </div>
                     
+                    <!-- Nube de Palabras -->
+                    <div class="glass rounded-2xl p-5 mb-6"><h3 class="text-sm font-bold text-white mb-3">☁️ Nube de Palabras</h3><canvas id="wordcloud" width="700" height="300" class="w-full"></canvas></div>
+                    
+                    <!-- Tabla -->
                     <div class="glass rounded-2xl p-5">
                         <div class="flex flex-wrap justify-between items-center mb-4 gap-2">
-                            <h3 class="text-sm font-bold text-white">📋 Comentarios (Zero Escape Mode)</h3>
+                            <h3 class="text-sm font-bold text-white">📋 Comentarios Analizados</h3>
                             <div class="flex gap-2">
                                 <select id="filtroSentimiento" class="px-2 py-1.5 text-xs" onchange="aplicarFiltros()"><option value="">Sentimiento</option><option value="Negativo">Negativo</option><option value="Neutral">Neutral</option><option value="Positivo">Positivo</option></select>
+                                <select id="filtroEmocion" class="px-2 py-1.5 text-xs" onchange="aplicarFiltros()"><option value="">Emoción</option></select>
+                                <select id="filtroTipo" class="px-2 py-1.5 text-xs" onchange="aplicarFiltros()"><option value="">Tipo</option></select>
                             </div>
                         </div>
                         <div class="overflow-x-auto">
                             <table id="tablaComentarios" class="display nowrap" style="width:100%">
-                                <thead><tr><th>Fecha</th><th>Usuario</th><th>Comentario</th><th>Sent</th><th>Emoción</th><th>Tipo</th><th>Tema</th><th>Prioridad</th><th>Falso Neutral</th></tr></thead>
+                                <thead><tr><th>Fecha</th><th>Usuario</th><th>Comentario</th><th>Sent</th><th>Emoción</th><th>Tipo</th><th>Tema</th><th>Prioridad</th><th>Zero Escape</th></tr></thead>
                                 <tbody id="tablaBody"></tbody>
                             </table>
                         </div>
                     </div>
                 </div>
                 
-                <!-- OTRAS VISTAS (placeholder) -->
-                <div id="view-emotions" class="hidden"><div class="glass rounded-2xl p-6"><h2 class="text-xl font-bold text-white">🧠 Laboratorio Emocional</h2><p class="text-blue-300/50 mt-4">Carga datos primero</p></div></div>
-                <div id="view-crisis" class="hidden"><div class="glass rounded-2xl p-6"><h2 class="text-xl font-bold text-white">🚨 Centro de Crisis</h2><p class="text-blue-300/50 mt-4">Carga datos primero</p></div></div>
-                <div id="view-narratives" class="hidden"><div class="glass rounded-2xl p-6"><h2 class="text-xl font-bold text-white">📊 Narrativas</h2><p class="text-blue-300/50 mt-4">Carga datos primero</p></div></div>
-                <div id="view-influence" class="hidden"><div class="glass rounded-2xl p-6"><h2 class="text-xl font-bold text-white">🕸️ Influencia</h2><p class="text-blue-300/50 mt-4">Carga datos primero</p></div></div>
-                <div id="view-stories" class="hidden"><div class="glass rounded-2xl p-6"><h2 class="text-xl font-bold text-white">📖 Stories</h2><p class="text-blue-300/50 mt-4">Carga datos primero</p></div></div>
-                <div id="view-collab" class="hidden"><div class="glass rounded-2xl p-6"><h2 class="text-xl font-bold text-white">💬 Colaboración</h2><p class="text-blue-300/50 mt-4">Carga datos primero</p></div></div>
-                <div id="view-reports" class="hidden"><div class="glass rounded-2xl p-6"><h2 class="text-xl font-bold text-white">📊 Reportes</h2><p class="text-blue-300/50 mt-4">Carga datos primero</p></div></div>
+                <!-- ==================== LAB EMOCIONAL ==================== -->
+                <div id="view-emotions" class="hidden">
+                    <div class="glass rounded-2xl p-6 mb-6">
+                        <h2 class="text-xl font-bold text-white mb-2">🧠 Laboratorio Emocional</h2>
+                        <p class="text-sm text-blue-300/50 mb-6">Análisis basado en la Rueda de Plutchik con detección de ironía</p>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8" id="emotionWheel"></div>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div class="glass rounded-xl p-5"><h3 class="text-sm font-bold text-white mb-3">Distribución Emocional</h3><div class="chart-container"><canvas id="chartEmocionDist"></canvas></div></div>
+                            <div class="glass rounded-xl p-5"><h3 class="text-sm font-bold text-white mb-3">Intensidad por Emoción</h3><div class="chart-container"><canvas id="chartIntensidad"></canvas></div></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ==================== CENTRO DE CRISIS ==================== -->
+                <div id="view-crisis" class="hidden">
+                    <div class="glass rounded-2xl p-6 mb-6">
+                        <h2 class="text-xl font-bold text-white mb-2">🚨 Centro de Crisis</h2>
+                        <p class="text-sm text-blue-300/50 mb-6">Monitoreo en tiempo real de situaciones críticas y falsos neutrales corregidos</p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6" id="crisisStats"></div>
+                        <div class="glass rounded-xl p-5 mb-6"><h3 class="text-sm font-bold text-white mb-3">Evolución de Crisis</h3><div class="chart-container"><canvas id="chartCrisisEvo"></canvas></div></div>
+                        <h3 class="text-sm font-bold text-white mb-3">🚨 Alertas Activas</h3>
+                        <div id="crisisAlertsList" class="space-y-3"></div>
+                    </div>
+                </div>
+                
+                <!-- ==================== NARRATIVAS ==================== -->
+                <div id="view-narratives" class="hidden">
+                    <div class="glass rounded-2xl p-6 mb-6">
+                        <h2 class="text-xl font-bold text-white mb-2">📊 Rastreador de Narrativas</h2>
+                        <p class="text-sm text-blue-300/50 mb-6">Detección de narrativas políticas y sociales dominantes</p>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                            <div class="glass rounded-xl p-5"><h3 class="text-sm font-bold text-white mb-3">Narrativas por Tema</h3><div class="chart-container"><canvas id="chartNarrativas"></canvas></div></div>
+                            <div class="glass rounded-xl p-5"><h3 class="text-sm font-bold text-white mb-3">Evolución de Narrativas</h3><div class="chart-container"><canvas id="chartNarrEvo"></canvas></div></div>
+                        </div>
+                        <h3 class="text-sm font-bold text-white mb-3">📝 Narrativas Detectadas</h3>
+                        <div id="narrativasList" class="space-y-3"></div>
+                    </div>
+                </div>
+                
+                <!-- ==================== RED DE INFLUENCIA ==================== -->
+                <div id="view-influence" class="hidden">
+                    <div class="glass rounded-2xl p-6 mb-6">
+                        <h2 class="text-xl font-bold text-white mb-2">🕸️ Red de Influencia</h2>
+                        <p class="text-sm text-blue-300/50 mb-6">Mapeo de interacciones y líderes de opinión</p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6" id="influencersList"></div>
+                        <div class="glass rounded-xl p-5 mb-6"><h3 class="text-sm font-bold text-white mb-3">Grafo de Interacciones</h3><div id="influenceGraph" style="height: 400px;"></div></div>
+                        <h3 class="text-sm font-bold text-white mb-3">👥 Usuarios Más Influyentes</h3>
+                        <div id="topInfluencers" class="space-y-2"></div>
+                    </div>
+                </div>
+                
+                <!-- ==================== STORY GENERATOR ==================== -->
+                <div id="view-stories" class="hidden">
+                    <div class="glass rounded-2xl p-6 mb-6">
+                        <h2 class="text-xl font-bold text-white mb-2">📖 Story Generator</h2>
+                        <p class="text-sm text-blue-300/50 mb-6">Narrativa ejecutiva automática con datos de Zero Escape</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div class="glass rounded-xl p-5 cursor-pointer glass-hover text-center" onclick="generarStory('semanal')">
+                                <i class="fas fa-calendar-week text-3xl text-blue-400 mb-3"></i>
+                                <h3 class="font-bold text-white">Story Semanal</h3>
+                            </div>
+                            <div class="glass rounded-xl p-5 cursor-pointer glass-hover text-center" onclick="generarStory('crisis')">
+                                <i class="fas fa-exclamation-triangle text-3xl text-red-400 mb-3"></i>
+                                <h3 class="font-bold text-white">Story de Crisis</h3>
+                            </div>
+                        </div>
+                        <div id="storyOutput" class="glass rounded-xl p-6 hidden"></div>
+                    </div>
+                </div>
+                
+                <!-- ==================== COLABORACIÓN ==================== -->
+                <div id="view-collab" class="hidden">
+                    <div class="glass rounded-2xl p-6 mb-6">
+                        <h2 class="text-xl font-bold text-white mb-2">💬 Colaboración en Equipo</h2>
+                        <p class="text-sm text-blue-300/50 mb-6">Asignación y seguimiento de comentarios críticos</p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6" id="teamStats"></div>
+                        <h3 class="text-sm font-bold text-white mb-3">📋 Bandeja de Asignaciones</h3>
+                        <div id="collabList" class="space-y-3"></div>
+                    </div>
+                </div>
+                
+                <!-- ==================== REPORTES ==================== -->
+                <div id="view-reports" class="hidden">
+                    <div class="glass rounded-2xl p-6">
+                        <h2 class="text-xl font-bold text-white mb-6">📊 Reportes</h2>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                            <div class="glass rounded-xl p-5 glass-hover cursor-pointer text-center" onclick="generarReporte('diario')"><i class="fas fa-calendar-day text-3xl text-blue-400 mb-2"></i><h3 class="font-bold text-white">Diario</h3></div>
+                            <div class="glass rounded-xl p-5 glass-hover cursor-pointer text-center" onclick="generarReporte('semanal')"><i class="fas fa-calendar-week text-3xl text-blue-400 mb-2"></i><h3 class="font-bold text-white">Semanal</h3></div>
+                            <div class="glass rounded-xl p-5 glass-hover cursor-pointer text-center" onclick="generarReporte('mensual')"><i class="fas fa-calendar-alt text-3xl text-blue-400 mb-2"></i><h3 class="font-bold text-white">Mensual</h3></div>
+                            <div class="glass rounded-xl p-5 glass-hover cursor-pointer text-center" onclick="generarReporte('story')"><i class="fas fa-book text-3xl text-orange-400 mb-2"></i><h3 class="font-bold text-white">Story</h3></div>
+                        </div>
+                        <div id="reporteOutput" class="glass rounded-xl p-6 hidden"></div>
+                    </div>
+                </div>
+                
+                <!-- ==================== CONFIG ==================== -->
                 <div id="view-config" class="hidden">
                     <div class="glass rounded-2xl p-6 max-w-4xl">
                         <h2 class="text-xl font-bold text-white mb-6">⚙️ Configuración</h2>
-                        <div class="mb-4"><label class="text-sm text-blue-300/70">API Key</label><input type="password" id="cfgApiKey" class="w-full px-4 py-2.5 mt-1"></div>
+                        <div class="mb-4"><label class="text-sm text-blue-300/70">API Key de Gemini</label><input type="password" id="cfgApiKey" class="w-full px-4 py-2.5 mt-1"></div>
+                        <div class="mb-4"><label class="text-sm text-blue-300/70">Prompt del Sistema</label><textarea id="cfgPrompt" class="w-full px-4 py-2.5 mt-1 font-mono text-xs" rows="15"></textarea></div>
                         <button onclick="guardarConfig()" class="px-6 py-2.5 btn-gold"><i class="fas fa-save mr-2"></i>Guardar</button>
                     </div>
                 </div>
             </div>
         </main>
+        
+        <!-- PANEL DETALLE -->
+        <div id="detailPanel" class="fixed inset-y-0 right-0 w-full sm:w-[500px] bg-[#0d1117] border-l border-[#1e3050] shadow-2xl transform translate-x-full transition-transform duration-300 z-50 overflow-y-auto">
+            <div class="p-5">
+                <div class="flex justify-between items-center mb-5"><h2 class="text-lg font-bold text-white">🧬 Análisis Detallado</h2><button onclick="cerrarDetalle()" class="text-blue-300/50 hover:text-white text-xl">&times;</button></div>
+                <div id="detalleContenido"></div>
+            </div>
+        </div>
     </div>
 
     <script>
         // ============================================
-        // PROMPT ZERO-ESCAPE - REESCRITO COMPLETO
+        // PROMPT ZERO-ESCAPE v12
         // ============================================
         
-        const PROMPT_ZERO_ESCAPE = `ERES UN ANALISTA FORENSE DE SENTIMIENTOS. TU MISIÓN CRÍTICA ES IDENTIFICAR CORRECTAMENTE SENTIMIENTOS NEGATIVOS. NO PUEDES DEJAR ESCAPAR NI UN SOLO COMENTARIO NEGATIVO.
+        const PROMPT_ZERO_ESCAPE = `ERES UN ANALISTA FORENSE DE SENTIMIENTOS. TU MISIÓN: IDENTIFICAR CORRECTAMENTE SENTIMIENTOS NEGATIVOS. CERO TOLERANCIA A FALSOS NEUTRALES.
 
 DEVUELVE EXCLUSIVAMENTE ESTE JSON:
 {
@@ -344,90 +484,66 @@ DEVUELVE EXCLUSIVAMENTE ESTE JSON:
   "palabrasClave": ["p1","p2","p3"]
 }
 
-═══════════════════════════════════════
-REGLA SUPREMA (LEE ESTO PRIMERO)
-═══════════════════════════════════════
-SI EL COMENTARIO CONTIENE CUALQUIERA DE ESTOS ELEMENTOS, EL SENTIMIENTO ES "Negativo":
+REGLAS SUPREMAS:
+1. CUALQUIER crítica, ironía, sarcasmo, insulto = "Negativo"
+2. Palabras entre comillas en contexto crítico = Ironía = "Negativo"
+3. Preguntas retóricas ("¿Cuánto le pagan?") = "Negativo"
+4. Términos despectivos = "Negativo"
+5. Acusaciones de corrupción = "Negativo"
+6. Deslegitimación política = "Negativo"
+7. SI HAY DUDA → "Negativo"
 
-1. CRÍTICA: Cualquier señalamiento de error, falla, deficiencia
-2. IRONÍA/SARCASMO: Preguntas retóricas, comillas sarcásticas ("mantenimiento"), tono burlón
-3. INSULTOS: Apodos, descalificaciones, lenguaje soez
-4. ACUSACIONES: Corrupción, robo, estafa, favoritismo, nepotismo
-5. COMPARACIONES DESPECTIVAS: "tren chatarra", "tierra de nadie", "inservible"
-6. CUESTIONAMIENTOS: Preguntas que implican crítica ("¿Cuánto le pagan?")
-7. DESLEGITIMACIÓN: Cuestionar elecciones, autoridad, democracia
-8. REFERENCIAS NEGATIVAS: "lameculos", "marrano", "amiguito", "chiste"
-9. EMOCIONES NEGATIVAS: Enojo, frustración, indignación, decepción
-10. CUALQUIER COMENTARIO QUE NO SEA CLARAMENTE POSITIVO O NEUTRAL
-
-═══════════════════════════════════════
-DETECCIÓN DE IRONÍA PERUANA
-═══════════════════════════════════════
-- Palabras entre comillas en contexto crítico: "mantenimiento" = NEGATIVO
-- Preguntas retóricas: "¿Cuánto le pagan?" = NEGATIVO
-- Términos despectivos: "tren chatarra", "kimono", "japonesa" = NEGATIVO
-- Insinuaciones: "amiguito de RLA", "lameculos del marrano" = NEGATIVO
-
-═══════════════════════════════════════
-NUEVAS CATEGORÍAS DE TEMAS POLÍTICOS
-═══════════════════════════════════════
-- "Corrupción": coimas, pagos, favoritismo, amiguitos, nepotismo
+NUEVAS CATEGORÍAS DE TEMAS:
+- "Corrupción": coimas, pagos, amiguitos, nepotismo, favoritismo
 - "Crítica Política": deslegitimación, críticas a autoridades, elecciones
 - "Inseguridad": delincuencia, tierra de nadie, violencia
-- "Gestión Municipal": mantenimiento, obras, servicios
-- "Transporte": tren, buses, tráfico
-- "Racismo/Xenofobia": referencias étnicas despectivas (japonesa, kimono)
-- "Insultos Directos": ataques personales sin contenido político
-
-═══════════════════════════════════════
-PRIORIDAD Y RIESGO
-═══════════════════════════════════════
-Prioridad Alta: Acusaciones de corrupción, insultos, deslegitimación
-Riesgo Alto: Menciones a figuras políticas + críticas graves`;
+- "Xenofobia": referencias étnicas despectivas
+- "Transporte": tren, mantenimiento, oxidación, chatarra
+- "Gestión Municipal": administración, obras, servicios
+- "Insultos Directos": ataques personales sin contenido político`;
 
         // ============================================
-        // MOTOR ZERO-ESCAPE
+        // ESTADO GLOBAL
         // ============================================
         
         const STATE = {
             datos: [],
             filtrados: [],
-            apiKey: localStorage.getItem('sentinel_v11_key') || '',
+            apiKey: localStorage.getItem('sentinel_v12_key') || '',
+            prompt: localStorage.getItem('sentinel_v12_prompt') || PROMPT_ZERO_ESCAPE,
             tablaData: null,
             graficos: {},
             crisisAlerts: [],
-            falsosNeutrales: []
+            falsosNeutrales: [],
+            vistaActual: 'dashboard'
         };
         
-        class ZeroEscapeAnalyzer {
+        // ============================================
+        // MOTOR ZERO-ESCAPE
+        // ============================================
+        
+        class ZeroEscapeEngine {
             
             static async analizar(textoOriginal) {
-                // PRIMERO: Análisis local ultra-agresivo
                 const analisisLocal = this.analisisLocalUltra(textoOriginal);
                 
-                // Si el análisis local detecta Negativo, lo marcamos como tal
                 if (analisisLocal.sentimiento === 'Negativo') {
                     return { ...analisisLocal, fuente: 'Motor Zero-Escape', confianza: 1.0, esFalsoNeutral: false };
                 }
                 
-                // Si hay API key, consultar a Gemini para verificación adicional
                 if (STATE.apiKey) {
                     try {
                         const analisisGemini = await this.callGemini(textoOriginal);
-                        // Si Gemini dice Negativo, usar ese
                         if (analisisGemini.sentimiento === 'Negativo') {
-                            return { ...analisisGemini, fuente: 'Gemini Pro', confianza: 0.99, esFalsoNeutral: false };
+                            return { ...analisisGemini, fuente: 'Gemini Pro', confianza: 0.99, esFalsoNeutral: true };
                         }
-                        // Si ambos dicen que NO es negativo, confiar
                         return { ...analisisGemini, fuente: 'Gemini Pro', confianza: 0.95, esFalsoNeutral: false };
                     } catch (e) {
-                        // Si Gemini falla, confiar en el local
+                        console.warn('Gemini error:', e.message);
                         return { ...analisisLocal, fuente: 'Motor Local', confianza: 0.90, esFalsoNeutral: false };
                     }
                 }
                 
-                // Sin API key, el análisis local ya dijo que no es negativo
-                // PERO si el análisis local tiene dudas, marcar como negativo
                 if (analisisLocal.intensidad >= 4) {
                     return { ...analisisLocal, sentimiento: 'Negativo', fuente: 'Motor (forzado)', confianza: 0.85, esFalsoNeutral: true };
                 }
@@ -442,11 +558,7 @@ Riesgo Alto: Menciones a figuras políticas + críticas graves`;
                 let puntajeNegativo = 0;
                 let razones = [];
                 
-                // ============================================
-                // DETECCIÓN DE IRONÍA Y SARCASMO
-                // ============================================
-                
-                // Palabras entre comillas en contexto negativo
+                // Ironía: palabras entre comillas
                 const comillasMatch = original.match(/"([^"]+)"/g);
                 if (comillasMatch) {
                     comillasMatch.forEach(m => {
@@ -458,166 +570,50 @@ Riesgo Alto: Menciones a figuras políticas + críticas graves`;
                     });
                 }
                 
-                // Preguntas retóricas que implican crítica
+                // Preguntas retóricas
                 if (t.includes('¿') && t.includes('?')) {
-                    const patronesRetricos = [
-                        'cuánto le pagan', 'cuánto cobra', 'cuánto cuesta', 'cuánto vale',
-                        'hasta cuándo', 'dónde está', 'quién le paga', 'quién lo eligió',
-                        'por qué no', 'cómo es posible', 'se puede saber'
-                    ];
-                    patronesRetricos.forEach(p => {
-                        if (t.includes(p)) {
-                            puntajeNegativo += 25;
-                            razones.push(`Pregunta retórica crítica: "${p}"`);
-                        }
-                    });
+                    const patrones = ['cuánto le pagan', 'cuánto cobra', 'cuánto cuesta', 'hasta cuándo', 'dónde está', 'quién le paga', 'quién lo eligió'];
+                    patrones.forEach(p => { if (t.includes(p)) { puntajeNegativo += 25; razones.push(`Pregunta retórica: "${p}"`); } });
                 }
                 
-                // ============================================
-                // DETECCIÓN DE INSULTOS Y DESCALIFICACIONES
-                // ============================================
+                // Insultos
+                const insultos = ['lameculos', 'lambeculo', 'lambón', 'arrastrado', 'marrano', 'chancho', 'rata', 'ratero', 'cucaracha', 'fantoche', 'payaso', 'bufón', 'títere', 'inservible', 'inútil', 'incapaz', 'inepto', 'mediocre', 'chiste', 'ridículo', 'patético', 'miserable', 'cojudo', 'huevón', 'pendejo', 'conchudo', 'mierda', 'basura', 'vendido', 'traidor', 'corrupto', 'ladrón', 'sinvergüenza', 'amiguito', 'compinche'];
+                insultos.forEach(i => { if (t.includes(i)) { puntajeNegativo += 30; razones.push(`Insulto: "${i}"`); } });
                 
-                const insultos = [
-                    'lameculos', 'lambeculo', 'lambón', 'arrastrado', 'sobón', 'adulón',
-                    'marrano', 'chancho', 'cerdo', 'puerco', 'rata', 'ratero', 'cucaracha',
-                    'fantoche', 'payaso', 'bufón', 'títere', 'marioneta', 'muñeco',
-                    'inservible', 'inútil', 'incapaz', 'inepto', 'mediocre', 'incompetente',
-                    'chiste', 'ridículo', 'patético', 'miserable', 'desgraciado',
-                    'cojudo', 'huevón', 'pendejo', 'conchudo', 'mierda', 'basura',
-                    'vendido', 'traidor', 'corrupto', 'ladrón', 'sinvergüenza',
-                    'amiguito', 'amiguita', 'compinche', 'cómplice'
-                ];
+                // Términos despectivos
+                const despectivos = ['tren chatarra', 'chatarra', 'oxidándose', 'tierra de nadie', 'japonesa dando órdenes', 'kimono', 'no fue elegido', 'ilegítimo', 'usurpador', 'delincuencia tomó', 'corrupción tomó', 'poco o nada', 'no hacen nada', 'puro show', 'pura pantalla'];
+                despectivos.forEach(d => { if (t.includes(d)) { puntajeNegativo += 20; razones.push(`Despectivo: "${d}"`); } });
                 
-                insultos.forEach(insulto => {
-                    if (t.includes(insulto)) {
-                        puntajeNegativo += 30;
-                        razones.push(`Insulto detectado: "${insulto}"`);
-                    }
-                });
+                // Corrupción
+                const corrupcion = ['corrupción', 'corrupto', 'coima', 'coimero', 'mermelada', 'mermelero', 'argolla', 'robo', 'robar', 'ladrón', 'estafa', 'fraude', 'desfalco', 'malversación', 'sobrevalorado', 'inflado', 'cuánto le pagan', 'cuánto cobra', 'favores', 'favoritismo', 'nepotismo', 'amiguismo'];
+                corrupcion.forEach(c => { if (t.includes(c)) { puntajeNegativo += 35; razones.push(`Corrupción: "${c}"`); } });
                 
-                // ============================================
-                // DETECCIÓN DE TÉRMINOS DESPECTIVOS
-                // ============================================
+                // Deslegitimación
+                const deslegitimacion = ['no fue elegido', 'no elegido democráticamente', 'ilegítimo', 'usurpador', 'golpista', 'dictador', 'dando órdenes a un alcalde', 'títere', 'marioneta', 'no lo eligieron', 'quién lo eligió'];
+                deslegitimacion.forEach(d => { if (t.includes(d)) { puntajeNegativo += 35; razones.push(`Deslegitimación: "${d}"`); } });
                 
-                const despectivos = [
-                    'tren chatarra', 'chatarra', 'oxidándose', 'oxidado',
-                    'tierra de nadie', 'descontrol', 'caos', 'desastre',
-                    'japonesa dando órdenes', 'kimono', 'no fue elegido',
-                    'no elegido democráticamente', 'ilegítimo', 'usurpador',
-                    'delincuencia tomó el poder', 'corrupción tomó el poder',
-                    'poco o nada', 'no hacen nada', 'no sirven para nada',
-                    'puro show', 'pura pantalla', 'figuretti', 'showsero'
-                ];
-                
-                despectivos.forEach(d => {
-                    if (t.includes(d)) {
-                        puntajeNegativo += 20;
-                        razones.push(`Término despectivo: "${d}"`);
-                    }
-                });
-                
-                // ============================================
-                // ACUSACIONES DE CORRUPCIÓN
-                // ============================================
-                
-                const corrupcion = [
-                    'corrupción', 'corrupto', 'coima', 'coimero', 'mermelada',
-                    'mermelero', 'argolla', 'argollero', 'robo', 'robar', 'ladrón',
-                    'estafa', 'fraude', 'desfalco', 'malversación', 'peculado',
-                    'sobrevalorado', 'inflado', 'sobrecosto', 'diezmo',
-                    'cuánto le pagan', 'cuánto cobra', 'pago', 'pagaron',
-                    'favores', 'favoritismo', 'nepotismo', 'amiguismo',
-                    'se la llevan fácil', 'plata como cancha'
-                ];
-                
-                corrupcion.forEach(c => {
-                    if (t.includes(c)) {
-                        puntajeNegativo += 35;
-                        razones.push(`Acusación de corrupción: "${c}"`);
-                    }
-                });
-                
-                // ============================================
-                // DESLEGITIMACIÓN POLÍTICA
-                // ============================================
-                
-                const deslegitimacion = [
-                    'no fue elegido', 'no elegido democráticamente', 'ilegítimo',
-                    'usurpador', 'golpista', 'dictador', 'dictadura',
-                    'dando órdenes a un alcalde', 'títere', 'marioneta',
-                    'no lo eligieron', 'quién lo eligió', 'nadie lo eligió',
-                    'gobierno de facto', 'no representa'
-                ];
-                
-                deslegitimacion.forEach(d => {
-                    if (t.includes(d)) {
-                        puntajeNegativo += 35;
-                        razones.push(`Deslegitimación: "${d}"`);
-                    }
-                });
-                
-                // ============================================
-                // REFERENCIAS RACISTAS/XENÓFOBAS
-                // ============================================
-                
-                const xenofobia = [
-                    'japonesa', 'japonés', 'chino', 'china', 'kimono',
-                    'extranjero', 'no es de aquí', 'váyase a su país',
-                    'invasión', 'colonización'
-                ];
-                
+                // Xenofobia
                 let tieneXenofobia = false;
-                xenofobia.forEach(x => {
-                    if (t.includes(x) && puntajeNegativo > 0) {
-                        tieneXenofobia = true;
-                        puntajeNegativo += 25;
-                        razones.push(`Referencia xenófoba: "${x}"`);
-                    }
-                });
+                ['japonesa', 'japonés', 'chino', 'china', 'kimono', 'extranjero'].forEach(x => { if (t.includes(x) && puntajeNegativo > 0) { tieneXenofobia = true; puntajeNegativo += 25; razones.push(`Xenofobia: "${x}"`); } });
                 
-                // ============================================
-                // MENCIONES A FIGURAS POLÍTICAS
-                // ============================================
-                
-                const figuras = ['keiko', 'fujimori', 'reggiardo', 'rla', 'lopez aliaga', 
-                                'boluarte', 'castillo', 'alan garcía', 'toledo', 'humala'];
-                
+                // Menciones políticas
                 let mencionPolitica = false;
-                figuras.forEach(f => {
-                    if (t.includes(f)) {
-                        mencionPolitica = true;
-                        if (puntajeNegativo > 0) {
-                            puntajeNegativo += 10;
-                            razones.push(`Mención política en contexto negativo: ${f}`);
-                        }
-                    }
-                });
+                ['keiko', 'fujimori', 'reggiardo', 'rla', 'lopez aliaga', 'boluarte', 'castillo'].forEach(f => { if (t.includes(f)) { mencionPolitica = true; if (puntajeNegativo > 0) { puntajeNegativo += 10; } } });
                 
-                // ============================================
-                // DETERMINACIÓN FINAL
-                // ============================================
-                
+                // Determinación
                 let sentimiento;
-                if (puntajeNegativo >= 20) {
-                    sentimiento = 'Negativo';
-                } else if (puntajeNegativo >= 10 && mencionPolitica) {
-                    sentimiento = 'Negativo'; // Si hay mención política y algo de negatividad
-                } else if (puntajeNegativo >= 5) {
-                    sentimiento = 'Negativo'; // Cualquier indicio
-                } else {
-                    sentimiento = 'Neutral';
-                }
+                if (puntajeNegativo >= 15) sentimiento = 'Negativo';
+                else if (puntajeNegativo >= 8 && mencionPolitica) sentimiento = 'Negativo';
+                else if (puntajeNegativo >= 5) sentimiento = 'Negativo';
+                else sentimiento = 'Neutral';
                 
-                // Emoción
                 let emocion = 'Neutral';
                 let intensidad = 1;
-                
                 if (puntajeNegativo >= 60) { emocion = 'Ira'; intensidad = 10; }
                 else if (puntajeNegativo >= 40) { emocion = 'Indignación'; intensidad = 9; }
                 else if (puntajeNegativo >= 25) { emocion = 'Frustración'; intensidad = 7; }
                 else if (puntajeNegativo >= 10) { emocion = 'Decepción'; intensidad = 5; }
                 
-                // Tipo
                 let tipo = 'Opinión';
                 if (tieneXenofobia) tipo = 'Ataque Xenófobo';
                 else if (puntajeNegativo >= 50) tipo = 'Insulto';
@@ -625,13 +621,12 @@ Riesgo Alto: Menciones a figuras políticas + críticas graves`;
                 else if (puntajeNegativo >= 15) tipo = 'Crítica';
                 else if (t.includes('?')) tipo = 'Consulta Crítica';
                 
-                // Tema
                 let tema = 'General';
                 if (t.includes('corrup') || t.includes('coima') || t.includes('pagan') || t.includes('robo')) tema = 'Corrupción';
                 else if (t.includes('delincuencia') || t.includes('tierra de nadie') || t.includes('inseguridad')) tema = 'Inseguridad';
                 else if (t.includes('tren') || t.includes('oxid') || t.includes('chatarra') || t.includes('mantenimiento')) tema = 'Transporte';
                 else if (t.includes('elección') || t.includes('democrátic') || t.includes('ilegítimo')) tema = 'Crítica Política';
-                else if (t.includes('japonesa') || t.includes('kimono') || t.includes('extranjero')) tema = 'Xenofobia';
+                else if (t.includes('japonesa') || t.includes('kimono')) tema = 'Xenofobia';
                 else if (mencionPolitica) tema = 'Crítica Política';
                 else if (t.includes('alcalde') || t.includes('municipal')) tema = 'Gestión Municipal';
                 
@@ -651,18 +646,17 @@ Riesgo Alto: Menciones a figuras políticas + críticas graves`;
                     necesitaRespuesta: sentimiento === 'Negativo',
                     resumen: razones.slice(0, 3).join('. ') || 'Análisis completado',
                     palabrasClave: t.split(/\s+/).filter(w => w.length > 4).slice(0, 5),
-                    razones: razones
+                    razones
                 };
             }
             
             static async callGemini(texto) {
                 const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${STATE.apiKey}`;
-                
                 const res = await fetch(url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        contents: [{ parts: [{ text: PROMPT_ZERO_ESCAPE + `\n\nCOMENTARIO: "${texto}"\n\nJSON:` }] }],
+                        contents: [{ parts: [{ text: STATE.prompt + `\n\nCOMENTARIO: "${texto}"\n\nJSON:` }] }],
                         generationConfig: { temperature: 0.01, topK: 1, topP: 0.9, maxOutputTokens: 400 },
                         safetySettings: [
                             { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },
@@ -672,20 +666,16 @@ Riesgo Alto: Menciones a figuras políticas + críticas graves`;
                         ]
                     })
                 });
-                
                 if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                
                 const data = await res.json();
                 const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
                 const match = text.match(/\{[\s\S]*\}/);
                 if (!match) throw new Error('JSON no encontrado');
-                
                 let a = JSON.parse(match[0]);
                 a.sentimiento = this.norm(a.sentimiento, ['Negativo', 'Neutral', 'Positivo'], 'Negativo');
                 a.prioridad = this.norm(a.prioridad, ['Alta', 'Media', 'Baja'], 'Media');
                 a.riesgo = this.norm(a.riesgo, ['Alto', 'Medio', 'Bajo'], 'Medio');
                 a.intensidad = parseInt(a.intensidad) || 5;
-                a.esCrisis = a.esCrisis || false;
                 return a;
             }
             
@@ -704,19 +694,13 @@ Riesgo Alto: Menciones a figuras políticas + críticas graves`;
                 for (let i = 0; i < total; i++) {
                     const c = comentarios[i];
                     const texto = c['Full Text'] || c['full_text'] || c['text'] || '';
-                    
                     if (callback) callback({ actual: i + 1, total, porcentaje: Math.round(((i+1)/total)*100) });
-                    
                     const analisis = await this.analizar(texto.toString());
-                    
                     if (analisis.esCrisis) STATE.crisisAlerts.push({ ...c, _analisis: analisis });
                     if (analisis.esFalsoNeutral) STATE.falsosNeutrales.push({ ...c, _analisis: analisis });
-                    
                     resultados.push({ ...c, _analisis: analisis });
-                    
                     if (STATE.apiKey) await new Promise(r => setTimeout(r, 80));
                 }
-                
                 return resultados;
             }
         }
@@ -733,55 +717,87 @@ Riesgo Alto: Menciones a figuras políticas + críticas graves`;
                     return i === self.findIndex(x => (x['Tweet Id'] || x['tweet_id'] || x['id']) === id);
                 });
             
-            STATE.datos = await ZeroEscapeAnalyzer.analizarLote(limpios, (p) => {
-                console.log(`Analizando... ${p.actual}/${p.total}`);
+            const pc = document.getElementById('progressContainer');
+            const pb = document.getElementById('progressBar');
+            const pt = document.getElementById('progressText');
+            const pp = document.getElementById('progressPercent');
+            pc.classList.remove('hidden');
+            
+            STATE.datos = await ZeroEscapeEngine.analizarLote(limpios, (p) => {
+                pb.style.width = p.porcentaje + '%';
+                pp.textContent = p.porcentaje + '%';
+                pt.textContent = `🛡️ Zero-Escape... ${p.actual}/${p.total}`;
             });
             
             STATE.filtrados = [...STATE.datos];
+            setTimeout(() => pc.classList.add('hidden'), 600);
             
-            console.log('✅ Análisis Zero-Escape completado');
-            console.log(`📊 Total: ${STATE.datos.length}`);
-            console.log(`🔴 Negativos: ${STATE.datos.filter(r => r._analisis.sentimiento === 'Negativo').length}`);
-            console.log(`🟡 Neutrales: ${STATE.datos.filter(r => r._analisis.sentimiento === 'Neutral').length}`);
-            console.log(`🟢 Positivos: ${STATE.datos.filter(r => r._analisis.sentimiento === 'Positivo').length}`);
-            console.log(`⚠️ Falsos neutrales corregidos: ${STATE.falsosNeutrales.length}`);
-            
+            updateCrisisBadges();
             renderizarDashboard();
+            
+            console.log('✅ Zero-Escape completado');
+            console.log(`🔴 Negativos: ${STATE.datos.filter(r => r._analisis.sentimiento === 'Negativo').length}`);
+            console.log(`🛡️ Falsos neutrales corregidos: ${STATE.falsosNeutrales.length}`);
+        }
+        
+        function updateCrisisBadges() {
+            const count = STATE.crisisAlerts.length;
+            const navBadge = document.getElementById('crisis-nav-badge');
+            const headerBadge = document.getElementById('crisis-header-badge');
+            const headerCount = document.getElementById('crisis-header-count');
+            if (count > 0) {
+                navBadge.classList.remove('hidden'); navBadge.textContent = count;
+                headerBadge.classList.remove('hidden'); headerCount.textContent = count;
+            } else {
+                navBadge.classList.add('hidden'); headerBadge.classList.add('hidden');
+            }
+        }
+        
+        function procesarArchivo(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = async function(ev) {
+                try {
+                    const data = new Uint8Array(ev.target.result);
+                    const wb = XLSX.read(data, { type: 'array' });
+                    const ws = wb.Sheets[wb.SheetNames[0]];
+                    const json = XLSX.utils.sheet_to_json(ws);
+                    await procesarComentarios(json);
+                    alert(`✅ ${STATE.datos.length} comentarios\n🔴 ${STATE.datos.filter(r => r._analisis.sentimiento === 'Negativo').length} negativos\n🛡️ ${STATE.falsosNeutrales.length} corregidos`);
+                } catch(err) { alert('❌ Error: ' + err.message); }
+            };
+            reader.readAsArrayBuffer(file);
         }
         
         async function cargarDemo() {
             const demo = [
-                { 'Tweet Id': '11001', 'Full Text': '@MuniLima ¿Cuánto le pagan al amiguito de RLA para dar "mantenimiento" al tren chatarra que sigue oxidándose?', 'Created At': '2024-08-01 10:00:00', 'User Name': 'Ciudadano Crítico', 'Favorite Count': 89 },
-                { 'Tweet Id': '11002', 'Full Text': '@MuniLima @Renzo_Reggiardo @KeikoFujimori La delincuencia y corrupción a tomado el poder, Perú tierra de nadie', 'Created At': '2024-08-01 11:00:00', 'User Name': 'Vecino Preocupado', 'Favorite Count': 156 },
-                { 'Tweet Id': '11003', 'Full Text': '@MuniLima @Renzo_Reggiardo @KeikoFujimori Una japonesa dando órdenes a un alcalde que no fue elegido democráticamente', 'Created At': '2024-08-01 12:00:00', 'User Name': 'Crítico Político', 'Favorite Count': 234 },
-                { 'Tweet Id': '11004', 'Full Text': '@MuniLima Este lameculos del marrano es un chiste', 'Created At': '2024-08-01 13:00:00', 'User Name': 'Indignado', 'Favorite Count': 178 },
-                { 'Tweet Id': '11005', 'Full Text': '@MuniLima @Renzo_Reggiardo @KeikoFujimori ¿Se estuvo probando el kimono?', 'Created At': '2024-08-01 14:00:00', 'User Name': 'Burlón', 'Favorite Count': 345 },
-                { 'Tweet Id': '11006', 'Full Text': '@MuniLima @Renzo_Reggiardo @KeikoFujimori Un inservible.', 'Created At': '2024-08-01 15:00:00', 'User Name': 'Directo', 'Favorite Count': 456 },
-                { 'Tweet Id': '11007', 'Full Text': 'Gracias por la limpieza en el parque, quedó muy bonito', 'Created At': '2024-08-01 16:00:00', 'User Name': 'Vecina Feliz', 'Favorite Count': 23 },
-                { 'Tweet Id': '11008', 'Full Text': '¿Cuál es el horario de atención de la municipalidad?', 'Created At': '2024-08-01 17:00:00', 'User Name': 'Ciudadano', 'Favorite Count': 1 }
+                { 'Tweet Id': '12001', 'Full Text': '@MuniLima ¿Cuánto le pagan al amiguito de RLA para dar "mantenimiento" al tren chatarra que sigue oxidándose?', 'Created At': '2024-08-15 10:00:00', 'User Name': 'Ciudadano Crítico', 'Favorite Count': 89, 'Retweet Count': 45 },
+                { 'Tweet Id': '12002', 'Full Text': '@MuniLima @Renzo_Reggiardo @KeikoFujimori La delincuencia y corrupción a tomado el poder, Perú tierra de nadie', 'Created At': '2024-08-15 11:00:00', 'User Name': 'Vecino Preocupado', 'Favorite Count': 156, 'Retweet Count': 78 },
+                { 'Tweet Id': '12003', 'Full Text': '@MuniLima @Renzo_Reggiardo @KeikoFujimori Una japonesa dando órdenes a un alcalde que no fue elegido democráticamente', 'Created At': '2024-08-15 12:00:00', 'User Name': 'Crítico Político', 'Favorite Count': 234, 'Retweet Count': 123 },
+                { 'Tweet Id': '12004', 'Full Text': '@MuniLima Este lameculos del marrano es un chiste', 'Created At': '2024-08-15 13:00:00', 'User Name': 'Indignado', 'Favorite Count': 178, 'Retweet Count': 89 },
+                { 'Tweet Id': '12005', 'Full Text': '@MuniLima @Renzo_Reggiardo @KeikoFujimori ¿Se estuvo probando el kimono?', 'Created At': '2024-08-15 14:00:00', 'User Name': 'Burlón', 'Favorite Count': 345, 'Retweet Count': 156 },
+                { 'Tweet Id': '12006', 'Full Text': '@MuniLima @Renzo_Reggiardo @KeikoFujimori Un inservible.', 'Created At': '2024-08-15 15:00:00', 'User Name': 'Directo', 'Favorite Count': 456, 'Retweet Count': 234 },
+                { 'Tweet Id': '12007', 'Full Text': 'Gracias por la limpieza en el parque, quedó muy bonito', 'Created At': '2024-08-15 16:00:00', 'User Name': 'Vecina Feliz', 'Favorite Count': 23, 'Retweet Count': 5 },
+                { 'Tweet Id': '12008', 'Full Text': '¿Cuál es el horario de atención de la municipalidad?', 'Created At': '2024-08-15 17:00:00', 'User Name': 'Ciudadano', 'Favorite Count': 1, 'Retweet Count': 0 }
             ];
-            
             await procesarComentarios(demo);
-            
-            const negativos = STATE.datos.filter(r => r._analisis.sentimiento === 'Negativo').length;
-            alert(`✅ Demo crítico cargado\n🔴 ${negativos}/${STATE.datos.length} comentarios NEGATIVOS detectados\n⚠️ ${STATE.falsosNeutrales.length} falsos neutrales corregidos`);
+            alert(`✅ Demo cargado\n🔴 ${STATE.datos.filter(r => r._analisis.sentimiento === 'Negativo').length}/${STATE.datos.length} NEGATIVOS detectados\n🛡️ ${STATE.falsosNeutrales.length} falsos neutrales corregidos`);
         }
         
         // ============================================
-        // RENDERIZADO
+        // RENDERIZADO DASHBOARD
         // ============================================
         
         function renderizarDashboard() {
             if (!STATE.datos.length) return;
-            
             const d = STATE.filtrados;
             
-            // KPIs
-            const s = {};
-            let crisis = 0, falsosNeutrales = STATE.falsosNeutrales.length;
-            
+            const s = {}, emo = {};
+            let crisis = 0, falsosN = STATE.falsosNeutrales.length;
             d.forEach(r => {
                 s[r._analisis.sentimiento] = (s[r._analisis.sentimiento] || 0) + 1;
+                emo[r._analisis.emocion] = (emo[r._analisis.emocion] || 0) + 1;
                 if (r._analisis.esCrisis) crisis++;
             });
             
@@ -791,7 +807,7 @@ Riesgo Alto: Menciones a figuras políticas + críticas graves`;
                 { label: '🟡 Neutrales', value: s['Neutral'] || 0, icon: '⚠️' },
                 { label: '🟢 Positivos', value: s['Positivo'] || 0, icon: '✅' },
                 { label: '💢 Crisis', value: crisis, icon: '🔥' },
-                { label: '🛡️ Corregidos', value: falsosNeutrales, icon: '🛡️' }
+                { label: '🛡️ Corregidos', value: falsosN, icon: '🛡️' }
             ];
             
             document.getElementById('kpiContainer').innerHTML = kpis.map(k => `
@@ -801,7 +817,13 @@ Riesgo Alto: Menciones a figuras políticas + críticas graves`;
                 </div>
             `).join('');
             
-            // Gráficos
+            renderizarGraficosDashboard(d);
+            renderizarWordCloud(d);
+            renderizarTabla(d);
+            actualizarFiltros(d);
+        }
+        
+        function renderizarGraficosDashboard(d) {
             Object.values(STATE.graficos).forEach(g => { if (g && g.destroy) g.destroy(); });
             STATE.graficos = {};
             
@@ -813,11 +835,82 @@ Riesgo Alto: Menciones a figuras políticas + críticas graves`;
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#93c5fd', font: { size: 10 } } } } }
             });
             
-            // Tabla
-            if (STATE.tablaData) STATE.tablaData.destroy();
+            const eData = {}; d.forEach(r => eData[r._analisis.emocion] = (eData[r._analisis.emocion] || 0) + 1);
+            const ctx2 = document.getElementById('chartEmociones');
+            if (ctx2) STATE.graficos.emociones = new Chart(ctx2, {
+                type: 'radar',
+                data: { labels: Object.keys(eData), datasets: [{ data: Object.values(eData), backgroundColor: 'rgba(139,92,246,0.2)', borderColor: '#8b5cf6', borderWidth: 2 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { r: { ticks: { color: '#93c5fd' }, grid: { color: 'rgba(30,48,80,0.4)' }, pointLabels: { color: '#93c5fd' } } } }
+            });
             
+            const tData = {}; d.forEach(r => tData[r._analisis.tema] = (tData[r._analisis.tema] || 0) + 1);
+            const ctx3 = document.getElementById('chartTemas');
+            if (ctx3) STATE.graficos.temas = new Chart(ctx3, {
+                type: 'bar',
+                data: { labels: Object.keys(tData), datasets: [{ data: Object.values(tData), backgroundColor: '#3b82f6', borderRadius: 6 }] },
+                options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#93c5fd' } }, y: { ticks: { color: '#93c5fd' } } } }
+            });
+            
+            const crisisData = {};
+            d.forEach(r => {
+                if (r._analisis.intensidad >= 7) {
+                    const f = new Date(r['Created At'] || '');
+                    if (!isNaN(f)) {
+                        const k = f.toLocaleDateString('es-PE', { day: '2-digit', month: '2-digit', hour: '2-digit' });
+                        crisisData[k] = (crisisData[k] || 0) + 1;
+                    }
+                }
+            });
+            const crisisKeys = Object.keys(crisisData).slice(-15);
+            const ctx4 = document.getElementById('chartCrisis');
+            if (ctx4) STATE.graficos.crisis = new Chart(ctx4, {
+                type: 'bar',
+                data: { labels: crisisKeys, datasets: [{ data: crisisKeys.map(k => crisisData[k]), backgroundColor: '#ef4444', borderRadius: 4 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { ticks: { color: '#93c5fd' } }, x: { ticks: { color: '#93c5fd', font: { size: 8 } } } } }
+            });
+            
+            const timeline = {};
+            d.forEach(r => {
+                const f = new Date(r['Created At'] || '');
+                if (!isNaN(f)) {
+                    const k = f.toLocaleDateString('es-PE', { day: '2-digit', month: '2-digit' });
+                    timeline[k] = (timeline[k] || 0) + 1;
+                }
+            });
+            const timeKeys = Object.keys(timeline).sort();
+            const ctx5 = document.getElementById('chartTimeline');
+            if (ctx5) STATE.graficos.timeline = new Chart(ctx5, {
+                type: 'line',
+                data: {
+                    labels: timeKeys,
+                    datasets: [
+                        { label: 'Total', data: timeKeys.map(k => timeline[k]), borderColor: '#3b82f6', tension: 0.4, fill: true, backgroundColor: 'rgba(59,130,246,0.08)' },
+                        { label: 'Alta Intensidad', data: timeKeys.map(k => d.filter(r => { const f = new Date(r['Created At']||''); return !isNaN(f) && f.toLocaleDateString('es-PE',{day:'2-digit',month:'2-digit'})===k && r._analisis.intensidad>=7; }).length), borderColor: '#ef4444', tension: 0.4 }
+                    ]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#93c5fd', font: { size: 10 } } } }, scales: { y: { ticks: { color: '#93c5fd' } }, x: { ticks: { color: '#93c5fd', font: { size: 9 } } } } }
+            });
+        }
+        
+        function renderizarWordCloud(d) {
+            const canvas = document.getElementById('wordcloud');
+            if (!canvas) return;
+            const words = {};
+            d.forEach(r => { (r._analisis.palabrasClave || []).forEach(p => { words[p] = (words[p] || 0) + 1; }); });
+            const list = Object.entries(words).map(([w, c]) => [w, c * 15]);
+            if (list.length > 0 && window.WordCloud) {
+                WordCloud(canvas, {
+                    list, gridSize: 10, weightFactor: 2, fontFamily: 'Inter, sans-serif',
+                    color: () => `hsl(${Math.random()*60+200}, 70%, ${Math.random()*30+45}%)`,
+                    backgroundColor: 'transparent', rotateRatio: 0.2
+                });
+            }
+        }
+        
+        function renderizarTabla(d) {
+            if (STATE.tablaData) STATE.tablaData.destroy();
             document.getElementById('tablaBody').innerHTML = d.map(r => `
-                <tr class="cursor-pointer hover:bg-[#1a2332]">
+                <tr class="cursor-pointer hover:bg-[#1a2332]" onclick="mostrarDetalle('${r['Tweet Id'] || r['tweet_id']}')">
                     <td class="text-xs">${new Date(r['Created At']||'').toLocaleDateString('es-PE')}</td>
                     <td class="text-sm font-semibold text-white">${r['User Name']||'Anónimo'}</td>
                     <td class="text-sm max-w-xs truncate text-blue-100/60">${(r['Full Text']||'').substring(0,60)}...</td>
@@ -826,23 +919,240 @@ Riesgo Alto: Menciones a figuras políticas + críticas graves`;
                     <td class="text-xs text-blue-200/60">${r._analisis.tipo}</td>
                     <td class="text-xs text-blue-200/60">${r._analisis.tema}</td>
                     <td class="text-xs font-bold ${r._analisis.prioridad==='Alta'?'text-red-400':''}">${r._analisis.prioridad}</td>
-                    <td>${r._analisis.esFalsoNeutral?'<span class="badge badge-neg">⚠️ CORREGIDO</span>':r._analisis.esCrisis?'<span class="badge badge-neg pulse-crisis">🚨</span>':''}</td>
+                    <td>${r._analisis.esFalsoNeutral?'<span class="badge badge-neg">🛡️ CORREGIDO</span>':r._analisis.esCrisis?'<span class="badge badge-neg pulse-crisis">🚨</span>':''}</td>
                 </tr>
             `).join('');
-            
             STATE.tablaData = $('#tablaComentarios').DataTable({
-                pageLength: 25,
-                language: { url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json' },
-                order: [[0, 'desc']]
+                pageLength: 25, language: { url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json' }, order: [[0, 'desc']]
             });
+        }
+        
+        function actualizarFiltros(d) {
+            const emociones = [...new Set(d.map(r => r._analisis.emocion))].sort();
+            const tipos = [...new Set(d.map(r => r._analisis.tipo))].sort();
+            document.getElementById('filtroEmocion').innerHTML = '<option value="">Emoción</option>' + emociones.map(e => `<option>${e}</option>`).join('');
+            document.getElementById('filtroTipo').innerHTML = '<option value="">Tipo</option>' + tipos.map(t => `<option>${t}</option>`).join('');
         }
         
         function aplicarFiltros() {
             let d = [...STATE.datos];
             const s = document.getElementById('filtroSentimiento').value;
+            const e = document.getElementById('filtroEmocion').value;
+            const t = document.getElementById('filtroTipo').value;
             if (s) d = d.filter(r => r._analisis.sentimiento === s);
+            if (e) d = d.filter(r => r._analisis.emocion === e);
+            if (t) d = d.filter(r => r._analisis.tipo === t);
             STATE.filtrados = d;
             renderizarDashboard();
+        }
+        
+        // ============================================
+        // VISTAS COMPLETAS
+        // ============================================
+        
+        function renderizarLabEmocional() {
+            if (!STATE.datos.length) {
+                document.getElementById('emotionWheel').innerHTML = '<p class="text-blue-300/50 text-center col-span-full py-8">Carga datos primero</p>';
+                return;
+            }
+            const d = STATE.datos;
+            const emociones = [
+                { name: 'Ira', color: '#ef4444', icon: '😡' }, { name: 'Miedo', color: '#8b5cf6', icon: '😨' },
+                { name: 'Tristeza', color: '#3b82f6', icon: '😢' }, { name: 'Alegría', color: '#10b981', icon: '😊' },
+                { name: 'Asco', color: '#059669', icon: '🤢' }, { name: 'Sorpresa', color: '#f59e0b', icon: '😲' },
+                { name: 'Frustración', color: '#f97316', icon: '😤' }, { name: 'Indignación', color: '#dc2626', icon: '🤬' }
+            ];
+            const emoCount = {};
+            d.forEach(r => { emoCount[r._analisis.emocion] = (emoCount[r._analisis.emocion] || 0) + 1; });
+            document.getElementById('emotionWheel').innerHTML = emociones.map(e => `
+                <div class="emotion-card glass rounded-xl p-4 text-center" style="border-top: 3px solid ${e.color}">
+                    <span class="text-3xl">${e.icon}</span>
+                    <h4 class="font-bold text-white mt-2">${e.name}</h4>
+                    <p class="text-2xl font-black mt-2" style="color: ${e.color}">${emoCount[e.name] || 0}</p>
+                </div>
+            `).join('');
+            
+            const ctxDist = document.getElementById('chartEmocionDist');
+            if (ctxDist) {
+                if (STATE.graficos.emocionDist) STATE.graficos.emocionDist.destroy();
+                STATE.graficos.emocionDist = new Chart(ctxDist, {
+                    type: 'bar',
+                    data: { labels: Object.keys(emoCount), datasets: [{ data: Object.values(emoCount), backgroundColor: Object.keys(emoCount).map(e => emociones.find(x => x.name === e)?.color || '#3b82f6'), borderRadius: 8 }] },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { ticks: { color: '#93c5fd' } }, x: { ticks: { color: '#93c5fd' } } } }
+                });
+            }
+        }
+        
+        function renderizarCentroCrisis() {
+            if (!STATE.datos.length) {
+                document.getElementById('crisisStats').innerHTML = '<p class="text-blue-300/50 text-center col-span-full py-8">Carga datos primero</p>';
+                return;
+            }
+            const d = STATE.datos;
+            const crisis = STATE.crisisAlerts;
+            document.getElementById('crisisStats').innerHTML = `
+                <div class="glass rounded-xl p-4 text-center"><p class="text-3xl font-black text-red-400">${crisis.length}</p><p class="text-xs text-blue-300/50">Crisis</p></div>
+                <div class="glass rounded-xl p-4 text-center"><p class="text-3xl font-black text-orange-400">${d.filter(r => r._analisis.intensidad >= 8).length}</p><p class="text-xs text-blue-300/50">Alta Intensidad</p></div>
+                <div class="glass rounded-xl p-4 text-center"><p class="text-3xl font-black text-yellow-400">${STATE.falsosNeutrales.length}</p><p class="text-xs text-blue-300/50">Corregidos</p></div>
+            `;
+            
+            document.getElementById('crisisAlertsList').innerHTML = crisis.length > 0 ? crisis.map(c => `
+                <div class="crisis-alert glass rounded-xl p-4">
+                    <p class="font-bold text-white">${c['User Name']}</p>
+                    <p class="text-sm text-blue-100/70 mt-1">${c['Full Text']}</p>
+                    <span class="badge badge-neg mt-2">${c._analisis.sentimiento} | Intensidad: ${c._analisis.intensidad}/10</span>
+                </div>
+            `).join('') : '<p class="text-blue-300/50 text-center py-8">✅ No hay crisis activas</p>';
+        }
+        
+        function renderizarNarrativas() {
+            if (!STATE.datos.length) { document.getElementById('narrativasList').innerHTML = '<p class="text-blue-300/50 text-center py-8">Carga datos primero</p>'; return; }
+            const d = STATE.datos;
+            const narrativas = {};
+            d.forEach(r => {
+                const tema = r._analisis.tema;
+                if (!narrativas[tema]) narrativas[tema] = { positivo: 0, negativo: 0, neutral: 0 };
+                narrativas[tema][r._analisis.sentimiento.toLowerCase()]++;
+            });
+            document.getElementById('narrativasList').innerHTML = Object.entries(narrativas).map(([tema, data]) => `
+                <div class="glass rounded-xl p-4">
+                    <h4 class="font-bold text-white">${tema}</h4>
+                    <div class="flex gap-3 mt-2 text-xs">
+                        <span class="text-red-400">🔴 ${data.negativo}</span>
+                        <span class="text-yellow-400">🟡 ${data.neutral}</span>
+                        <span class="text-green-400">🟢 ${data.positivo}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function renderizarInfluencia() {
+            if (!STATE.datos.length) { document.getElementById('influencersList').innerHTML = '<p class="text-blue-300/50 text-center col-span-full py-8">Carga datos primero</p>'; return; }
+            const d = STATE.datos;
+            const influencers = d.map(r => ({
+                name: r['User Name'] || 'Anónimo',
+                screenName: r['User Screen Name'] || '',
+                engagement: (parseInt(r['Favorite Count'] || 0) + parseInt(r['Retweet Count'] || 0) * 2),
+            })).sort((a, b) => b.engagement - a.engagement).slice(0, 6);
+            
+            document.getElementById('influencersList').innerHTML = influencers.map((inf, i) => `
+                <div class="glass rounded-xl p-4 text-center" style="border-top: 3px solid ${i === 0 ? '#f59e0b' : i === 1 ? '#c0c0c0' : i === 2 ? '#cd7f32' : '#3b82f6'}">
+                    <span class="text-2xl">${i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : '👤'}</span>
+                    <h4 class="font-bold text-white mt-1">${inf.name}</h4>
+                    <p class="text-xs text-blue-300/50">@${inf.screenName}</p>
+                    <p class="text-lg font-black text-blue-400 mt-2">${inf.engagement.toLocaleString()}</p>
+                </div>
+            `).join('');
+            
+            document.getElementById('topInfluencers').innerHTML = influencers.map((inf, i) => `
+                <div class="glass rounded-lg p-3 flex justify-between items-center">
+                    <span class="text-white text-sm font-semibold">${i+1}. ${inf.name}</span>
+                    <span class="text-sm font-bold text-blue-400">${inf.engagement.toLocaleString()} pts</span>
+                </div>
+            `).join('');
+        }
+        
+        function generarStory(tipo) {
+            if (!STATE.datos.length) return alert('No hay datos');
+            const d = STATE.datos;
+            const output = document.getElementById('storyOutput');
+            output.classList.remove('hidden');
+            const negCount = d.filter(r => r._analisis.sentimiento === 'Negativo').length;
+            output.innerHTML = `
+                <div class="space-y-4">
+                    <h3 class="text-lg font-bold text-white">📖 ${tipo === 'semanal' ? 'Story Semanal' : 'Story de Crisis'}</h3>
+                    <div class="glass rounded-xl p-5">
+                        <p class="text-blue-200">Total: <strong class="text-white">${d.length}</strong> | Negativos: <strong class="text-red-400">${negCount}</strong> (${((negCount/d.length)*100).toFixed(1)}%)</p>
+                        <p class="text-blue-200 mt-2">Crisis: <strong class="text-red-400">${STATE.crisisAlerts.length}</strong> | Falsos neutrales corregidos: <strong class="text-orange-400">${STATE.falsosNeutrales.length}</strong></p>
+                    </div>
+                </div>
+            `;
+            output.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function renderizarColaboracion() {
+            if (!STATE.datos.length) { document.getElementById('teamStats').innerHTML = '<p class="text-blue-300/50 text-center col-span-full py-8">Carga datos primero</p>'; return; }
+            const d = STATE.datos;
+            const pendientes = d.filter(r => r._analisis.necesitaRespuesta).length;
+            const urgentes = d.filter(r => r._analisis.prioridad === 'Alta').length;
+            document.getElementById('teamStats').innerHTML = `
+                <div class="glass rounded-xl p-4 text-center"><p class="text-3xl font-black text-blue-400">${d.length}</p><p class="text-xs text-blue-300/50">Total</p></div>
+                <div class="glass rounded-xl p-4 text-center"><p class="text-3xl font-black text-yellow-400">${pendientes}</p><p class="text-xs text-blue-300/50">Pendientes</p></div>
+                <div class="glass rounded-xl p-4 text-center"><p class="text-3xl font-black text-red-400">${urgentes}</p><p class="text-xs text-blue-300/50">Urgentes</p></div>
+            `;
+            
+            const asignaciones = d.filter(r => r._analisis.necesitaRespuesta).slice(0, 10);
+            document.getElementById('collabList').innerHTML = asignaciones.length > 0 ? asignaciones.map(c => `
+                <div class="glass rounded-xl p-4 flex justify-between items-center">
+                    <div>
+                        <span class="font-semibold text-white text-sm">${c['User Name']}</span>
+                        <p class="text-xs text-blue-100/60">${(c['Full Text']||'').substring(0, 80)}...</p>
+                    </div>
+                    <span class="badge ${c._analisis.prioridad==='Alta'?'badge-neg':'badge-neu'}">${c._analisis.prioridad}</span>
+                </div>
+            `).join('') : '<p class="text-blue-300/50 text-center py-8">✅ Sin pendientes</p>';
+        }
+        
+        // ============================================
+        // DETALLE
+        // ============================================
+        
+        function mostrarDetalle(id) {
+            const c = STATE.datos.find(r => (r['Tweet Id'] || r['tweet_id']) === id);
+            if (!c) return;
+            const a = c._analisis;
+            document.getElementById('detalleContenido').innerHTML = `
+                <div class="space-y-4">
+                    ${a.esCrisis ? '<div class="bg-red-500/10 border border-red-500/30 rounded-xl p-3 pulse-crisis"><p class="text-red-400 font-bold">🚨 CRISIS</p></div>' : ''}
+                    ${a.esFalsoNeutral ? '<div class="bg-orange-500/10 border border-orange-500/30 rounded-xl p-3"><p class="text-orange-400 font-bold">🛡️ FALSO NEUTRAL CORREGIDO</p></div>' : ''}
+                    <div class="glass rounded-xl p-4">
+                        <h3 class="font-bold text-white">${c['User Name']}</h3>
+                        <p class="text-sm text-blue-300/50">@${c['User Screen Name'] || 'usuario'}</p>
+                        <p class="mt-3 text-white">${c['Full Text']}</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div class="glass rounded-lg p-3 text-center"><p class="text-xs text-blue-300/50">Sentimiento</p><p class="text-lg font-bold ${a.sentimiento==='Negativo'?'text-red-400':'text-green-400'}">${a.sentimiento}</p></div>
+                        <div class="glass rounded-lg p-3 text-center"><p class="text-xs text-blue-300/50">Emoción</p><p class="text-lg font-bold text-purple-400">${a.emocion}</p></div>
+                        <div class="glass rounded-lg p-3 text-center"><p class="text-xs text-blue-300/50">Intensidad</p><p class="text-lg font-bold ${a.intensidad>=7?'text-red-400':'text-blue-400'}">${a.intensidad}/10</p></div>
+                        <div class="glass rounded-lg p-3 text-center"><p class="text-xs text-blue-300/50">Tipo</p><p class="text-lg font-bold text-cyan-400">${a.tipo}</p></div>
+                    </div>
+                    <div class="glass rounded-xl p-4"><h4 class="font-bold text-white text-sm">📝 Razones</h4><p class="text-blue-200 text-sm">${(a.razones||[]).join('; ') || a.resumen}</p></div>
+                </div>
+            `;
+            document.getElementById('detailPanel').classList.remove('translate-x-full');
+        }
+        
+        function cerrarDetalle() { document.getElementById('detailPanel').classList.add('translate-x-full'); }
+        
+        // ============================================
+        // REPORTES
+        // ============================================
+        
+        function generarReporte(tipo) {
+            if (!STATE.datos.length) return alert('No hay datos');
+            const d = STATE.datos;
+            const titulos = { diario: 'Diario', semanal: 'Semanal', mensual: 'Mensual', story: 'Story' };
+            document.getElementById('reporteOutput').classList.remove('hidden');
+            document.getElementById('reporteOutput').innerHTML = `
+                <h3 class="text-lg font-bold text-white mb-4">📊 Reporte ${titulos[tipo]}</h3>
+                <div class="glass rounded-xl p-4 mb-4">
+                    <p class="text-blue-200 text-sm">Total: <strong class="text-white">${d.length}</strong> | Negativos: <strong class="text-red-400">${d.filter(r=>r._analisis.sentimiento==='Negativo').length}</strong> | Corregidos: <strong class="text-orange-400">${STATE.falsosNeutrales.length}</strong></p>
+                </div>
+                <button onclick="exportarReporte()" class="px-4 py-2 btn-primary text-sm">📥 Exportar CSV</button>
+            `;
+            document.getElementById('reporteOutput').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function exportarReporte() {
+            let csv = 'Fecha,Usuario,Comentario,Sentimiento,Emoción,Intensidad,Tipo,Tema,Prioridad,Riesgo,Crisis,FalsoNeutral\n';
+            STATE.datos.forEach(r => {
+                csv += `"${r['Created At']}","${r['User Name']}","${(r['Full Text']||'').replace(/"/g,'""')}","${r._analisis.sentimiento}","${r._analisis.emocion}","${r._analisis.intensidad}","${r._analisis.tipo}","${r._analisis.tema}","${r._analisis.prioridad}","${r._analisis.riesgo}","${r._analisis.esCrisis}","${r._analisis.esFalsoNeutral}"\n`;
+            });
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url; a.download = `reporte-zeroescape-${Date.now()}.csv`;
+            a.click(); URL.revokeObjectURL(url);
         }
         
         // ============================================
@@ -851,44 +1161,57 @@ Riesgo Alto: Menciones a figuras políticas + críticas graves`;
         
         function navigateTo(view) {
             const vistas = ['dashboard', 'emotions', 'crisis', 'narratives', 'influence', 'stories', 'collab', 'reports', 'config'];
-            vistas.forEach(v => {
-                const el = document.getElementById(`view-${v}`);
-                if (el) el.classList.add('hidden');
-            });
-            
+            vistas.forEach(v => { const el = document.getElementById(`view-${v}`); if (el) el.classList.add('hidden'); });
             const target = document.getElementById(`view-${view}`);
-            if (target) target.classList.remove('hidden');
-            
+            if (target) { target.classList.remove('hidden'); target.classList.add('animate-in'); }
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             const navItems = document.querySelectorAll('.nav-item');
             const idx = vistas.indexOf(view);
             if (idx >= 0 && idx < navItems.length) navItems[idx].classList.add('active');
             
+            const titles = { dashboard: 'Dashboard', emotions: 'Lab Emocional', crisis: 'Centro Crisis', narratives: 'Narrativas', influence: 'Influencia', stories: 'Stories', collab: 'Colaboración', reports: 'Reportes', config: 'Config' };
+            document.getElementById('header-title').textContent = titles[view] || 'Dashboard';
+            STATE.vistaActual = view;
+            
+            if (STATE.datos.length > 0) {
+                setTimeout(() => {
+                    if (view === 'emotions') renderizarLabEmocional();
+                    if (view === 'crisis') renderizarCentroCrisis();
+                    if (view === 'narratives') renderizarNarrativas();
+                    if (view === 'influence') renderizarInfluencia();
+                    if (view === 'collab') renderizarColaboracion();
+                }, 100);
+            }
+            
             if (view === 'config') {
                 document.getElementById('cfgApiKey').value = STATE.apiKey;
+                document.getElementById('cfgPrompt').value = STATE.prompt;
             }
+            
+            if (window.innerWidth < 1024) toggleSidebar();
         }
         
         function guardarAPIKey() {
             const key = document.getElementById('apiKey').value.trim();
-            if (key) { STATE.apiKey = key; localStorage.setItem('sentinel_v11_key', key); alert('✅ API Key guardada'); }
+            if (key) { STATE.apiKey = key; localStorage.setItem('sentinel_v12_key', key); alert('✅ Conectado'); }
         }
         
         function guardarConfig() {
             const key = document.getElementById('cfgApiKey').value.trim();
-            if (key) { STATE.apiKey = key; localStorage.setItem('sentinel_v11_key', key); }
-            alert('✅ Configuración guardada');
+            const prompt = document.getElementById('cfgPrompt').value.trim();
+            if (key) { STATE.apiKey = key; localStorage.setItem('sentinel_v12_key', key); }
+            if (prompt) { STATE.prompt = prompt; localStorage.setItem('sentinel_v12_prompt', prompt); }
+            alert('✅ Guardado');
         }
         
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); }
         
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('fecha-header').textContent = new Date().toLocaleDateString('es-PE', { weekday: 'long', day: 'numeric', month: 'long' });
-            if (STATE.apiKey) document.getElementById('apiKey').value = STATE.apiKey;
-            console.log('🛡️ Sentinel AI v11.0 - ZERO ESCAPE MODE');
-            console.log('✅ Detección de ironía activada');
-            console.log('✅ Categorías políticas expandidas');
-            console.log('✅ Tolerancia CERO a falsos neutrales');
+            if (STATE.apiKey) { document.getElementById('apiKey').value = STATE.apiKey; document.getElementById('cfgApiKey').value = STATE.apiKey; }
+            document.getElementById('cfgPrompt').value = STATE.prompt;
+            document.addEventListener('keydown', e => { if (e.key === 'Escape') cerrarDetalle(); });
+            console.log('🛡️ Sentinel AI v12.0 - COMPLETO + ZERO ESCAPE');
         });
     </script>
 </body>
