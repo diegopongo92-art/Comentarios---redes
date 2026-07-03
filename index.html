@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Listening Dashboard | MML</title>
+    
+    <!-- Fuentes -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        brand: {
+                            red: '#E31837',
+                            dark: '#1E293B',
+                            light: '#F8FAFC',
+                            gray: '#64748B'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Estilos CSS integrados -->
+    <style>
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #F8FAFC; }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        
+        table.dataTable.no-footer { border-bottom: 1px solid #E2E8F0; }
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+            background: #F8FAFC !important;
+            border: 1px solid #E2E8F0 !important;
+            border-radius: 0.375rem;
+        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.3s ease-in; }
+    </style>
+
+    <!-- Librerías Externas -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-brand-light text-slate-800 font-sans antialiased overflow-hidden">
+
+    <!-- PANTALLA DE INICIO -->
+    <div id="home-view" class="fixed inset-0 z-50 bg-brand-light flex flex-col items-center justify-center p-6 transition-opacity duration-500">
+        <div class="max-w-5xl w-full text-center space-y-8">
+            <div class="mb-12">
+                <h1 class="text-4xl font-bold text-brand-dark tracking-tight mb-4">Social Listening <span class="text-brand-red">Dashboard</span></h1>
+                <p class="text-lg text-brand-gray">Motor local de clasificación sin IA. Seleccione la red social a analizar.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <button onclick="app.selectNetwork('X')" class="group bg-white p-8 rounded-2xl shadow-sm border border-slate-200 hover:shadow-xl hover:border-brand-red transition-all duration-300 transform hover:-translate-y-1">
+                    <div class="h-20 w-20 mx-auto bg-slate-900 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i data-lucide="twitter" class="text-white w-10 h-10"></i>
+                    </div>
+                    <h2 class="text-2xl font-semibold mb-2">X (Twitter)</h2>
+                    <p class="text-sm text-slate-500">Analizar tweets y menciones.</p>
+                </button>
+                <button disabled class="opacity-50 cursor-not-allowed bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+                    <div class="h-20 w-20 mx-auto bg-blue-600 rounded-full flex items-center justify-center mb-6">
+                        <i data-lucide="facebook" class="text-white w-10 h-10"></i>
+                    </div>
+                    <h2 class="text-2xl font-semibold mb-2">Facebook</h2>
+                    <p class="text-sm text-slate-500">Próximamente.</p>
+                </button>
+                <button disabled class="opacity-50 cursor-not-allowed bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+                    <div class="h-20 w-20 mx-auto bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-500 rounded-full flex items-center justify-center mb-6">
+                        <i data-lucide="instagram" class="text-white w-10 h-10"></i>
+                    </div>
+                    <h2 class="text-2xl font-semibold mb-2">Instagram</h2>
+                    <p class="text-sm text-slate-500">Próximamente.</p>
+                </button>
+                <button disabled class="opacity-50 cursor-not-allowed bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+                    <div class="h-20 w-20 mx-auto bg-black rounded-full flex items-center justify-center mb-6">
+                        <i data-lucide="video" class="text-white w-10 h-10"></i>
+                    </div>
+                    <h2 class="text-2xl font-semibold mb-2">TikTok</h2>
+                    <p class="text-sm text-slate-500">Próximamente.</p>
+                </button>
+            </div>
+            
+            <div id="upload-zone" class="hidden mt-12 max-w-2xl mx-auto opacity-0 transition-opacity duration-500">
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-dashed border-slate-300">
+                    <i data-lucide="upload-cloud" class="w-12 h-12 text-brand-red mx-auto mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2" id="upload-title">Cargar dataset</h3>
+                    <p class="text-sm text-slate-500 mb-6">Sube tu archivo .xlsx exportado.</p>
+                    <input type="file" id="file-upload" accept=".xlsx" class="hidden" onchange="app.processFile(event)">
+                    <label for="file-upload" class="cursor-pointer inline-flex items-center justify-center px-6 py-3 bg-brand-red text-white font-medium rounded-lg hover:bg-red-700 transition-colors">
+                        Seleccionar Archivo Excel
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DASHBOARD PRINCIPAL -->
+    <div id="dashboard-view" class="hidden h-screen w-full flex">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white border-r border-slate-200 flex flex-col z-20">
+            <div class="h-16 flex items-center px-6 border-b border-slate-200">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 bg-brand-red rounded flex items-center justify-center">
+                        <span class="text-white font-bold text-xs" id="sidebar-icon">X</span>
+                    </div>
+                    <span class="font-bold text-lg text-brand-dark">MML</span>
+                </div>
+            </div>
+            <nav class="flex-1 overflow-y-auto py-4">
+                <ul class="space-y-1 px-3">
+                    <li>
+                        <button onclick="app.switchTab('dashboard')" id="nav-dashboard" class="nav-btn w-full flex items-center gap-3 px-3 py-2 text-brand-red bg-red-50 rounded-lg font-medium transition-colors">
+                            <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="app.switchTab('data')" id="nav-data" class="nav-btn w-full flex items-center gap-3 px-3 py-2 text-slate-600 hover:bg-slate-50 rounded-lg font-medium transition-colors">
+                            <i data-lucide="table-2" class="w-5 h-5"></i> Base de Datos
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+            <div class="p-4 border-t border-slate-200">
+                <button onclick="location.reload()" class="w-full flex items-center justify-center gap-2 px-3 py-2 text-sm text-slate-500 hover:text-brand-red transition-colors">
+                    <i data-lucide="log-out" class="w-4 h-4"></i> Nuevo Análisis
+                </button>
+            </div>
+        </aside>
+
+        <!-- Contenido -->
+        <main class="flex-1 flex flex-col h-screen overflow-hidden bg-brand-light relative">
+            <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 shadow-sm z-10">
+                <h2 class="text-xl font-semibold text-slate-800" id="header-title">Visión General</h2>
+                <div class="text-sm text-slate-500">Registros procesados: <span id="record-count" class="font-bold text-slate-800">0</span></div>
+            </header>
+
+            <div class="flex-1 overflow-y-auto p-6 scroll-smooth">
+                
+                <!-- PESTAÑA: DASHBOARD -->
+                <div id="tab-dashboard" class="tab-content active space-y-6">
+                    <!-- KPIs -->
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                            <p class="text-sm text-slate-500 font-medium">Total Comentarios</p>
+                            <p class="text-3xl font-bold text-slate-800 mt-2" id="kpi-total">0</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm border-b-4 border-b-green-500">
+                            <p class="text-sm text-slate-500 font-medium">Positivos</p>
+                            <p class="text-3xl font-bold text-slate-800 mt-2" id="kpi-pos">0</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm border-b-4 border-b-red-500">
+                            <p class="text-sm text-slate-500 font-medium">Negativos / Críticas</p>
+                            <p class="text-3xl font-bold text-slate-800 mt-2" id="kpi-neg">0</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm border-b-4 border-b-orange-500">
+                            <p class="text-sm text-slate-500 font-medium">Riesgo Alto</p>
+                            <p class="text-3xl font-bold text-slate-800 mt-2" id="kpi-risk">0</p>
+                        </div>
+                    </div>
+
+                    <!-- Gráficos -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                            <h3 class="font-semibold text-slate-700 mb-4">Distribución de Sentimiento</h3>
+                            <div class="relative h-64 w-full"><canvas id="chart-sentiment"></canvas></div>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                            <h3 class="font-semibold text-slate-700 mb-4">Principales Temáticas</h3>
+                            <div class="relative h-64 w-full"><canvas id="chart-themes"></canvas></div>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm lg:col-span-2">
+                            <h3 class="font-semibold text-slate-700 mb-4">Evolución Temporal</h3>
+                            <div class="relative h-64 w-full"><canvas id="chart-timeline"></canvas></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PESTAÑA: BASE DE DATOS -->
+                <div id="tab-data" class="tab-content">
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                        <table id="main-table" class="w-full text-left text-sm text-slate-600">
+                            <thead class="text-xs text-slate-700 uppercase bg-slate-50">
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Usuario</th>
+                                    <th>Comentario</th>
+                                    <th>Sentimiento</th>
+                                    <th>Tipo</th>
+                                    <th>Tema</th>
+                                    <th>Riesgo</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- CÓDIGO JAVASCRIPT INTEGRADO -->
+    <script>
+        // 1. MOTOR DE DICCIONARIOS (Inteligencia Local)
+        const Dictionaries = {
+            sentiment: {
+                positive: ["excelente", "bueno", "buena", "bien", "gracias", "felicito", "felicitaciones", "apoyo", "mejora", "mejor", "gran trabajo", "genial", "maravilloso", "útil", "orgullo", "solución", "resuelto"],
+                negative: ["malo", "mala", "pésimo", "peor", "asco", "basura", "corrupción", "corrupto", "robo", "ladrones", "incompetentes", "desastre", "vergüenza", "inútil", "mentira", "estafa", "harto", "terrible", "horrible", "caos", "abandonado", "sucio", "peligro"]
+            },
+            types: {
+                "Denuncia": ["denuncia", "denunciar", "fiscalía", "policía", "robo", "delito", "coima", "corrupción"],
+                "Queja": ["queja", "pésimo", "desastre", "asco", "vergüenza", "harto", "no hacen nada"],
+                "Consulta": ["cómo", "cuándo", "dónde", "qué", "información", "saber", "duda", "pregunta", "?"],
+                "Solicitud": ["solicito", "por favor", "necesitamos", "requerimos", "pido", "arreglen"],
+                "Felicitación": ["felicitaciones", "aplausos", "bravo", "excelente gestión"]
+            },
+            themes: {
+                "Seguridad Ciudadana": ["seguridad", "robo", "asalto", "delincuencia", "policía", "comisaría", "pnp", "crimen"],
+                "Serenazgo": ["serenazgo", "sereno", "serenos", "patrullaje"],
+                "Obras Públicas": ["obra", "construcción", "puente", "asfalto", "bache", "hueco", "pista", "vereda", "cierre"],
+                "Limpieza": ["limpieza", "basura", "sucio", "contaminación", "desmontes", "barrido"],
+                "Tránsito": ["tráfico", "tránsito", "accidente", "semaforo", "semáforo", "metropolitano", "corredor"],
+                "Comercio Ambulatorio": ["ambulantes", "comercio informal", "informalidad"]
+            },
+            risk: ["prensa", "noticiero", "escándalo", "viral", "corrupción", "coima", "muerte"]
+        };
+
+        // 2. ESTADO DE LA APLICACIÓN
+        const state = {
+            network: '',
+            rawData: [],
+            processedData: [],
+            charts: {}
+        };
+
+        // 3. LÓGICA PRINCIPAL (Controlador)
+        const app = {
+            init() {
+                lucide.createIcons();
+            },
+
+            selectNetwork(network) {
+                state.network = network;
+                document.getElementById('sidebar-icon').innerText = network.charAt(0);
+                
+                const uploadZone = document.getElementById('upload-zone');
+                uploadZone.classList.remove('hidden');
+                setTimeout(() => uploadZone.classList.remove('opacity-0'), 50);
+                
+                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+            },
+
+            processFile(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const firstSheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[firstSheetName];
+                    const json = XLSX.utils.sheet_to_json(worksheet);
+                    
+                    this.analyzeData(json);
+                };
+                reader.readAsArrayBuffer(file);
+            },
+
+            analyzeData(data) {
+                state.rawData = data;
+                state.processedData = data.map(row => {
+                    // Adaptar columnas según exportación típica de X/Twitter
+                    const text = row['Full Text'] || row['Text'] || row['comentario'] || '';
+                    const dateRaw = row['Created At'] || row['Date'] || row['fecha'] || '';
+                    const user = row['User Screen Name'] || row['Usuario'] || 'Anónimo';
+                    
+                    const textLower = text.toLowerCase();
+                    
+                    // Clasificar Sentimiento
+                    let posCount = Dictionaries.sentiment.positive.filter(w => textLower.includes(w)).length;
+                    let negCount = Dictionaries.sentiment.negative.filter(w => textLower.includes(w)).length;
+                    let sentiment = "Neutral";
+                    if (posCount > negCount) sentiment = "Positivo";
+                    else if (negCount > posCount) sentiment = "Negativo";
+
+                    // Clasificar Tipo
+                    let type = "Opinión";
+                    for (const [key, words] of Object.entries(Dictionaries.types)) {
+                        if (words.some(w => textLower.includes(w))) { type = key; break; }
+                    }
+
+                    // Clasificar Tema
+                    let theme = "Otro";
+                    for (const [key, words] of Object.entries(Dictionaries.themes)) {
+                        if (words.some(w => textLower.includes(w))) { theme = key; break; }
+                    }
+
+                    // Riesgo Reputacional
+                    let risk = "Bajo";
+                    if (sentiment === "Negativo" && Dictionaries.risk.some(w => textLower.includes(w))) {
+                        risk = "Alto";
+                    }
+
+                    // Formatear Fecha
+                    let dateStr = "Sin fecha";
+                    if(dateRaw) {
+                        try {
+                            const d = new Date(dateRaw);
+                            if(!isNaN(d.getTime())) dateStr = d.toISOString().split('T')[0];
+                            else dateStr = dateRaw.toString().substring(0, 10);
+                        } catch(e) {}
+                    }
+
+                    return {
+                        date: dateStr,
+                        user: `@${user}`,
+                        text: text,
+                        sentiment: sentiment,
+                        type: type,
+                        theme: theme,
+                        risk: risk
+                    };
+                });
+
+                this.showDashboard();
+            },
+
+            showDashboard() {
+                document.getElementById('home-view').classList.add('hidden');
+                document.getElementById('dashboard-view').classList.remove('hidden');
+                document.getElementById('record-count').innerText = state.processedData.length;
+                
+                this.updateKPIs();
+                this.renderCharts();
+                this.initTable();
+            },
+
+            updateKPIs() {
+                const total = state.processedData.length;
+                const pos = state.processedData.filter(d => d.sentiment === 'Positivo').length;
+                const neg = state.processedData.filter(d => d.sentiment === 'Negativo').length;
+                const risk = state.processedData.filter(d => d.risk === 'Alto').length;
+
+                document.getElementById('kpi-total').innerText = total;
+                document.getElementById('kpi-pos').innerText = pos;
+                document.getElementById('kpi-neg').innerText = neg;
+                document.getElementById('kpi-risk').innerText = risk;
+            },
+
+            renderCharts() {
+                // Destruir gráficos previos si existen
+                Object.values(state.charts).forEach(chart => chart.destroy());
+
+                // Preparar datos para gráficos
+                const sentimentCounts = { Positivo: 0, Neutral: 0, Negativo: 0 };
+                const themeCounts = {};
+                const dateCounts = {};
+
+                state.processedData.forEach(d => {
+                    sentimentCounts[d.sentiment]++;
+                    themeCounts[d.theme] = (themeCounts[d.theme] || 0) + 1;
+                    if(d.date !== "Sin fecha") {
+                        dateCounts[d.date] = (dateCounts[d.date] || 0) + 1;
+                    }
+                });
+
+                // 1. Gráfico de Sentimiento (Doughnut)
+                const ctxSentiment = document.getElementById('chart-sentiment').getContext('2d');
+                state.charts.sentiment = new Chart(ctxSentiment, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Positivo', 'Neutral', 'Negativo'],
+                        datasets: [{
+                            data: [sentimentCounts.Positivo, sentimentCounts.Neutral, sentimentCounts.Negativo],
+                            backgroundColor: ['#22c55e', '#cbd5e1', '#ef4444'],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: { maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+                });
+
+                // 2. Gráfico de Temáticas (Bar)
+                const sortedThemes = Object.entries(themeCounts).sort((a,b) => b[1] - a[1]).slice(0, 5);
+                const ctxThemes = document.getElementById('chart-themes').getContext('2d');
+                state.charts.themes = new Chart(ctxThemes, {
+                    type: 'bar',
+                    data: {
+                        labels: sortedThemes.map(t => t[0]),
+                        datasets: [{
+                            label: 'Comentarios',
+                            data: sortedThemes.map(t => t[1]),
+                            backgroundColor: '#3b82f6',
+                            borderRadius: 4
+                        }]
+                    },
+                    options: { maintainAspectRatio: false, plugins: { legend: { display: false } } }
+                });
+
+                // 3. Gráfico Temporal (Line)
+                const sortedDates = Object.keys(dateCounts).sort();
+                const ctxTimeline = document.getElementById('chart-timeline').getContext('2d');
+                state.charts.timeline = new Chart(ctxTimeline, {
+                    type: 'line',
+                    data: {
+                        labels: sortedDates,
+                        datasets: [{
+                            label: 'Volumen de Comentarios',
+                            data: sortedDates.map(d => dateCounts[d]),
+                            borderColor: '#E31837',
+                            backgroundColor: 'rgba(227, 24, 55, 0.1)',
+                            fill: true,
+                            tension: 0.3
+                        }]
+                    },
+                    options: { maintainAspectRatio: false, plugins: { legend: { display: false } } }
+                });
+            },
+
+            initTable() {
+                if ($.fn.DataTable.isDataTable('#main-table')) {
+                    $('#main-table').DataTable().destroy();
+                }
+
+                $('#main-table').DataTable({
+                    data: state.processedData,
+                    columns: [
+                        { data: 'date' },
+                        { data: 'user' },
+                        { data: 'text', render: function(data) { 
+                            return `<div class="truncate max-w-xs" title="${data}">${data}</div>`; 
+                        }},
+                        { data: 'sentiment', render: function(data) {
+                            let color = data === 'Positivo' ? 'text-green-600 bg-green-50' : (data === 'Negativo' ? 'text-red-600 bg-red-50' : 'text-slate-600 bg-slate-100');
+                            return `<span class="px-2 py-1 rounded-full text-xs font-medium ${color}">${data}</span>`;
+                        }},
+                        { data: 'type' },
+                        { data: 'theme' },
+                        { data: 'risk', render: function(data) {
+                            return data === 'Alto' ? `<span class="text-red-600 font-bold"><i data-lucide="alert-triangle" class="w-4 h-4 inline"></i> Alto</span>` : data;
+                        }}
+                    ],
+                    language: {
+                        url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+                    },
+                    pageLength: 10,
+                    order: [[0, 'desc']],
+                    drawCallback: function() { lucide.createIcons(); }
+                });
+            },
+
+            switchTab(tabId) {
+                // Reset nav buttons
+                document.querySelectorAll('.nav-btn').forEach(btn => {
+                    btn.classList.remove('text-brand-red', 'bg-red-50');
+                    btn.classList.add('text-slate-600');
+                });
+                // Set active nav
+                const activeBtn = document.getElementById(`nav-${tabId}`);
+                activeBtn.classList.remove('text-slate-600', 'hover:bg-slate-50');
+                activeBtn.classList.add('text-brand-red', 'bg-red-50');
+
+                // Toggle views
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.getElementById(`tab-${tabId}`).classList.add('active');
+                
+                // Update header
+                document.getElementById('header-title').innerText = tabId === 'dashboard' ? 'Visión General' : 'Base de Datos Procesada';
+            }
+        };
+
+        // Iniciar la app al cargar
+        document.addEventListener('DOMContentLoaded', () => app.init());
+    </script>
+</body>
+</html>
