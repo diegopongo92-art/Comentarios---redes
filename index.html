@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Social Listening Dashboard - MML</title>
+    <title>Social Listening Dashboard - MML v2.0</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com">
@@ -37,22 +37,17 @@
 
     <style>
         /* ============================================
-           ESTILOS PERSONALIZADOS
+           ESTILOS COMPLETOS DEL DASHBOARD
            ============================================ */
         
         :root {
             --mml-red: #DC2626;
             --mml-darkred: #991B1B;
-            --mml-white: #FFFFFF;
             --mml-gray-50: #F9FAFB;
             --mml-gray-100: #F3F4F6;
             --mml-gray-200: #E5E7EB;
             --mml-gray-300: #D1D5DB;
-            --mml-gray-400: #9CA3AF;
-            --mml-gray-500: #6B7280;
-            --mml-gray-600: #4B5563;
             --mml-gray-700: #374151;
-            --mml-gray-800: #1F2937;
             --mml-gray-900: #111827;
         }
 
@@ -61,119 +56,86 @@
             scrollbar-color: var(--mml-gray-300) var(--mml-gray-100);
         }
 
-        *::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        *::-webkit-scrollbar-track {
-            background: var(--mml-gray-100);
-        }
-
-        *::-webkit-scrollbar-thumb {
-            background-color: var(--mml-gray-300);
-            border-radius: 20px;
-        }
-
         body {
-            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background: var(--mml-gray-50);
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            background: #f5f5f5;
         }
 
-        .animate-fade-in {
+        .animate-fadeIn {
             animation: fadeIn 0.5s ease-in-out;
         }
 
-        .animate-slide-in {
-            animation: slideIn 0.3s ease-out;
-        }
-
-        .animate-pulse-soft {
-            animation: pulseSoft 2s infinite;
-        }
-
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        @keyframes slideIn {
-            from { transform: translateX(100%); }
-            to { transform: translateX(0); }
-        }
-
-        @keyframes pulseSoft {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
-        }
-
         .card-hover {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s ease;
         }
-
         .card-hover:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-
-        .gradient-red {
-            background: linear-gradient(135deg, #DC2626 0%, #991B1B 100%);
-        }
-
-        .gradient-light {
-            background: linear-gradient(135deg, #F9FAFB 0%, #E5E7EB 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15);
         }
 
         .kpi-card {
             border-left: 4px solid var(--mml-red);
-            transition: all 0.3s ease;
+            transition: all 0.3s;
         }
-
         .kpi-card:hover {
             border-left-width: 8px;
-            background: linear-gradient(90deg, rgba(220, 38, 38, 0.05) 0%, transparent 100%);
+            background: #fff5f5;
         }
 
         .platform-card {
             border: 2px solid transparent;
-            transition: all 0.3s ease;
+            transition: all 0.3s;
         }
-
         .platform-card:hover {
             border-color: var(--mml-red);
-            background: linear-gradient(135deg, rgba(220, 38, 38, 0.05) 0%, rgba(153, 27, 27, 0.02) 100%);
+            transform: translateY(-5px);
         }
-
         .platform-card.selected {
             border-color: var(--mml-red);
-            background: linear-gradient(135deg, rgba(220, 38, 38, 0.1) 0%, rgba(153, 27, 27, 0.05) 100%);
+            background: #fef2f2;
         }
 
         .sidebar-link {
-            transition: all 0.2s ease;
-            border-left: 3px solid transparent;
+            transition: all 0.2s;
+            border-left: 4px solid transparent;
         }
-
         .sidebar-link:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-left-color: var(--mml-red);
+            background: rgba(255,255,255,0.15);
+            border-left-color: #ef4444;
         }
-
         .sidebar-link.active {
-            background: rgba(220, 38, 38, 0.2);
-            border-left-color: var(--mml-red);
+            background: rgba(239,68,68,0.3);
+            border-left-color: #ef4444;
         }
 
-        .badge-mml {
-            background: var(--mml-red);
-            color: white;
-            padding: 2px 10px;
+        .badge-sentiment-positive {
+            background: #dcfce7;
+            color: #166534;
+            padding: 4px 12px;
             border-radius: 20px;
-            font-size: 0.75rem;
             font-weight: 600;
+            font-size: 0.75rem;
         }
-
-        .dataTables_wrapper {
-            font-size: 0.875rem;
+        .badge-sentiment-negative {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.75rem;
+        }
+        .badge-sentiment-neutral {
+            background: #fef9c3;
+            color: #854d0e;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.75rem;
         }
 
         .chart-container {
@@ -186,360 +148,268 @@
             .chart-container {
                 height: 250px;
             }
-            
-            .kpi-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
+        }
+
+        .progress-bar {
+            height: 8px;
+            border-radius: 10px;
+            transition: width 1s ease;
         }
     </style>
 </head>
 <body class="bg-gray-50">
     
-    <!-- Overlay móvil -->
-    <div id="mobile-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
-    
-    <!-- Contenedor principal -->
+    <!-- App Container -->
     <div class="flex h-screen overflow-hidden">
         
         <!-- SIDEBAR -->
         <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-72 bg-gray-900 text-white transform -translate-x-full lg:translate-x-0 lg:static transition-transform duration-300 overflow-y-auto">
             <div class="p-6">
-                <!-- Logo y nombre -->
                 <div class="text-center mb-8">
-                    <div class="w-20 h-20 bg-white rounded-full mx-auto mb-3 flex items-center justify-center">
+                    <div class="w-20 h-20 bg-white rounded-full mx-auto mb-3 flex items-center justify-center shadow-lg">
                         <span class="text-3xl font-bold text-red-700">MML</span>
                     </div>
                     <h2 class="text-lg font-bold">Social Listening</h2>
-                    <p class="text-sm text-gray-400">Dashboard v1.0</p>
+                    <p class="text-sm text-gray-400">Dashboard v2.0</p>
                 </div>
                 
-                <!-- Red social seleccionada -->
                 <div id="sidebar-platform-badge" class="hidden mb-6 p-3 bg-gray-800 rounded-lg text-center">
                     <i id="sidebar-platform-icon" class="text-2xl mb-1"></i>
                     <p id="sidebar-platform-name" class="text-sm font-semibold"></p>
                 </div>
                 
-                <!-- Navegación -->
                 <nav class="space-y-1">
-                    <a href="#" onclick="navigateTo('platform-select')" class="sidebar-link flex items-center px-4 py-3 rounded-lg text-gray-300 hover:text-white cursor-pointer">
-                        <i class="fas fa-home w-6"></i>
-                        <span>Inicio</span>
+                    <a onclick="navigateTo('platform-select')" class="sidebar-link flex items-center px-4 py-3 rounded-lg cursor-pointer text-gray-300">
+                        <i class="fas fa-home w-6"></i><span>Inicio</span>
                     </a>
-                    <a href="#" onclick="navigateTo('dashboard')" class="sidebar-link flex items-center px-4 py-3 rounded-lg text-gray-300 hover:text-white cursor-pointer">
-                        <i class="fas fa-chart-line w-6"></i>
-                        <span>Dashboard</span>
+                    <a onclick="navigateTo('dashboard')" class="sidebar-link flex items-center px-4 py-3 rounded-lg cursor-pointer text-gray-300">
+                        <i class="fas fa-chart-line w-6"></i><span>Dashboard</span>
                     </a>
-                    <a href="#" onclick="navigateTo('reports')" class="sidebar-link flex items-center px-4 py-3 rounded-lg text-gray-300 hover:text-white cursor-pointer">
-                        <i class="fas fa-file-alt w-6"></i>
-                        <span>Reportes</span>
+                    <a onclick="navigateTo('reports')" class="sidebar-link flex items-center px-4 py-3 rounded-lg cursor-pointer text-gray-300">
+                        <i class="fas fa-file-alt w-6"></i><span>Reportes</span>
                     </a>
-                    <a href="#" onclick="navigateTo('config')" class="sidebar-link flex items-center px-4 py-3 rounded-lg text-gray-300 hover:text-white cursor-pointer">
-                        <i class="fas fa-cog w-6"></i>
-                        <span>Configuración</span>
+                    <a onclick="navigateTo('config')" class="sidebar-link flex items-center px-4 py-3 rounded-lg cursor-pointer text-gray-300">
+                        <i class="fas fa-cog w-6"></i><span>Configuración</span>
                     </a>
                 </nav>
             </div>
         </aside>
         
-        <!-- CONTENIDO PRINCIPAL -->
-        <main class="flex-1 overflow-y-auto bg-gray-50">
+        <!-- MAIN CONTENT -->
+        <main class="flex-1 overflow-y-auto">
             
             <!-- Header -->
             <header class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-30">
-                <div class="px-6 py-4">
-                    <div class="flex items-center justify-between">
-                        <button onclick="toggleSidebar()" class="lg:hidden text-gray-600 hover:text-gray-900">
-                            <i class="fas fa-bars text-2xl"></i>
-                        </button>
-                        
-                        <div class="flex items-center space-x-3">
-                            <div class="w-10 h-10 bg-red-700 rounded-lg flex items-center justify-center">
-                                <span class="text-white font-bold">M</span>
-                            </div>
-                            <div>
-                                <h1 class="text-xl font-bold text-gray-900">Social Listening Dashboard</h1>
-                                <p class="text-sm text-gray-600">Municipalidad Metropolitana de Lima</p>
-                            </div>
+                <div class="px-6 py-4 flex items-center justify-between">
+                    <button onclick="toggleSidebar()" class="lg:hidden text-gray-600">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-red-700 rounded-lg flex items-center justify-center">
+                            <span class="text-white font-bold">M</span>
                         </div>
-                        
-                        <div class="flex items-center space-x-4">
-                            <span id="header-date" class="text-sm text-gray-600"></span>
-                            <button onclick="location.reload()" class="p-2 hover:bg-gray-100 rounded-lg transition">
-                                <i class="fas fa-sync-alt text-gray-600"></i>
-                            </button>
+                        <div>
+                            <h1 class="text-xl font-bold text-gray-900">Social Listening Dashboard</h1>
+                            <p class="text-sm text-gray-600">Municipalidad Metropolitana de Lima</p>
                         </div>
                     </div>
+                    <span id="header-date" class="text-sm text-gray-600"></span>
                 </div>
             </header>
             
-            <!-- Vistas -->
+            <!-- VIEWS -->
             <div class="p-6">
                 
-                <!-- VISTA 1: SELECCIÓN DE PLATAFORMA -->
-                <div id="view-platform-select" class="animate-fade-in">
-                    <div class="max-w-7xl mx-auto">
-                        <div class="text-center mb-12 mt-8">
-                            <div class="w-24 h-24 bg-gradient-to-br from-red-600 to-red-800 rounded-2xl mx-auto mb-6 flex items-center justify-center shadow-lg">
-                                <span class="text-4xl font-bold text-white">MML</span>
-                            </div>
-                            <h2 class="text-4xl font-bold text-gray-900 mb-4">Social Listening Dashboard</h2>
-                            <p class="text-xl text-gray-600">Selecciona la red social para comenzar el análisis</p>
+                <!-- VISTA: Selección de Plataforma -->
+                <div id="view-platform-select" class="animate-fadeIn">
+                    <div class="max-w-7xl mx-auto text-center mt-12">
+                        <div class="w-24 h-24 bg-gradient-to-br from-red-600 to-red-800 rounded-2xl mx-auto mb-6 flex items-center justify-center shadow-xl">
+                            <span class="text-4xl font-bold text-white">MML</span>
                         </div>
+                        <h2 class="text-4xl font-bold text-gray-900 mb-4">Social Listening Dashboard</h2>
+                        <p class="text-xl text-gray-600 mb-12">Selecciona la red social para analizar</p>
                         
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="platform-cards">
-                            <!-- X/Twitter -->
-                            <div class="platform-card bg-white rounded-xl p-8 text-center cursor-pointer shadow-lg" onclick="selectPlatform('twitter')">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            <div class="platform-card bg-white rounded-xl p-8 cursor-pointer shadow-lg" onclick="selectPlatform('twitter')">
                                 <i class="fab fa-twitter text-6xl text-blue-400 mb-4"></i>
-                                <h3 class="text-2xl font-bold text-gray-900 mb-2">X (Twitter)</h3>
-                                <p class="text-gray-600">Análisis de tweets y menciones</p>
+                                <h3 class="text-2xl font-bold mb-2">X (Twitter)</h3>
+                                <p class="text-gray-600">Análisis de tweets</p>
                             </div>
-                            
-                            <!-- Facebook -->
-                            <div class="platform-card bg-white rounded-xl p-8 text-center cursor-pointer shadow-lg opacity-60">
+                            <div class="platform-card bg-white rounded-xl p-8 cursor-pointer shadow-lg opacity-60">
                                 <i class="fab fa-facebook text-6xl text-blue-600 mb-4"></i>
-                                <h3 class="text-2xl font-bold text-gray-900 mb-2">Facebook</h3>
+                                <h3 class="text-2xl font-bold mb-2">Facebook</h3>
                                 <p class="text-gray-600">Próximamente</p>
                             </div>
-                            
-                            <!-- Instagram -->
-                            <div class="platform-card bg-white rounded-xl p-8 text-center cursor-pointer shadow-lg opacity-60">
+                            <div class="platform-card bg-white rounded-xl p-8 cursor-pointer shadow-lg opacity-60">
                                 <i class="fab fa-instagram text-6xl text-pink-600 mb-4"></i>
-                                <h3 class="text-2xl font-bold text-gray-900 mb-2">Instagram</h3>
+                                <h3 class="text-2xl font-bold mb-2">Instagram</h3>
                                 <p class="text-gray-600">Próximamente</p>
                             </div>
-                            
-                            <!-- TikTok -->
-                            <div class="platform-card bg-white rounded-xl p-8 text-center cursor-pointer shadow-lg opacity-60">
+                            <div class="platform-card bg-white rounded-xl p-8 cursor-pointer shadow-lg opacity-60">
                                 <i class="fab fa-tiktok text-6xl text-gray-900 mb-4"></i>
-                                <h3 class="text-2xl font-bold text-gray-900 mb-2">TikTok</h3>
+                                <h3 class="text-2xl font-bold mb-2">TikTok</h3>
                                 <p class="text-gray-600">Próximamente</p>
                             </div>
                         </div>
                     </div>
                 </div>
                 
-                <!-- VISTA 2: DASHBOARD -->
-                <div id="view-dashboard" class="hidden animate-fade-in">
-                    <!-- Controles superiores -->
+                <!-- VISTA: Dashboard -->
+                <div id="view-dashboard" class="hidden animate-fadeIn">
                     <div class="bg-white rounded-xl p-6 mb-6 shadow-sm">
                         <div class="flex flex-wrap items-center justify-between gap-4">
                             <div class="flex items-center space-x-4">
-                                <i id="dashboard-platform-icon" class="text-3xl"></i>
+                                <i id="dashboard-icon" class="text-3xl text-blue-400 fab fa-twitter"></i>
                                 <div>
-                                    <h2 class="text-2xl font-bold text-gray-900">Dashboard de Análisis</h2>
-                                    <p id="dashboard-platform-name" class="text-gray-600"></p>
+                                    <h2 class="text-2xl font-bold">Dashboard de Análisis</h2>
+                                    <p id="dashboard-subtitle" class="text-gray-600"></p>
                                 </div>
                             </div>
-                            
-                            <div class="flex flex-wrap gap-2">
-                                <button onclick="showFileUpload()" class="px-4 py-2 bg-red-700 text-white rounded-lg hover:bg-red-800 transition">
+                            <div class="flex gap-2">
+                                <button onclick="document.getElementById('fileInput').click()" class="px-4 py-2 bg-red-700 text-white rounded-lg hover:bg-red-800 font-semibold transition">
                                     <i class="fas fa-upload mr-2"></i>Cargar Excel
                                 </button>
-                                <button onclick="loadSampleData()" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">
-                                    <i class="fas fa-database mr-2"></i>Datos de Ejemplo
+                                <button onclick="loadSampleData()" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 font-semibold transition">
+                                    <i class="fas fa-database mr-2"></i>Datos Demo
                                 </button>
                             </div>
-                        </div>
-                        
-                        <!-- Área de carga de archivos -->
-                        <div id="file-upload-area" class="hidden mt-6 p-8 border-2 border-dashed border-gray-300 rounded-xl text-center hover:border-red-500 transition cursor-pointer">
-                            <input type="file" id="excel-file-input" accept=".xlsx,.xls" class="hidden" onchange="handleFileUpload(event)">
-                            <i class="fas fa-cloud-upload-alt text-5xl text-gray-400 mb-4"></i>
-                            <p class="text-lg text-gray-600">Arrastra tu archivo Excel aquí o haz clic para seleccionar</p>
-                            <p class="text-sm text-gray-500 mt-2">Formatos soportados: .xlsx, .xls</p>
+                            <input type="file" id="fileInput" accept=".xlsx,.xls" class="hidden" onchange="handleFileUpload(event)">
                         </div>
                     </div>
                     
                     <!-- KPIs -->
-                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6" id="kpi-container">
-                        <!-- Se llena dinámicamente -->
-                    </div>
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6" id="kpiContainer"></div>
                     
-                    <!-- Gráficos - Fila 1 -->
+                    <!-- Charts Row 1 -->
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                         <div class="bg-white rounded-xl p-6 shadow-sm">
-                            <h3 class="text-lg font-bold text-gray-900 mb-4">Distribución de Sentimientos</h3>
-                            <div class="chart-container">
-                                <canvas id="chart-sentiment"></canvas>
-                            </div>
+                            <h3 class="text-lg font-bold mb-4">Sentimientos</h3>
+                            <div class="chart-container"><canvas id="chartSentiment"></canvas></div>
                         </div>
-                        
                         <div class="bg-white rounded-xl p-6 shadow-sm">
-                            <h3 class="text-lg font-bold text-gray-900 mb-4">Tipos de Comentarios</h3>
-                            <div class="chart-container">
-                                <canvas id="chart-types"></canvas>
-                            </div>
+                            <h3 class="text-lg font-bold mb-4">Tipos de Comentarios</h3>
+                            <div class="chart-container"><canvas id="chartTypes"></canvas></div>
                         </div>
                     </div>
                     
-                    <!-- Gráficos - Fila 2 -->
+                    <!-- Charts Row 2 -->
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                         <div class="bg-white rounded-xl p-6 shadow-sm">
-                            <h3 class="text-lg font-bold text-gray-900 mb-4">Comentarios por Día</h3>
-                            <div class="chart-container">
-                                <canvas id="chart-daily"></canvas>
-                            </div>
+                            <h3 class="text-lg font-bold mb-4">Evolución Diaria</h3>
+                            <div class="chart-container"><canvas id="chartDaily"></canvas></div>
                         </div>
-                        
                         <div class="bg-white rounded-xl p-6 shadow-sm">
-                            <h3 class="text-lg font-bold text-gray-900 mb-4">Principales Temas</h3>
-                            <div class="chart-container">
-                                <canvas id="chart-topics"></canvas>
-                            </div>
+                            <h3 class="text-lg font-bold mb-4">Temas Principales</h3>
+                            <div class="chart-container"><canvas id="chartTopics"></canvas></div>
                         </div>
                     </div>
                     
-                    <!-- Tabla de datos -->
+                    <!-- Tabla -->
                     <div class="bg-white rounded-xl p-6 shadow-sm">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-lg font-bold text-gray-900">Comentarios Analizados</h3>
-                            
-                            <!-- Filtros rápidos -->
+                        <div class="flex flex-wrap justify-between items-center mb-4 gap-2">
+                            <h3 class="text-lg font-bold">Comentarios Analizados</h3>
                             <div class="flex flex-wrap gap-2">
-                                <select id="filter-sentiment" class="px-3 py-1 border rounded-lg text-sm" onchange="applyFilters()">
-                                    <option value="">Todos los sentimientos</option>
+                                <select id="filterSentiment" class="px-3 py-1.5 border rounded-lg text-sm" onchange="applyFilters()">
+                                    <option value="">Sentimiento</option>
                                     <option value="Positivo">Positivo</option>
                                     <option value="Neutral">Neutral</option>
                                     <option value="Negativo">Negativo</option>
                                 </select>
-                                
-                                <select id="filter-type" class="px-3 py-1 border rounded-lg text-sm" onchange="applyFilters()">
-                                    <option value="">Todos los tipos</option>
+                                <select id="filterType" class="px-3 py-1.5 border rounded-lg text-sm" onchange="applyFilters()">
+                                    <option value="">Tipo</option>
                                 </select>
-                                
-                                <select id="filter-topic" class="px-3 py-1 border rounded-lg text-sm" onchange="applyFilters()">
-                                    <option value="">Todos los temas</option>
+                                <select id="filterTopic" class="px-3 py-1.5 border rounded-lg text-sm" onchange="applyFilters()">
+                                    <option value="">Tema</option>
                                 </select>
-                                
-                                <select id="filter-priority" class="px-3 py-1 border rounded-lg text-sm" onchange="applyFilters()">
-                                    <option value="">Todas las prioridades</option>
+                                <select id="filterPriority" class="px-3 py-1.5 border rounded-lg text-sm" onchange="applyFilters()">
+                                    <option value="">Prioridad</option>
                                     <option value="Alta">Alta</option>
                                     <option value="Media">Media</option>
                                     <option value="Baja">Baja</option>
                                 </select>
                             </div>
                         </div>
-                        
                         <div class="overflow-x-auto">
-                            <table id="comments-table" class="display nowrap" style="width:100%">
+                            <table id="commentsTable" class="display nowrap" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th>Fecha</th>
-                                        <th>Usuario</th>
-                                        <th>Comentario</th>
-                                        <th>Sentimiento</th>
-                                        <th>Tipo</th>
-                                        <th>Tema</th>
-                                        <th>Prioridad</th>
-                                        <th>Riesgo</th>
-                                        <th>Likes</th>
-                                        <th>RT/Resp</th>
-                                        <th>Vistas</th>
+                                        <th>Fecha</th><th>Usuario</th><th>Comentario</th>
+                                        <th>Sentimiento</th><th>Tipo</th><th>Tema</th>
+                                        <th>Prioridad</th><th>Riesgo</th>
+                                        <th>Likes</th><th>RT</th><th>Vistas</th>
                                     </tr>
                                 </thead>
-                                <tbody id="comments-table-body">
-                                </tbody>
+                                <tbody id="tableBody"></tbody>
                             </table>
                         </div>
                     </div>
                 </div>
                 
-                <!-- VISTA 3: REPORTES -->
-                <div id="view-reports" class="hidden animate-fade-in">
+                <!-- VISTA: Reportes -->
+                <div id="view-reports" class="hidden animate-fadeIn">
                     <div class="max-w-7xl mx-auto">
-                        <h2 class="text-3xl font-bold text-gray-900 mb-8">Generador de Reportes</h2>
-                        
+                        <h2 class="text-3xl font-bold mb-8">Generador de Reportes</h2>
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                             <div class="bg-white rounded-xl p-6 shadow-sm card-hover cursor-pointer" onclick="generateReport('daily')">
                                 <i class="fas fa-calendar-day text-4xl text-red-700 mb-4"></i>
-                                <h3 class="text-xl font-bold text-gray-900 mb-2">Reporte Diario</h3>
-                                <p class="text-gray-600">Resumen de las últimas 24 horas</p>
+                                <h3 class="text-xl font-bold mb-2">Diario</h3>
+                                <p class="text-gray-600">Últimas 24 horas</p>
                             </div>
-                            
                             <div class="bg-white rounded-xl p-6 shadow-sm card-hover cursor-pointer" onclick="generateReport('weekly')">
                                 <i class="fas fa-calendar-week text-4xl text-red-700 mb-4"></i>
-                                <h3 class="text-xl font-bold text-gray-900 mb-2">Reporte Semanal</h3>
-                                <p class="text-gray-600">Análisis de los últimos 7 días</p>
+                                <h3 class="text-xl font-bold mb-2">Semanal</h3>
+                                <p class="text-gray-600">Últimos 7 días</p>
                             </div>
-                            
                             <div class="bg-white rounded-xl p-6 shadow-sm card-hover cursor-pointer" onclick="generateReport('monthly')">
                                 <i class="fas fa-calendar-alt text-4xl text-red-700 mb-4"></i>
-                                <h3 class="text-xl font-bold text-gray-900 mb-2">Reporte Mensual</h3>
-                                <p class="text-gray-600">Tendencias del último mes</p>
+                                <h3 class="text-xl font-bold mb-2">Mensual</h3>
+                                <p class="text-gray-600">Último mes</p>
                             </div>
-                            
                             <div class="bg-white rounded-xl p-6 shadow-sm card-hover cursor-pointer" onclick="showCustomReportModal()">
                                 <i class="fas fa-calendar-check text-4xl text-red-700 mb-4"></i>
-                                <h3 class="text-xl font-bold text-gray-900 mb-2">Personalizado</h3>
-                                <p class="text-gray-600">Selecciona el rango de fechas</p>
+                                <h3 class="text-xl font-bold mb-2">Personalizado</h3>
+                                <p class="text-gray-600">Rango de fechas</p>
                             </div>
                         </div>
-                        
-                        <!-- Área de visualización del reporte -->
-                        <div id="report-output" class="bg-white rounded-xl p-8 shadow-sm hidden">
-                            <div class="flex justify-between items-center mb-6">
-                                <h2 id="report-title" class="text-2xl font-bold text-gray-900"></h2>
-                                <div class="flex gap-2">
-                                    <button onclick="exportReport('pdf')" class="px-4 py-2 bg-red-700 text-white rounded-lg hover:bg-red-800">
-                                        <i class="fas fa-file-pdf mr-2"></i>PDF
-                                    </button>
-                                    <button onclick="exportReport('excel')" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
-                                        <i class="fas fa-file-excel mr-2"></i>Excel
-                                    </button>
-                                    <button onclick="exportReport('csv')" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                                        <i class="fas fa-file-csv mr-2"></i>CSV
-                                    </button>
-                                    <button onclick="exportReport('html')" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">
-                                        <i class="fas fa-code mr-2"></i>HTML
-                                    </button>
-                                </div>
-                            </div>
-                            <div id="report-content"></div>
-                        </div>
+                        <div id="reportOutput" class="bg-white rounded-xl p-8 shadow-sm hidden"></div>
                     </div>
                 </div>
                 
-                <!-- VISTA 4: CONFIGURACIÓN -->
-                <div id="view-config" class="hidden animate-fade-in">
+                <!-- VISTA: Configuración -->
+                <div id="view-config" class="hidden animate-fadeIn">
                     <div class="max-w-4xl mx-auto">
-                        <h2 class="text-3xl font-bold text-gray-900 mb-8">Configuración del Sistema</h2>
+                        <h2 class="text-3xl font-bold mb-8">Configuración del Sistema</h2>
                         
-                        <div class="bg-white rounded-xl p-8 shadow-sm mb-6">
-                            <h3 class="text-xl font-bold text-gray-900 mb-6">Información de la Institución</h3>
-                            
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-white rounded-xl p-6 shadow-sm mb-6">
+                            <h3 class="text-xl font-bold mb-4">Institución</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Nombre de la Institución</label>
-                                    <input type="text" id="config-name" class="w-full px-4 py-2 border rounded-lg" value="Municipalidad Metropolitana de Lima">
+                                    <label class="block text-sm font-semibold mb-2">Nombre</label>
+                                    <input id="cfgName" class="w-full px-4 py-2 border rounded-lg" value="Municipalidad Metropolitana de Lima">
                                 </div>
-                                
                                 <div>
-                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Color Principal</label>
-                                    <input type="color" id="config-color" class="w-full h-10 border rounded-lg" value="#DC2626">
+                                    <label class="block text-sm font-semibold mb-2">Color Principal</label>
+                                    <input type="color" id="cfgColor" class="w-full h-10 border rounded-lg" value="#DC2626">
                                 </div>
                             </div>
                         </div>
                         
-                        <div class="bg-white rounded-xl p-8 shadow-sm mb-6">
-                            <h3 class="text-xl font-bold text-gray-900 mb-6">Palabras Clave - Sentimientos</h3>
-                            
+                        <div class="bg-white rounded-xl p-6 shadow-sm mb-6">
+                            <h3 class="text-xl font-bold mb-4">Palabras Clave - Sentimiento</h3>
                             <div class="mb-4">
-                                <label class="block text-sm font-semibold text-green-700 mb-2">Palabras Positivas (separadas por coma)</label>
-                                <textarea id="config-positive-words" class="w-full px-4 py-2 border rounded-lg" rows="3">excelente, bueno, genial, gracias, felicitaciones, rápido, eficiente, increíble, útil, magnífico, perfecto, maravilloso, fantástico, grandioso, positivo, satisfecho, contento, feliz, bien, mejor</textarea>
+                                <label class="block text-sm font-semibold text-green-700 mb-2">Positivas (separadas por coma)</label>
+                                <textarea id="cfgPositive" class="w-full px-4 py-2 border rounded-lg" rows="3"></textarea>
                             </div>
-                            
                             <div>
-                                <label class="block text-sm font-semibold text-red-700 mb-2">Palabras Negativas (separadas por coma)</label>
-                                <textarea id="config-negative-words" class="w-full px-4 py-2 border rounded-lg" rows="3">malo, pésimo, decepción, lento, error, queja, terrible, horrible, inútil, estafa, basura, desastre, fatal, nefasto, penoso, lamentable, vergüenza, indignante, inaceptable, caos</textarea>
+                                <label class="block text-sm font-semibold text-red-700 mb-2">Negativas (separadas por coma)</label>
+                                <textarea id="cfgNegative" class="w-full px-4 py-2 border rounded-lg" rows="3"></textarea>
                             </div>
                         </div>
                         
-                        <div class="bg-white rounded-xl p-8 shadow-sm mb-6">
-                            <h3 class="text-xl font-bold text-gray-900 mb-6">Temas y Categorías</h3>
-                            <div id="topics-config">
-                                <!-- Generado dinámicamente -->
-                            </div>
-                            <button onclick="addTopic()" class="mt-4 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300">
+                        <div class="bg-white rounded-xl p-6 shadow-sm mb-6">
+                            <h3 class="text-xl font-bold mb-4">Temas y Categorías</h3>
+                            <div id="topicsConfig"></div>
+                            <button onclick="addTopic()" class="mt-4 px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">
                                 <i class="fas fa-plus mr-2"></i>Agregar Tema
                             </button>
                         </div>
@@ -552,41 +422,32 @@
             </div>
         </main>
         
-        <!-- PANEL LATERAL DE DETALLE -->
-        <div id="detail-panel" class="fixed inset-y-0 right-0 w-full sm:w-96 lg:w-[500px] bg-white shadow-2xl transform translate-x-full transition-transform duration-300 z-50 overflow-y-auto">
+        <!-- DETAIL PANEL -->
+        <div id="detailPanel" class="fixed inset-y-0 right-0 w-full sm:w-96 lg:w-[500px] bg-white shadow-2xl transform translate-x-full transition-transform duration-300 z-50 overflow-y-auto">
             <div class="p-6">
                 <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-xl font-bold text-gray-900">Detalle del Comentario</h2>
-                    <button onclick="closeDetailPanel()" class="text-gray-600 hover:text-gray-900">
-                        <i class="fas fa-times text-2xl"></i>
-                    </button>
+                    <h2 class="text-xl font-bold">Detalle del Comentario</h2>
+                    <button onclick="closeDetail()" class="text-gray-600 hover:text-gray-900 text-2xl">&times;</button>
                 </div>
-                <div id="detail-content"></div>
+                <div id="detailContent"></div>
             </div>
         </div>
         
-        <!-- MODAL REPORTE PERSONALIZADO -->
-        <div id="custom-report-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
+        <!-- MODAL -->
+        <div id="customReportModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
             <div class="bg-white rounded-xl p-8 max-w-md w-full mx-4">
-                <h2 class="text-2xl font-bold text-gray-900 mb-6">Reporte Personalizado</h2>
-                
+                <h2 class="text-2xl font-bold mb-6">Reporte Personalizado</h2>
                 <div class="mb-4">
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Fecha Inicio</label>
-                    <input type="date" id="custom-start-date" class="w-full px-4 py-2 border rounded-lg">
+                    <label class="block text-sm font-semibold mb-2">Fecha Inicio</label>
+                    <input type="date" id="startDate" class="w-full px-4 py-2 border rounded-lg">
                 </div>
-                
                 <div class="mb-6">
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Fecha Fin</label>
-                    <input type="date" id="custom-end-date" class="w-full px-4 py-2 border rounded-lg">
+                    <label class="block text-sm font-semibold mb-2">Fecha Fin</label>
+                    <input type="date" id="endDate" class="w-full px-4 py-2 border rounded-lg">
                 </div>
-                
                 <div class="flex gap-4">
-                    <button onclick="closeCustomReportModal()" class="flex-1 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300">
-                        Cancelar
-                    </button>
-                    <button onclick="generateCustomReport()" class="flex-1 px-4 py-2 bg-red-700 text-white rounded-lg hover:bg-red-800">
-                        Generar Reporte
-                    </button>
+                    <button onclick="closeCustomReportModal()" class="flex-1 px-4 py-2 bg-gray-200 rounded-lg">Cancelar</button>
+                    <button onclick="generateCustomReport()" class="flex-1 px-4 py-2 bg-red-700 text-white rounded-lg">Generar</button>
                 </div>
             </div>
         </div>
@@ -594,122 +455,386 @@
 
     <script>
         // ============================================
-        // DATOS GLOBALES Y ESTADO DE LA APLICACIÓN
+        // SISTEMA MEJORADO DE ANÁLISIS DE SENTIMIENTOS
         // ============================================
         
-        const APP_STATE = {
-            currentPlatform: null,
-            currentView: 'platform-select',
-            analyzedData: [],
-            filteredData: [],
+        const STATE = {
+            platform: null,
+            view: 'platform-select',
+            data: [],
+            filtered: [],
             dataTable: null,
             charts: {},
-            currentReport: null
+            report: null
         };
         
-        // ============================================
-        // CONFIGURACIÓN POR DEFECTO
-        // ============================================
-        
-        const DEFAULT_CONFIG = {
-            institutionName: 'Municipalidad Metropolitana de Lima',
-            primaryColor: '#DC2626',
-            sentimentWords: {
-                positive: ['excelente', 'bueno', 'genial', 'gracias', 'felicitaciones', 'rápido', 'eficiente', 'increíble', 'útil', 'magnífico', 'perfecto', 'maravilloso', 'fantástico', 'grandioso', 'positivo', 'satisfecho', 'contento', 'feliz', 'bien', 'mejor'],
-                negative: ['malo', 'pésimo', 'decepción', 'lento', 'error', 'queja', 'terrible', 'horrible', 'inútil', 'estafa', 'basura', 'desastre', 'fatal', 'nefasto', 'penoso', 'lamentable', 'vergüenza', 'indignante', 'inaceptable', 'caos']
+        const CONFIG = {
+            institution: 'Municipalidad Metropolitana de Lima',
+            color: '#DC2626',
+            sentiment: {
+                positive: [
+                    'excelente', 'bueno', 'genial', 'gracias', 'felicitaciones', 'rápido', 'eficiente',
+                    'increíble', 'útil', 'magnífico', 'perfecto', 'maravilloso', 'fantástico', 'grandioso',
+                    'positivo', 'satisfecho', 'contento', 'feliz', 'bien', 'mejor', 'buenísimo', 'buena',
+                    'gran', 'grande', 'extraordinario', 'espectacular', 'brillante', 'admirable', 'imponente',
+                    'hermoso', 'bonito', 'lindo', 'fabuloso', 'sensacional', 'estupendo', 'fenomenal',
+                    'eficaz', 'correcto', 'adecuado', 'óptimo', 'satisfactorio', 'aplauso', 'aplaudo',
+                    'reconocimiento', 'orgullo', 'avance', 'progreso', 'mejora', 'solucionado', 'resuelto'
+                ],
+                negative: [
+                    'malo', 'pésimo', 'decepción', 'lento', 'error', 'queja', 'terrible', 'horrible',
+                    'inútil', 'estafa', 'basura', 'desastre', 'fatal', 'nefasto', 'penoso', 'lamentable',
+                    'vergüenza', 'indignante', 'inaceptable', 'caos', 'corrupto', 'corrupción', 'mentira',
+                    'mentiroso', 'incapaz', 'incompetente', 'mediocre', 'fracaso', 'fracasado', 'pésima',
+                    'desgracia', 'asqueroso', 'repugnante', 'detestable', 'aborrezco', 'odio', 'indignado',
+                    'enojado', 'furioso', 'molesto', 'fastidiado', 'harto', 'cansado', 'hastiado',
+                    'burla', 'ridículo', 'patético', 'fantoche', 'payaso', 'bufón', 'títere', 'inepto',
+                    'ineficiente', 'deficiente', 'precario', 'abandono', 'olvidado', 'promesa', 'falso',
+                    'engaño', 'mentira', 'robo', 'ladrón', 'sinvergüenza', 'caradura', 'descarado',
+                    'demagogo', 'populista', 'oportunista', 'ventajista', 'traidor', 'vendido'
+                ]
             },
             topics: [
-                { name: 'Seguridad Ciudadana', keywords: ['seguridad', 'policía', 'serenazgo', 'delincuencia', 'robo', 'crimen', 'patrullaje', 'vigilancia'] },
-                { name: 'Limpieza Pública', keywords: ['basura', 'limpieza', 'residuos', 'reciclaje', 'barrido', 'desmonte', 'contaminación'] },
-                { name: 'Transporte', keywords: ['transporte', 'bus', 'tráfico', 'movilidad', 'semáforo', 'paradero', 'congestión'] },
-                { name: 'Obras Públicas', keywords: ['obra', 'construcción', 'pista', 'vereda', 'parque', 'alameda', 'infraestructura'] },
-                { name: 'Atención al Ciudadano', keywords: ['atención', 'trámite', 'ventanilla', 'servicio', 'colas', 'demora', 'burocracia'] },
-                { name: 'Eventos y Cultura', keywords: ['evento', 'cultura', 'concierto', 'exposición', 'teatro', 'feria', 'festival'] },
-                { name: 'Medio Ambiente', keywords: ['ambiente', 'áreas verdes', 'árboles', 'jardín', 'ecología', 'sostenible'] },
-                { name: 'Fiscalización', keywords: ['fiscalización', 'clausura', 'multa', 'inspección', 'sanción', 'infracción'] }
+                {
+                    name: 'Seguridad Ciudadana',
+                    keywords: ['seguridad', 'policía', 'serenazgo', 'delincuencia', 'robo', 'crimen',
+                              'patrullaje', 'vigilancia', 'cámaras', 'alerta', 'peligro', 'asalto',
+                              'pandillaje', 'drogas', 'violencia', 'inseguridad']
+                },
+                {
+                    name: 'Limpieza Pública',
+                    keywords: ['basura', 'limpieza', 'residuos', 'reciclaje', 'barrido', 'desmonte',
+                              'contaminación', 'suciedad', 'hedor', 'mal olor', 'acumulación', 'desperdicio',
+                              'vertedero', 'botadero', 'recogida', 'recojo']
+                },
+                {
+                    name: 'Transporte y Tránsito',
+                    keywords: ['transporte', 'bus', 'tráfico', 'movilidad', 'semáforo', 'paradero',
+                              'congestión', 'vehículo', 'taxi', 'mototaxi', 'ciclovía', 'bicicleta',
+                              'peatón', 'accidente', 'choque', 'atropello', 'vereda', 'calzada',
+                              'estacionamiento', 'parqueo']
+                },
+                {
+                    name: 'Obras Públicas',
+                    keywords: ['obra', 'construcción', 'pista', 'vereda', 'parque', 'alameda',
+                              'infraestructura', 'edificación', 'remodelación', 'renovación', 'mejora',
+                              'inversión', 'proyecto', 'ejecución', 'presupuesto', 'mantenimiento']
+                },
+                {
+                    name: 'Atención al Ciudadano',
+                    keywords: ['atención', 'trámite', 'ventanilla', 'servicio', 'colas', 'demora',
+                              'burocracia', 'documento', 'expediente', 'solicitud', 'reclamo', 'queja',
+                              'sugerencia', 'consulta', 'información', 'orientación', 'ayuda']
+                },
+                {
+                    name: 'Eventos y Cultura',
+                    keywords: ['evento', 'cultura', 'concierto', 'exposición', 'teatro', 'feria',
+                              'festival', 'espectáculo', 'show', 'presentación', 'inauguración',
+                              'celebración', 'fiesta', 'aniversario', 'tradición']
+                },
+                {
+                    name: 'Medio Ambiente',
+                    keywords: ['ambiente', 'verde', 'árbol', 'jardín', 'ecología', 'sostenible',
+                              'reciclaje', 'contaminación', 'río', 'playa', 'área natural', 'protección',
+                              'conservación', 'reforestación', 'cambio climático']
+                },
+                {
+                    name: 'Gestión Municipal',
+                    keywords: ['alcalde', 'gestión', 'municipalidad', 'funcionario', 'regidor',
+                              'concejo', 'administración', 'gobierno', 'autoridad', 'política',
+                              'elección', 'campaña', 'promesa', 'plan', 'programa', 'resultado']
+                },
+                {
+                    name: 'Salud Pública',
+                    keywords: ['salud', 'hospital', 'posta', 'centro de salud', 'enfermedad',
+                              'epidemia', 'contagio', 'vacuna', 'medicina', 'atención médica',
+                              'emergencia', 'ambulancia', 'saneamiento', 'higiene']
+                },
+                {
+                    name: 'Educación',
+                    keywords: ['educación', 'escuela', 'colegio', 'universidad', 'biblioteca',
+                              'taller', 'curso', 'capacitación', 'formación', 'aprendizaje',
+                              'beca', 'estudiante', 'profesor', 'aula', 'enseñanza']
+                }
             ]
         };
         
-        let appConfig = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+        // Cargar config guardada
+        try {
+            const saved = localStorage.getItem('mml_config_v2');
+            if (saved) Object.assign(CONFIG, JSON.parse(saved));
+        } catch(e) {}
         
-        // Cargar configuración guardada
-        const savedConfig = localStorage.getItem('mml-social-listening-config');
-        if (savedConfig) {
-            appConfig = { ...DEFAULT_CONFIG, ...JSON.parse(savedConfig) };
+        // ============================================
+        // MOTOR DE CLASIFICACIÓN MEJORADO
+        // ============================================
+        
+        class CommentAnalyzer {
+            
+            static analyze(text) {
+                const cleanText = this.cleanText(text);
+                const sentiment = this.analyzeSentiment(cleanText);
+                const type = this.classifyType(cleanText, sentiment);
+                const topic = this.detectTopic(cleanText);
+                const priority = this.calculatePriority(cleanText, sentiment, type);
+                const risk = this.calculateRisk(sentiment, type, priority);
+                const needsResponse = ['Queja', 'Reclamo', 'Denuncia', 'Consulta'].includes(type);
+                const keywords = this.extractKeywords(cleanText);
+                const summary = this.generateSummary(cleanText, sentiment, type, topic);
+                
+                return {
+                    sentiment, type, topic, priority, risk,
+                    needsResponse, keywords, summary
+                };
+            }
+            
+            static cleanText(text) {
+                // Eliminar URLs
+                let cleaned = text.replace(/https?:\/\/\S+/g, '');
+                // Eliminar menciones pero guardarlas para contexto
+                cleaned = cleaned.replace(/@\w+/g, '');
+                // Eliminar hashtags pero guardar el texto
+                cleaned = cleaned.replace(/#(\w+)/g, '$1');
+                // Normalizar espacios
+                cleaned = cleaned.replace(/\s+/g, ' ').trim();
+                return cleaned.toLowerCase();
+            }
+            
+            static analyzeSentiment(text) {
+                let score = 0;
+                const words = text.split(/\s+/);
+                
+                // Palabras positivas
+                CONFIG.sentiment.positive.forEach(word => {
+                    const regex = new RegExp(`\\b${word}\\b`, 'gi');
+                    const matches = text.match(regex);
+                    if (matches) score += matches.length * 3;
+                });
+                
+                // Palabras negativas
+                CONFIG.sentiment.negative.forEach(word => {
+                    const regex = new RegExp(`\\b${word}\\b`, 'gi');
+                    const matches = text.match(regex);
+                    if (matches) score -= matches.length * 3;
+                });
+                
+                // Intensificadores negativos
+                const intensifiers = ['muy', 'demasiado', 'extremadamente', 'absolutamente', 'totalmente',
+                                     'completamente', 'realmente', 'verdaderamente', 'sumamente'];
+                intensifiers.forEach(int => {
+                    const regex = new RegExp(`${int}\\s+(\\w+)`, 'gi');
+                    const matches = [...text.matchAll(regex)];
+                    matches.forEach(match => {
+                        const nextWord = match[1];
+                        if (CONFIG.sentiment.negative.includes(nextWord)) score -= 5;
+                        if (CONFIG.sentiment.positive.includes(nextWord)) score += 5;
+                    });
+                });
+                
+                // Negaciones que invierten el sentimiento
+                const negations = ['no', 'nunca', 'jamás', 'tampoco', 'ningún', 'ninguna', 'nadie', 'nada'];
+                negations.forEach(neg => {
+                    const regex = new RegExp(`${neg}\\s+(\\w+)`, 'gi');
+                    const matches = [...text.matchAll(regex)];
+                    matches.forEach(match => {
+                        const nextWord = match[1];
+                        if (CONFIG.sentiment.positive.includes(nextWord)) score -= 6;
+                        if (CONFIG.sentiment.negative.includes(nextWord)) score += 6;
+                    });
+                });
+                
+                // Signos de exclamación múltiples (enojo)
+                if ((text.match(/!/g) || []).length >= 3 && score < 0) score -= 3;
+                
+                // Signos de interrogación múltiples (frustración)
+                if ((text.match(/\?/g) || []).length >= 3) score -= 2;
+                
+                // Emojis básicos en texto
+                if (text.includes(':)') || text.includes('=)') || text.includes(':D')) score += 2;
+                if (text.includes(':(') || text.includes('=(') || text.includes(':/')) score -= 2;
+                
+                // Mayúsculas sostenidas (GRITO/ENOJO)
+                const uppercaseRatio = (text.replace(/[^A-ZÁÉÍÓÚÜÑ]/g, '').length / text.length) || 0;
+                if (uppercaseRatio > 0.5 && text.length > 20) score -= 3;
+                
+                // Sarcasmo básico: palabras positivas seguidas de negativas
+                const sarcasmPatterns = [
+                    /qué\s+(bonito|lindo|hermoso|bueno|genial|excelente|maravilloso)/i,
+                    /menudo\s+(éxito|logro|avance|progreso)/i,
+                    /vaya\s+(sorpresa|maravilla|maravilloso)/i
+                ];
+                sarcasmPatterns.forEach(pattern => {
+                    if (pattern.test(text)) score -= 4;
+                });
+                
+                // Determinación final
+                if (score >= 5) return 'Positivo';
+                if (score <= -5) return 'Negativo';
+                return 'Neutral';
+            }
+            
+            static classifyType(text, sentiment) {
+                // Denuncias (prioridad máxima)
+                if (/denuncia|denuncio|corrupción|ilegal|delito|fraude|estafa|robo|ladrón/i.test(text)) {
+                    return 'Denuncia';
+                }
+                
+                // Reclamos formales
+                if (/reclamo|exijo|reclamo formal|hoja de reclamación|libro de reclamaciones/i.test(text)) {
+                    return 'Reclamo';
+                }
+                
+                // Consultas
+                if (text.includes('?') || /\bcómo\b|\bcuál\b|\bcuándo\b|\bdónde\b|\bquién\b|\bcuánto\b/i.test(text)) {
+                    if (sentiment === 'Negativo') return 'Queja';
+                    return 'Consulta';
+                }
+                
+                // Solicitudes
+                if (/solicito|solicitud|quisiera|necesito|requiero|pedir|por favor|urgente/i.test(text)) {
+                    if (sentiment === 'Negativo') return 'Queja';
+                    return 'Solicitud';
+                }
+                
+                // Felicitaciones
+                if (/felicit|excelente trabajo|buen trabajo|enhorabuena|felicidades|felicitaciones|magnífico/i.test(text)) {
+                    return 'Felicitación';
+                }
+                
+                // Agradecimientos
+                if (/gracias|agradecido|agradezco|agradecer|muy agradecido/i.test(text)) {
+                    return 'Agradecimiento';
+                }
+                
+                // Sugerencias
+                if (/sugiero|sugerencia|propongo|propuesta|podrían|deberían|recomiendo|recomendación/i.test(text)) {
+                    return 'Sugerencia';
+                }
+                
+                // Críticas (negativas pero constructivas)
+                if (sentiment === 'Negativo' && /\bcrítica\b|\bcrítico\b|debería|podría mejorar|falta|ausencia/i.test(text)) {
+                    return 'Crítica';
+                }
+                
+                // Quejas (negativas generales)
+                if (sentiment === 'Negativo') {
+                    return 'Queja';
+                }
+                
+                // Humor
+                if (/jaja|jeje|jiji|😂|🤣|humor|chiste|broma|qué risa/i.test(text)) {
+                    return 'Humor';
+                }
+                
+                // Spam
+                if (/spam|oferta|descuento|compra|vendo|publicidad|promoción|imperdible/i.test(text)) {
+                    return 'Spam';
+                }
+                
+                // Información
+                if (/información|informo|comunico|aviso|comunicado|noticia|entero/i.test(text)) {
+                    return 'Información';
+                }
+                
+                return 'Opinión';
+            }
+            
+            static detectTopic(text) {
+                const scores = {};
+                
+                CONFIG.topics.forEach(topic => {
+                    scores[topic.name] = 0;
+                    topic.keywords.forEach(keyword => {
+                        const regex = new RegExp(`\\b${keyword}\\b`, 'gi');
+                        const matches = text.match(regex);
+                        if (matches) scores[topic.name] += matches.length;
+                    });
+                });
+                
+                const bestTopic = Object.entries(scores).sort((a, b) => b[1] - a[1])[0];
+                return bestTopic[1] > 0 ? bestTopic[0] : 'Otro';
+            }
+            
+            static calculatePriority(text, sentiment, type) {
+                // Crítico: menciones a autoridades + negativo
+                const authorityMentions = /@\w+|alcalde|regidor|funcionario|autoridad|ministro|presidente|congresista/i;
+                if (authorityMentions.test(text) && sentiment === 'Negativo') return 'Alta';
+                
+                if (['Denuncia', 'Reclamo'].includes(type)) return 'Alta';
+                if (sentiment === 'Negativo' && ['Queja', 'Crítica'].includes(type)) return 'Alta';
+                if (/urgente|emergencia|peligro|grave|crítico|inmediato|ahora mismo/i.test(text)) return 'Alta';
+                
+                if (['Consulta', 'Solicitud'].includes(type)) return 'Media';
+                if (sentiment === 'Negativo') return 'Media';
+                
+                return 'Baja';
+            }
+            
+            static calculateRisk(sentiment, type, priority) {
+                if (priority === 'Alta' && ['Denuncia', 'Reclamo'].includes(type)) return 'Alto';
+                if (priority === 'Alta' && sentiment === 'Negativo') return 'Alto';
+                if (type === 'Denuncia') return 'Alto';
+                if (sentiment === 'Negativo' && ['Queja', 'Crítica'].includes(type)) return 'Medio';
+                if (sentiment === 'Negativo') return 'Medio';
+                return 'Bajo';
+            }
+            
+            static extractKeywords(text) {
+                const stopWords = new Set([
+                    'de', 'la', 'que', 'el', 'en', 'y', 'a', 'los', 'del', 'se', 'las', 'por',
+                    'un', 'para', 'con', 'no', 'una', 'su', 'al', 'lo', 'como', 'más', 'pero',
+                    'sus', 'le', 'ya', 'o', 'este', 'sí', 'porque', 'esta', 'entre', 'cuando',
+                    'muy', 'sin', 'sobre', 'también', 'me', 'hasta', 'hay', 'donde', 'quien',
+                    'todo', 'nos', 'durante', 'todos', 'uno', 'les', 'ni', 'contra', 'otros'
+                ]);
+                
+                return text.split(/\s+/)
+                    .map(w => w.replace(/[.,!?¡¿()\[\]{}"':;]/g, ''))
+                    .filter(w => w.length > 3 && !stopWords.has(w.toLowerCase()))
+                    .slice(0, 8);
+            }
+            
+            static generateSummary(text, sentiment, type, topic) {
+                const preview = text.length > 120 ? text.substring(0, 117) + '...' : text;
+                return `${type} ${sentiment.toLowerCase()} sobre ${topic}: "${preview}"`;
+            }
         }
         
         // ============================================
-        // SISTEMA DE NAVEGACIÓN
+        // PROCESAMIENTO DE DATOS
         // ============================================
         
-        function navigateTo(view) {
-            APP_STATE.currentView = view;
+        function processData(rawData) {
+            STATE.data = rawData
+                .filter(row => {
+                    const text = row['Full Text'] || row['full_text'] || row['text'] || '';
+                    return text.toString().trim().length > 0;
+                })
+                .filter((row, index, self) => {
+                    const id = row['Tweet Id'] || row['tweet_id'] || row['id'];
+                    return index === self.findIndex(r => 
+                        (r['Tweet Id'] || r['tweet_id'] || r['id']) === id
+                    );
+                })
+                .map(row => {
+                    const text = row['Full Text'] || row['full_text'] || row['text'] || '';
+                    const analysis = CommentAnalyzer.analyze(text.toString());
+                    return { ...row, _analysis: analysis };
+                });
             
-            // Ocultar todas las vistas
-            document.querySelectorAll('[id^="view-"]').forEach(el => {
-                el.classList.add('hidden');
-            });
+            STATE.filtered = [...STATE.data];
+            console.log(`✅ ${STATE.data.length} comentarios analizados con el motor mejorado`);
             
-            // Mostrar la vista seleccionada
-            const targetView = document.getElementById(`view-${view}`);
-            if (targetView) {
-                targetView.classList.remove('hidden');
-                targetView.classList.add('animate-fade-in');
+            // Log de muestra para verificar
+            if (STATE.data.length > 0) {
+                const sample = STATE.data[0];
+                console.log('📝 Muestra de análisis:', {
+                    texto: (sample['Full Text'] || '').substring(0, 100),
+                    resultado: sample._analysis
+                });
             }
             
-            // Actualizar sidebar activo
-            document.querySelectorAll('.sidebar-link').forEach(link => {
-                link.classList.remove('active');
-            });
-            
-            // Inicializar vista
-            switch(view) {
-                case 'dashboard':
-                    if (APP_STATE.analyzedData.length > 0) {
-                        renderDashboard();
-                    }
-                    break;
-                case 'config':
-                    renderConfigPanel();
-                    break;
-            }
-            
-            // Cerrar sidebar en móvil
-            if (window.innerWidth < 1024) {
-                closeSidebar();
-            }
-        }
-        
-        // ============================================
-        // SELECCIÓN DE PLATAFORMA
-        // ============================================
-        
-        function selectPlatform(platform) {
-            if (platform !== 'twitter') {
-                alert('Esta plataforma estará disponible próximamente');
-                return;
-            }
-            
-            APP_STATE.currentPlatform = platform;
-            
-            // Actualizar UI
-            document.getElementById('sidebar-platform-badge').classList.remove('hidden');
-            document.getElementById('sidebar-platform-icon').className = 'fab fa-twitter text-2xl text-blue-400 mb-1';
-            document.getElementById('sidebar-platform-name').textContent = 'X (Twitter)';
-            
-            // Navegar al dashboard
-            navigateTo('dashboard');
-            
-            // Mostrar área de carga
-            document.getElementById('file-upload-area').classList.remove('hidden');
-        }
-        
-        // ============================================
-        // CARGA DE ARCHIVOS EXCEL
-        // ============================================
-        
-        function showFileUpload() {
-            document.getElementById('excel-file-input').click();
+            renderDashboard();
         }
         
         function handleFileUpload(event) {
@@ -721,187 +846,52 @@
                 try {
                     const data = new Uint8Array(e.target.result);
                     const workbook = XLSX.read(data, { type: 'array' });
-                    const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-                    const jsonData = XLSX.utils.sheet_to_json(firstSheet);
-                    
-                    processExcelData(jsonData);
-                } catch (error) {
-                    alert('Error al procesar el archivo: ' + error.message);
+                    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+                    const json = XLSX.utils.sheet_to_json(sheet);
+                    processData(json);
+                    alert(`✅ ${STATE.data.length} comentarios procesados exitosamente`);
+                } catch(err) {
+                    alert('❌ Error al leer el archivo: ' + err.message);
                 }
             };
             reader.readAsArrayBuffer(file);
         }
         
-        function processExcelData(rawData) {
-            // Limpieza de datos
-            const cleanData = rawData
-                .filter(row => row['Full Text'] && row['Full Text'].toString().trim() !== '')
-                .filter((row, index, self) => 
-                    index === self.findIndex(r => r['Tweet Id'] === row['Tweet Id'])
-                );
-            
-            // Análisis de cada comentario
-            APP_STATE.analyzedData = cleanData.map(row => analyzeComment(row));
-            
-            // Renderizar dashboard
-            renderDashboard();
-            
-            alert(`✅ ${APP_STATE.analyzedData.length} comentarios analizados exitosamente`);
-        }
-        
         function loadSampleData() {
-            const sampleData = [
-                { 'Tweet Id': '123456789', 'Full Text': 'Excelente trabajo de la municipalidad en la limpieza de calles. ¡Gracias!', 'Created At': '2024-01-15 10:30:00', 'User Name': 'María García', 'Reply Count': 2, 'Retweet Count': 5, 'Favorite Count': 12, 'View Count': 150 },
-                { 'Tweet Id': '123456790', 'Full Text': 'El tráfico en la Av. Abancay es un caos total. No hay semáforos funcionando.', 'Created At': '2024-01-15 11:00:00', 'User Name': 'Carlos López', 'Reply Count': 3, 'Retweet Count': 8, 'Favorite Count': 5, 'View Count': 200 },
-                { 'Tweet Id': '123456791', 'Full Text': '¿Cuál es el horario de atención para trámites? No lo encuentro en la web.', 'Created At': '2024-01-15 09:15:00', 'User Name': 'Ana Martínez', 'Reply Count': 1, 'Retweet Count': 0, 'Favorite Count': 2, 'View Count': 80 },
-                { 'Tweet Id': '123456792', 'Full Text': 'Felicitaciones por el Festival de Verano, estuvo increíble. Bien organizado.', 'Created At': '2024-01-14 18:00:00', 'User Name': 'Pedro Sánchez', 'Reply Count': 0, 'Retweet Count': 15, 'Favorite Count': 30, 'View Count': 500 },
-                { 'Tweet Id': '123456793', 'Full Text': 'Esto es una vergüenza, la basura lleva días acumulada en mi calle.', 'Created At': '2024-01-14 14:30:00', 'User Name': 'Laura Díaz', 'Reply Count': 5, 'Retweet Count': 12, 'Favorite Count': 8, 'View Count': 300 },
-                { 'Tweet Id': '123456794', 'Full Text': 'Los parques están muy bonitos con las nuevas remodelaciones.', 'Created At': '2024-01-14 12:00:00', 'User Name': 'Roberto Fernández', 'Reply Count': 0, 'Retweet Count': 3, 'Favorite Count': 10, 'View Count': 120 }
+            const samples = [
+                {
+                    'Tweet Id': '1001', 'Full Text': '@MuniLima @Renzo_Reggiardo @KeikoFujimori Este fantoche ya está buscando un puesto en el próximo gobierno. Puro oportunista.',
+                    'Created At': '2024-01-20 15:30:00', 'User Name': 'Ciudadano Indignado', 'User Screen Name': 'ciudadano_x',
+                    'Favorite Count': 45, 'Retweet Count': 23, 'Reply Count': 12, 'View Count': 1500
+                },
+                {
+                    'Tweet Id': '1002', 'Full Text': 'Excelente trabajo de limpieza en el Centro de Lima. ¡Por fin calles limpias! Gracias @MuniLima',
+                    'Created At': '2024-01-20 10:15:00', 'User Name': 'María García', 'User Screen Name': 'maria_lima',
+                    'Favorite Count': 120, 'Retweet Count': 45, 'Reply Count': 8, 'View Count': 3200
+                },
+                {
+                    'Tweet Id': '1003', 'Full Text': '¿Hasta cuándo van a seguir con esta corrupción? Las obras nunca se terminan y el dinero desaparece.',
+                    'Created At': '2024-01-19 18:45:00', 'User Name': 'Carlos López', 'User Screen Name': 'carlos_l',
+                    'Favorite Count': 89, 'Retweet Count': 56, 'Reply Count': 23, 'View Count': 2800
+                },
+                {
+                    'Tweet Id': '1004', 'Full Text': '¡Qué bonito parque! Felicitaciones por la remodelación. Mis hijos están encantados.',
+                    'Created At': '2024-01-19 14:20:00', 'User Name': 'Ana Martínez', 'User Screen Name': 'ana_m',
+                    'Favorite Count': 67, 'Retweet Count': 12, 'Reply Count': 3, 'View Count': 980
+                },
+                {
+                    'Tweet Id': '1005', 'Full Text': 'El tráfico en la Av. Abancay es un desastre total. Pésima gestión del alcalde.',
+                    'Created At': '2024-01-18 09:00:00', 'User Name': 'Pedro Sánchez', 'User Screen Name': 'pedro_s',
+                    'Favorite Count': 34, 'Retweet Count': 18, 'Reply Count': 7, 'View Count': 1200
+                },
+                {
+                    'Tweet Id': '1006', 'Full Text': 'Solicito información sobre los horarios de atención para trámites de licencia.',
+                    'Created At': '2024-01-18 11:30:00', 'User Name': 'Laura Díaz', 'User Screen Name': 'laura_d',
+                    'Favorite Count': 2, 'Retweet Count': 0, 'Reply Count': 1, 'View Count': 45
+                }
             ];
-            
-            processExcelData(sampleData);
-        }
-        
-        // ============================================
-        // MOTOR DE ANÁLISIS DE COMENTARIOS
-        // ============================================
-        
-        function analyzeComment(row) {
-            const text = (row['Full Text'] || '').toString().toLowerCase().trim();
-            
-            // Análisis de sentimiento
-            const sentiment = analyzeSentiment(text);
-            
-            // Clasificación del tipo
-            const type = classifyCommentType(text, sentiment);
-            
-            // Detección de tema
-            const topic = detectTopic(text);
-            
-            // Prioridad
-            const priority = calculatePriority(sentiment, type, text);
-            
-            // Riesgo reputacional
-            const risk = calculateRisk(sentiment, type, priority);
-            
-            // ¿Necesita respuesta?
-            const needsResponse = type === 'Queja' || type === 'Reclamo' || type === 'Denuncia' || type === 'Consulta';
-            
-            // Palabras clave
-            const keywords = extractKeywords(text);
-            
-            // Resumen
-            const summary = generateSummary(text, sentiment, type, topic);
-            
-            return {
-                ...row,
-                analysis: {
-                    sentiment,
-                    type,
-                    topic,
-                    priority,
-                    risk,
-                    needsResponse,
-                    keywords,
-                    summary
-                }
-            };
-        }
-        
-        function analyzeSentiment(text) {
-            let score = 0;
-            const words = text.split(/\s+/);
-            
-            words.forEach(word => {
-                const cleanWord = word.replace(/[.,!?¡¿]/g, '');
-                if (appConfig.sentimentWords.positive.includes(cleanWord)) score += 2;
-                if (appConfig.sentimentWords.negative.includes(cleanWord)) score -= 2;
-            });
-            
-            // Análisis contextual adicional
-            if (text.includes('!') && score > 0) score += 1;
-            if (text.includes('¡') && score > 0) score += 1;
-            if (text.match(/!!+/)) score -= 1;
-            
-            if (score >= 3) return 'Positivo';
-            if (score <= -3) return 'Negativo';
-            return 'Neutral';
-        }
-        
-        function classifyCommentType(text, sentiment) {
-            if (text.includes('?') || /cómo|cuál|cuándo|dónde|quién|información|horario|consulta/.test(text)) {
-                return 'Consulta';
-            }
-            if (/excelente|felicit|gracias|buen trabajo|enhorabuena|magnífico/.test(text)) {
-                return 'Felicitación';
-            }
-            if (/gracias|agradecido|agradecer/.test(text)) {
-                return 'Agradecimiento';
-            }
-            if (/denuncia|denuncio|corrupción|ilegal|delito/.test(text)) {
-                return 'Denuncia';
-            }
-            if (/reclamo|exijo|reclamo formal/.test(text)) {
-                return 'Reclamo';
-            }
-            if (/sugiero|sugerencia|propongo|podrían|deberían/.test(text)) {
-                return 'Sugerencia';
-            }
-            if (sentiment === 'Negativo' && /mal|pésimo|terrible|horrible|caos|desastre/.test(text)) {
-                return 'Crítica';
-            }
-            if (sentiment === 'Negativo') {
-                return 'Queja';
-            }
-            if (/humor|jaja|chiste|broma|😂|🤣/.test(text)) {
-                return 'Humor';
-            }
-            if (/spam|oferta|descuento|compra|vendo|publicidad/.test(text)) {
-                return 'Spam';
-            }
-            return 'Opinión';
-        }
-        
-        function detectTopic(text) {
-            for (const topic of appConfig.topics) {
-                if (topic.keywords.some(keyword => text.includes(keyword.toLowerCase()))) {
-                    return topic.name;
-                }
-            }
-            return 'Otro';
-        }
-        
-        function calculatePriority(sentiment, type, text) {
-            if (type === 'Denuncia' || type === 'Reclamo') return 'Alta';
-            if (sentiment === 'Negativo' && (type === 'Queja' || type === 'Crítica')) return 'Alta';
-            if (text.includes('urgente') || text.includes('emergencia') || text.includes('peligro')) return 'Alta';
-            if (type === 'Consulta') return 'Media';
-            if (sentiment === 'Negativo') return 'Media';
-            return 'Baja';
-        }
-        
-        function calculateRisk(sentiment, type, priority) {
-            if (priority === 'Alta' && sentiment === 'Negativo') return 'Alto';
-            if (type === 'Denuncia') return 'Alto';
-            if (sentiment === 'Negativo' && type === 'Queja') return 'Medio';
-            if (sentiment === 'Negativo') return 'Medio';
-            return 'Bajo';
-        }
-        
-        function extractKeywords(text) {
-            const words = text.split(/\s+/).map(w => w.replace(/[.,!?¡¿]/g, ''));
-            const stopWords = ['de', 'la', 'que', 'el', 'en', 'y', 'a', 'los', 'del', 'se', 'las', 'por', 'un', 'para', 'con', 'no', 'una', 'su', 'al', 'lo', 'como', 'más', 'pero', 'sus', 'le', 'ya', 'o', 'este', 'sí', 'porque', 'esta', 'entre', 'cuando', 'muy', 'sin', 'sobre', 'también', 'me', 'hasta', 'hay', 'donde', 'quien', 'todo', 'nos', 'durante', 'todos', 'uno', 'les', 'ni', 'contra', 'otros', 'ese', 'eso', 'ante', 'ellos', 'e', 'esto', 'mí', 'antes', 'algunos', 'qué', 'unos', 'yo', 'otro', 'otras', 'otra', 'él', 'tanto', 'esa', 'estos', 'mucho', 'quienes', 'nada', 'muchos', 'cual', 'poco', 'ella', 'estar', 'estas', 'algunas', 'algo', 'nosotros', 'mi', 'mis', 'tú', 'te', 'ti', 'tu', 'tus', 'ellas', 'nosotras', 'vosotros', 'vosotras', 'os', 'mío', 'mía', 'míos', 'mías', 'tuyo', 'tuya', 'tuyos', 'tuyas', 'suyo', 'suya', 'suyos', 'suyas', 'nuestro', 'nuestra', 'nuestros', 'nuestras'];
-            
-            const keywords = words
-                .filter(word => word.length > 3 && !stopWords.includes(word))
-                .slice(0, 5);
-            
-            return keywords;
-        }
-        
-        function generateSummary(text, sentiment, type, topic) {
-            const shortText = text.length > 100 ? text.substring(0, 97) + '...' : text;
-            return `${type} ${sentiment.toLowerCase()} sobre ${topic}: "${shortText}"`;
+            processData(samples);
+            alert('✅ Datos de ejemplo cargados. Revisa la consola para ver el análisis detallado.');
         }
         
         // ============================================
@@ -909,78 +899,69 @@
         // ============================================
         
         function renderDashboard() {
-            if (APP_STATE.analyzedData.length === 0) return;
+            if (!STATE.data.length) return;
             
-            const data = APP_STATE.analyzedData;
-            APP_STATE.filteredData = data;
+            const d = STATE.filtered;
             
-            // Actualizar KPIs
-            renderKPIs(data);
-            
-            // Renderizar gráficos
-            renderCharts(data);
-            
-            // Renderizar tabla
-            renderDataTable(data);
-            
-            // Actualizar filtros
-            updateFilterOptions(data);
-        }
-        
-        function renderKPIs(data) {
+            // KPIs
             const sentiments = { Positivo: 0, Neutral: 0, Negativo: 0 };
             const types = {};
-            let totalLikes = 0, totalReplies = 0, totalViews = 0, highRisk = 0;
+            let likes = 0, replies = 0, views = 0, highRisk = 0;
             
-            data.forEach(row => {
-                sentiments[row.analysis.sentiment]++;
-                types[row.analysis.type] = (types[row.analysis.type] || 0) + 1;
-                if (row.analysis.risk === 'Alto') highRisk++;
-                totalLikes += parseInt(row['Favorite Count'] || 0);
-                totalReplies += parseInt(row['Reply Count'] || 0);
-                totalViews += parseInt(row['View Count'] || 0);
+            d.forEach(r => {
+                sentiments[r._analysis.sentiment]++;
+                types[r._analysis.type] = (types[r._analysis.type] || 0) + 1;
+                if (r._analysis.risk === 'Alto') highRisk++;
+                likes += parseInt(r['Favorite Count'] || r['favorite_count'] || 0);
+                replies += parseInt(r['Reply Count'] || r['reply_count'] || 0);
+                views += parseInt(r['View Count'] || r['view_count'] || 0);
             });
             
             const kpis = [
-                { label: 'Total', value: data.length, icon: 'fa-comments', color: 'text-blue-600' },
+                { label: 'Total', value: d.length, icon: 'fa-comments', color: 'text-blue-600' },
                 { label: 'Positivos', value: sentiments.Positivo, icon: 'fa-smile', color: 'text-green-600' },
                 { label: 'Neutrales', value: sentiments.Neutral, icon: 'fa-meh', color: 'text-yellow-600' },
                 { label: 'Negativos', value: sentiments.Negativo, icon: 'fa-frown', color: 'text-red-600' },
                 { label: 'Riesgo Alto', value: highRisk, icon: 'fa-exclamation-triangle', color: 'text-orange-600' },
-                { label: 'Likes', value: totalLikes, icon: 'fa-heart', color: 'text-pink-600' }
+                { label: 'Likes', value: likes, icon: 'fa-heart', color: 'text-pink-600' }
             ];
             
-            document.getElementById('kpi-container').innerHTML = kpis.map(kpi => `
-                <div class="bg-white rounded-xl p-4 shadow-sm kpi-card animate-fade-in">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="text-sm text-gray-600">${kpi.label}</span>
-                        <i class="fas ${kpi.icon} ${kpi.color} text-xl"></i>
+            document.getElementById('kpiContainer').innerHTML = kpis.map(k => `
+                <div class="bg-white rounded-xl p-4 shadow-sm kpi-card">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-xs text-gray-500 uppercase tracking-wider">${k.label}</span>
+                        <i class="fas ${k.icon} ${k.color} text-xl"></i>
                     </div>
-                    <div class="text-3xl font-bold text-gray-900">${kpi.value.toLocaleString()}</div>
+                    <div class="text-3xl font-bold text-gray-900">${k.value.toLocaleString()}</div>
                 </div>
             `).join('');
+            
+            // Charts
+            renderCharts(d);
+            
+            // Table
+            renderTable(d);
+            
+            // Filters
+            updateFilters(d);
         }
         
-        function renderCharts(data) {
-            // Destruir gráficos existentes
-            Object.values(APP_STATE.charts).forEach(chart => chart.destroy());
-            APP_STATE.charts = {};
+        function renderCharts(d) {
+            Object.values(STATE.charts).forEach(c => c.destroy());
             
-            // 1. Gráfico de Sentimientos
-            const sentimentCtx = document.getElementById('chart-sentiment').getContext('2d');
-            const sentimentData = {
-                Positivo: data.filter(r => r.analysis.sentiment === 'Positivo').length,
-                Neutral: data.filter(r => r.analysis.sentiment === 'Neutral').length,
-                Negativo: data.filter(r => r.analysis.sentiment === 'Negativo').length
-            };
+            // Sentiment Chart
+            const sData = { Positivo: 0, Neutral: 0, Negativo: 0 };
+            d.forEach(r => sData[r._analysis.sentiment]++);
             
-            APP_STATE.charts.sentiment = new Chart(sentimentCtx, {
+            const ctx1 = document.getElementById('chartSentiment').getContext('2d');
+            STATE.charts.sentiment = new Chart(ctx1, {
                 type: 'doughnut',
                 data: {
-                    labels: Object.keys(sentimentData),
+                    labels: Object.keys(sData),
                     datasets: [{
-                        data: Object.values(sentimentData),
-                        backgroundColor: ['#10B981', '#F59E0B', '#EF4444']
+                        data: Object.values(sData),
+                        backgroundColor: ['#10B981', '#F59E0B', '#EF4444'],
+                        borderWidth: 0
                     }]
                 },
                 options: {
@@ -990,19 +971,20 @@
                 }
             });
             
-            // 2. Gráfico de Tipos
-            const typesCtx = document.getElementById('chart-types').getContext('2d');
-            const typeCount = {};
-            data.forEach(r => { typeCount[r.analysis.type] = (typeCount[r.analysis.type] || 0) + 1; });
+            // Types Chart
+            const tData = {};
+            d.forEach(r => tData[r._analysis.type] = (tData[r._analysis.type] || 0) + 1);
             
-            APP_STATE.charts.types = new Chart(typesCtx, {
+            const ctx2 = document.getElementById('chartTypes').getContext('2d');
+            STATE.charts.types = new Chart(ctx2, {
                 type: 'bar',
                 data: {
-                    labels: Object.keys(typeCount),
+                    labels: Object.keys(tData),
                     datasets: [{
                         label: 'Cantidad',
-                        data: Object.values(typeCount),
-                        backgroundColor: '#DC2626'
+                        data: Object.values(tData),
+                        backgroundColor: '#DC2626',
+                        borderRadius: 8
                     }]
                 },
                 options: {
@@ -1012,44 +994,44 @@
                 }
             });
             
-            // 3. Gráfico por Día
-            const dailyCtx = document.getElementById('chart-daily').getContext('2d');
-            const dailyData = {};
-            data.forEach(r => {
-                const date = (r['Created At'] || '').toString().substring(0, 10);
-                dailyData[date] = (dailyData[date] || 0) + 1;
+            // Daily Chart
+            const daily = {};
+            d.forEach(r => {
+                const date = (r['Created At'] || r['created_at'] || '').toString().substring(0, 10);
+                daily[date] = (daily[date] || 0) + 1;
             });
             
-            APP_STATE.charts.daily = new Chart(dailyCtx, {
+            const ctx3 = document.getElementById('chartDaily').getContext('2d');
+            STATE.charts.daily = new Chart(ctx3, {
                 type: 'line',
                 data: {
-                    labels: Object.keys(dailyData).sort(),
+                    labels: Object.keys(daily).sort(),
                     datasets: [{
                         label: 'Comentarios',
-                        data: Object.values(dailyData),
+                        data: Object.values(daily),
                         borderColor: '#DC2626',
+                        backgroundColor: 'rgba(220,38,38,0.1)',
+                        fill: true,
                         tension: 0.4
                     }]
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false
-                }
+                options: { responsive: true, maintainAspectRatio: false }
             });
             
-            // 4. Gráfico de Temas
-            const topicsCtx = document.getElementById('chart-topics').getContext('2d');
-            const topicCount = {};
-            data.forEach(r => { topicCount[r.analysis.topic] = (topicCount[r.analysis.topic] || 0) + 1; });
+            // Topics Chart
+            const topics = {};
+            d.forEach(r => topics[r._analysis.topic] = (topics[r._analysis.topic] || 0) + 1);
             
-            APP_STATE.charts.topics = new Chart(topicsCtx, {
+            const ctx4 = document.getElementById('chartTopics').getContext('2d');
+            STATE.charts.topics = new Chart(ctx4, {
                 type: 'bar',
                 data: {
-                    labels: Object.keys(topicCount),
+                    labels: Object.keys(topics),
                     datasets: [{
                         label: 'Menciones',
-                        data: Object.values(topicCount),
-                        backgroundColor: '#991B1B'
+                        data: Object.values(topics),
+                        backgroundColor: '#991B1B',
+                        borderRadius: 8
                     }]
                 },
                 options: {
@@ -1061,454 +1043,383 @@
             });
         }
         
-        function renderDataTable(data) {
-            if (APP_STATE.dataTable) {
-                APP_STATE.dataTable.destroy();
-            }
+        function renderTable(d) {
+            if (STATE.dataTable) STATE.dataTable.destroy();
             
-            const tbody = document.getElementById('comments-table-body');
-            tbody.innerHTML = data.map(row => `
-                <tr class="cursor-pointer hover:bg-gray-50" onclick="showCommentDetail('${row['Tweet Id']}')">
-                    <td class="text-sm">${(row['Created At'] || '').toString().substring(0, 10)}</td>
-                    <td class="text-sm font-semibold">${row['User Name'] || 'Anónimo'}</td>
-                    <td class="text-sm">${(row['Full Text'] || '').toString().substring(0, 80)}...</td>
-                    <td><span class="px-2 py-1 rounded-full text-xs font-semibold ${getSentimentBadge(row.analysis.sentiment)}">${row.analysis.sentiment}</span></td>
-                    <td class="text-sm">${row.analysis.type}</td>
-                    <td class="text-sm">${row.analysis.topic}</td>
-                    <td><span class="px-2 py-1 rounded-full text-xs font-semibold ${getPriorityBadge(row.analysis.priority)}">${row.analysis.priority}</span></td>
-                    <td><span class="px-2 py-1 rounded-full text-xs font-semibold ${getRiskBadge(row.analysis.risk)}">${row.analysis.risk}</span></td>
-                    <td class="text-sm">${row['Favorite Count'] || 0}</td>
-                    <td class="text-sm">${row['Reply Count'] || 0}</td>
-                    <td class="text-sm">${row['View Count'] || 0}</td>
+            document.getElementById('tableBody').innerHTML = d.map(r => `
+                <tr class="cursor-pointer hover:bg-gray-50" onclick="showDetail('${r['Tweet Id'] || r['tweet_id']}')">
+                    <td class="text-xs">${(r['Created At'] || r['created_at'] || '').toString().substring(0, 10)}</td>
+                    <td class="text-sm font-semibold">${r['User Name'] || r['user_name'] || 'Anónimo'}</td>
+                    <td class="text-sm max-w-xs truncate">${(r['Full Text'] || r['full_text'] || '').toString().substring(0, 80)}...</td>
+                    <td><span class="${r._analysis.sentiment === 'Positivo' ? 'badge-sentiment-positive' : r._analysis.sentiment === 'Negativo' ? 'badge-sentiment-negative' : 'badge-sentiment-neutral'}">${r._analysis.sentiment}</span></td>
+                    <td class="text-xs">${r._analysis.type}</td>
+                    <td class="text-xs">${r._analysis.topic}</td>
+                    <td class="text-xs font-semibold ${r._analysis.priority === 'Alta' ? 'text-red-600' : ''}">${r._analysis.priority}</td>
+                    <td class="text-xs font-semibold ${r._analysis.risk === 'Alto' ? 'text-red-600' : ''}">${r._analysis.risk}</td>
+                    <td class="text-xs">${r['Favorite Count'] || r['favorite_count'] || 0}</td>
+                    <td class="text-xs">${r['Retweet Count'] || r['retweet_count'] || 0}</td>
+                    <td class="text-xs">${r['View Count'] || r['view_count'] || 0}</td>
                 </tr>
             `).join('');
             
-            APP_STATE.dataTable = $('#comments-table').DataTable({
+            STATE.dataTable = $('#commentsTable').DataTable({
                 pageLength: 25,
-                language: {
-                    url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
-                }
+                language: { url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json' }
             });
         }
         
-        function updateFilterOptions(data) {
-            const types = [...new Set(data.map(r => r.analysis.type))];
-            const topics = [...new Set(data.map(r => r.analysis.topic))];
+        function updateFilters(d) {
+            const types = [...new Set(d.map(r => r._analysis.type))].sort();
+            const topics = [...new Set(d.map(r => r._analysis.topic))].sort();
             
-            document.getElementById('filter-type').innerHTML = '<option value="">Todos los tipos</option>' +
+            document.getElementById('filterType').innerHTML = '<option value="">Tipo</option>' +
                 types.map(t => `<option value="${t}">${t}</option>`).join('');
-            
-            document.getElementById('filter-topic').innerHTML = '<option value="">Todos los temas</option>' +
+            document.getElementById('filterTopic').innerHTML = '<option value="">Tema</option>' +
                 topics.map(t => `<option value="${t}">${t}</option>`).join('');
         }
         
         function applyFilters() {
-            let data = APP_STATE.analyzedData;
+            let d = [...STATE.data];
             
-            const sentimentFilter = document.getElementById('filter-sentiment').value;
-            const typeFilter = document.getElementById('filter-type').value;
-            const topicFilter = document.getElementById('filter-topic').value;
-            const priorityFilter = document.getElementById('filter-priority').value;
+            const sentiment = document.getElementById('filterSentiment').value;
+            const type = document.getElementById('filterType').value;
+            const topic = document.getElementById('filterTopic').value;
+            const priority = document.getElementById('filterPriority').value;
             
-            if (sentimentFilter) data = data.filter(r => r.analysis.sentiment === sentimentFilter);
-            if (typeFilter) data = data.filter(r => r.analysis.type === typeFilter);
-            if (topicFilter) data = data.filter(r => r.analysis.topic === topicFilter);
-            if (priorityFilter) data = data.filter(r => r.analysis.priority === priorityFilter);
+            if (sentiment) d = d.filter(r => r._analysis.sentiment === sentiment);
+            if (type) d = d.filter(r => r._analysis.type === type);
+            if (topic) d = d.filter(r => r._analysis.topic === topic);
+            if (priority) d = d.filter(r => r._analysis.priority === priority);
             
-            APP_STATE.filteredData = data;
-            renderDataTable(data);
+            STATE.filtered = d;
+            renderDashboard();
         }
         
         // ============================================
         // PANEL DE DETALLE
         // ============================================
         
-        function showCommentDetail(tweetId) {
-            const comment = APP_STATE.analyzedData.find(r => r['Tweet Id'] === tweetId);
+        function showDetail(id) {
+            const comment = STATE.data.find(r => (r['Tweet Id'] || r['tweet_id']) === id);
             if (!comment) return;
             
-            document.getElementById('detail-content').innerHTML = `
-                <div class="space-y-4">
-                    <div>
-                        <h3 class="text-lg font-bold text-gray-900">${comment['User Name'] || 'Anónimo'}</h3>
+            const a = comment._analysis;
+            
+            document.getElementById('detailContent').innerHTML = `
+                <div class="space-y-5">
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="font-bold text-lg">${comment['User Name'] || 'Anónimo'}</h3>
                         <p class="text-sm text-gray-600">@${comment['User Screen Name'] || 'usuario'}</p>
+                        <p class="mt-3 text-gray-800">${comment['Full Text'] || comment['full_text']}</p>
                     </div>
                     
-                    <div class="bg-gray-50 rounded-lg p-4">
-                        <p class="text-gray-800">${comment['Full Text']}</p>
-                    </div>
-                    
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="bg-blue-50 rounded-lg p-3 text-center">
-                            <p class="text-sm text-gray-600">Sentimiento</p>
-                            <p class="text-lg font-bold ${comment.analysis.sentiment === 'Positivo' ? 'text-green-600' : comment.analysis.sentiment === 'Negativo' ? 'text-red-600' : 'text-yellow-600'}">${comment.analysis.sentiment}</p>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-blue-50 p-3 rounded-lg text-center">
+                            <p class="text-xs text-gray-600">Sentimiento</p>
+                            <p class="text-lg font-bold ${a.sentiment === 'Positivo' ? 'text-green-600' : a.sentiment === 'Negativo' ? 'text-red-600' : 'text-yellow-600'}">${a.sentiment}</p>
                         </div>
-                        <div class="bg-purple-50 rounded-lg p-3 text-center">
-                            <p class="text-sm text-gray-600">Tipo</p>
-                            <p class="text-lg font-bold text-purple-600">${comment.analysis.type}</p>
+                        <div class="bg-purple-50 p-3 rounded-lg text-center">
+                            <p class="text-xs text-gray-600">Tipo</p>
+                            <p class="text-lg font-bold text-purple-600">${a.type}</p>
                         </div>
-                        <div class="bg-orange-50 rounded-lg p-3 text-center">
-                            <p class="text-sm text-gray-600">Tema</p>
-                            <p class="text-lg font-bold text-orange-600">${comment.analysis.topic}</p>
+                        <div class="bg-orange-50 p-3 rounded-lg text-center">
+                            <p class="text-xs text-gray-600">Tema</p>
+                            <p class="text-lg font-bold text-orange-600">${a.topic}</p>
                         </div>
-                        <div class="bg-red-50 rounded-lg p-3 text-center">
-                            <p class="text-sm text-gray-600">Prioridad</p>
-                            <p class="text-lg font-bold text-red-600">${comment.analysis.priority}</p>
+                        <div class="bg-red-50 p-3 rounded-lg text-center">
+                            <p class="text-xs text-gray-600">Prioridad</p>
+                            <p class="text-lg font-bold ${a.priority === 'Alta' ? 'text-red-600' : ''}">${a.priority}</p>
                         </div>
                     </div>
                     
-                    <div>
-                        <h4 class="font-bold text-gray-900 mb-2">Métricas</h4>
-                        <div class="flex space-x-4 text-sm">
-                            <span><i class="fas fa-heart text-red-500"></i> ${comment['Favorite Count'] || 0}</span>
-                            <span><i class="fas fa-retweet text-green-500"></i> ${comment['Retweet Count'] || 0}</span>
-                            <span><i class="fas fa-comment text-blue-500"></i> ${comment['Reply Count'] || 0}</span>
-                            <span><i class="fas fa-eye text-gray-500"></i> ${comment['View Count'] || 0}</span>
-                        </div>
+                    <div class="flex space-x-4 text-sm">
+                        <span><i class="fas fa-heart text-red-500"></i> ${comment['Favorite Count'] || 0} Likes</span>
+                        <span><i class="fas fa-retweet text-green-500"></i> ${comment['Retweet Count'] || 0} RT</span>
+                        <span><i class="fas fa-comment text-blue-500"></i> ${comment['Reply Count'] || 0} Resp.</span>
+                        <span><i class="fas fa-eye text-gray-500"></i> ${comment['View Count'] || 0} Vistas</span>
                     </div>
                     
                     <div>
-                        <h4 class="font-bold text-gray-900 mb-2">Palabras Clave</h4>
+                        <h4 class="font-bold mb-2">Palabras Clave Detectadas</h4>
                         <div class="flex flex-wrap gap-2">
-                            ${comment.analysis.keywords.map(k => `<span class="px-2 py-1 bg-gray-200 rounded-full text-xs">${k}</span>`).join('')}
+                            ${a.keywords.map(k => `<span class="px-3 py-1 bg-gray-200 rounded-full text-sm">${k}</span>`).join('')}
                         </div>
                     </div>
                     
-                    <div class="bg-gray-50 rounded-lg p-3">
-                        <p class="text-sm text-gray-600">📝 ${comment.analysis.summary}</p>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <p class="text-sm"><strong>📝 Resumen:</strong> ${a.summary}</p>
+                    </div>
+                    
+                    <div class="bg-yellow-50 p-3 rounded-lg">
+                        <p class="text-sm"><strong>⚠️ Riesgo Reputacional:</strong> ${a.risk}</p>
+                        <p class="text-sm"><strong>📞 ¿Necesita respuesta?:</strong> ${a.needsResponse ? 'SÍ - Atender prioritariamente' : 'No requiere'}</p>
                     </div>
                 </div>
             `;
             
-            document.getElementById('detail-panel').classList.add('translate-x-0');
-            document.getElementById('detail-panel').classList.remove('translate-x-full');
+            document.getElementById('detailPanel').classList.remove('translate-x-full');
         }
         
-        function closeDetailPanel() {
-            document.getElementById('detail-panel').classList.add('translate-x-full');
-            document.getElementById('detail-panel').classList.remove('translate-x-0');
+        function closeDetail() {
+            document.getElementById('detailPanel').classList.add('translate-x-full');
         }
         
         // ============================================
-        // GENERACIÓN DE REPORTES
+        // REPORTES
         // ============================================
         
         function generateReport(type) {
-            if (APP_STATE.analyzedData.length === 0) {
-                alert('No hay datos para generar el reporte');
-                return;
-            }
+            if (!STATE.data.length) return alert('No hay datos');
             
-            const data = APP_STATE.analyzedData;
-            const summary = {
-                total: data.length,
-                sentiments: {
-                    Positivo: data.filter(r => r.analysis.sentiment === 'Positivo').length,
-                    Neutral: data.filter(r => r.analysis.sentiment === 'Neutral').length,
-                    Negativo: data.filter(r => r.analysis.sentiment === 'Negativo').length
-                },
-                topics: {},
-                types: {},
-                highRisks: data.filter(r => r.analysis.risk === 'Alto').length
+            const d = STATE.data;
+            const s = {
+                Positivo: d.filter(r => r._analysis.sentiment === 'Positivo').length,
+                Neutral: d.filter(r => r._analysis.sentiment === 'Neutral').length,
+                Negativo: d.filter(r => r._analysis.sentiment === 'Negativo').length
             };
             
-            data.forEach(r => {
-                summary.topics[r.analysis.topic] = (summary.topics[r.analysis.topic] || 0) + 1;
-                summary.types[r.analysis.type] = (summary.types[r.analysis.type] || 0) + 1;
+            const topics = {};
+            const types = {};
+            d.forEach(r => {
+                topics[r._analysis.topic] = (topics[r._analysis.topic] || 0) + 1;
+                types[r._analysis.type] = (types[r._analysis.type] || 0) + 1;
             });
             
-            const mainTopics = Object.entries(summary.topics).sort((a, b) => b[1] - a[1]).slice(0, 3);
-            const mainTypes = Object.entries(summary.types).sort((a, b) => b[1] - a[1]).slice(0, 3);
+            const topTopics = Object.entries(topics).sort((a,b) => b[1]-a[1]).slice(0,3);
+            const topTypes = Object.entries(types).sort((a,b) => b[1]-a[1]).slice(0,3);
+            const risks = d.filter(r => r._analysis.risk === 'Alto').length;
             
-            APP_STATE.currentReport = { type, summary };
+            const titles = { daily: 'Diario', weekly: 'Semanal', monthly: 'Mensual' };
+            const title = titles[type] || 'Personalizado';
             
-            document.getElementById('report-output').classList.remove('hidden');
-            document.getElementById('report-title').textContent = 
-                type === 'daily' ? 'Reporte Diario' :
-                type === 'weekly' ? 'Reporte Semanal' :
-                type === 'monthly' ? 'Reporte Mensual' : 'Reporte Personalizado';
+            STATE.report = { type, data: d };
             
-            document.getElementById('report-content').innerHTML = `
-                <div class="prose max-w-none">
-                    <div class="bg-gradient-to-r from-red-50 to-white rounded-xl p-6 mb-6">
-                        <h3 class="text-xl font-bold text-gray-900 mb-4">Resumen Ejecutivo</h3>
-                        <p class="text-gray-700 leading-relaxed">
-                            Durante el período analizado, se procesaron <strong>${summary.total}</strong> comentarios 
-                            provenientes de la plataforma <strong>X (Twitter)</strong>. 
-                            El sentimiento general fue <strong>${summary.sentiments.Positivo > summary.sentiments.Negativo ? 'mayoritariamente positivo' : 'predominantemente negativo'}</strong>, 
-                            con un <strong>${((summary.sentiments.Positivo / summary.total) * 100).toFixed(1)}%</strong> de comentarios positivos 
-                            y un <strong>${((summary.sentiments.Negativo / summary.total) * 100).toFixed(1)}%</strong> de comentarios negativos.
-                        </p>
+            document.getElementById('reportOutput').classList.remove('hidden');
+            document.getElementById('reportOutput').innerHTML = `
+                <h2 class="text-2xl font-bold mb-6">📊 Reporte ${title}</h2>
+                <div class="bg-gradient-to-r from-red-50 to-white p-6 rounded-xl mb-6">
+                    <h3 class="text-xl font-bold mb-3">Resumen Ejecutivo</h3>
+                    <p class="text-gray-700 leading-relaxed">
+                        Se analizaron <strong>${d.length}</strong> comentarios. 
+                        Sentimiento <strong>${s.Positivo > s.Negativo ? 'mayoritariamente positivo' : 'predominantemente negativo'}</strong> 
+                        (${((s.Positivo/d.length)*100).toFixed(1)}% positivo vs ${((s.Negativo/d.length)*100).toFixed(1)}% negativo).
+                        Se detectaron <strong>${risks}</strong> riesgos reputacionales altos.
+                    </p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div class="text-center p-4 bg-white border rounded-xl">
+                        <i class="fas fa-comments text-3xl text-blue-500 mb-2"></i>
+                        <p class="text-3xl font-bold">${d.length}</p>
+                        <p class="text-gray-600">Total Comentarios</p>
                     </div>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                        <div class="bg-white border rounded-xl p-6 text-center">
-                            <i class="fas fa-comments text-3xl text-blue-500 mb-2"></i>
-                            <p class="text-3xl font-bold text-gray-900">${summary.total}</p>
-                            <p class="text-gray-600">Total Comentarios</p>
-                        </div>
-                        <div class="bg-white border rounded-xl p-6 text-center">
-                            <i class="fas fa-smile text-3xl text-green-500 mb-2"></i>
-                            <p class="text-3xl font-bold text-green-600">${summary.sentiments.Positivo}</p>
-                            <p class="text-gray-600">Positivos</p>
-                        </div>
-                        <div class="bg-white border rounded-xl p-6 text-center">
-                            <i class="fas fa-frown text-3xl text-red-500 mb-2"></i>
-                            <p class="text-3xl font-bold text-red-600">${summary.sentiments.Negativo}</p>
-                            <p class="text-gray-600">Negativos</p>
-                        </div>
+                    <div class="text-center p-4 bg-white border rounded-xl">
+                        <i class="fas fa-smile text-3xl text-green-500 mb-2"></i>
+                        <p class="text-3xl font-bold text-green-600">${s.Positivo}</p>
+                        <p class="text-gray-600">Positivos</p>
                     </div>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                        <div class="bg-white border rounded-xl p-6">
-                            <h4 class="font-bold text-gray-900 mb-3">Principales Temas</h4>
-                            <ul class="space-y-2">
-                                ${mainTopics.map(([topic, count]) => `<li class="flex justify-between"><span>${topic}</span><span class="font-bold">${count}</span></li>`).join('')}
-                            </ul>
-                        </div>
-                        <div class="bg-white border rounded-xl p-6">
-                            <h4 class="font-bold text-gray-900 mb-3">Tipos de Comentarios</h4>
-                            <ul class="space-y-2">
-                                ${mainTypes.map(([type, count]) => `<li class="flex justify-between"><span>${type}</span><span class="font-bold">${count}</span></li>`).join('')}
-                            </ul>
-                        </div>
+                    <div class="text-center p-4 bg-white border rounded-xl">
+                        <i class="fas fa-frown text-3xl text-red-500 mb-2"></i>
+                        <p class="text-3xl font-bold text-red-600">${s.Negativo}</p>
+                        <p class="text-gray-600">Negativos</p>
                     </div>
-                    
-                    <div class="bg-red-50 border border-red-200 rounded-xl p-6 mb-6">
-                        <h4 class="font-bold text-red-900 mb-3">⚠️ Riesgos Reputacionales</h4>
-                        <p class="text-red-800">Se identificaron <strong>${summary.highRisks}</strong> comentarios con riesgo reputacional alto que requieren atención inmediata.</p>
-                    </div>
-                    
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                     <div class="bg-white border rounded-xl p-6">
-                        <h4 class="font-bold text-gray-900 mb-3">Conclusiones y Recomendaciones</h4>
-                        <ul class="space-y-2 text-gray-700">
-                            <li>• Se recomienda fortalecer la atención en los temas de <strong>${mainTopics[0]?.[0] || 'interés general'}</strong>.</li>
-                            <li>• Implementar un protocolo de respuesta rápida para ${mainTypes[0]?.[0] || 'consultas'}.</li>
-                            <li>• Monitorear de cerca los comentarios negativos para prevenir crisis reputacionales.</li>
-                        </ul>
+                        <h4 class="font-bold mb-3">Principales Temas</h4>
+                        ${topTopics.map(([t,c]) => `<p class="flex justify-between"><span>${t}</span><strong>${c}</strong></p>`).join('')}
                     </div>
+                    <div class="bg-white border rounded-xl p-6">
+                        <h4 class="font-bold mb-3">Tipos de Comentarios</h4>
+                        ${topTypes.map(([t,c]) => `<p class="flex justify-between"><span>${t}</span><strong>${c}</strong></p>`).join('')}
+                    </div>
+                </div>
+                <div class="bg-red-50 border border-red-200 rounded-xl p-6 mb-6">
+                    <h4 class="font-bold text-red-900 mb-2">⚠️ Riesgos Reputacionales</h4>
+                    <p class="text-red-800">${risks} comentarios con riesgo alto requieren atención inmediata.</p>
+                </div>
+                <div class="bg-white border rounded-xl p-6">
+                    <h4 class="font-bold mb-3">Conclusiones y Recomendaciones</h4>
+                    <ul class="space-y-2 text-gray-700">
+                        <li>• Fortalecer la comunicación en <strong>${topTopics[0]?.[0] || 'temas generales'}</strong>.</li>
+                        <li>• Protocolo de respuesta rápida para <strong>${topTypes[0]?.[0] || 'comentarios críticos'}</strong>.</li>
+                        <li>• Monitorear tendencia ${s.Negativo > s.Positivo ? 'negativa' : 'positiva'} de sentimiento.</li>
+                    </ul>
+                </div>
+                <div class="mt-6 flex gap-2">
+                    <button onclick="exportReport('pdf')" class="px-4 py-2 bg-red-700 text-white rounded-lg"><i class="fas fa-file-pdf mr-2"></i>PDF</button>
+                    <button onclick="exportReport('excel')" class="px-4 py-2 bg-green-600 text-white rounded-lg"><i class="fas fa-file-excel mr-2"></i>Excel</button>
+                    <button onclick="exportReport('csv')" class="px-4 py-2 bg-blue-600 text-white rounded-lg"><i class="fas fa-file-csv mr-2"></i>CSV</button>
                 </div>
             `;
             
-            // Scroll al reporte
-            document.getElementById('report-output').scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('reportOutput').scrollIntoView({ behavior: 'smooth' });
         }
         
         function showCustomReportModal() {
-            document.getElementById('custom-report-modal').classList.remove('hidden');
+            document.getElementById('customReportModal').classList.remove('hidden');
         }
         
         function closeCustomReportModal() {
-            document.getElementById('custom-report-modal').classList.add('hidden');
+            document.getElementById('customReportModal').classList.add('hidden');
         }
         
         function generateCustomReport() {
-            const startDate = document.getElementById('custom-start-date').value;
-            const endDate = document.getElementById('custom-end-date').value;
+            const start = document.getElementById('startDate').value;
+            const end = document.getElementById('endDate').value;
+            if (!start || !end) return alert('Selecciona ambas fechas');
             
-            if (!startDate || !endDate) {
-                alert('Por favor selecciona ambas fechas');
-                return;
-            }
-            
-            // Filtrar datos por fecha
-            const filtered = APP_STATE.analyzedData.filter(row => {
-                const date = (row['Created At'] || '').toString().substring(0, 10);
-                return date >= startDate && date <= endDate;
+            const filtered = STATE.data.filter(r => {
+                const d = (r['Created At'] || '').toString().substring(0, 10);
+                return d >= start && d <= end;
             });
             
-            if (filtered.length === 0) {
-                alert('No hay datos en el rango de fechas seleccionado');
-                return;
-            }
+            if (!filtered.length) return alert('Sin datos en ese rango');
             
-            const originalData = APP_STATE.analyzedData;
-            APP_STATE.analyzedData = filtered;
+            const original = STATE.data;
+            STATE.data = filtered;
             generateReport('custom');
-            APP_STATE.analyzedData = originalData;
-            
+            STATE.data = original;
             closeCustomReportModal();
         }
         
         function exportReport(format) {
-            if (!APP_STATE.currentReport) {
-                alert('Primero genera un reporte');
+            if (!STATE.report) return alert('Genera un reporte primero');
+            
+            if (format === 'pdf') {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                doc.text('Reporte', 20, 20);
+                doc.save(`reporte-${Date.now()}.pdf`);
                 return;
             }
             
-            const reportContent = document.getElementById('report-content').innerText;
-            const reportTitle = document.getElementById('report-title').textContent;
-            let filename = `reporte-${Date.now()}`;
-            let content, mimeType;
+            let csv = 'Fecha,Usuario,Comentario,Sentimiento,Tipo,Tema,Prioridad,Riesgo\n';
+            STATE.report.data.forEach(r => {
+                csv += `"${r['Created At']}","${r['User Name']}","${r['Full Text']}","${r._analysis.sentiment}","${r._analysis.type}","${r._analysis.topic}","${r._analysis.priority}","${r._analysis.risk}"\n`;
+            });
             
-            switch(format) {
-                case 'pdf':
-                    const { jsPDF } = window.jspdf;
-                    const doc = new jsPDF();
-                    doc.text(reportTitle, 20, 20);
-                    doc.text(reportContent.substring(0, 1000), 20, 30);
-                    doc.save(`${filename}.pdf`);
-                    return;
-                
-                case 'excel':
-                    content = generateCSV();
-                    mimeType = 'application/vnd.ms-excel';
-                    filename += '.xls';
-                    break;
-                
-                case 'csv':
-                    content = generateCSV();
-                    mimeType = 'text/csv';
-                    filename += '.csv';
-                    break;
-                
-                case 'html':
-                    content = document.getElementById('report-output').outerHTML;
-                    mimeType = 'text/html';
-                    filename += '.html';
-                    break;
-            }
+            const mime = format === 'excel' ? 'application/vnd.ms-excel' : 'text/csv';
+            const ext = format === 'excel' ? '.xls' : '.csv';
             
-            const blob = new Blob([content], { type: mimeType });
+            const blob = new Blob([csv], { type: mime });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = filename;
+            a.download = `reporte-${Date.now()}${ext}`;
             a.click();
             URL.revokeObjectURL(url);
-        }
-        
-        function generateCSV() {
-            let csv = 'Fecha,Usuario,Comentario,Sentimiento,Tipo,Tema,Prioridad,Riesgo\n';
-            APP_STATE.analyzedData.forEach(row => {
-                csv += `"${row['Created At']}","${row['User Name']}","${row['Full Text']}","${row.analysis.sentiment}","${row.analysis.type}","${row.analysis.topic}","${row.analysis.priority}","${row.analysis.risk}"\n`;
-            });
-            return csv;
         }
         
         // ============================================
         // CONFIGURACIÓN
         // ============================================
         
-        function renderConfigPanel() {
-            document.getElementById('config-name').value = appConfig.institutionName;
-            document.getElementById('config-color').value = appConfig.primaryColor;
-            document.getElementById('config-positive-words').value = appConfig.sentimentWords.positive.join(', ');
-            document.getElementById('config-negative-words').value = appConfig.sentimentWords.negative.join(', ');
+        function renderConfig() {
+            document.getElementById('cfgName').value = CONFIG.institution;
+            document.getElementById('cfgColor').value = CONFIG.color;
+            document.getElementById('cfgPositive').value = CONFIG.sentiment.positive.join(', ');
+            document.getElementById('cfgNegative').value = CONFIG.sentiment.negative.join(', ');
             
-            const topicsConfig = document.getElementById('topics-config');
-            topicsConfig.innerHTML = appConfig.topics.map((topic, index) => `
-                <div class="mb-4 p-4 bg-gray-50 rounded-lg">
+            document.getElementById('topicsConfig').innerHTML = CONFIG.topics.map((t, i) => `
+                <div class="mb-3 p-4 bg-gray-50 rounded-lg">
                     <div class="flex justify-between items-center mb-2">
-                        <input type="text" class="topic-name font-bold bg-transparent border-b-2 border-gray-300 focus:border-red-500 outline-none" value="${topic.name}" data-index="${index}">
-                        <button onclick="removeTopic(${index})" class="text-red-600 hover:text-red-800">
-                            <i class="fas fa-trash"></i>
-                        </button>
+                        <input class="topic-name font-bold bg-transparent border-b-2 border-gray-300 focus:border-red-500 outline-none" value="${t.name}" data-index="${i}">
+                        <button onclick="removeTopic(${i})" class="text-red-600">&times;</button>
                     </div>
-                    <input type="text" class="topic-keywords w-full px-3 py-2 border rounded-lg text-sm" value="${topic.keywords.join(', ')}" data-index="${index}" placeholder="Palabras clave separadas por coma">
+                    <input class="topic-keys w-full px-3 py-2 border rounded-lg text-sm" value="${t.keywords.join(', ')}" data-index="${i}">
                 </div>
             `).join('');
         }
         
         function addTopic() {
-            appConfig.topics.push({ name: 'Nuevo Tema', keywords: [] });
-            renderConfigPanel();
+            CONFIG.topics.push({ name: 'Nuevo Tema', keywords: [] });
+            renderConfig();
         }
         
-        function removeTopic(index) {
-            appConfig.topics.splice(index, 1);
-            renderConfigPanel();
+        function removeTopic(i) {
+            CONFIG.topics.splice(i, 1);
+            renderConfig();
         }
         
         function saveConfig() {
-            appConfig.institutionName = document.getElementById('config-name').value;
-            appConfig.primaryColor = document.getElementById('config-color').value;
-            appConfig.sentimentWords.positive = document.getElementById('config-positive-words').value.split(',').map(s => s.trim().toLowerCase());
-            appConfig.sentimentWords.negative = document.getElementById('config-negative-words').value.split(',').map(s => s.trim().toLowerCase());
+            CONFIG.institution = document.getElementById('cfgName').value;
+            CONFIG.color = document.getElementById('cfgColor').value;
+            CONFIG.sentiment.positive = document.getElementById('cfgPositive').value.split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+            CONFIG.sentiment.negative = document.getElementById('cfgNegative').value.split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
             
-            // Guardar temas
-            document.querySelectorAll('.topic-name').forEach((input, index) => {
-                appConfig.topics[index].name = input.value;
+            document.querySelectorAll('.topic-name').forEach((el, i) => {
+                CONFIG.topics[i].name = el.value;
+            });
+            document.querySelectorAll('.topic-keys').forEach((el, i) => {
+                CONFIG.topics[i].keywords = el.value.split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
             });
             
-            document.querySelectorAll('.topic-keywords').forEach((input, index) => {
-                appConfig.topics[index].keywords = input.value.split(',').map(s => s.trim().toLowerCase());
-            });
+            localStorage.setItem('mml_config_v2', JSON.stringify(CONFIG));
             
-            localStorage.setItem('mml-social-listening-config', JSON.stringify(appConfig));
-            
-            // Reanalizar datos si existen
-            if (APP_STATE.analyzedData.length > 0) {
-                APP_STATE.analyzedData = APP_STATE.analyzedData.map(row => analyzeComment(row));
+            if (STATE.data.length) {
+                STATE.data = STATE.data.map(r => {
+                    const text = r['Full Text'] || '';
+                    return { ...r, _analysis: CommentAnalyzer.analyze(text.toString()) };
+                });
                 renderDashboard();
             }
             
-            alert('✅ Configuración guardada exitosamente');
+            alert('✅ Configuración guardada');
         }
         
         // ============================================
-        // UTILIDADES DE UI
+        // NAVEGACIÓN Y UI
         // ============================================
         
-        function getSentimentBadge(sentiment) {
-            return sentiment === 'Positivo' ? 'bg-green-100 text-green-800' :
-                   sentiment === 'Negativo' ? 'bg-red-100 text-red-800' :
-                   'bg-yellow-100 text-yellow-800';
+        function navigateTo(view) {
+            STATE.view = view;
+            document.querySelectorAll('[id^="view-"]').forEach(el => el.classList.add('hidden'));
+            const target = document.getElementById(`view-${view}`);
+            if (target) {
+                target.classList.remove('hidden');
+                target.classList.add('animate-fadeIn');
+            }
+            
+            document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+            
+            if (view === 'dashboard' && STATE.data.length) renderDashboard();
+            if (view === 'config') renderConfig();
+            if (window.innerWidth < 1024) closeSidebar();
         }
         
-        function getPriorityBadge(priority) {
-            return priority === 'Alta' ? 'bg-red-100 text-red-800' :
-                   priority === 'Media' ? 'bg-yellow-100 text-yellow-800' :
-                   'bg-green-100 text-green-800';
-        }
-        
-        function getRiskBadge(risk) {
-            return risk === 'Alto' ? 'bg-red-100 text-red-800' :
-                   risk === 'Medio' ? 'bg-orange-100 text-orange-800' :
-                   'bg-blue-100 text-blue-800';
+        function selectPlatform(p) {
+            if (p !== 'twitter') return alert('Próximamente');
+            STATE.platform = p;
+            document.getElementById('sidebar-platform-badge').classList.remove('hidden');
+            navigateTo('dashboard');
         }
         
         function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('mobile-overlay');
-            
-            if (sidebar.classList.contains('-translate-x-full')) {
-                sidebar.classList.remove('-translate-x-full');
-                overlay.classList.remove('hidden');
-            } else {
-                closeSidebar();
-            }
+            const s = document.getElementById('sidebar');
+            s.classList.toggle('-translate-x-full');
         }
         
         function closeSidebar() {
             document.getElementById('sidebar').classList.add('-translate-x-full');
-            document.getElementById('mobile-overlay').classList.add('hidden');
         }
         
-        // Cerrar sidebar al hacer clic en overlay
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('mobile-overlay').addEventListener('click', closeSidebar);
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('header-date').textContent = new Date().toLocaleDateString('es-PE', {
+                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+            });
             
-            // Cerrar panel de detalle con ESC
-            document.addEventListener('keydown', function(e) {
+            document.addEventListener('keydown', e => {
                 if (e.key === 'Escape') {
-                    closeDetailPanel();
+                    closeDetail();
                     closeCustomReportModal();
                 }
             });
             
-            // Hacer clic en área de carga
-            document.getElementById('file-upload-area').addEventListener('click', showFileUpload);
-            
-            // Fecha actual en header
-            const now = new Date();
-            document.getElementById('header-date').textContent = now.toLocaleDateString('es-PE', {
-                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-            });
-            
-            console.log('🚀 Social Listening Dashboard v1.0 inicializado');
-            console.log('📊 Desarrollado para la Municipalidad Metropolitana de Lima');
-            console.log('💡 Arquitectura preparada para futuras integraciones con APIs de IA');
+            console.log('🚀 Social Listening Dashboard v2.0 - Motor Mejorado');
+            console.log('✅ Sistema de detección de sarcasmo activado');
+            console.log('✅ Análisis de contexto y negaciones implementado');
+            console.log('✅ Detección de menciones y patrones de crítica mejorada');
         });
     </script>
 </body>
