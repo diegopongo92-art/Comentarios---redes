@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sentinel AI v12.0 - Zero Escape Completo</title>
+    <title>Sentinel AI v14.0 - IA con Libertad Pensativa</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -12,8 +12,6 @@
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/wordcloud2.js/1.0.2/wordcloud2.min.js"></script>
     
     <style>
         :root {
@@ -26,7 +24,6 @@
             --danger: #ef4444;
             --success: #10b981;
             --purple: #8b5cf6;
-            --cyan: #06b6d4;
         }
         
         * { scrollbar-width: thin; scrollbar-color: #1e3050 #0a0e17; margin: 0; padding: 0; box-sizing: border-box; }
@@ -46,15 +43,6 @@
             backdrop-filter: blur(20px);
             border: 1px solid rgba(59,130,246,0.12);
             box-shadow: 0 8px 32px rgba(0,0,0,0.4);
-        }
-        
-        .glass-hover {
-            transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
-        }
-        .glass-hover:hover {
-            border-color: rgba(59,130,246,0.35);
-            box-shadow: 0 12px 40px rgba(59,130,246,0.12);
-            transform: translateY(-2px);
         }
         
         .kpi-card {
@@ -98,14 +86,14 @@
         
         .chart-container { position: relative; height: 300px; width: 100%; }
         
-        .pulse-crisis { animation: pulseCrisis 0.8s ease-in-out infinite alternate; }
-        @keyframes pulseCrisis {
-            from { box-shadow: 0 0 8px rgba(239,68,68,0.4); }
-            to { box-shadow: 0 0 25px rgba(239,68,68,0.9); }
+        .pulse-ia { animation: pulseIA 2s infinite; }
+        @keyframes pulseIA {
+            0%, 100% { box-shadow: 0 0 5px rgba(139,92,246,0.3); }
+            50% { box-shadow: 0 0 25px rgba(139,92,246,0.7); }
         }
         
         .shimmer {
-            background: linear-gradient(90deg, var(--accent), var(--purple), var(--cyan), var(--accent));
+            background: linear-gradient(90deg, var(--accent), var(--purple), #06b6d4, var(--accent));
             background-size: 200% 100%;
             animation: shimmer 2s infinite;
         }
@@ -184,32 +172,13 @@
         }
         .btn-outline:hover { background: var(--border); }
         
-        .emotion-card {
-            transition: all 0.3s;
-            cursor: pointer;
-        }
-        .emotion-card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 20px rgba(139,92,246,0.3);
-        }
-        
-        .crisis-alert { border-left: 4px solid #ef4444; }
-        
-        .influence-node {
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .influence-node:hover { filter: brightness(1.4); }
-        
-        .zero-escape-badge {
-            background: rgba(239,68,68,0.2);
-            border: 2px solid rgba(239,68,68,0.5);
-            animation: pulseCrisis 1.5s ease-in-out infinite alternate;
+        .ia-thinking {
+            background: linear-gradient(135deg, rgba(139,92,246,0.1), rgba(59,130,246,0.1));
+            border: 2px solid rgba(139,92,246,0.3);
         }
         
         @media (max-width: 768px) {
             .chart-container { height: 220px; }
-            .kpi-value { font-size: 1.5rem; }
         }
     </style>
 </head>
@@ -218,50 +187,30 @@
     <div class="flex h-screen overflow-hidden">
         
         <!-- SIDEBAR -->
-        <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-72 bg-[#0d1117] border-r border-[#1e3050] transform -translate-x-full lg:translate-x-0 lg:static transition-transform duration-300 overflow-y-auto">
-            <div class="p-5">
-                <div class="text-center mb-6">
-                    <div class="w-16 h-16 bg-gradient-to-br from-red-600 via-orange-500 to-yellow-400 rounded-2xl mx-auto mb-3 flex items-center justify-center shadow-lg">
-                        <span class="text-2xl font-black text-white">🛡️</span>
+        <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-[#0d1117] border-r border-[#1e3050] transform -translate-x-full lg:translate-x-0 lg:static transition-transform duration-300 overflow-y-auto">
+            <div class="p-4">
+                <div class="text-center mb-5">
+                    <div class="w-14 h-14 bg-gradient-to-br from-purple-600 via-blue-600 to-cyan-400 rounded-2xl mx-auto mb-2 flex items-center justify-center shadow-lg pulse-ia">
+                        <span class="text-xl font-black text-white">🧠</span>
                     </div>
-                    <h2 class="text-lg font-bold text-white">Sentinel AI</h2>
-                    <p class="text-xs text-red-300/70">v12.0 Zero Escape</p>
+                    <h2 class="text-base font-bold text-white">Sentinel AI</h2>
+                    <p class="text-xs text-purple-300/70">v14.0 Libre Pensador</p>
                 </div>
                 
-                <div class="mb-4 p-3 bg-red-500/5 border border-red-500/20 rounded-xl zero-escape-badge">
-                    <p class="text-xs text-red-300/80 text-center font-bold">🛡️ ZERO ESCAPE MODE</p>
-                    <p class="text-xs text-red-300/50 text-center mt-1">Tolerancia CERO a falsos neutrales</p>
+                <div class="mb-4 p-3 ia-thinking rounded-xl text-center">
+                    <p class="text-xs text-purple-300 font-bold">🧠 IA CON LIBERTAD PENSATIVA</p>
+                    <p class="text-xs text-purple-300/50 mt-1">Gemini analiza sin restricciones</p>
                 </div>
                 
                 <nav class="space-y-1">
-                    <div onclick="navigateTo('dashboard')" class="nav-item active flex items-center px-3 py-2.5 rounded-lg text-sm text-blue-200/80">
-                        <i class="fas fa-chart-pie w-5 text-blue-400"></i><span class="ml-2">Dashboard</span>
+                    <div onclick="navigateTo('dashboard')" class="nav-item active flex items-center px-3 py-2 rounded-lg text-sm text-blue-200/80">
+                        <i class="fas fa-chart-pie w-4 text-blue-400"></i><span class="ml-2">Dashboard</span>
                     </div>
-                    <div onclick="navigateTo('emotions')" class="nav-item flex items-center px-3 py-2.5 rounded-lg text-sm text-blue-200/80">
-                        <i class="fas fa-brain w-5 text-purple-400"></i><span class="ml-2">Lab Emocional</span>
+                    <div onclick="navigateTo('reports')" class="nav-item flex items-center px-3 py-2 rounded-lg text-sm text-blue-200/80">
+                        <i class="fas fa-file-contract w-4 text-blue-300"></i><span class="ml-2">Reportes</span>
                     </div>
-                    <div onclick="navigateTo('crisis')" class="nav-item flex items-center px-3 py-2.5 rounded-lg text-sm text-blue-200/80">
-                        <i class="fas fa-exclamation-triangle w-5 text-red-400"></i><span class="ml-2">Centro Crisis</span>
-                        <span id="crisis-nav-badge" class="ml-auto text-xs bg-red-500/20 text-red-300 px-1.5 py-0.5 rounded-full hidden">0</span>
-                    </div>
-                    <div onclick="navigateTo('narratives')" class="nav-item flex items-center px-3 py-2.5 rounded-lg text-sm text-blue-200/80">
-                        <i class="fas fa-project-diagram w-5 text-cyan-400"></i><span class="ml-2">Narrativas</span>
-                    </div>
-                    <div onclick="navigateTo('influence')" class="nav-item flex items-center px-3 py-2.5 rounded-lg text-sm text-blue-200/80">
-                        <i class="fas fa-users w-5 text-green-400"></i><span class="ml-2">Influencia</span>
-                    </div>
-                    <div onclick="navigateTo('stories')" class="nav-item flex items-center px-3 py-2.5 rounded-lg text-sm text-blue-200/80">
-                        <i class="fas fa-book-open w-5 text-orange-400"></i><span class="ml-2">Stories</span>
-                    </div>
-                    <div onclick="navigateTo('collab')" class="nav-item flex items-center px-3 py-2.5 rounded-lg text-sm text-blue-200/80">
-                        <i class="fas fa-comments w-5 text-pink-400"></i><span class="ml-2">Colaboración</span>
-                    </div>
-                    <div class="my-3 border-t border-[#1e3050]"></div>
-                    <div onclick="navigateTo('reports')" class="nav-item flex items-center px-3 py-2.5 rounded-lg text-sm text-blue-200/80">
-                        <i class="fas fa-file-contract w-5 text-blue-300"></i><span class="ml-2">Reportes</span>
-                    </div>
-                    <div onclick="navigateTo('config')" class="nav-item flex items-center px-3 py-2.5 rounded-lg text-sm text-blue-200/80">
-                        <i class="fas fa-sliders-h w-5 text-blue-300"></i><span class="ml-2">Config</span>
+                    <div onclick="navigateTo('config')" class="nav-item flex items-center px-3 py-2 rounded-lg text-sm text-blue-200/80">
+                        <i class="fas fa-sliders-h w-4 text-blue-300"></i><span class="ml-2">Config</span>
                     </div>
                 </nav>
             </div>
@@ -270,192 +219,104 @@
         <!-- MAIN -->
         <main class="flex-1 overflow-y-auto">
             
-            <header class="glass sticky top-0 z-30 border-b border-[#1e3050] px-6 py-3">
+            <header class="glass sticky top-0 z-30 border-b border-[#1e3050] px-5 py-3">
                 <div class="flex items-center justify-between">
                     <button onclick="toggleSidebar()" class="lg:hidden text-blue-300"><i class="fas fa-bars text-xl"></i></button>
-                    <h1 class="text-lg font-bold text-white" id="header-title">Dashboard Principal</h1>
-                    <div class="flex items-center gap-3">
-                        <span class="text-xs text-blue-300/50" id="fecha-header"></span>
-                        <span id="crisis-header-badge" class="text-xs bg-red-500/10 text-red-300 px-2 py-1 rounded-full hidden">🚨 <span id="crisis-header-count">0</span></span>
-                    </div>
+                    <h1 class="text-lg font-bold text-white">🧠 Sentinel AI v14.0 - IA con Libertad Pensativa</h1>
+                    <span class="text-xs text-blue-300/50" id="fecha-header"></span>
                 </div>
             </header>
             
-            <div class="p-5">
+            <div class="p-4">
                 
-                <!-- ==================== DASHBOARD ==================== -->
+                <!-- DASHBOARD -->
                 <div id="view-dashboard">
                     
                     <!-- Panel de Control -->
-                    <div class="glass rounded-2xl p-5 mb-6">
+                    <div class="glass rounded-2xl p-4 mb-5 ia-thinking">
                         <div class="flex flex-wrap items-center justify-between gap-3">
                             <div>
-                                <h2 class="text-xl font-bold text-white">🛡️ Sentinel AI v12.0 - Zero Escape</h2>
-                                <p class="text-xs text-blue-300/50">Detección de ironía • Categorías políticas • CERO falsos neutrales</p>
+                                <h2 class="text-lg font-bold text-white">🧠 Análisis con Libertad Pensativa</h2>
+                                <p class="text-xs text-purple-300/70">Gemini analiza cada comentario usando su comprensión del lenguaje natural peruano</p>
                             </div>
                             <div class="flex gap-2 flex-wrap">
-                                <input type="password" id="apiKey" class="px-3 py-2 text-sm w-48" placeholder="Gemini API Key">
-                                <button onclick="guardarAPIKey()" class="px-4 py-2 btn-gold text-sm"><i class="fas fa-key mr-1"></i>Conectar</button>
-                                <button onclick="document.getElementById('fileInput').click()" class="px-4 py-2 btn-primary text-sm"><i class="fas fa-upload mr-1"></i>Cargar Excel</button>
-                                <button onclick="cargarDemo()" class="px-4 py-2 btn-outline text-sm"><i class="fas fa-flask mr-1"></i>Demo Crítico</button>
+                                <input type="password" id="apiKey" class="px-3 py-2 text-xs w-44" placeholder="🔑 Gemini API Key (gratis)">
+                                <button onclick="guardarAPIKey()" class="px-3 py-2 btn-gold text-xs"><i class="fas fa-key mr-1"></i>Conectar IA</button>
+                                <button onclick="document.getElementById('fileInput').click()" class="px-3 py-2 btn-primary text-xs"><i class="fas fa-upload mr-1"></i>Excel</button>
+                                <button onclick="cargarDemo()" class="px-3 py-2 btn-outline text-xs"><i class="fas fa-flask mr-1"></i>Demo</button>
                             </div>
                             <input type="file" id="fileInput" accept=".xlsx,.xls" class="hidden" onchange="procesarArchivo(event)">
                         </div>
-                        <div id="progressContainer" class="hidden mt-4">
-                            <div class="flex justify-between text-xs mb-1"><span class="text-blue-300" id="progressText"></span><span class="text-blue-200 font-bold" id="progressPercent">0%</span></div>
+                        <div id="progressContainer" class="hidden mt-3">
+                            <div class="flex justify-between text-xs mb-1"><span class="text-purple-300" id="progressText"></span><span class="text-purple-200 font-bold" id="progressPercent">0%</span></div>
                             <div class="w-full bg-[#0a0e17] rounded-full h-2"><div id="progressBar" class="shimmer h-2 rounded-full" style="width:0%"></div></div>
                         </div>
                     </div>
                     
                     <!-- KPIs -->
-                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-6" id="kpiContainer"></div>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5" id="kpiContainer"></div>
                     
-                    <!-- Charts Row 1 -->
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-6">
-                        <div class="glass rounded-2xl p-5 glass-hover"><h3 class="text-sm font-bold text-white mb-3">🎭 Sentimientos</h3><div class="chart-container"><canvas id="chartSentimiento"></canvas></div></div>
-                        <div class="glass rounded-2xl p-5 glass-hover"><h3 class="text-sm font-bold text-white mb-3">🧠 Emociones</h3><div class="chart-container"><canvas id="chartEmociones"></canvas></div></div>
-                        <div class="glass rounded-2xl p-5 glass-hover"><h3 class="text-sm font-bold text-white mb-3">📂 Temas</h3><div class="chart-container"><canvas id="chartTemas"></canvas></div></div>
+                    <!-- Charts -->
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-5">
+                        <div class="glass rounded-2xl p-4"><h3 class="text-sm font-bold text-white mb-2">🎭 Sentimientos</h3><div class="chart-container"><canvas id="chartSentimiento"></canvas></div></div>
+                        <div class="glass rounded-2xl p-4"><h3 class="text-sm font-bold text-white mb-2">📂 Temas</h3><div class="chart-container"><canvas id="chartTemas"></canvas></div></div>
+                        <div class="glass rounded-2xl p-4"><h3 class="text-sm font-bold text-white mb-2">🏷️ Tipos</h3><div class="chart-container"><canvas id="chartTipos"></canvas></div></div>
                     </div>
                     
-                    <!-- Charts Row 2 -->
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6">
-                        <div class="glass rounded-2xl p-5 glass-hover"><h3 class="text-sm font-bold text-white mb-3">🚨 Monitor Crisis</h3><div class="chart-container"><canvas id="chartCrisis"></canvas></div></div>
-                        <div class="glass rounded-2xl p-5 glass-hover"><h3 class="text-sm font-bold text-white mb-3">📈 Timeline</h3><div class="chart-container"><canvas id="chartTimeline"></canvas></div></div>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-5">
+                        <div class="glass rounded-2xl p-4"><h3 class="text-sm font-bold text-white mb-2">📈 Evolución</h3><div class="chart-container"><canvas id="chartTimeline"></canvas></div></div>
+                        <div class="glass rounded-2xl p-4"><h3 class="text-sm font-bold text-white mb-2">🧠 Confianza IA</h3><div class="chart-container"><canvas id="chartConfianza"></canvas></div></div>
                     </div>
-                    
-                    <!-- Nube de Palabras -->
-                    <div class="glass rounded-2xl p-5 mb-6"><h3 class="text-sm font-bold text-white mb-3">☁️ Nube de Palabras</h3><canvas id="wordcloud" width="700" height="300" class="w-full"></canvas></div>
                     
                     <!-- Tabla -->
-                    <div class="glass rounded-2xl p-5">
-                        <div class="flex flex-wrap justify-between items-center mb-4 gap-2">
-                            <h3 class="text-sm font-bold text-white">📋 Comentarios Analizados</h3>
-                            <div class="flex gap-2">
-                                <select id="filtroSentimiento" class="px-2 py-1.5 text-xs" onchange="aplicarFiltros()"><option value="">Sentimiento</option><option value="Negativo">Negativo</option><option value="Neutral">Neutral</option><option value="Positivo">Positivo</option></select>
-                                <select id="filtroEmocion" class="px-2 py-1.5 text-xs" onchange="aplicarFiltros()"><option value="">Emoción</option></select>
-                                <select id="filtroTipo" class="px-2 py-1.5 text-xs" onchange="aplicarFiltros()"><option value="">Tipo</option></select>
-                            </div>
+                    <div class="glass rounded-2xl p-4">
+                        <div class="flex flex-wrap justify-between items-center mb-3 gap-2">
+                            <h3 class="text-sm font-bold text-white">📋 Comentarios Analizados por IA</h3>
+                            <select id="filtroSentimiento" class="px-2 py-1.5 text-xs" onchange="aplicarFiltros()">
+                                <option value="">Todos</option>
+                                <option value="Negativo">Negativo</option>
+                                <option value="Neutral">Neutral</option>
+                                <option value="Positivo">Positivo</option>
+                            </select>
                         </div>
                         <div class="overflow-x-auto">
                             <table id="tablaComentarios" class="display nowrap" style="width:100%">
-                                <thead><tr><th>Fecha</th><th>Usuario</th><th>Comentario</th><th>Sent</th><th>Emoción</th><th>Tipo</th><th>Tema</th><th>Prioridad</th><th>Zero Escape</th></tr></thead>
+                                <thead><tr><th>Fecha</th><th>Usuario</th><th>Comentario</th><th>Sent</th><th>Tipo</th><th>Tema</th><th>Prioridad</th><th>IA Confianza</th></tr></thead>
                                 <tbody id="tablaBody"></tbody>
                             </table>
                         </div>
                     </div>
                 </div>
                 
-                <!-- ==================== LAB EMOCIONAL ==================== -->
-                <div id="view-emotions" class="hidden">
-                    <div class="glass rounded-2xl p-6 mb-6">
-                        <h2 class="text-xl font-bold text-white mb-2">🧠 Laboratorio Emocional</h2>
-                        <p class="text-sm text-blue-300/50 mb-6">Análisis basado en la Rueda de Plutchik con detección de ironía</p>
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8" id="emotionWheel"></div>
-                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                            <div class="glass rounded-xl p-5"><h3 class="text-sm font-bold text-white mb-3">Distribución Emocional</h3><div class="chart-container"><canvas id="chartEmocionDist"></canvas></div></div>
-                            <div class="glass rounded-xl p-5"><h3 class="text-sm font-bold text-white mb-3">Intensidad por Emoción</h3><div class="chart-container"><canvas id="chartIntensidad"></canvas></div></div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- ==================== CENTRO DE CRISIS ==================== -->
-                <div id="view-crisis" class="hidden">
-                    <div class="glass rounded-2xl p-6 mb-6">
-                        <h2 class="text-xl font-bold text-white mb-2">🚨 Centro de Crisis</h2>
-                        <p class="text-sm text-blue-300/50 mb-6">Monitoreo en tiempo real de situaciones críticas y falsos neutrales corregidos</p>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6" id="crisisStats"></div>
-                        <div class="glass rounded-xl p-5 mb-6"><h3 class="text-sm font-bold text-white mb-3">Evolución de Crisis</h3><div class="chart-container"><canvas id="chartCrisisEvo"></canvas></div></div>
-                        <h3 class="text-sm font-bold text-white mb-3">🚨 Alertas Activas</h3>
-                        <div id="crisisAlertsList" class="space-y-3"></div>
-                    </div>
-                </div>
-                
-                <!-- ==================== NARRATIVAS ==================== -->
-                <div id="view-narratives" class="hidden">
-                    <div class="glass rounded-2xl p-6 mb-6">
-                        <h2 class="text-xl font-bold text-white mb-2">📊 Rastreador de Narrativas</h2>
-                        <p class="text-sm text-blue-300/50 mb-6">Detección de narrativas políticas y sociales dominantes</p>
-                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                            <div class="glass rounded-xl p-5"><h3 class="text-sm font-bold text-white mb-3">Narrativas por Tema</h3><div class="chart-container"><canvas id="chartNarrativas"></canvas></div></div>
-                            <div class="glass rounded-xl p-5"><h3 class="text-sm font-bold text-white mb-3">Evolución de Narrativas</h3><div class="chart-container"><canvas id="chartNarrEvo"></canvas></div></div>
-                        </div>
-                        <h3 class="text-sm font-bold text-white mb-3">📝 Narrativas Detectadas</h3>
-                        <div id="narrativasList" class="space-y-3"></div>
-                    </div>
-                </div>
-                
-                <!-- ==================== RED DE INFLUENCIA ==================== -->
-                <div id="view-influence" class="hidden">
-                    <div class="glass rounded-2xl p-6 mb-6">
-                        <h2 class="text-xl font-bold text-white mb-2">🕸️ Red de Influencia</h2>
-                        <p class="text-sm text-blue-300/50 mb-6">Mapeo de interacciones y líderes de opinión</p>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6" id="influencersList"></div>
-                        <div class="glass rounded-xl p-5 mb-6"><h3 class="text-sm font-bold text-white mb-3">Grafo de Interacciones</h3><div id="influenceGraph" style="height: 400px;"></div></div>
-                        <h3 class="text-sm font-bold text-white mb-3">👥 Usuarios Más Influyentes</h3>
-                        <div id="topInfluencers" class="space-y-2"></div>
-                    </div>
-                </div>
-                
-                <!-- ==================== STORY GENERATOR ==================== -->
-                <div id="view-stories" class="hidden">
-                    <div class="glass rounded-2xl p-6 mb-6">
-                        <h2 class="text-xl font-bold text-white mb-2">📖 Story Generator</h2>
-                        <p class="text-sm text-blue-300/50 mb-6">Narrativa ejecutiva automática con datos de Zero Escape</p>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                            <div class="glass rounded-xl p-5 cursor-pointer glass-hover text-center" onclick="generarStory('semanal')">
-                                <i class="fas fa-calendar-week text-3xl text-blue-400 mb-3"></i>
-                                <h3 class="font-bold text-white">Story Semanal</h3>
-                            </div>
-                            <div class="glass rounded-xl p-5 cursor-pointer glass-hover text-center" onclick="generarStory('crisis')">
-                                <i class="fas fa-exclamation-triangle text-3xl text-red-400 mb-3"></i>
-                                <h3 class="font-bold text-white">Story de Crisis</h3>
-                            </div>
-                        </div>
-                        <div id="storyOutput" class="glass rounded-xl p-6 hidden"></div>
-                    </div>
-                </div>
-                
-                <!-- ==================== COLABORACIÓN ==================== -->
-                <div id="view-collab" class="hidden">
-                    <div class="glass rounded-2xl p-6 mb-6">
-                        <h2 class="text-xl font-bold text-white mb-2">💬 Colaboración en Equipo</h2>
-                        <p class="text-sm text-blue-300/50 mb-6">Asignación y seguimiento de comentarios críticos</p>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6" id="teamStats"></div>
-                        <h3 class="text-sm font-bold text-white mb-3">📋 Bandeja de Asignaciones</h3>
-                        <div id="collabList" class="space-y-3"></div>
-                    </div>
-                </div>
-                
-                <!-- ==================== REPORTES ==================== -->
+                <!-- REPORTES -->
                 <div id="view-reports" class="hidden">
                     <div class="glass rounded-2xl p-6">
-                        <h2 class="text-xl font-bold text-white mb-6">📊 Reportes</h2>
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-                            <div class="glass rounded-xl p-5 glass-hover cursor-pointer text-center" onclick="generarReporte('diario')"><i class="fas fa-calendar-day text-3xl text-blue-400 mb-2"></i><h3 class="font-bold text-white">Diario</h3></div>
-                            <div class="glass rounded-xl p-5 glass-hover cursor-pointer text-center" onclick="generarReporte('semanal')"><i class="fas fa-calendar-week text-3xl text-blue-400 mb-2"></i><h3 class="font-bold text-white">Semanal</h3></div>
-                            <div class="glass rounded-xl p-5 glass-hover cursor-pointer text-center" onclick="generarReporte('mensual')"><i class="fas fa-calendar-alt text-3xl text-blue-400 mb-2"></i><h3 class="font-bold text-white">Mensual</h3></div>
-                            <div class="glass rounded-xl p-5 glass-hover cursor-pointer text-center" onclick="generarReporte('story')"><i class="fas fa-book text-3xl text-orange-400 mb-2"></i><h3 class="font-bold text-white">Story</h3></div>
+                        <h2 class="text-xl font-bold text-white mb-4">📊 Reportes</h2>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                            <div class="glass rounded-xl p-4 cursor-pointer text-center" onclick="generarReporte('diario')"><i class="fas fa-calendar-day text-2xl text-blue-400 mb-1"></i><h3 class="font-bold text-white text-sm">Diario</h3></div>
+                            <div class="glass rounded-xl p-4 cursor-pointer text-center" onclick="generarReporte('semanal')"><i class="fas fa-calendar-week text-2xl text-blue-400 mb-1"></i><h3 class="font-bold text-white text-sm">Semanal</h3></div>
+                            <div class="glass rounded-xl p-4 cursor-pointer text-center" onclick="generarReporte('mensual')"><i class="fas fa-calendar-alt text-2xl text-blue-400 mb-1"></i><h3 class="font-bold text-white text-sm">Mensual</h3></div>
+                            <div class="glass rounded-xl p-4 cursor-pointer text-center" onclick="exportarReporte()"><i class="fas fa-download text-2xl text-green-400 mb-1"></i><h3 class="font-bold text-white text-sm">Exportar</h3></div>
                         </div>
-                        <div id="reporteOutput" class="glass rounded-xl p-6 hidden"></div>
+                        <div id="reporteOutput" class="glass rounded-xl p-4 hidden"></div>
                     </div>
                 </div>
                 
-                <!-- ==================== CONFIG ==================== -->
+                <!-- CONFIG -->
                 <div id="view-config" class="hidden">
-                    <div class="glass rounded-2xl p-6 max-w-4xl">
-                        <h2 class="text-xl font-bold text-white mb-6">⚙️ Configuración</h2>
-                        <div class="mb-4"><label class="text-sm text-blue-300/70">API Key de Gemini</label><input type="password" id="cfgApiKey" class="w-full px-4 py-2.5 mt-1"></div>
-                        <div class="mb-4"><label class="text-sm text-blue-300/70">Prompt del Sistema</label><textarea id="cfgPrompt" class="w-full px-4 py-2.5 mt-1 font-mono text-xs" rows="15"></textarea></div>
-                        <button onclick="guardarConfig()" class="px-6 py-2.5 btn-gold"><i class="fas fa-save mr-2"></i>Guardar</button>
+                    <div class="glass rounded-2xl p-6 max-w-3xl">
+                        <h2 class="text-xl font-bold text-white mb-4">⚙️ Configuración</h2>
+                        <div class="mb-3"><label class="text-sm text-blue-300/70">API Key de Gemini</label><input type="password" id="cfgApiKey" class="w-full px-3 py-2 mt-1 text-sm"></div>
+                        <button onclick="guardarConfig()" class="px-5 py-2 btn-gold text-sm"><i class="fas fa-save mr-1"></i>Guardar</button>
                     </div>
                 </div>
             </div>
         </main>
         
-        <!-- PANEL DETALLE -->
+        <!-- DETALLE -->
         <div id="detailPanel" class="fixed inset-y-0 right-0 w-full sm:w-[500px] bg-[#0d1117] border-l border-[#1e3050] shadow-2xl transform translate-x-full transition-transform duration-300 z-50 overflow-y-auto">
             <div class="p-5">
-                <div class="flex justify-between items-center mb-5"><h2 class="text-lg font-bold text-white">🧬 Análisis Detallado</h2><button onclick="cerrarDetalle()" class="text-blue-300/50 hover:text-white text-xl">&times;</button></div>
+                <div class="flex justify-between items-center mb-4"><h2 class="text-lg font-bold text-white">🧠 Análisis de IA</h2><button onclick="cerrarDetalle()" class="text-blue-300/50 hover:text-white text-xl">&times;</button></div>
                 <div id="detalleContenido"></div>
             </div>
         </div>
@@ -463,44 +324,33 @@
 
     <script>
         // ============================================
-        // PROMPT ZERO-ESCAPE v12
+        // PROMPT DE LIBERTAD PENSATIVA - LA IA DECIDE
         // ============================================
         
-        const PROMPT_ZERO_ESCAPE = `ERES UN ANALISTA FORENSE DE SENTIMIENTOS. TU MISIÓN: IDENTIFICAR CORRECTAMENTE SENTIMIENTOS NEGATIVOS. CERO TOLERANCIA A FALSOS NEUTRALES.
+        const PROMPT_LIBERTAD_PENSATIVA = `Eres un analista peruano experto en comunicación política y social. Tienes libertad total para analizar este comentario sobre la Municipalidad Metropolitana de Lima.
 
-DEVUELVE EXCLUSIVAMENTE ESTE JSON:
+Tu trabajo es leer el comentario, entenderlo como lo haría un peruano, y clasificarlo usando tu criterio.
+
+Devuelve EXACTAMENTE este JSON (sin texto adicional, sin markdown, solo el JSON):
+
 {
-  "sentimiento": "Negativo",
-  "emocion": "Ira",
-  "intensidad": 8,
-  "tipo": "Crítica Política",
-  "tema": "Corrupción",
-  "prioridad": "Alta",
-  "riesgo": "Alto",
-  "esCrisis": false,
-  "narrativa": "frase",
-  "necesitaRespuesta": true,
-  "resumen": "breve",
-  "palabrasClave": ["p1","p2","p3"]
+  "sentimiento": "Positivo, Negativo o Neutral",
+  "tipo": "el tipo de comentario que consideres",
+  "tema": "el tema principal",
+  "prioridad": "Alta, Media o Baja",
+  "riesgo": "Alto, Medio o Bajo",
+  "confianza": 0.95,
+  "razonamiento": "Explica en una frase por qué clasificaste así este comentario",
+  "palabrasClave": ["palabra1", "palabra2"]
 }
 
-REGLAS SUPREMAS:
-1. CUALQUIER crítica, ironía, sarcasmo, insulto = "Negativo"
-2. Palabras entre comillas en contexto crítico = Ironía = "Negativo"
-3. Preguntas retóricas ("¿Cuánto le pagan?") = "Negativo"
-4. Términos despectivos = "Negativo"
-5. Acusaciones de corrupción = "Negativo"
-6. Deslegitimación política = "Negativo"
-7. SI HAY DUDA → "Negativo"
-
-NUEVAS CATEGORÍAS DE TEMAS:
-- "Corrupción": coimas, pagos, amiguitos, nepotismo, favoritismo
-- "Crítica Política": deslegitimación, críticas a autoridades, elecciones
-- "Inseguridad": delincuencia, tierra de nadie, violencia
-- "Xenofobia": referencias étnicas despectivas
-- "Transporte": tren, mantenimiento, oxidación, chatarra
-- "Gestión Municipal": administración, obras, servicios
-- "Insultos Directos": ataques personales sin contenido político`;
+INSTRUCCIONES IMPORTANTES:
+- Usa tu conocimiento del español peruano, jergas, sarcasmo, ironía
+- Entiende el contexto político peruano
+- Detecta insultos, burlas, críticas veladas
+- Reconoce cuando un hashtag o emoji cambia el significado
+- Si alguien dice algo con sarcasmo, clasifícalo como Negativo
+- Confianza: qué tan seguro estás de tu clasificación (0.0 a 1.0)`;
 
         // ============================================
         // ESTADO GLOBAL
@@ -509,212 +359,160 @@ NUEVAS CATEGORÍAS DE TEMAS:
         const STATE = {
             datos: [],
             filtrados: [],
-            apiKey: localStorage.getItem('sentinel_v12_key') || '',
-            prompt: localStorage.getItem('sentinel_v12_prompt') || PROMPT_ZERO_ESCAPE,
+            apiKey: localStorage.getItem('sentinel_v14_key') || '',
             tablaData: null,
-            graficos: {},
-            crisisAlerts: [],
-            falsosNeutrales: [],
-            vistaActual: 'dashboard'
+            graficos: {}
         };
         
         // ============================================
-        // MOTOR ZERO-ESCAPE
+        // LLAMADA A GEMINI CON LIBERTAD PENSATIVA
         // ============================================
         
-        class ZeroEscapeEngine {
+        async function consultarGemini(texto) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${STATE.apiKey}`;
             
-            static async analizar(textoOriginal) {
-                const analisisLocal = this.analisisLocalUltra(textoOriginal);
-                
-                if (analisisLocal.sentimiento === 'Negativo') {
-                    return { ...analisisLocal, fuente: 'Motor Zero-Escape', confianza: 1.0, esFalsoNeutral: false };
-                }
-                
-                if (STATE.apiKey) {
-                    try {
-                        const analisisGemini = await this.callGemini(textoOriginal);
-                        if (analisisGemini.sentimiento === 'Negativo') {
-                            return { ...analisisGemini, fuente: 'Gemini Pro', confianza: 0.99, esFalsoNeutral: true };
-                        }
-                        return { ...analisisGemini, fuente: 'Gemini Pro', confianza: 0.95, esFalsoNeutral: false };
-                    } catch (e) {
-                        console.warn('Gemini error:', e.message);
-                        return { ...analisisLocal, fuente: 'Motor Local', confianza: 0.90, esFalsoNeutral: false };
-                    }
-                }
-                
-                if (analisisLocal.intensidad >= 4) {
-                    return { ...analisisLocal, sentimiento: 'Negativo', fuente: 'Motor (forzado)', confianza: 0.85, esFalsoNeutral: true };
-                }
-                
-                return { ...analisisLocal, fuente: 'Motor Local', confianza: 0.90, esFalsoNeutral: false };
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [{
+                        parts: [{
+                            text: PROMPT_LIBERTAD_PENSATIVA + `\n\nCOMENTARIO A ANALIZAR:\n"${texto}"\n\nTu análisis (SOLO JSON):`
+                        }]
+                    }],
+                    generationConfig: {
+                        temperature: 0.3,
+                        topK: 40,
+                        topP: 0.95,
+                        maxOutputTokens: 500
+                    },
+                    safetySettings: [
+                        { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },
+                        { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_NONE" },
+                        { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_NONE" },
+                        { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_NONE" }
+                    ]
+                })
+            });
+            
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`HTTP ${response.status}: ${errorText.substring(0, 200)}`);
             }
             
-            static analisisLocalUltra(texto) {
-                const t = texto.toLowerCase();
-                const original = texto;
-                
-                let puntajeNegativo = 0;
-                let razones = [];
-                
-                // Ironía: palabras entre comillas
-                const comillasMatch = original.match(/"([^"]+)"/g);
-                if (comillasMatch) {
-                    comillasMatch.forEach(m => {
-                        const palabra = m.replace(/"/g, '').toLowerCase();
-                        if (['mantenimiento', 'obra', 'arreglo', 'mejora', 'inversión', 'transparencia', 'eficiencia', 'gestión', 'trabajo', 'servicio'].includes(palabra)) {
-                            puntajeNegativo += 20;
-                            razones.push(`Ironía: "${palabra}" entre comillas`);
-                        }
-                    });
+            const data = await response.json();
+            const respuestaTexto = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+            
+            // Extraer JSON de la respuesta
+            const jsonMatch = respuestaTexto.match(/\{[\s\S]*\}/);
+            if (!jsonMatch) {
+                throw new Error('No se encontró JSON en: ' + respuestaTexto.substring(0, 100));
+            }
+            
+            const analisis = JSON.parse(jsonMatch[0]);
+            
+            // Validar y normalizar
+            return {
+                sentimiento: analisis.sentimiento || 'Neutral',
+                tipo: analisis.tipo || 'Sin clasificar',
+                tema: analisis.tema || 'General',
+                prioridad: analisis.prioridad || 'Media',
+                riesgo: analisis.riesgo || 'Medio',
+                confianza: analisis.confianza || 0.9,
+                razonamiento: analisis.razonamiento || 'Análisis completado por IA',
+                palabrasClave: analisis.palabrasClave || []
+            };
+        }
+        
+        // ============================================
+        // FALLBACK LOCAL (si no hay API key)
+        // ============================================
+        
+        function analisisLocalBasico(texto) {
+            const t = texto.toLowerCase();
+            
+            // Detección rápida de obvios negativos
+            const palabrasNegativas = [
+                'lameculos', 'rata', 'ratero', 'corrupto', 'ladrón', 'sinvergüenza',
+                'inútil', 'inservible', 'mediocre', 'fantoche', 'payaso', 'títere',
+                'mierda', 'basura', 'estafa', 'robo', 'coima', 'coimero',
+                'miserable', 'patético', 'ridículo', 'chiste', 'burla',
+                'corrupción', 'delincuencia', 'tierra de nadie', 'caos', 'desastre'
+            ];
+            
+            let esNegativo = palabrasNegativas.some(p => t.includes(p));
+            
+            // Preguntas retóricas
+            if (t.includes('¿') && t.includes('?') && 
+                (t.includes('cuánto') || t.includes('dónde está') || t.includes('por qué'))) {
+                esNegativo = true;
+            }
+            
+            // Ironía con comillas
+            if (texto.includes('"') && (t.includes('mantenimiento') || t.includes('obra') || t.includes('gestión'))) {
+                esNegativo = true;
+            }
+            
+            return {
+                sentimiento: esNegativo ? 'Negativo' : 'Neutral',
+                tipo: esNegativo ? 'Crítica' : 'Sin clasificar',
+                tema: 'General',
+                prioridad: esNegativo ? 'Alta' : 'Media',
+                riesgo: esNegativo ? 'Medio' : 'Bajo',
+                confianza: 0.7,
+                razonamiento: 'Análisis local básico (sin IA)',
+                palabrasClave: t.split(/\s+/).filter(w => w.length > 4).slice(0, 3)
+            };
+        }
+        
+        // ============================================
+        // ANÁLISIS PRINCIPAL
+        // ============================================
+        
+        async function analizarComentario(texto) {
+            if (STATE.apiKey) {
+                try {
+                    const resultado = await consultarGemini(texto);
+                    return {
+                        ...resultado,
+                        fuente: '🧠 Gemini IA',
+                        usaIA: true
+                    };
+                } catch (error) {
+                    console.warn('Error con Gemini:', error.message);
+                    // Si falla Gemini, usar fallback local
+                    const fallback = analisisLocalBasico(texto);
+                    return {
+                        ...fallback,
+                        fuente: '⚠️ Local (Gemini falló)',
+                        usaIA: false,
+                        errorIA: error.message
+                    };
                 }
-                
-                // Preguntas retóricas
-                if (t.includes('¿') && t.includes('?')) {
-                    const patrones = ['cuánto le pagan', 'cuánto cobra', 'cuánto cuesta', 'hasta cuándo', 'dónde está', 'quién le paga', 'quién lo eligió'];
-                    patrones.forEach(p => { if (t.includes(p)) { puntajeNegativo += 25; razones.push(`Pregunta retórica: "${p}"`); } });
-                }
-                
-                // Insultos
-                const insultos = ['lameculos', 'lambeculo', 'lambón', 'arrastrado', 'marrano', 'chancho', 'rata', 'ratero', 'cucaracha', 'fantoche', 'payaso', 'bufón', 'títere', 'inservible', 'inútil', 'incapaz', 'inepto', 'mediocre', 'chiste', 'ridículo', 'patético', 'miserable', 'cojudo', 'huevón', 'pendejo', 'conchudo', 'mierda', 'basura', 'vendido', 'traidor', 'corrupto', 'ladrón', 'sinvergüenza', 'amiguito', 'compinche'];
-                insultos.forEach(i => { if (t.includes(i)) { puntajeNegativo += 30; razones.push(`Insulto: "${i}"`); } });
-                
-                // Términos despectivos
-                const despectivos = ['tren chatarra', 'chatarra', 'oxidándose', 'tierra de nadie', 'japonesa dando órdenes', 'kimono', 'no fue elegido', 'ilegítimo', 'usurpador', 'delincuencia tomó', 'corrupción tomó', 'poco o nada', 'no hacen nada', 'puro show', 'pura pantalla'];
-                despectivos.forEach(d => { if (t.includes(d)) { puntajeNegativo += 20; razones.push(`Despectivo: "${d}"`); } });
-                
-                // Corrupción
-                const corrupcion = ['corrupción', 'corrupto', 'coima', 'coimero', 'mermelada', 'mermelero', 'argolla', 'robo', 'robar', 'ladrón', 'estafa', 'fraude', 'desfalco', 'malversación', 'sobrevalorado', 'inflado', 'cuánto le pagan', 'cuánto cobra', 'favores', 'favoritismo', 'nepotismo', 'amiguismo'];
-                corrupcion.forEach(c => { if (t.includes(c)) { puntajeNegativo += 35; razones.push(`Corrupción: "${c}"`); } });
-                
-                // Deslegitimación
-                const deslegitimacion = ['no fue elegido', 'no elegido democráticamente', 'ilegítimo', 'usurpador', 'golpista', 'dictador', 'dando órdenes a un alcalde', 'títere', 'marioneta', 'no lo eligieron', 'quién lo eligió'];
-                deslegitimacion.forEach(d => { if (t.includes(d)) { puntajeNegativo += 35; razones.push(`Deslegitimación: "${d}"`); } });
-                
-                // Xenofobia
-                let tieneXenofobia = false;
-                ['japonesa', 'japonés', 'chino', 'china', 'kimono', 'extranjero'].forEach(x => { if (t.includes(x) && puntajeNegativo > 0) { tieneXenofobia = true; puntajeNegativo += 25; razones.push(`Xenofobia: "${x}"`); } });
-                
-                // Menciones políticas
-                let mencionPolitica = false;
-                ['keiko', 'fujimori', 'reggiardo', 'rla', 'lopez aliaga', 'boluarte', 'castillo'].forEach(f => { if (t.includes(f)) { mencionPolitica = true; if (puntajeNegativo > 0) { puntajeNegativo += 10; } } });
-                
-                // Determinación
-                let sentimiento;
-                if (puntajeNegativo >= 15) sentimiento = 'Negativo';
-                else if (puntajeNegativo >= 8 && mencionPolitica) sentimiento = 'Negativo';
-                else if (puntajeNegativo >= 5) sentimiento = 'Negativo';
-                else sentimiento = 'Neutral';
-                
-                let emocion = 'Neutral';
-                let intensidad = 1;
-                if (puntajeNegativo >= 60) { emocion = 'Ira'; intensidad = 10; }
-                else if (puntajeNegativo >= 40) { emocion = 'Indignación'; intensidad = 9; }
-                else if (puntajeNegativo >= 25) { emocion = 'Frustración'; intensidad = 7; }
-                else if (puntajeNegativo >= 10) { emocion = 'Decepción'; intensidad = 5; }
-                
-                let tipo = 'Opinión';
-                if (tieneXenofobia) tipo = 'Ataque Xenófobo';
-                else if (puntajeNegativo >= 50) tipo = 'Insulto';
-                else if (puntajeNegativo >= 30) tipo = 'Crítica Política';
-                else if (puntajeNegativo >= 15) tipo = 'Crítica';
-                else if (t.includes('?')) tipo = 'Consulta Crítica';
-                
-                let tema = 'General';
-                if (t.includes('corrup') || t.includes('coima') || t.includes('pagan') || t.includes('robo')) tema = 'Corrupción';
-                else if (t.includes('delincuencia') || t.includes('tierra de nadie') || t.includes('inseguridad')) tema = 'Inseguridad';
-                else if (t.includes('tren') || t.includes('oxid') || t.includes('chatarra') || t.includes('mantenimiento')) tema = 'Transporte';
-                else if (t.includes('elección') || t.includes('democrátic') || t.includes('ilegítimo')) tema = 'Crítica Política';
-                else if (t.includes('japonesa') || t.includes('kimono')) tema = 'Xenofobia';
-                else if (mencionPolitica) tema = 'Crítica Política';
-                else if (t.includes('alcalde') || t.includes('municipal')) tema = 'Gestión Municipal';
-                
-                let prioridad = 'Baja';
-                if (puntajeNegativo >= 40) prioridad = 'Alta';
-                else if (puntajeNegativo >= 20) prioridad = 'Media';
-                
-                let riesgo = 'Bajo';
-                if (puntajeNegativo >= 50 && mencionPolitica) riesgo = 'Alto';
-                else if (puntajeNegativo >= 30) riesgo = 'Medio';
-                
-                let esCrisis = puntajeNegativo >= 60;
-                
+            } else {
+                // Sin API key, usar fallback local
+                const fallback = analisisLocalBasico(texto);
                 return {
-                    sentimiento, emocion, intensidad, tipo, tema, prioridad, riesgo, esCrisis,
-                    narrativa: `${tipo} ${sentimiento.toLowerCase()} sobre ${tema}`,
-                    necesitaRespuesta: sentimiento === 'Negativo',
-                    resumen: razones.slice(0, 3).join('. ') || 'Análisis completado',
-                    palabrasClave: t.split(/\s+/).filter(w => w.length > 4).slice(0, 5),
-                    razones
+                    ...fallback,
+                    fuente: '💻 Análisis Local',
+                    usaIA: false
                 };
-            }
-            
-            static async callGemini(texto) {
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${STATE.apiKey}`;
-                const res = await fetch(url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: STATE.prompt + `\n\nCOMENTARIO: "${texto}"\n\nJSON:` }] }],
-                        generationConfig: { temperature: 0.01, topK: 1, topP: 0.9, maxOutputTokens: 400 },
-                        safetySettings: [
-                            { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },
-                            { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_NONE" },
-                            { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_NONE" },
-                            { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_NONE" }
-                        ]
-                    })
-                });
-                if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                const data = await res.json();
-                const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-                const match = text.match(/\{[\s\S]*\}/);
-                if (!match) throw new Error('JSON no encontrado');
-                let a = JSON.parse(match[0]);
-                a.sentimiento = this.norm(a.sentimiento, ['Negativo', 'Neutral', 'Positivo'], 'Negativo');
-                a.prioridad = this.norm(a.prioridad, ['Alta', 'Media', 'Baja'], 'Media');
-                a.riesgo = this.norm(a.riesgo, ['Alto', 'Medio', 'Bajo'], 'Medio');
-                a.intensidad = parseInt(a.intensidad) || 5;
-                return a;
-            }
-            
-            static norm(val, opts, def) {
-                const v = (val || '').toLowerCase().trim();
-                for (const o of opts) if (v.includes(o.toLowerCase())) return o;
-                return def;
-            }
-            
-            static async analizarLote(comentarios, callback) {
-                const resultados = [];
-                const total = comentarios.length;
-                STATE.crisisAlerts = [];
-                STATE.falsosNeutrales = [];
-                
-                for (let i = 0; i < total; i++) {
-                    const c = comentarios[i];
-                    const texto = c['Full Text'] || c['full_text'] || c['text'] || '';
-                    if (callback) callback({ actual: i + 1, total, porcentaje: Math.round(((i+1)/total)*100) });
-                    const analisis = await this.analizar(texto.toString());
-                    if (analisis.esCrisis) STATE.crisisAlerts.push({ ...c, _analisis: analisis });
-                    if (analisis.esFalsoNeutral) STATE.falsosNeutrales.push({ ...c, _analisis: analisis });
-                    resultados.push({ ...c, _analisis: analisis });
-                    if (STATE.apiKey) await new Promise(r => setTimeout(r, 80));
-                }
-                return resultados;
             }
         }
         
         // ============================================
-        // PROCESAMIENTO
+        // PROCESAMIENTO POR LOTES
         // ============================================
         
         async function procesarComentarios(datosCrudos) {
             const limpios = datosCrudos
-                .filter(f => (f['Full Text'] || f['full_text'] || f['text'] || '').toString().trim())
+                .filter(f => {
+                    const texto = f['Full Text'] || f['full_text'] || f['text'] || '';
+                    return texto.toString().trim().length > 0;
+                })
                 .filter((f, i, self) => {
-                    const id = f['Tweet Id'] || f['tweet_id'] || f['id'];
-                    return i === self.findIndex(x => (x['Tweet Id'] || x['tweet_id'] || x['id']) === id);
+                    const id = f['Tweet Id'] || f['tweet_id'] || f['id'] || i;
+                    return i === self.findIndex(x => (x['Tweet Id'] || x['tweet_id'] || x['id'] || 0) === id);
                 });
             
             const pc = document.getElementById('progressContainer');
@@ -723,39 +521,69 @@ NUEVAS CATEGORÍAS DE TEMAS:
             const pp = document.getElementById('progressPercent');
             pc.classList.remove('hidden');
             
-            STATE.datos = await ZeroEscapeEngine.analizarLote(limpios, (p) => {
-                pb.style.width = p.porcentaje + '%';
-                pp.textContent = p.porcentaje + '%';
-                pt.textContent = `🛡️ Zero-Escape... ${p.actual}/${p.total}`;
-            });
+            const total = limpios.length;
+            STATE.datos = [];
+            
+            for (let i = 0; i < total; i++) {
+                const c = limpios[i];
+                const texto = c['Full Text'] || c['full_text'] || c['text'] || '';
+                
+                // Actualizar progreso
+                pb.style.width = Math.round(((i+1)/total)*100) + '%';
+                pp.textContent = Math.round(((i+1)/total)*100) + '%';
+                
+                if (STATE.apiKey) {
+                    pt.textContent = `🧠 Consultando a Gemini... ${i+1}/${total}`;
+                } else {
+                    pt.textContent = `💻 Análisis local... ${i+1}/${total}`;
+                }
+                
+                const analisis = await analizarComentario(texto.toString());
+                STATE.datos.push({ ...c, _analisis: analisis });
+                
+                // Pausa entre llamadas a la API para no exceder límites
+                if (STATE.apiKey) {
+                    await new Promise(r => setTimeout(r, 200));
+                } else {
+                    await new Promise(r => setTimeout(r, 5));
+                }
+            }
             
             STATE.filtrados = [...STATE.datos];
-            setTimeout(() => pc.classList.add('hidden'), 600);
+            setTimeout(() => pc.classList.add('hidden'), 500);
             
-            updateCrisisBadges();
+            // Mostrar resumen en consola
+            const neg = STATE.datos.filter(r => r._analisis.sentimiento === 'Negativo').length;
+            const neu = STATE.datos.filter(r => r._analisis.sentimiento === 'Neutral').length;
+            const pos = STATE.datos.filter(r => r._analisis.sentimiento === 'Positivo').length;
+            const conIA = STATE.datos.filter(r => r._analisis.usaIA).length;
+            
+            console.log('═══════════════════════════════');
+            console.log('🧠 RESULTADOS DEL ANÁLISIS:');
+            console.log(`   🔴 Negativos: ${neg} (${((neg/total)*100).toFixed(1)}%)`);
+            console.log(`   🟡 Neutrales: ${neu} (${((neu/total)*100).toFixed(1)}%)`);
+            console.log(`   🟢 Positivos: ${pos} (${((pos/total)*100).toFixed(1)}%)`);
+            console.log(`   🧠 Analizados con IA: ${conIA}/${total}`);
+            console.log('───────────────────────────────');
+            
+            // Mostrar razonamientos de la IA
+            STATE.datos.forEach(d => {
+                console.log(`   [${d._analisis.sentimiento}] "${(d['Full Text']||'').substring(0, 60)}..." → ${d._analisis.razonamiento}`);
+            });
+            console.log('═══════════════════════════════');
+            
             renderizarDashboard();
-            
-            console.log('✅ Zero-Escape completado');
-            console.log(`🔴 Negativos: ${STATE.datos.filter(r => r._analisis.sentimiento === 'Negativo').length}`);
-            console.log(`🛡️ Falsos neutrales corregidos: ${STATE.falsosNeutrales.length}`);
-        }
-        
-        function updateCrisisBadges() {
-            const count = STATE.crisisAlerts.length;
-            const navBadge = document.getElementById('crisis-nav-badge');
-            const headerBadge = document.getElementById('crisis-header-badge');
-            const headerCount = document.getElementById('crisis-header-count');
-            if (count > 0) {
-                navBadge.classList.remove('hidden'); navBadge.textContent = count;
-                headerBadge.classList.remove('hidden'); headerCount.textContent = count;
-            } else {
-                navBadge.classList.add('hidden'); headerBadge.classList.add('hidden');
-            }
         }
         
         function procesarArchivo(e) {
             const file = e.target.files[0];
             if (!file) return;
+            
+            if (!STATE.apiKey) {
+                const continuar = confirm('⚠️ No has configurado una API Key de Gemini.\n\nEl análisis se hará con un motor local básico (menos preciso).\n\n¿Quieres continuar?\n\nPuedes obtener una API Key gratis en: https://aistudio.google.com/apikey');
+                if (!continuar) return;
+            }
+            
             const reader = new FileReader();
             reader.onload = async function(ev) {
                 try {
@@ -764,50 +592,66 @@ NUEVAS CATEGORÍAS DE TEMAS:
                     const ws = wb.Sheets[wb.SheetNames[0]];
                     const json = XLSX.utils.sheet_to_json(ws);
                     await procesarComentarios(json);
-                    alert(`✅ ${STATE.datos.length} comentarios\n🔴 ${STATE.datos.filter(r => r._analisis.sentimiento === 'Negativo').length} negativos\n🛡️ ${STATE.falsosNeutrales.length} corregidos`);
-                } catch(err) { alert('❌ Error: ' + err.message); }
+                    
+                    const neg = STATE.datos.filter(r => r._analisis.sentimiento === 'Negativo').length;
+                    alert(`✅ ${STATE.datos.length} comentarios analizados\n🧠 ${STATE.datos.filter(r => r._analisis.usaIA).length} con IA\n🔴 ${neg} Negativos (${((neg/STATE.datos.length)*100).toFixed(1)}%)\n\nRevisa la consola (F12) para ver el razonamiento de cada análisis`);
+                } catch(err) {
+                    alert('❌ Error: ' + err.message);
+                }
             };
             reader.readAsArrayBuffer(file);
         }
         
         async function cargarDemo() {
+            if (!STATE.apiKey) {
+                const continuar = confirm('⚠️ Sin API Key, el análisis será con motor local básico.\n\nTe recomiendo obtener una key gratis en:\nhttps://aistudio.google.com/apikey\n\n¿Continuar con análisis local?');
+                if (!continuar) return;
+            }
+            
             const demo = [
-                { 'Tweet Id': '12001', 'Full Text': '@MuniLima ¿Cuánto le pagan al amiguito de RLA para dar "mantenimiento" al tren chatarra que sigue oxidándose?', 'Created At': '2024-08-15 10:00:00', 'User Name': 'Ciudadano Crítico', 'Favorite Count': 89, 'Retweet Count': 45 },
-                { 'Tweet Id': '12002', 'Full Text': '@MuniLima @Renzo_Reggiardo @KeikoFujimori La delincuencia y corrupción a tomado el poder, Perú tierra de nadie', 'Created At': '2024-08-15 11:00:00', 'User Name': 'Vecino Preocupado', 'Favorite Count': 156, 'Retweet Count': 78 },
-                { 'Tweet Id': '12003', 'Full Text': '@MuniLima @Renzo_Reggiardo @KeikoFujimori Una japonesa dando órdenes a un alcalde que no fue elegido democráticamente', 'Created At': '2024-08-15 12:00:00', 'User Name': 'Crítico Político', 'Favorite Count': 234, 'Retweet Count': 123 },
-                { 'Tweet Id': '12004', 'Full Text': '@MuniLima Este lameculos del marrano es un chiste', 'Created At': '2024-08-15 13:00:00', 'User Name': 'Indignado', 'Favorite Count': 178, 'Retweet Count': 89 },
-                { 'Tweet Id': '12005', 'Full Text': '@MuniLima @Renzo_Reggiardo @KeikoFujimori ¿Se estuvo probando el kimono?', 'Created At': '2024-08-15 14:00:00', 'User Name': 'Burlón', 'Favorite Count': 345, 'Retweet Count': 156 },
-                { 'Tweet Id': '12006', 'Full Text': '@MuniLima @Renzo_Reggiardo @KeikoFujimori Un inservible.', 'Created At': '2024-08-15 15:00:00', 'User Name': 'Directo', 'Favorite Count': 456, 'Retweet Count': 234 },
-                { 'Tweet Id': '12007', 'Full Text': 'Gracias por la limpieza en el parque, quedó muy bonito', 'Created At': '2024-08-15 16:00:00', 'User Name': 'Vecina Feliz', 'Favorite Count': 23, 'Retweet Count': 5 },
-                { 'Tweet Id': '12008', 'Full Text': '¿Cuál es el horario de atención de la municipalidad?', 'Created At': '2024-08-15 17:00:00', 'User Name': 'Ciudadano', 'Favorite Count': 1, 'Retweet Count': 0 }
+                { 'Tweet Id': 'D001', 'Full Text': '@MuniLima ¿Cuánto le pagan al amiguito de RLA para dar "mantenimiento" al tren chatarra que sigue oxidándose?', 'Created At': '2024-09-15 10:00:00', 'User Name': 'Ciudadano 1', 'Favorite Count': 89 },
+                { 'Tweet Id': 'D002', 'Full Text': '@MuniLima @Renzo_Reggiardo @KeikoFujimori La delincuencia y corrupción a tomado el poder, Perú tierra de nadie', 'Created At': '2024-09-15 11:00:00', 'User Name': 'Ciudadano 2', 'Favorite Count': 156 },
+                { 'Tweet Id': 'D003', 'Full Text': '@MuniLima @Renzo_Reggiardo @KeikoFujimori Una japonesa dando órdenes a un alcalde que no fue elegido democráticamente', 'Created At': '2024-09-15 12:00:00', 'User Name': 'Ciudadano 3', 'Favorite Count': 234 },
+                { 'Tweet Id': 'D004', 'Full Text': '@MuniLima Este lameculos del marrano es un chiste', 'Created At': '2024-09-15 13:00:00', 'User Name': 'Ciudadano 4', 'Favorite Count': 178 },
+                { 'Tweet Id': 'D005', 'Full Text': '@MuniLima @Renzo_Reggiardo @KeikoFujimori ¿Se estuvo probando el kimono?', 'Created At': '2024-09-15 14:00:00', 'User Name': 'Ciudadano 5', 'Favorite Count': 345 },
+                { 'Tweet Id': 'D006', 'Full Text': '@MuniLima @Renzo_Reggiardo @KeikoFujimori Un inservible.', 'Created At': '2024-09-15 15:00:00', 'User Name': 'Ciudadano 6', 'Favorite Count': 456 },
+                { 'Tweet Id': 'D007', 'Full Text': 'Gracias por la limpieza en el parque, quedó muy bonito', 'Created At': '2024-09-15 16:00:00', 'User Name': 'Vecina', 'Favorite Count': 23 },
+                { 'Tweet Id': 'D008', 'Full Text': '¿Cuál es el horario de atención de la municipalidad?', 'Created At': '2024-09-15 17:00:00', 'User Name': 'Ciudadano', 'Favorite Count': 1 }
             ];
+            
             await procesarComentarios(demo);
-            alert(`✅ Demo cargado\n🔴 ${STATE.datos.filter(r => r._analisis.sentimiento === 'Negativo').length}/${STATE.datos.length} NEGATIVOS detectados\n🛡️ ${STATE.falsosNeutrales.length} falsos neutrales corregidos`);
+            
+            const neg = STATE.datos.filter(r => r._analisis.sentimiento === 'Negativo').length;
+            const conIA = STATE.datos.filter(r => r._analisis.usaIA).length;
+            alert(`✅ Demo analizado\n🧠 ${conIA}/${STATE.datos.length} con IA\n🔴 ${neg} Negativos (${((neg/STATE.datos.length)*100).toFixed(1)}%)\n\n📝 Revisa la consola (F12) para ver el razonamiento de la IA`);
         }
         
         // ============================================
-        // RENDERIZADO DASHBOARD
+        // RENDERIZADO
         // ============================================
         
         function renderizarDashboard() {
             if (!STATE.datos.length) return;
             const d = STATE.filtrados;
             
-            const s = {}, emo = {};
-            let crisis = 0, falsosN = STATE.falsosNeutrales.length;
+            // KPIs
+            const s = {}, tipos = {}, temas = {};
+            let confianzaTotal = 0;
+            
             d.forEach(r => {
                 s[r._analisis.sentimiento] = (s[r._analisis.sentimiento] || 0) + 1;
-                emo[r._analisis.emocion] = (emo[r._analisis.emocion] || 0) + 1;
-                if (r._analisis.esCrisis) crisis++;
+                tipos[r._analisis.tipo] = (tipos[r._analisis.tipo] || 0) + 1;
+                temas[r._analisis.tema] = (temas[r._analisis.tema] || 0) + 1;
+                confianzaTotal += (r._analisis.confianza || 0);
             });
+            
+            const confianzaPromedio = Math.round((confianzaTotal / d.length) * 100);
             
             const kpis = [
                 { label: 'Total', value: d.length, icon: '📊' },
                 { label: '🔴 Negativos', value: s['Negativo'] || 0, icon: '🚨' },
                 { label: '🟡 Neutrales', value: s['Neutral'] || 0, icon: '⚠️' },
-                { label: '🟢 Positivos', value: s['Positivo'] || 0, icon: '✅' },
-                { label: '💢 Crisis', value: crisis, icon: '🔥' },
-                { label: '🛡️ Corregidos', value: falsosN, icon: '🛡️' }
+                { label: '🟢 Positivos', value: s['Positivo'] || 0, icon: '✅' }
             ];
             
             document.getElementById('kpiContainer').innerHTML = kpis.map(k => `
@@ -817,280 +661,191 @@ NUEVAS CATEGORÍAS DE TEMAS:
                 </div>
             `).join('');
             
-            renderizarGraficosDashboard(d);
-            renderizarWordCloud(d);
-            renderizarTabla(d);
-            actualizarFiltros(d);
-        }
-        
-        function renderizarGraficosDashboard(d) {
-            Object.values(STATE.graficos).forEach(g => { if (g && g.destroy) g.destroy(); });
+            // Destruir gráficos anteriores
+            Object.values(STATE.graficos).forEach(g => { if (g) g.destroy(); });
             STATE.graficos = {};
             
-            const sData = {}; d.forEach(r => sData[r._analisis.sentimiento] = (sData[r._analisis.sentimiento] || 0) + 1);
+            // 1. SENTIMIENTOS
             const ctx1 = document.getElementById('chartSentimiento');
-            if (ctx1) STATE.graficos.sentimiento = new Chart(ctx1, {
-                type: 'doughnut',
-                data: { labels: Object.keys(sData), datasets: [{ data: Object.values(sData), backgroundColor: ['#EF4444','#F59E0B','#10B981'] }] },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#93c5fd', font: { size: 10 } } } } }
-            });
-            
-            const eData = {}; d.forEach(r => eData[r._analisis.emocion] = (eData[r._analisis.emocion] || 0) + 1);
-            const ctx2 = document.getElementById('chartEmociones');
-            if (ctx2) STATE.graficos.emociones = new Chart(ctx2, {
-                type: 'radar',
-                data: { labels: Object.keys(eData), datasets: [{ data: Object.values(eData), backgroundColor: 'rgba(139,92,246,0.2)', borderColor: '#8b5cf6', borderWidth: 2 }] },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { r: { ticks: { color: '#93c5fd' }, grid: { color: 'rgba(30,48,80,0.4)' }, pointLabels: { color: '#93c5fd' } } } }
-            });
-            
-            const tData = {}; d.forEach(r => tData[r._analisis.tema] = (tData[r._analisis.tema] || 0) + 1);
-            const ctx3 = document.getElementById('chartTemas');
-            if (ctx3) STATE.graficos.temas = new Chart(ctx3, {
-                type: 'bar',
-                data: { labels: Object.keys(tData), datasets: [{ data: Object.values(tData), backgroundColor: '#3b82f6', borderRadius: 6 }] },
-                options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#93c5fd' } }, y: { ticks: { color: '#93c5fd' } } } }
-            });
-            
-            const crisisData = {};
-            d.forEach(r => {
-                if (r._analisis.intensidad >= 7) {
-                    const f = new Date(r['Created At'] || '');
-                    if (!isNaN(f)) {
-                        const k = f.toLocaleDateString('es-PE', { day: '2-digit', month: '2-digit', hour: '2-digit' });
-                        crisisData[k] = (crisisData[k] || 0) + 1;
+            if (ctx1) {
+                STATE.graficos.sentimiento = new Chart(ctx1, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Negativo', 'Neutral', 'Positivo'],
+                        datasets: [{
+                            data: [s['Negativo']||0, s['Neutral']||0, s['Positivo']||0],
+                            backgroundColor: ['#EF4444', '#F59E0B', '#10B981'],
+                            borderWidth: 2,
+                            borderColor: '#0a0e17'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: { color: '#93c5fd', padding: 12, font: { size: 10 } }
+                            }
+                        }
                     }
-                }
-            });
-            const crisisKeys = Object.keys(crisisData).slice(-15);
-            const ctx4 = document.getElementById('chartCrisis');
-            if (ctx4) STATE.graficos.crisis = new Chart(ctx4, {
-                type: 'bar',
-                data: { labels: crisisKeys, datasets: [{ data: crisisKeys.map(k => crisisData[k]), backgroundColor: '#ef4444', borderRadius: 4 }] },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { ticks: { color: '#93c5fd' } }, x: { ticks: { color: '#93c5fd', font: { size: 8 } } } } }
-            });
+                });
+            }
             
+            // 2. TEMAS
+            const ctx2 = document.getElementById('chartTemas');
+            if (ctx2) {
+                STATE.graficos.temas = new Chart(ctx2, {
+                    type: 'bar',
+                    data: {
+                        labels: Object.keys(temas),
+                        datasets: [{
+                            data: Object.values(temas),
+                            backgroundColor: '#8b5cf6',
+                            borderRadius: 6
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            x: { ticks: { color: '#93c5fd' }, grid: { color: 'rgba(30,48,80,0.3)' } },
+                            y: { ticks: { color: '#93c5fd' }, grid: { display: false } }
+                        }
+                    }
+                });
+            }
+            
+            // 3. TIPOS
+            const ctx3 = document.getElementById('chartTipos');
+            if (ctx3) {
+                STATE.graficos.tipos = new Chart(ctx3, {
+                    type: 'bar',
+                    data: {
+                        labels: Object.keys(tipos),
+                        datasets: [{
+                            data: Object.values(tipos),
+                            backgroundColor: '#3b82f6',
+                            borderRadius: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: { ticks: { color: '#93c5fd' }, grid: { color: 'rgba(30,48,80,0.3)' } },
+                            x: { ticks: { color: '#93c5fd', maxRotation: 45, font: { size: 8 } }, grid: { display: false } }
+                        }
+                    }
+                });
+            }
+            
+            // 4. TIMELINE
             const timeline = {};
             d.forEach(r => {
                 const f = new Date(r['Created At'] || '');
                 if (!isNaN(f)) {
                     const k = f.toLocaleDateString('es-PE', { day: '2-digit', month: '2-digit' });
-                    timeline[k] = (timeline[k] || 0) + 1;
+                    if (!timeline[k]) timeline[k] = { total: 0, negativos: 0 };
+                    timeline[k].total++;
+                    if (r._analisis.sentimiento === 'Negativo') timeline[k].negativos++;
                 }
             });
+            
             const timeKeys = Object.keys(timeline).sort();
-            const ctx5 = document.getElementById('chartTimeline');
-            if (ctx5) STATE.graficos.timeline = new Chart(ctx5, {
-                type: 'line',
-                data: {
-                    labels: timeKeys,
-                    datasets: [
-                        { label: 'Total', data: timeKeys.map(k => timeline[k]), borderColor: '#3b82f6', tension: 0.4, fill: true, backgroundColor: 'rgba(59,130,246,0.08)' },
-                        { label: 'Alta Intensidad', data: timeKeys.map(k => d.filter(r => { const f = new Date(r['Created At']||''); return !isNaN(f) && f.toLocaleDateString('es-PE',{day:'2-digit',month:'2-digit'})===k && r._analisis.intensidad>=7; }).length), borderColor: '#ef4444', tension: 0.4 }
-                    ]
-                },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#93c5fd', font: { size: 10 } } } }, scales: { y: { ticks: { color: '#93c5fd' } }, x: { ticks: { color: '#93c5fd', font: { size: 9 } } } } }
-            });
-        }
-        
-        function renderizarWordCloud(d) {
-            const canvas = document.getElementById('wordcloud');
-            if (!canvas) return;
-            const words = {};
-            d.forEach(r => { (r._analisis.palabrasClave || []).forEach(p => { words[p] = (words[p] || 0) + 1; }); });
-            const list = Object.entries(words).map(([w, c]) => [w, c * 15]);
-            if (list.length > 0 && window.WordCloud) {
-                WordCloud(canvas, {
-                    list, gridSize: 10, weightFactor: 2, fontFamily: 'Inter, sans-serif',
-                    color: () => `hsl(${Math.random()*60+200}, 70%, ${Math.random()*30+45}%)`,
-                    backgroundColor: 'transparent', rotateRatio: 0.2
+            const ctx4 = document.getElementById('chartTimeline');
+            if (ctx4) {
+                STATE.graficos.timeline = new Chart(ctx4, {
+                    type: 'line',
+                    data: {
+                        labels: timeKeys,
+                        datasets: [
+                            {
+                                label: 'Total', data: timeKeys.map(k => timeline[k].total),
+                                borderColor: '#3b82f6', backgroundColor: 'rgba(59,130,246,0.1)',
+                                fill: true, tension: 0.4
+                            },
+                            {
+                                label: 'Negativos', data: timeKeys.map(k => timeline[k].negativos),
+                                borderColor: '#EF4444', backgroundColor: 'rgba(239,68,68,0.1)',
+                                fill: true, tension: 0.4
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true, maintainAspectRatio: false,
+                        plugins: { legend: { labels: { color: '#93c5fd', usePointStyle: true, padding: 15, font: { size: 10 } } } },
+                        scales: {
+                            y: { ticks: { color: '#93c5fd' }, grid: { color: 'rgba(30,48,80,0.3)' } },
+                            x: { ticks: { color: '#93c5fd', font: { size: 8 } }, grid: { color: 'rgba(30,48,80,0.3)' } }
+                        }
+                    }
                 });
             }
-        }
-        
-        function renderizarTabla(d) {
+            
+            // 5. CONFIANZA IA
+            const confianzaData = {};
+            d.forEach(r => {
+                const nivel = Math.round((r._analisis.confianza || 0.9) * 100);
+                const key = `${nivel}%`;
+                confianzaData[key] = (confianzaData[key] || 0) + 1;
+            });
+            
+            const ctx5 = document.getElementById('chartConfianza');
+            if (ctx5) {
+                STATE.graficos.confianza = new Chart(ctx5, {
+                    type: 'bar',
+                    data: {
+                        labels: Object.keys(confianzaData).sort(),
+                        datasets: [{
+                            data: Object.values(confianzaData),
+                            backgroundColor: '#10B981',
+                            borderRadius: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true, maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: { ticks: { color: '#93c5fd' }, grid: { color: 'rgba(30,48,80,0.3)' } },
+                            x: { ticks: { color: '#93c5fd' }, grid: { display: false } }
+                        }
+                    }
+                });
+            }
+            
+            // Tabla
             if (STATE.tablaData) STATE.tablaData.destroy();
+            
             document.getElementById('tablaBody').innerHTML = d.map(r => `
                 <tr class="cursor-pointer hover:bg-[#1a2332]" onclick="mostrarDetalle('${r['Tweet Id'] || r['tweet_id']}')">
                     <td class="text-xs">${new Date(r['Created At']||'').toLocaleDateString('es-PE')}</td>
                     <td class="text-sm font-semibold text-white">${r['User Name']||'Anónimo'}</td>
                     <td class="text-sm max-w-xs truncate text-blue-100/60">${(r['Full Text']||'').substring(0,60)}...</td>
                     <td><span class="badge ${r._analisis.sentimiento==='Negativo'?'badge-neg':r._analisis.sentimiento==='Positivo'?'badge-pos':'badge-neu'}">${r._analisis.sentimiento}</span></td>
-                    <td class="text-xs ${r._analisis.intensidad>=7?'text-red-400 font-bold':'text-blue-200/60'}">${r._analisis.emocion} (${r._analisis.intensidad}/10)</td>
                     <td class="text-xs text-blue-200/60">${r._analisis.tipo}</td>
                     <td class="text-xs text-blue-200/60">${r._analisis.tema}</td>
-                    <td class="text-xs font-bold ${r._analisis.prioridad==='Alta'?'text-red-400':''}">${r._analisis.prioridad}</td>
-                    <td>${r._analisis.esFalsoNeutral?'<span class="badge badge-neg">🛡️ CORREGIDO</span>':r._analisis.esCrisis?'<span class="badge badge-neg pulse-crisis">🚨</span>':''}</td>
+                    <td class="text-xs font-bold ${r._analisis.prioridad==='Alta'?'text-red-400':r._analisis.prioridad==='Media'?'text-yellow-400':''}">${r._analisis.prioridad}</td>
+                    <td class="text-xs ${r._analisis.usaIA?'text-purple-400':'text-gray-400'}">${r._analisis.usaIA?'🧠 IA '+Math.round((r._analisis.confianza||0.9)*100)+'%':'💻 Local'}</td>
                 </tr>
             `).join('');
+            
             STATE.tablaData = $('#tablaComentarios').DataTable({
-                pageLength: 25, language: { url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json' }, order: [[0, 'desc']]
+                pageLength: 25,
+                language: { url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json' },
+                order: [[0, 'desc']]
             });
-        }
-        
-        function actualizarFiltros(d) {
-            const emociones = [...new Set(d.map(r => r._analisis.emocion))].sort();
-            const tipos = [...new Set(d.map(r => r._analisis.tipo))].sort();
-            document.getElementById('filtroEmocion').innerHTML = '<option value="">Emoción</option>' + emociones.map(e => `<option>${e}</option>`).join('');
-            document.getElementById('filtroTipo').innerHTML = '<option value="">Tipo</option>' + tipos.map(t => `<option>${t}</option>`).join('');
         }
         
         function aplicarFiltros() {
             let d = [...STATE.datos];
             const s = document.getElementById('filtroSentimiento').value;
-            const e = document.getElementById('filtroEmocion').value;
-            const t = document.getElementById('filtroTipo').value;
             if (s) d = d.filter(r => r._analisis.sentimiento === s);
-            if (e) d = d.filter(r => r._analisis.emocion === e);
-            if (t) d = d.filter(r => r._analisis.tipo === t);
             STATE.filtrados = d;
             renderizarDashboard();
-        }
-        
-        // ============================================
-        // VISTAS COMPLETAS
-        // ============================================
-        
-        function renderizarLabEmocional() {
-            if (!STATE.datos.length) {
-                document.getElementById('emotionWheel').innerHTML = '<p class="text-blue-300/50 text-center col-span-full py-8">Carga datos primero</p>';
-                return;
-            }
-            const d = STATE.datos;
-            const emociones = [
-                { name: 'Ira', color: '#ef4444', icon: '😡' }, { name: 'Miedo', color: '#8b5cf6', icon: '😨' },
-                { name: 'Tristeza', color: '#3b82f6', icon: '😢' }, { name: 'Alegría', color: '#10b981', icon: '😊' },
-                { name: 'Asco', color: '#059669', icon: '🤢' }, { name: 'Sorpresa', color: '#f59e0b', icon: '😲' },
-                { name: 'Frustración', color: '#f97316', icon: '😤' }, { name: 'Indignación', color: '#dc2626', icon: '🤬' }
-            ];
-            const emoCount = {};
-            d.forEach(r => { emoCount[r._analisis.emocion] = (emoCount[r._analisis.emocion] || 0) + 1; });
-            document.getElementById('emotionWheel').innerHTML = emociones.map(e => `
-                <div class="emotion-card glass rounded-xl p-4 text-center" style="border-top: 3px solid ${e.color}">
-                    <span class="text-3xl">${e.icon}</span>
-                    <h4 class="font-bold text-white mt-2">${e.name}</h4>
-                    <p class="text-2xl font-black mt-2" style="color: ${e.color}">${emoCount[e.name] || 0}</p>
-                </div>
-            `).join('');
-            
-            const ctxDist = document.getElementById('chartEmocionDist');
-            if (ctxDist) {
-                if (STATE.graficos.emocionDist) STATE.graficos.emocionDist.destroy();
-                STATE.graficos.emocionDist = new Chart(ctxDist, {
-                    type: 'bar',
-                    data: { labels: Object.keys(emoCount), datasets: [{ data: Object.values(emoCount), backgroundColor: Object.keys(emoCount).map(e => emociones.find(x => x.name === e)?.color || '#3b82f6'), borderRadius: 8 }] },
-                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { ticks: { color: '#93c5fd' } }, x: { ticks: { color: '#93c5fd' } } } }
-                });
-            }
-        }
-        
-        function renderizarCentroCrisis() {
-            if (!STATE.datos.length) {
-                document.getElementById('crisisStats').innerHTML = '<p class="text-blue-300/50 text-center col-span-full py-8">Carga datos primero</p>';
-                return;
-            }
-            const d = STATE.datos;
-            const crisis = STATE.crisisAlerts;
-            document.getElementById('crisisStats').innerHTML = `
-                <div class="glass rounded-xl p-4 text-center"><p class="text-3xl font-black text-red-400">${crisis.length}</p><p class="text-xs text-blue-300/50">Crisis</p></div>
-                <div class="glass rounded-xl p-4 text-center"><p class="text-3xl font-black text-orange-400">${d.filter(r => r._analisis.intensidad >= 8).length}</p><p class="text-xs text-blue-300/50">Alta Intensidad</p></div>
-                <div class="glass rounded-xl p-4 text-center"><p class="text-3xl font-black text-yellow-400">${STATE.falsosNeutrales.length}</p><p class="text-xs text-blue-300/50">Corregidos</p></div>
-            `;
-            
-            document.getElementById('crisisAlertsList').innerHTML = crisis.length > 0 ? crisis.map(c => `
-                <div class="crisis-alert glass rounded-xl p-4">
-                    <p class="font-bold text-white">${c['User Name']}</p>
-                    <p class="text-sm text-blue-100/70 mt-1">${c['Full Text']}</p>
-                    <span class="badge badge-neg mt-2">${c._analisis.sentimiento} | Intensidad: ${c._analisis.intensidad}/10</span>
-                </div>
-            `).join('') : '<p class="text-blue-300/50 text-center py-8">✅ No hay crisis activas</p>';
-        }
-        
-        function renderizarNarrativas() {
-            if (!STATE.datos.length) { document.getElementById('narrativasList').innerHTML = '<p class="text-blue-300/50 text-center py-8">Carga datos primero</p>'; return; }
-            const d = STATE.datos;
-            const narrativas = {};
-            d.forEach(r => {
-                const tema = r._analisis.tema;
-                if (!narrativas[tema]) narrativas[tema] = { positivo: 0, negativo: 0, neutral: 0 };
-                narrativas[tema][r._analisis.sentimiento.toLowerCase()]++;
-            });
-            document.getElementById('narrativasList').innerHTML = Object.entries(narrativas).map(([tema, data]) => `
-                <div class="glass rounded-xl p-4">
-                    <h4 class="font-bold text-white">${tema}</h4>
-                    <div class="flex gap-3 mt-2 text-xs">
-                        <span class="text-red-400">🔴 ${data.negativo}</span>
-                        <span class="text-yellow-400">🟡 ${data.neutral}</span>
-                        <span class="text-green-400">🟢 ${data.positivo}</span>
-                    </div>
-                </div>
-            `).join('');
-        }
-        
-        function renderizarInfluencia() {
-            if (!STATE.datos.length) { document.getElementById('influencersList').innerHTML = '<p class="text-blue-300/50 text-center col-span-full py-8">Carga datos primero</p>'; return; }
-            const d = STATE.datos;
-            const influencers = d.map(r => ({
-                name: r['User Name'] || 'Anónimo',
-                screenName: r['User Screen Name'] || '',
-                engagement: (parseInt(r['Favorite Count'] || 0) + parseInt(r['Retweet Count'] || 0) * 2),
-            })).sort((a, b) => b.engagement - a.engagement).slice(0, 6);
-            
-            document.getElementById('influencersList').innerHTML = influencers.map((inf, i) => `
-                <div class="glass rounded-xl p-4 text-center" style="border-top: 3px solid ${i === 0 ? '#f59e0b' : i === 1 ? '#c0c0c0' : i === 2 ? '#cd7f32' : '#3b82f6'}">
-                    <span class="text-2xl">${i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : '👤'}</span>
-                    <h4 class="font-bold text-white mt-1">${inf.name}</h4>
-                    <p class="text-xs text-blue-300/50">@${inf.screenName}</p>
-                    <p class="text-lg font-black text-blue-400 mt-2">${inf.engagement.toLocaleString()}</p>
-                </div>
-            `).join('');
-            
-            document.getElementById('topInfluencers').innerHTML = influencers.map((inf, i) => `
-                <div class="glass rounded-lg p-3 flex justify-between items-center">
-                    <span class="text-white text-sm font-semibold">${i+1}. ${inf.name}</span>
-                    <span class="text-sm font-bold text-blue-400">${inf.engagement.toLocaleString()} pts</span>
-                </div>
-            `).join('');
-        }
-        
-        function generarStory(tipo) {
-            if (!STATE.datos.length) return alert('No hay datos');
-            const d = STATE.datos;
-            const output = document.getElementById('storyOutput');
-            output.classList.remove('hidden');
-            const negCount = d.filter(r => r._analisis.sentimiento === 'Negativo').length;
-            output.innerHTML = `
-                <div class="space-y-4">
-                    <h3 class="text-lg font-bold text-white">📖 ${tipo === 'semanal' ? 'Story Semanal' : 'Story de Crisis'}</h3>
-                    <div class="glass rounded-xl p-5">
-                        <p class="text-blue-200">Total: <strong class="text-white">${d.length}</strong> | Negativos: <strong class="text-red-400">${negCount}</strong> (${((negCount/d.length)*100).toFixed(1)}%)</p>
-                        <p class="text-blue-200 mt-2">Crisis: <strong class="text-red-400">${STATE.crisisAlerts.length}</strong> | Falsos neutrales corregidos: <strong class="text-orange-400">${STATE.falsosNeutrales.length}</strong></p>
-                    </div>
-                </div>
-            `;
-            output.scrollIntoView({ behavior: 'smooth' });
-        }
-        
-        function renderizarColaboracion() {
-            if (!STATE.datos.length) { document.getElementById('teamStats').innerHTML = '<p class="text-blue-300/50 text-center col-span-full py-8">Carga datos primero</p>'; return; }
-            const d = STATE.datos;
-            const pendientes = d.filter(r => r._analisis.necesitaRespuesta).length;
-            const urgentes = d.filter(r => r._analisis.prioridad === 'Alta').length;
-            document.getElementById('teamStats').innerHTML = `
-                <div class="glass rounded-xl p-4 text-center"><p class="text-3xl font-black text-blue-400">${d.length}</p><p class="text-xs text-blue-300/50">Total</p></div>
-                <div class="glass rounded-xl p-4 text-center"><p class="text-3xl font-black text-yellow-400">${pendientes}</p><p class="text-xs text-blue-300/50">Pendientes</p></div>
-                <div class="glass rounded-xl p-4 text-center"><p class="text-3xl font-black text-red-400">${urgentes}</p><p class="text-xs text-blue-300/50">Urgentes</p></div>
-            `;
-            
-            const asignaciones = d.filter(r => r._analisis.necesitaRespuesta).slice(0, 10);
-            document.getElementById('collabList').innerHTML = asignaciones.length > 0 ? asignaciones.map(c => `
-                <div class="glass rounded-xl p-4 flex justify-between items-center">
-                    <div>
-                        <span class="font-semibold text-white text-sm">${c['User Name']}</span>
-                        <p class="text-xs text-blue-100/60">${(c['Full Text']||'').substring(0, 80)}...</p>
-                    </div>
-                    <span class="badge ${c._analisis.prioridad==='Alta'?'badge-neg':'badge-neu'}">${c._analisis.prioridad}</span>
-                </div>
-            `).join('') : '<p class="text-blue-300/50 text-center py-8">✅ Sin pendientes</p>';
         }
         
         // ============================================
@@ -1101,24 +856,39 @@ NUEVAS CATEGORÍAS DE TEMAS:
             const c = STATE.datos.find(r => (r['Tweet Id'] || r['tweet_id']) === id);
             if (!c) return;
             const a = c._analisis;
+            
             document.getElementById('detalleContenido').innerHTML = `
                 <div class="space-y-4">
-                    ${a.esCrisis ? '<div class="bg-red-500/10 border border-red-500/30 rounded-xl p-3 pulse-crisis"><p class="text-red-400 font-bold">🚨 CRISIS</p></div>' : ''}
-                    ${a.esFalsoNeutral ? '<div class="bg-orange-500/10 border border-orange-500/30 rounded-xl p-3"><p class="text-orange-400 font-bold">🛡️ FALSO NEUTRAL CORREGIDO</p></div>' : ''}
+                    <div class="ia-thinking rounded-xl p-4 border border-purple-500/30">
+                        <div class="flex items-center space-x-2 mb-2">
+                            <span class="text-2xl">🧠</span>
+                            <span class="font-bold text-purple-300">${a.fuente}</span>
+                            <span class="text-xs text-purple-400">${Math.round((a.confianza||0.9)*100)}% confianza</span>
+                        </div>
+                    </div>
+                    
                     <div class="glass rounded-xl p-4">
                         <h3 class="font-bold text-white">${c['User Name']}</h3>
                         <p class="text-sm text-blue-300/50">@${c['User Screen Name'] || 'usuario'}</p>
                         <p class="mt-3 text-white">${c['Full Text']}</p>
                     </div>
+                    
                     <div class="grid grid-cols-2 gap-2">
-                        <div class="glass rounded-lg p-3 text-center"><p class="text-xs text-blue-300/50">Sentimiento</p><p class="text-lg font-bold ${a.sentimiento==='Negativo'?'text-red-400':'text-green-400'}">${a.sentimiento}</p></div>
-                        <div class="glass rounded-lg p-3 text-center"><p class="text-xs text-blue-300/50">Emoción</p><p class="text-lg font-bold text-purple-400">${a.emocion}</p></div>
-                        <div class="glass rounded-lg p-3 text-center"><p class="text-xs text-blue-300/50">Intensidad</p><p class="text-lg font-bold ${a.intensidad>=7?'text-red-400':'text-blue-400'}">${a.intensidad}/10</p></div>
+                        <div class="glass rounded-lg p-3 text-center"><p class="text-xs text-blue-300/50">Sentimiento</p><p class="text-lg font-bold ${a.sentimiento==='Negativo'?'text-red-400':a.sentimiento==='Positivo'?'text-green-400':'text-yellow-400'}">${a.sentimiento}</p></div>
                         <div class="glass rounded-lg p-3 text-center"><p class="text-xs text-blue-300/50">Tipo</p><p class="text-lg font-bold text-cyan-400">${a.tipo}</p></div>
+                        <div class="glass rounded-lg p-3 text-center"><p class="text-xs text-blue-300/50">Tema</p><p class="text-lg font-bold text-purple-400">${a.tema}</p></div>
+                        <div class="glass rounded-lg p-3 text-center"><p class="text-xs text-blue-300/50">Prioridad</p><p class="text-lg font-bold ${a.prioridad==='Alta'?'text-red-400':'text-yellow-400'}">${a.prioridad}</p></div>
                     </div>
-                    <div class="glass rounded-xl p-4"><h4 class="font-bold text-white text-sm">📝 Razones</h4><p class="text-blue-200 text-sm">${(a.razones||[]).join('; ') || a.resumen}</p></div>
+                    
+                    <div class="glass rounded-xl p-4">
+                        <h4 class="font-bold text-white text-sm mb-2">🧠 Razonamiento de la IA</h4>
+                        <p class="text-blue-200 text-sm">${a.razonamiento}</p>
+                    </div>
+                    
+                    ${a.errorIA ? `<div class="bg-red-500/10 border border-red-500/30 rounded-xl p-3"><p class="text-red-400 text-xs">⚠️ Error: ${a.errorIA}</p></div>` : ''}
                 </div>
             `;
+            
             document.getElementById('detailPanel').classList.remove('translate-x-full');
         }
         
@@ -1131,12 +901,15 @@ NUEVAS CATEGORÍAS DE TEMAS:
         function generarReporte(tipo) {
             if (!STATE.datos.length) return alert('No hay datos');
             const d = STATE.datos;
-            const titulos = { diario: 'Diario', semanal: 'Semanal', mensual: 'Mensual', story: 'Story' };
+            const titulos = { diario: 'Diario', semanal: 'Semanal', mensual: 'Mensual' };
+            const neg = d.filter(r => r._analisis.sentimiento === 'Negativo').length;
+            
             document.getElementById('reporteOutput').classList.remove('hidden');
             document.getElementById('reporteOutput').innerHTML = `
-                <h3 class="text-lg font-bold text-white mb-4">📊 Reporte ${titulos[tipo]}</h3>
-                <div class="glass rounded-xl p-4 mb-4">
-                    <p class="text-blue-200 text-sm">Total: <strong class="text-white">${d.length}</strong> | Negativos: <strong class="text-red-400">${d.filter(r=>r._analisis.sentimiento==='Negativo').length}</strong> | Corregidos: <strong class="text-orange-400">${STATE.falsosNeutrales.length}</strong></p>
+                <h3 class="text-lg font-bold text-white mb-3">📊 Reporte ${titulos[tipo] || 'Personalizado'}</h3>
+                <div class="grid grid-cols-2 gap-3 mb-4">
+                    <div class="glass rounded-lg p-3 text-center"><p class="text-2xl font-black text-white">${d.length}</p><p class="text-xs text-blue-300/50">Total</p></div>
+                    <div class="glass rounded-lg p-3 text-center"><p class="text-2xl font-black text-red-400">${neg}</p><p class="text-xs text-blue-300/50">Negativos (${((neg/d.length)*100).toFixed(1)}%)</p></div>
                 </div>
                 <button onclick="exportarReporte()" class="px-4 py-2 btn-primary text-sm">📥 Exportar CSV</button>
             `;
@@ -1144,14 +917,14 @@ NUEVAS CATEGORÍAS DE TEMAS:
         }
         
         function exportarReporte() {
-            let csv = 'Fecha,Usuario,Comentario,Sentimiento,Emoción,Intensidad,Tipo,Tema,Prioridad,Riesgo,Crisis,FalsoNeutral\n';
+            let csv = 'Fecha,Usuario,Comentario,Sentimiento,Tipo,Tema,Prioridad,Razonamiento IA,Confianza\n';
             STATE.datos.forEach(r => {
-                csv += `"${r['Created At']}","${r['User Name']}","${(r['Full Text']||'').replace(/"/g,'""')}","${r._analisis.sentimiento}","${r._analisis.emocion}","${r._analisis.intensidad}","${r._analisis.tipo}","${r._analisis.tema}","${r._analisis.prioridad}","${r._analisis.riesgo}","${r._analisis.esCrisis}","${r._analisis.esFalsoNeutral}"\n`;
+                csv += `"${r['Created At']}","${r['User Name']}","${(r['Full Text']||'').replace(/"/g,'""')}","${r._analisis.sentimiento}","${r._analisis.tipo}","${r._analisis.tema}","${r._analisis.prioridad}","${r._analisis.razonamiento}","${r._analisis.confianza}"\n`;
             });
             const blob = new Blob([csv], { type: 'text/csv' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
-            a.href = url; a.download = `reporte-zeroescape-${Date.now()}.csv`;
+            a.href = url; a.download = `sentinel-ia-${Date.now()}.csv`;
             a.click(); URL.revokeObjectURL(url);
         }
         
@@ -1160,32 +933,17 @@ NUEVAS CATEGORÍAS DE TEMAS:
         // ============================================
         
         function navigateTo(view) {
-            const vistas = ['dashboard', 'emotions', 'crisis', 'narratives', 'influence', 'stories', 'collab', 'reports', 'config'];
-            vistas.forEach(v => { const el = document.getElementById(`view-${v}`); if (el) el.classList.add('hidden'); });
+            document.querySelectorAll('[id^="view-"]').forEach(el => el.classList.add('hidden'));
             const target = document.getElementById(`view-${view}`);
-            if (target) { target.classList.remove('hidden'); target.classList.add('animate-in'); }
+            if (target) target.classList.remove('hidden');
+            
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            const navItems = document.querySelectorAll('.nav-item');
-            const idx = vistas.indexOf(view);
-            if (idx >= 0 && idx < navItems.length) navItems[idx].classList.add('active');
-            
-            const titles = { dashboard: 'Dashboard', emotions: 'Lab Emocional', crisis: 'Centro Crisis', narratives: 'Narrativas', influence: 'Influencia', stories: 'Stories', collab: 'Colaboración', reports: 'Reportes', config: 'Config' };
-            document.getElementById('header-title').textContent = titles[view] || 'Dashboard';
-            STATE.vistaActual = view;
-            
-            if (STATE.datos.length > 0) {
-                setTimeout(() => {
-                    if (view === 'emotions') renderizarLabEmocional();
-                    if (view === 'crisis') renderizarCentroCrisis();
-                    if (view === 'narratives') renderizarNarrativas();
-                    if (view === 'influence') renderizarInfluencia();
-                    if (view === 'collab') renderizarColaboracion();
-                }, 100);
-            }
+            const items = document.querySelectorAll('.nav-item');
+            const idx = ['dashboard', 'reports', 'config'].indexOf(view);
+            if (idx >= 0 && items[idx]) items[idx].classList.add('active');
             
             if (view === 'config') {
                 document.getElementById('cfgApiKey').value = STATE.apiKey;
-                document.getElementById('cfgPrompt').value = STATE.prompt;
             }
             
             if (window.innerWidth < 1024) toggleSidebar();
@@ -1193,25 +951,25 @@ NUEVAS CATEGORÍAS DE TEMAS:
         
         function guardarAPIKey() {
             const key = document.getElementById('apiKey').value.trim();
-            if (key) { STATE.apiKey = key; localStorage.setItem('sentinel_v12_key', key); alert('✅ Conectado'); }
+            if (key) { STATE.apiKey = key; localStorage.setItem('sentinel_v14_key', key); alert('✅ IA Conectada - Gemini analizará con libertad pensativa'); }
         }
         
         function guardarConfig() {
             const key = document.getElementById('cfgApiKey').value.trim();
-            const prompt = document.getElementById('cfgPrompt').value.trim();
-            if (key) { STATE.apiKey = key; localStorage.setItem('sentinel_v12_key', key); }
-            if (prompt) { STATE.prompt = prompt; localStorage.setItem('sentinel_v12_prompt', prompt); }
-            alert('✅ Guardado');
+            if (key) { STATE.apiKey = key; localStorage.setItem('sentinel_v14_key', key); }
+            alert('✅ Configuración guardada');
         }
         
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); }
         
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('fecha-header').textContent = new Date().toLocaleDateString('es-PE', { weekday: 'long', day: 'numeric', month: 'long' });
-            if (STATE.apiKey) { document.getElementById('apiKey').value = STATE.apiKey; document.getElementById('cfgApiKey').value = STATE.apiKey; }
-            document.getElementById('cfgPrompt').value = STATE.prompt;
+            if (STATE.apiKey) document.getElementById('apiKey').value = STATE.apiKey;
             document.addEventListener('keydown', e => { if (e.key === 'Escape') cerrarDetalle(); });
-            console.log('🛡️ Sentinel AI v12.0 - COMPLETO + ZERO ESCAPE');
+            console.log('🧠 Sentinel AI v14.0 - LIBERTAD PENSATIVA');
+            console.log('✅ La IA clasifica sin restricciones');
+            console.log('✅ Gemini usa su comprensión del lenguaje natural');
+            console.log('✅ Razonamiento visible en cada análisis');
         });
     </script>
 </body>
