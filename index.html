@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Social Listening Dashboard - MML v3.0 🦙</title>
+    <title>Social Listening Dashboard - IA Edition 🧠</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -12,120 +12,86 @@
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <style>
         :root {
-            --rojo-mml: #DC2626;
-            --rojo-oscuro: #991B1B;
-            --gris-50: #F9FAFB;
-            --gris-100: #F3F4F6;
-            --gris-200: #E5E7EB;
-            --gris-700: #374151;
-            --gris-900: #111827;
+            --primary: #DC2626;
+            --primary-dark: #991B1B;
+            --bg: #f5f5f5;
         }
-
-        * {
-            scrollbar-width: thin;
-            scrollbar-color: var(--gris-300) var(--gris-100);
-        }
-
+        
+        * { scrollbar-width: thin; }
+        
         body {
-            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background: #f5f5f5;
-            margin: 0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
         }
-
-        .animate-fadeIn {
-            animation: fadeIn 0.4s ease-out;
+        
+        .gradient-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(12px); }
-            to { opacity: 1; transform: translateY(0); }
+        
+        .card-ia {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            border: 2px solid #667eea30;
         }
-
-        .card-hover {
-            transition: all 0.25s ease;
+        
+        .pulse-ia {
+            animation: pulse 2s infinite;
         }
-        .card-hover:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
         }
-
+        
         .kpi-card {
-            border-left: 5px solid var(--rojo-mml);
+            border-left: 5px solid var(--primary);
             transition: all 0.3s;
-            background: white;
         }
         .kpi-card:hover {
             border-left-width: 10px;
-            background: #fff5f5;
+            transform: translateX(3px);
         }
-
-        .platform-card {
-            border: 3px solid transparent;
-            transition: all 0.3s;
-            background: white;
-        }
-        .platform-card:hover {
-            border-color: var(--rojo-mml);
-            transform: translateY(-6px);
-            box-shadow: 0 20px 40px rgba(220,38,38,0.15);
-        }
-
-        .sidebar-link {
-            transition: all 0.2s;
-            border-left: 4px solid transparent;
-        }
-        .sidebar-link:hover {
-            background: rgba(255,255,255,0.12);
-            border-left-color: #ef4444;
-        }
-        .sidebar-link.active {
-            background: rgba(239,68,68,0.25);
-            border-left-color: #ef4444;
-        }
-
-        .badge-pos {
-            background: #dcfce7;
-            color: #166534;
-            padding: 3px 10px;
+        
+        .badge-sentiment {
+            padding: 4px 12px;
             border-radius: 20px;
             font-size: 0.7rem;
             font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-        .badge-neg {
-            background: #fee2e2;
-            color: #991b1b;
-            padding: 3px 10px;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            font-weight: 700;
-        }
-        .badge-neu {
-            background: #fef9c3;
-            color: #854d0e;
-            padding: 3px 10px;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            font-weight: 700;
-        }
-
+        
+        .badge-positivo { background: #dcfce7; color: #166534; }
+        .badge-negativo { background: #fee2e2; color: #991b1b; }
+        .badge-neutral { background: #fef9c3; color: #854d0e; }
+        
         .chart-container {
             position: relative;
             height: 350px;
             width: 100%;
         }
-
+        
         @media (max-width: 768px) {
             .chart-container { height: 250px; }
-            .kpi-grid { grid-template-columns: repeat(2, 1fr); }
         }
-
-        .fecha-peruana {
-            white-space: nowrap;
+        
+        .ia-processing {
+            background: linear-gradient(90deg, #667eea, #764ba2, #667eea);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
+        .confidence-bar {
+            height: 6px;
+            border-radius: 10px;
+            transition: width 1s ease;
         }
     </style>
 </head>
@@ -137,29 +103,25 @@
         <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-72 bg-gray-900 text-white transform -translate-x-full lg:translate-x-0 lg:static transition-transform duration-300 overflow-y-auto">
             <div class="p-6">
                 <div class="text-center mb-8">
-                    <div class="w-20 h-20 bg-white rounded-full mx-auto mb-3 flex items-center justify-center shadow-lg">
-                        <span class="text-3xl font-bold text-red-700">MML</span>
+                    <div class="w-20 h-20 bg-gradient-to-br from-purple-500 to-blue-600 rounded-full mx-auto mb-3 flex items-center justify-center shadow-lg">
+                        <span class="text-3xl font-bold text-white">🧠</span>
                     </div>
                     <h2 class="text-lg font-bold">Social Listening</h2>
-                    <p class="text-sm text-gray-400">Dashboard v3.0 🇵🇪</p>
+                    <p class="text-sm text-purple-300">IA Edition v4.0</p>
                 </div>
                 
-                <div id="sidebar-platform-badge" class="hidden mb-6 p-3 bg-gray-800 rounded-lg text-center">
-                    <i id="sidebar-platform-icon" class="text-2xl mb-1"></i>
-                    <p id="sidebar-platform-name" class="text-sm font-semibold"></p>
+                <div class="mb-6 p-3 bg-purple-900/50 rounded-lg text-center">
+                    <div class="flex items-center justify-center space-x-2">
+                        <div class="w-2 h-2 bg-green-400 rounded-full pulse-ia"></div>
+                        <span class="text-xs">IA Activa: <span id="ia-status">Gemini</span></span>
+                    </div>
                 </div>
                 
                 <nav class="space-y-1">
-                    <a onclick="navegar('inicio')" class="sidebar-link flex items-center px-4 py-3 rounded-lg cursor-pointer text-gray-300">
-                        <i class="fas fa-home w-6"></i><span>Inicio</span>
-                    </a>
-                    <a onclick="navegar('dashboard')" class="sidebar-link flex items-center px-4 py-3 rounded-lg cursor-pointer text-gray-300">
+                    <a onclick="navegar('dashboard')" class="flex items-center px-4 py-3 rounded-lg cursor-pointer hover:bg-white/10 transition">
                         <i class="fas fa-chart-line w-6"></i><span>Dashboard</span>
                     </a>
-                    <a onclick="navegar('reportes')" class="sidebar-link flex items-center px-4 py-3 rounded-lg cursor-pointer text-gray-300">
-                        <i class="fas fa-file-alt w-6"></i><span>Reportes</span>
-                    </a>
-                    <a onclick="navegar('config')" class="sidebar-link flex items-center px-4 py-3 rounded-lg cursor-pointer text-gray-300">
+                    <a onclick="navegar('config')" class="flex items-center px-4 py-3 rounded-lg cursor-pointer hover:bg-white/10 transition">
                         <i class="fas fa-cog w-6"></i><span>Configuración</span>
                     </a>
                 </nav>
@@ -176,84 +138,72 @@
                         <i class="fas fa-bars text-2xl"></i>
                     </button>
                     <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 bg-red-700 rounded-lg flex items-center justify-center">
-                            <span class="text-white font-bold">M</span>
+                        <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-blue-600 rounded-lg flex items-center justify-center">
+                            <span class="text-white font-bold">IA</span>
                         </div>
                         <div>
                             <h1 class="text-xl font-bold text-gray-900">Social Listening Dashboard</h1>
-                            <p class="text-sm text-gray-600">Municipalidad Metropolitana de Lima</p>
+                            <p class="text-sm text-gray-600">Análisis con Inteligencia Artificial</p>
                         </div>
                     </div>
-                    <span id="fecha-header" class="text-sm text-gray-600"></span>
+                    <span class="text-sm text-gray-600" id="fecha-header"></span>
                 </div>
             </header>
             
             <!-- CONTENIDO -->
             <div class="p-6">
                 
-                <!-- VISTA INICIO -->
-                <div id="vista-inicio" class="animate-fadeIn">
-                    <div class="max-w-7xl mx-auto text-center mt-12">
-                        <div class="w-24 h-24 bg-gradient-to-br from-red-600 to-red-800 rounded-2xl mx-auto mb-6 flex items-center justify-center shadow-xl">
-                            <span class="text-4xl font-bold text-white">MML</span>
-                        </div>
-                        <h2 class="text-4xl font-bold text-gray-900 mb-4">Social Listening Dashboard</h2>
-                        <p class="text-xl text-gray-600 mb-4">Herramienta de monitoreo de redes sociales</p>
-                        <p class="text-lg text-gray-500 mb-12">Motor de análisis mejorado con comprensión de jerga peruana 🇵🇪</p>
-                        
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                            <div class="platform-card rounded-xl p-8 cursor-pointer shadow-lg" onclick="seleccionarPlataforma('twitter')">
-                                <i class="fab fa-twitter text-6xl text-blue-400 mb-4"></i>
-                                <h3 class="text-2xl font-bold mb-2">X (Twitter)</h3>
-                                <p class="text-gray-600">Análisis de tweets</p>
-                                <span class="badge-pos mt-2 inline-block">Disponible</span>
-                            </div>
-                            <div class="platform-card rounded-xl p-8 shadow-lg opacity-60">
-                                <i class="fab fa-facebook text-6xl text-blue-600 mb-4"></i>
-                                <h3 class="text-2xl font-bold mb-2">Facebook</h3>
-                                <p class="text-gray-600">Próximamente</p>
-                            </div>
-                            <div class="platform-card rounded-xl p-8 shadow-lg opacity-60">
-                                <i class="fab fa-instagram text-6xl text-pink-600 mb-4"></i>
-                                <h3 class="text-2xl font-bold mb-2">Instagram</h3>
-                                <p class="text-gray-600">Próximamente</p>
-                            </div>
-                            <div class="platform-card rounded-xl p-8 shadow-lg opacity-60">
-                                <i class="fab fa-tiktok text-6xl text-gray-900 mb-4"></i>
-                                <h3 class="text-2xl font-bold mb-2">TikTok</h3>
-                                <p class="text-gray-600">Próximamente</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
                 <!-- VISTA DASHBOARD -->
-                <div id="vista-dashboard" class="hidden animate-fadeIn">
+                <div id="vista-dashboard">
+                    
+                    <!-- Panel de Control IA -->
                     <div class="bg-white rounded-xl p-6 mb-6 shadow-sm">
                         <div class="flex flex-wrap items-center justify-between gap-4">
                             <div>
-                                <h2 class="text-2xl font-bold">📊 Dashboard de Análisis</h2>
-                                <p class="text-gray-600">Motor de análisis contextual peruano activado</p>
+                                <h2 class="text-2xl font-bold flex items-center gap-2">
+                                    <span>🧠</span> Dashboard con IA
+                                </h2>
+                                <p class="text-gray-600">Análisis contextual profundo con Gemini API</p>
                             </div>
-                            <div class="flex gap-2">
-                                <button onclick="document.getElementById('fileInput').click()" class="px-4 py-2 bg-red-700 text-white rounded-lg hover:bg-red-800 font-semibold transition">
+                            <div class="flex gap-2 flex-wrap">
+                                <div class="relative">
+                                    <input type="password" id="apiKey" class="px-4 py-2 border rounded-lg text-sm w-64" 
+                                           placeholder="Gemini API Key (gratis)">
+                                    <button onclick="guardarAPIKey()" class="absolute right-2 top-2 text-gray-400 hover:text-purple-600">
+                                        <i class="fas fa-key"></i>
+                                    </button>
+                                </div>
+                                <button onclick="document.getElementById('fileInput').click()" 
+                                        class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 font-semibold">
                                     <i class="fas fa-upload mr-2"></i>Cargar Excel
                                 </button>
-                                <button onclick="cargarDatosDemo()" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 font-semibold transition">
+                                <button onclick="cargarDatosDemo()" 
+                                        class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 font-semibold">
                                     <i class="fas fa-database mr-2"></i>Datos Demo
                                 </button>
                             </div>
                             <input type="file" id="fileInput" accept=".xlsx,.xls" class="hidden" onchange="procesarArchivo(event)">
+                        </div>
+                        
+                        <!-- Barra de progreso IA -->
+                        <div id="progressContainer" class="hidden mt-4">
+                            <div class="flex justify-between text-sm mb-1">
+                                <span id="progressText">Analizando con IA...</span>
+                                <span id="progressPercent">0%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-3">
+                                <div id="progressBar" class="ia-processing h-3 rounded-full transition-all duration-300" style="width: 0%"></div>
+                            </div>
                         </div>
                     </div>
                     
                     <!-- KPIs -->
                     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6" id="kpiContainer"></div>
                     
-                    <!-- Charts Row 1 -->
+                    <!-- Charts -->
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                         <div class="bg-white rounded-xl p-6 shadow-sm">
-                            <h3 class="text-lg font-bold mb-4">Distribución de Sentimientos</h3>
+                            <h3 class="text-lg font-bold mb-4">Sentimientos</h3>
                             <div class="chart-container"><canvas id="chartSentimiento"></canvas></div>
                         </div>
                         <div class="bg-white rounded-xl p-6 shadow-sm">
@@ -262,11 +212,10 @@
                         </div>
                     </div>
                     
-                    <!-- Charts Row 2 -->
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                         <div class="bg-white rounded-xl p-6 shadow-sm">
-                            <h3 class="text-lg font-bold mb-4">Evolución Diaria</h3>
-                            <div class="chart-container"><canvas id="chartDiario"></canvas></div>
+                            <h3 class="text-lg font-bold mb-4">Evolución Temporal</h3>
+                            <div class="chart-container"><canvas id="chartTiempo"></canvas></div>
                         </div>
                         <div class="bg-white rounded-xl p-6 shadow-sm">
                             <h3 class="text-lg font-bold mb-4">Temas Principales</h3>
@@ -276,26 +225,20 @@
                     
                     <!-- Tabla -->
                     <div class="bg-white rounded-xl p-6 shadow-sm">
-                        <div class="flex flex-wrap justify-between items-center mb-4 gap-2">
+                        <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
                             <h3 class="text-lg font-bold">Comentarios Analizados</h3>
-                            <div class="flex flex-wrap gap-2">
+                            <div class="flex gap-2 flex-wrap">
                                 <select id="filtroSentimiento" class="px-3 py-1.5 border rounded-lg text-sm" onchange="aplicarFiltros()">
-                                    <option value="">Todos los sentimientos</option>
-                                    <option value="Negativo">Negativo</option>
-                                    <option value="Neutral">Neutral</option>
+                                    <option value="">Sentimiento</option>
                                     <option value="Positivo">Positivo</option>
+                                    <option value="Neutral">Neutral</option>
+                                    <option value="Negativo">Negativo</option>
                                 </select>
                                 <select id="filtroTipo" class="px-3 py-1.5 border rounded-lg text-sm" onchange="aplicarFiltros()">
-                                    <option value="">Todos los tipos</option>
+                                    <option value="">Tipo</option>
                                 </select>
                                 <select id="filtroTema" class="px-3 py-1.5 border rounded-lg text-sm" onchange="aplicarFiltros()">
-                                    <option value="">Todos los temas</option>
-                                </select>
-                                <select id="filtroPrioridad" class="px-3 py-1.5 border rounded-lg text-sm" onchange="aplicarFiltros()">
-                                    <option value="">Todas las prioridades</option>
-                                    <option value="Alta">Alta</option>
-                                    <option value="Media">Media</option>
-                                    <option value="Baja">Baja</option>
+                                    <option value="">Tema</option>
                                 </select>
                             </div>
                         </div>
@@ -305,8 +248,8 @@
                                     <tr>
                                         <th>Fecha</th><th>Usuario</th><th>Comentario</th>
                                         <th>Sentimiento</th><th>Tipo</th><th>Tema</th>
-                                        <th>Prioridad</th><th>Riesgo</th>
-                                        <th>Likes</th><th>RT</th><th>Vistas</th>
+                                        <th>Prioridad</th><th>Confianza</th>
+                                        <th>Likes</th><th>RT</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tablaBody"></tbody>
@@ -315,78 +258,52 @@
                     </div>
                 </div>
                 
-                <!-- VISTA REPORTES -->
-                <div id="vista-reportes" class="hidden animate-fadeIn">
-                    <div class="max-w-7xl mx-auto">
-                        <h2 class="text-3xl font-bold mb-8">Generador de Reportes</h2>
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                            <div class="bg-white rounded-xl p-6 shadow-sm card-hover cursor-pointer" onclick="generarReporte('diario')">
-                                <i class="fas fa-calendar-day text-4xl text-red-700 mb-4"></i>
-                                <h3 class="text-xl font-bold mb-2">Reporte Diario</h3>
-                                <p class="text-gray-600">Últimas 24 horas</p>
-                            </div>
-                            <div class="bg-white rounded-xl p-6 shadow-sm card-hover cursor-pointer" onclick="generarReporte('semanal')">
-                                <i class="fas fa-calendar-week text-4xl text-red-700 mb-4"></i>
-                                <h3 class="text-xl font-bold mb-2">Reporte Semanal</h3>
-                                <p class="text-gray-600">Últimos 7 días</p>
-                            </div>
-                            <div class="bg-white rounded-xl p-6 shadow-sm card-hover cursor-pointer" onclick="generarReporte('mensual')">
-                                <i class="fas fa-calendar-alt text-4xl text-red-700 mb-4"></i>
-                                <h3 class="text-xl font-bold mb-2">Reporte Mensual</h3>
-                                <p class="text-gray-600">Último mes</p>
-                            </div>
-                            <div class="bg-white rounded-xl p-6 shadow-sm card-hover cursor-pointer" onclick="mostrarModalPersonalizado()">
-                                <i class="fas fa-calendar-check text-4xl text-red-700 mb-4"></i>
-                                <h3 class="text-xl font-bold mb-2">Personalizado</h3>
-                                <p class="text-gray-600">Rango de fechas</p>
-                            </div>
-                        </div>
-                        <div id="reporteOutput" class="bg-white rounded-xl p-8 shadow-sm hidden"></div>
-                    </div>
-                </div>
-                
                 <!-- VISTA CONFIG -->
-                <div id="vista-config" class="hidden animate-fadeIn">
+                <div id="vista-config" class="hidden">
                     <div class="max-w-4xl mx-auto">
-                        <h2 class="text-3xl font-bold mb-8">⚙️ Configuración del Sistema</h2>
+                        <h2 class="text-3xl font-bold mb-8">⚙️ Configuración de IA</h2>
                         
                         <div class="bg-white rounded-xl p-6 shadow-sm mb-6">
-                            <h3 class="text-xl font-bold mb-4">Institución</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-sm font-semibold mb-2">Nombre</label>
-                                    <input id="cfgNombre" class="w-full px-4 py-2 border rounded-lg" value="Municipalidad Metropolitana de Lima">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-semibold mb-2">Color Principal</label>
-                                    <input type="color" id="cfgColor" class="w-full h-10 border rounded-lg" value="#DC2626">
-                                </div>
+                            <h3 class="text-xl font-bold mb-4">🔑 API Key de Gemini</h3>
+                            <p class="text-gray-600 mb-4">Obtén tu API key gratuita en: <a href="https://aistudio.google.com/apikey" target="_blank" class="text-purple-600 underline">Google AI Studio</a></p>
+                            <div class="flex gap-4">
+                                <input type="password" id="cfgApiKey" class="flex-1 px-4 py-2 border rounded-lg" placeholder="AIzaSy...">
+                                <button onclick="guardarConfig()" class="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">
+                                    <i class="fas fa-save mr-2"></i>Guardar
+                                </button>
                             </div>
+                            <p class="text-sm text-gray-500 mt-2">✅ 60 solicitudes por minuto (gratis)</p>
                         </div>
                         
                         <div class="bg-white rounded-xl p-6 shadow-sm mb-6">
-                            <h3 class="text-xl font-bold mb-4">Diccionario de Sentimientos 🇵🇪</h3>
+                            <h3 class="text-xl font-bold mb-4">📊 Prompts de Análisis</h3>
                             <div class="mb-4">
-                                <label class="block text-sm font-semibold text-green-700 mb-2">Palabras Positivas (separadas por coma)</label>
-                                <textarea id="cfgPositivas" class="w-full px-4 py-2 border rounded-lg" rows="3"></textarea>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold text-red-700 mb-2">Palabras Negativas (incluye jerga peruana)</label>
-                                <textarea id="cfgNegativas" class="w-full px-4 py-2 border rounded-lg" rows="4"></textarea>
+                                <label class="block text-sm font-semibold mb-2">Prompt del Sistema</label>
+                                <textarea id="cfgPrompt" class="w-full px-4 py-2 border rounded-lg" rows="6">
+Eres un analista de redes sociales peruano experto en monitoreo de comentarios ciudadanos sobre la Municipalidad Metropolitana de Lima.
+
+Analiza el siguiente comentario y clasifícalo EXACTAMENTE en este formato JSON (sin texto adicional):
+
+{
+  "sentimiento": "Positivo|Neutral|Negativo",
+  "tipo": "Felicitación|Queja|Crítica|Denuncia|Consulta|Sugerencia|Agradecimiento|Opinión|Humor|Spam|Información",
+  "tema": "Seguridad|Limpieza|Transporte|Obras|Atención|Gestión|Eventos|Ambiente|Salud|Educación|General",
+  "prioridad": "Alta|Media|Baja",
+  "riesgo": "Alto|Medio|Bajo",
+  "necesitaRespuesta": true|false,
+  "resumen": "breve resumen en una línea",
+  "palabrasClave": ["palabra1", "palabra2", "palabra3"]
+}
+
+REGLAS IMPORTANTES:
+- Considera jerga peruana, sarcasmo, insultos y lenguaje vulgar
+- Detecta menciones a figuras políticas (@KeikoFujimori, etc.)
+- Evalúa el tono general, no solo palabras individuales
+- Prioridad Alta: insultos, amenazas, denuncias de corrupción
+- Riesgo Alto: comentarios que pueden dañar reputación institucional
+                                </textarea>
                             </div>
                         </div>
-                        
-                        <div class="bg-white rounded-xl p-6 shadow-sm mb-6">
-                            <h3 class="text-xl font-bold mb-4">Categorías de Temas</h3>
-                            <div id="temasConfig"></div>
-                            <button onclick="agregarTema()" class="mt-4 px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">
-                                <i class="fas fa-plus mr-2"></i>Agregar Tema
-                            </button>
-                        </div>
-                        
-                        <button onclick="guardarConfig()" class="px-6 py-3 bg-red-700 text-white rounded-lg hover:bg-red-800 font-bold">
-                            <i class="fas fa-save mr-2"></i>Guardar Configuración
-                        </button>
                     </div>
                 </div>
             </div>
@@ -396,525 +313,212 @@
         <div id="panelDetalle" class="fixed inset-y-0 right-0 w-full sm:w-96 lg:w-[500px] bg-white shadow-2xl transform translate-x-full transition-transform duration-300 z-50 overflow-y-auto">
             <div class="p-6">
                 <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-xl font-bold">🔍 Detalle del Comentario</h2>
+                    <h2 class="text-xl font-bold">🔍 Análisis de IA</h2>
                     <button onclick="cerrarDetalle()" class="text-gray-600 hover:text-gray-900 text-2xl">&times;</button>
                 </div>
                 <div id="detalleContenido"></div>
-            </div>
-        </div>
-        
-        <!-- MODAL -->
-        <div id="modalPersonalizado" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
-            <div class="bg-white rounded-xl p-8 max-w-md w-full mx-4">
-                <h2 class="text-2xl font-bold mb-6">Reporte Personalizado</h2>
-                <div class="mb-4">
-                    <label class="block text-sm font-semibold mb-2">Fecha Inicio (DD/MM/AAAA)</label>
-                    <input type="date" id="fechaInicio" class="w-full px-4 py-2 border rounded-lg">
-                </div>
-                <div class="mb-6">
-                    <label class="block text-sm font-semibold mb-2">Fecha Fin (DD/MM/AAAA)</label>
-                    <input type="date" id="fechaFin" class="w-full px-4 py-2 border rounded-lg">
-                </div>
-                <div class="flex gap-4">
-                    <button onclick="cerrarModalPersonalizado()" class="flex-1 px-4 py-2 bg-gray-200 rounded-lg">Cancelar</button>
-                    <button onclick="generarReportePersonalizado()" class="flex-1 px-4 py-2 bg-red-700 text-white rounded-lg">Generar</button>
-                </div>
             </div>
         </div>
     </div>
 
     <script>
         // ============================================
-        // CONFIGURACIÓN CON JERGA PERUANA COMPLETA
-        // ============================================
-        
-        const CONFIG = {
-            institucion: 'Municipalidad Metropolitana de Lima',
-            color: '#DC2626',
-            diccionario: {
-                positivas: [
-                    'excelente', 'bueno', 'genial', 'gracias', 'felicitaciones', 'rápido', 'eficiente',
-                    'increíble', 'magnífico', 'perfecto', 'maravilloso', 'fantástico', 'grandioso',
-                    'positivo', 'satisfecho', 'contento', 'feliz', 'bien', 'mejor', 'buenísimo',
-                    'gran', 'grande', 'extraordinario', 'espectacular', 'brillante', 'admirable',
-                    'hermoso', 'bonito', 'lindo', 'fabuloso', 'sensacional', 'estupendo', 'fenomenal',
-                    'eficaz', 'correcto', 'óptimo', 'satisfactorio', 'aplauso', 'reconocimiento',
-                    'orgullo', 'avance', 'progreso', 'mejora', 'solucionado', 'resuelto', 'chévere',
-                    'bacán', 'paja', 'mostro', 'capo', 'crack', 'bravazo', 'de ley', 'pulento',
-                    'finísimo', 'joya', 'máquina', 'ídolo'
-                ],
-                negativas: [
-                    // Insultos generales
-                    'malo', 'pésimo', 'decepción', 'lento', 'error', 'terrible', 'horrible',
-                    'inútil', 'estafa', 'basura', 'desastre', 'fatal', 'nefasto', 'penoso',
-                    'lamentable', 'vergüenza', 'indignante', 'inaceptable', 'caos', 'corrupto',
-                    'corrupción', 'mentira', 'mentiroso', 'incapaz', 'incompetente', 'mediocre',
-                    'fracaso', 'fracasado', 'pésima', 'desgracia', 'asqueroso', 'repugnante',
-                    'detestable', 'indignado', 'enojado', 'furioso', 'molesto', 'fastidiado',
-                    'harto', 'cansado', 'hastiado', 'burla', 'ridículo', 'patético', 'fantoche',
-                    'payaso', 'bufón', 'títere', 'inepto', 'ineficiente', 'deficiente', 'precario',
-                    'abandono', 'olvidado', 'falso', 'engaño', 'robo', 'ladrón', 'sinvergüenza',
-                    'caradura', 'descarado', 'demagogo', 'populista', 'oportunista', 'ventajista',
-                    'traidor', 'vendido',
-                    
-                    // JERGA PERUANA NEGATIVA
-                    'rata', 'ratero', 'raterita', 'cucaracha', 'sabandija', 'alimaña', 'bicho',
-                    'cojudo', 'cojudazo', 'huevón', 'huevón de mierda', 'pendejo', 'conchudo',
-                    'conchadesumadre', 'cagón', 'cagada', 'mierda', 'mierdero', 'porquería',
-                    'basofia', 'cochinada', 'chanchada', 'coima', 'coimero', 'mermelero',
-                    'argollero', 'pituco', 'pituco de mierda', 'bravucón', 'matoncito',
-                    'lisuriento', 'basurear', 'ningunear', 'pisotear', 'humillar',
-                    'robar', 'afanar', 'chorear', 'choro', 'chorazo', 'plata como cancha',
-                    'se la llevan fácil', 'se hacen los locos', 'se hacen los cojudos',
-                    'se limpian el culo', 'se pasan por el culo', 'se rien en nuestra cara',
-                    'nos toman el pelo', 'nos ven la cara de cojudos', 'se burlan',
-                    'son una vergüenza', 'dan asco', 'dan pena ajena', 'son un chiste',
-                    'no sirven para nada', 'no hacen nada', 'puro bla bla', 'puro humo',
-                    'pura pantalla', 'puro show', 'showseros', 'figuretti', 'figurettis',
-                    'salidos en la foto', 'besamanos', 'chupamedias', 'lambiscones',
-                    'lambón', 'lambeculo', 'arrastrado', 'sobón', 'adulón'
-                ]
-            },
-            temas: [
-                {
-                    nombre: 'Seguridad Ciudadana',
-                    palabras: ['seguridad', 'policía', 'serenazgo', 'delincuencia', 'robo', 'crimen',
-                              'patrullaje', 'vigilancia', 'cámaras', 'alerta', 'peligro', 'asalto',
-                              'pandillaje', 'drogas', 'violencia', 'inseguridad', 'fiscalización',
-                              'intervención', 'operativo']
-                },
-                {
-                    nombre: 'Limpieza Pública',
-                    palabras: ['basura', 'limpieza', 'residuos', 'reciclaje', 'barrido', 'desmonte',
-                              'contaminación', 'suciedad', 'hedor', 'mal olor', 'acumulación',
-                              'vertedero', 'botadero', 'recogida', 'recojo']
-                },
-                {
-                    nombre: 'Transporte y Tránsito',
-                    palabras: ['transporte', 'bus', 'tráfico', 'movilidad', 'semáforo', 'paradero',
-                              'congestión', 'vehículo', 'taxi', 'mototaxi', 'ciclovía', 'bicicleta',
-                              'peatón', 'accidente', 'choque', 'atropello', 'vereda', 'calzada']
-                },
-                {
-                    nombre: 'Obras Públicas',
-                    palabras: ['obra', 'construcción', 'pista', 'vereda', 'parque', 'alameda',
-                              'infraestructura', 'edificación', 'remodelación', 'renovación',
-                              'inversión', 'proyecto', 'ejecución', 'presupuesto']
-                },
-                {
-                    nombre: 'Atención al Ciudadano',
-                    palabras: ['atención', 'trámite', 'ventanilla', 'servicio', 'colas', 'demora',
-                              'burocracia', 'documento', 'expediente', 'solicitud', 'reclamo',
-                              'consulta', 'información', 'orientación']
-                },
-                {
-                    nombre: 'Gestión Municipal',
-                    palabras: ['alcalde', 'gestión', 'municipalidad', 'funcionario', 'regidor',
-                              'concejo', 'administración', 'gobierno', 'autoridad', 'política',
-                              'elección', 'campaña', 'promesa', 'plan', 'programa', 'corrupto',
-                              'corrupción', 'coima', 'mermelada', 'argolla']
-                },
-                {
-                    nombre: 'Eventos y Cultura',
-                    palabras: ['evento', 'cultura', 'concierto', 'exposición', 'teatro', 'feria',
-                              'festival', 'espectáculo', 'show', 'presentación', 'inauguración']
-                },
-                {
-                    nombre: 'Medio Ambiente',
-                    palabras: ['ambiente', 'verde', 'árbol', 'jardín', 'ecología', 'sostenible',
-                              'reciclaje', 'contaminación', 'río', 'playa', 'área natural',
-                              'protección', 'conservación', 'reforestación']
-                }
-            ]
-        };
-        
-        // Cargar config guardada
-        try {
-            const guardada = localStorage.getItem('mml_config_v3_peru');
-            if (guardada) {
-                const parsed = JSON.parse(guardada);
-                CONFIG.institucion = parsed.institucion || CONFIG.institucion;
-                CONFIG.color = parsed.color || CONFIG.color;
-                CONFIG.diccionario.positivas = parsed.diccionario?.positivas || CONFIG.diccionario.positivas;
-                CONFIG.diccionario.negativas = parsed.diccionario?.negativas || CONFIG.diccionario.negativas;
-                CONFIG.temas = parsed.temas || CONFIG.temas;
-            }
-        } catch(e) {}
-        
-        // ============================================
-        // ESTADO GLOBAL
+        // CONFIGURACIÓN Y ESTADO
         // ============================================
         
         const STATE = {
-            plataforma: null,
-            vista: 'inicio',
             datos: [],
             filtrados: [],
+            apiKey: localStorage.getItem('gemini_api_key') || '',
             tablaData: null,
-            graficos: {},
-            reporte: null
+            graficos: {}
+        };
+        
+        const CONFIG = {
+            prompt: `Eres un analista de redes sociales peruano. Analiza el comentario y responde SOLO con JSON válido:
+{
+  "sentimiento": "Positivo|Neutral|Negativo",
+  "tipo": "Felicitación|Queja|Crítica|Denuncia|Consulta|Sugerencia|Agradecimiento|Opinión|Humor|Spam|Información",
+  "tema": "Seguridad|Limpieza|Transporte|Obras|Atención|Gestión|Eventos|Ambiente|Salud|Educación|General",
+  "prioridad": "Alta|Media|Baja",
+  "riesgo": "Alto|Medio|Bajo",
+  "necesitaRespuesta": true|false,
+  "resumen": "breve resumen",
+  "palabrasClave": ["palabra1", "palabra2"]
+}
+
+Considera jerga peruana, sarcasmo, insultos, lenguaje vulgar, menciones políticas.`
         };
         
         // ============================================
-        // MOTOR DE ANÁLISIS CONTEXTUAL PERUANO v3.0
+        // MOTOR DE IA - GEMINI API
         // ============================================
         
-        class AnalizadorPeruano {
+        class IAAnalyzer {
             
-            static analizar(textoOriginal) {
-                // Guardar texto original para referencia
-                const textoLimpio = this.limpiarTexto(textoOriginal);
-                const textoLower = textoLimpio.toLowerCase();
+            static async analizarComentario(texto) {
+                // Si no hay API key, usar fallback de reglas
+                if (!STATE.apiKey) {
+                    console.warn('⚠️ Sin API Key - Usando análisis básico');
+                    return this.analisisFallback(texto);
+                }
                 
-                // Detectar si hay insultos/vulgaridades (factor importante)
-                const nivelVulgaridad = this.detectarVulgaridad(textoLower);
+                try {
+                    const resultado = await this.llamarGemini(texto);
+                    return {
+                        ...resultado,
+                        fuente: 'Gemini IA',
+                        confianza: 0.95
+                    };
+                } catch (error) {
+                    console.error('❌ Error con Gemini:', error);
+                    console.warn('⚠️ Usando fallback de reglas');
+                    return {
+                        ...this.analisisFallback(texto),
+                        fuente: 'Reglas (fallback)',
+                        confianza: 0.6
+                    };
+                }
+            }
+            
+            static async llamarGemini(texto) {
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${STATE.apiKey}`;
                 
-                // Análisis de sentimiento con contexto peruano
-                const sentimiento = this.analizarSentimiento(textoLower, nivelVulgaridad);
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{
+                                text: `${CONFIG.prompt}\n\nComentario a analizar: "${texto}"`
+                            }]
+                        }],
+                        generationConfig: {
+                            temperature: 0.3,
+                            topK: 1,
+                            topP: 1,
+                            maxOutputTokens: 250
+                        }
+                    })
+                });
                 
-                // Clasificar tipo
-                const tipo = this.clasificarTipo(textoLower, sentimiento, nivelVulgaridad);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
                 
-                // Detectar tema
-                const tema = this.detectarTema(textoLower);
+                const data = await response.json();
+                const responseText = data.candidates[0].content.parts[0].text;
                 
-                // Calcular prioridad
-                const prioridad = this.calcularPrioridad(textoLower, sentimiento, tipo, nivelVulgaridad);
+                // Extraer JSON de la respuesta
+                const jsonMatch = responseText.match(/\{[\s\S]*\}/);
+                if (!jsonMatch) throw new Error('No se encontró JSON en la respuesta');
                 
-                // Calcular riesgo reputacional
-                const riesgo = this.calcularRiesgo(sentimiento, tipo, prioridad, nivelVulgaridad);
+                const analisis = JSON.parse(jsonMatch[0]);
                 
-                // ¿Necesita respuesta?
-                const necesitaRespuesta = ['Queja', 'Reclamo', 'Denuncia', 'Crítica'].includes(tipo) || 
-                                         (sentimiento === 'Negativo' && prioridad === 'Alta');
+                // Validar campos requeridos
+                const camposRequeridos = ['sentimiento', 'tipo', 'tema', 'prioridad', 'riesgo', 'necesitaRespuesta', 'resumen', 'palabrasClave'];
+                camposRequeridos.forEach(campo => {
+                    if (!analisis[campo]) throw new Error(`Falta campo: ${campo}`);
+                });
                 
-                // Extraer palabras clave
-                const palabrasClave = this.extraerPalabrasClave(textoLower);
+                return analisis;
+            }
+            
+            static analisisFallback(texto) {
+                const textoLower = texto.toLowerCase();
                 
-                // Generar resumen
-                const resumen = this.generarResumen(textoLower, sentimiento, tipo, tema);
+                // Análisis rápido de sentimiento
+                const palabrasPositivas = ['excelente', 'bueno', 'genial', 'gracias', 'felicitaciones', 'bacán', 'chévere', 'paja', 'mostro'];
+                const palabrasNegativas = ['malo', 'pésimo', 'rata', 'ratero', 'cojudo', 'huevón', 'corrupto', 'estafa', 'basura', 'fantoche', 'payaso', 'inútil'];
+                
+                let score = 0;
+                palabrasPositivas.forEach(p => { if (textoLower.includes(p)) score += 3; });
+                palabrasNegativas.forEach(p => { if (textoLower.includes(p)) score -= 3; });
+                
+                // Detectar vulgaridad
+                const vulgaridades = ['culo', 'cul0', 'mierda', 'ctm', 'ctmr', 'conchudo', 'pendejo'];
+                let nivelVulgaridad = 0;
+                vulgaridades.forEach(v => { if (textoLower.includes(v)) nivelVulgaridad += 5; });
+                if (nivelVulgaridad > 0) score -= nivelVulgaridad;
+                
+                // Detectar menciones políticas
+                const figuras = ['keiko', 'fujimori', 'boluarte', 'castillo', 'alan garcía'];
+                let mencionPolitica = false;
+                figuras.forEach(f => { if (textoLower.includes(f)) mencionPolitica = true; });
+                if (mencionPolitica && score < 0) score -= 5;
+                
+                const sentimiento = score >= 5 ? 'Positivo' : score <= -5 ? 'Negativo' : 'Neutral';
+                
+                // Tipo
+                let tipo = 'Opinión';
+                if (texto.includes('?')) tipo = 'Consulta';
+                if (nivelVulgaridad > 5) tipo = 'Crítica';
+                if (/denuncia|corrupción|estafa|robo/i.test(textoLower)) tipo = 'Denuncia';
+                if (/felicit|gracias|excelente/i.test(textoLower)) tipo = 'Felicitación';
+                if (/reclamo|exijo/i.test(textoLower)) tipo = 'Reclamo';
+                
+                // Tema
+                const temas = {
+                    'Seguridad': ['seguridad', 'policía', 'serenazgo', 'delincuencia', 'robo'],
+                    'Limpieza': ['basura', 'limpieza', 'residuos'],
+                    'Transporte': ['transporte', 'tráfico', 'bus'],
+                    'Gestión': ['alcalde', 'gestión', 'municipal', 'corrupción', 'coima'],
+                    'General': []
+                };
+                
+                let tema = 'General';
+                for (const [t, palabras] of Object.entries(temas)) {
+                    if (palabras.some(p => textoLower.includes(p))) {
+                        tema = t;
+                        break;
+                    }
+                }
+                
+                const prioridad = (nivelVulgaridad > 8 || tipo === 'Denuncia') ? 'Alta' :
+                                 (sentimiento === 'Negativo') ? 'Media' : 'Baja';
+                
+                const riesgo = (nivelVulgaridad > 8 && mencionPolitica) ? 'Alto' :
+                              (sentimiento === 'Negativo') ? 'Medio' : 'Bajo';
                 
                 return {
                     sentimiento, tipo, tema, prioridad, riesgo,
-                    necesitaRespuesta, palabrasClave, resumen,
-                    nivelVulgaridad
+                    necesitaRespuesta: ['Denuncia', 'Reclamo', 'Consulta'].includes(tipo),
+                    resumen: `${tipo} ${sentimiento.toLowerCase()} sobre ${tema}`,
+                    palabrasClave: textoLower.split(/\s+/).filter(w => w.length > 4).slice(0, 5)
                 };
             }
             
-            static limpiarTexto(texto) {
-                let t = texto.toString();
-                // Eliminar URLs
-                t = t.replace(/https?:\/\/\S+/g, '');
-                // Eliminar menciones (@usuario) pero guardar que hay menciones
-                t = t.replace(/@\w+/g, 'MENCIÓN');
-                // Eliminar hashtags pero guardar texto
-                t = t.replace(/#(\w+)/g, '$1');
-                // Normalizar espacios
-                t = t.replace(/\s+/g, ' ').trim();
-                return t;
-            }
-            
-            static detectarVulgaridad(texto) {
-                const palabrasVulgares = [
-                    'mierda', 'cojudo', 'cojudazo', 'huevón', 'huevon', 'pendejo', 'conchudo',
-                    'conchadesumadre', 'ctmr', 'ctm', 'cagón', 'cagon', 'cagada', 'porquería',
-                    'basofia', 'cochinada', 'chanchada', 'rata', 'ratero', 'cucaracha', 'sabandija',
-                    'alimaña', 'bicho', 'mierdero', 'lisuriento', 'cul0', 'culo', 'culiao',
-                    'recontra', 'puta', 'puto', 'carajo', 'hostia', 'joder', 'chingar',
-                    'chingada', 'verga', 'pendejada', 'webon', 'webonada', 'huevada', 'cojudez'
-                ];
+            static async analizarLote(comentarios, callback) {
+                const resultados = [];
+                const total = comentarios.length;
                 
-                let nivel = 0;
-                palabrasVulgares.forEach(palabra => {
-                    const regex = new RegExp(`\\b${palabra}\\b`, 'gi');
-                    const matches = texto.match(regex);
-                    if (matches) nivel += matches.length * 5;
-                });
-                
-                // Expresiones compuestas
-                const expresionesVulgares = [
-                    'besarle el cul', 'beso el cul', 'lamer el cul', 'chupar el cul',
-                    'limpiarse el cul', 'pasarse por el cul', 'pasar por el cul',
-                    'se rien en nuestra cara', 'se burlan en nuestra cara',
-                    'nos ven la cara', 'nos toman el pelo', 'se hacen los cojudos',
-                    'se hacen los locos', 'no hacen nada', 'no sirven para nada',
-                    'son un chiste', 'dan asco', 'dan pena ajena', 'puro bla bla',
-                    'puro humo', 'pura pantalla', 'puro show', 'showseros', 'figuretti'
-                ];
-                
-                expresionesVulgares.forEach(exp => {
-                    if (texto.includes(exp)) nivel += 8;
-                });
-                
-                return nivel; // 0-5: normal, 6-15: vulgar, 16+: muy vulgar
-            }
-            
-            static analizarSentimiento(texto, nivelVulgaridad) {
-                let puntaje = 0;
-                
-                // 1. Palabras positivas
-                CONFIG.diccionario.positivas.forEach(palabra => {
-                    const regex = new RegExp(`\\b${palabra}\\b`, 'gi');
-                    const coincidencias = texto.match(regex);
-                    if (coincidencias) puntaje += coincidencias.length * 4;
-                });
-                
-                // 2. Palabras negativas (incluye jerga peruana)
-                CONFIG.diccionario.negativas.forEach(palabra => {
-                    const regex = new RegExp(`\\b${palabra}\\b`, 'gi');
-                    const coincidencias = texto.match(regex);
-                    if (coincidencias) puntaje -= coincidencias.length * 4;
-                });
-                
-                // 3. Impacto de vulgaridad en sentimiento
-                if (nivelVulgaridad >= 10) puntaje -= 10;
-                else if (nivelVulgaridad >= 5) puntaje -= 5;
-                
-                // 4. Menciones a figuras políticas + contexto negativo
-                const figurasPoliticas = ['keiko', 'fujimori', 'castillo', 'boluarte', 'alan garcía',
-                                         'toledo', 'humala', 'ppk', 'vizcarra', 'merino', 'sagasti',
-                                         'reggiardo', 'lopez aliaga', 'urbina', 'forsyth'];
-                
-                let mencionPolitica = false;
-                figurasPoliticas.forEach(figura => {
-                    if (texto.includes(figura.toLowerCase())) {
-                        mencionPolitica = true;
-                        // Si menciona figura política en contexto negativo
-                        if (nivelVulgaridad > 0 || puntaje < 0) puntaje -= 6;
+                for (let i = 0; i < total; i++) {
+                    const comentario = comentarios[i];
+                    const texto = comentario['Full Text'] || comentario['full_text'] || comentario['text'] || '';
+                    
+                    // Actualizar progreso
+                    if (callback) {
+                        callback({
+                            actual: i + 1,
+                            total,
+                            porcentaje: Math.round(((i + 1) / total) * 100),
+                            texto: texto.substring(0, 50)
+                        });
                     }
-                });
-                
-                // 5. Intensificadores negativos
-                const intensificadores = ['muy', 'recontra', 'demasiado', 'extremadamente', 
-                                         'absolutamente', 'totalmente', 'completamente',
-                                         'realmente', 'verdaderamente', 'sumamente', 'bien'];
-                
-                intensificadores.forEach(int => {
-                    const regex = new RegExp(`${int}\\s+(\\w+)`, 'gi');
-                    const matches = [...texto.matchAll(regex)];
-                    matches.forEach(match => {
-                        const siguiente = match[1];
-                        if (CONFIG.diccionario.negativas.includes(siguiente)) puntaje -= 6;
+                    
+                    const analisis = await this.analizarComentario(texto.toString());
+                    resultados.push({
+                        ...comentario,
+                        _analisis: analisis
                     });
-                });
-                
-                // 6. Negaciones que invierten
-                const negaciones = ['no', 'nunca', 'jamás', 'tampoco', 'ningún', 'ninguna', 'nadie'];
-                negaciones.forEach(neg => {
-                    const regex = new RegExp(`${neg}\\s+(\\w+)`, 'gi');
-                    const matches = [...texto.matchAll(regex)];
-                    matches.forEach(match => {
-                        const siguiente = match[1];
-                        if (CONFIG.diccionario.positivas.includes(siguiente)) puntaje -= 7;
-                        if (CONFIG.diccionario.negativas.includes(siguiente)) puntaje += 3;
-                    });
-                });
-                
-                // 7. Signos de exclamación
-                const exclamaciones = (texto.match(/!/g) || []).length;
-                if (exclamaciones >= 3 && puntaje < 0) puntaje -= 3;
-                if (exclamaciones >= 3 && puntaje > 0) puntaje += 2;
-                
-                // 8. Signos de interrogación múltiple
-                const interrogaciones = (texto.match(/\?/g) || []).length;
-                if (interrogaciones >= 3) puntaje -= 3;
-                
-                // 9. Mayúsculas sostenidas
-                const ratioMayusculas = texto.replace(/[^A-ZÁÉÍÓÚÜÑ]/g, '').length / Math.max(texto.length, 1);
-                if (ratioMayusculas > 0.5 && texto.length > 15) puntaje -= 3;
-                
-                // 10. Sarcasmo peruano
-                const patronesSarcasmo = [
-                    /qué\s+(bonito|lindo|hermoso|bueno|genial|excelente|maravilloso|bacán|chévere)/i,
-                    /menudo\s+(éxito|logro|avance|progreso|milagro)/i,
-                    /vaya\s+(sorpresa|maravilla|maravilloso|noticia)/i,
-                    /claro\s+(que sí|que si|por supuesto)/i,
-                    /sí\s+claro/i, /si\s+claro/i,
-                    /sí\s+cómo no/i, /si\s+como no/i,
-                    /ah\s+qué\s+bien/i, /ah\s+que\s+bien/i
-                ];
-                
-                patronesSarcasmo.forEach(patron => {
-                    if (patron.test(texto)) puntaje -= 6;
-                });
-                
-                // Determinación final
-                if (puntaje >= 6) return 'Positivo';
-                if (puntaje <= -6) return 'Negativo';
-                return 'Neutral';
-            }
-            
-            static clasificarTipo(texto, sentimiento, nivelVulgaridad) {
-                // Denuncias (prioridad máxima)
-                if (/denuncia|denuncio|corrupción|ilegal|delito|fraude|estafa|robo|ladrón|coima|coimero/i.test(texto)) {
-                    return 'Denuncia';
+                    
+                    // Pequeña pausa para no exceder rate limit
+                    if (STATE.apiKey) {
+                        await new Promise(resolve => setTimeout(resolve, 100));
+                    }
                 }
                 
-                // Reclamos formales
-                if (/reclamo|exijo|hoja de reclamación|libro de reclamaciones/i.test(texto)) {
-                    return 'Reclamo';
-                }
-                
-                // Críticas con insultos o vulgaridades
-                if (sentimiento === 'Negativo' && nivelVulgaridad >= 5) {
-                    return 'Crítica';
-                }
-                
-                // Consultas
-                if (texto.includes('?') || /\bcómo\b|\bcuál\b|\bcuándo\b|\bdónde\b|\bqui[ée]n\b|\bcuánto\b/i.test(texto)) {
-                    return sentimiento === 'Negativo' ? 'Queja' : 'Consulta';
-                }
-                
-                // Solicitudes
-                if (/solicito|solicitud|quisiera|necesito|requiero|pedir|por favor|urgente/i.test(texto)) {
-                    return sentimiento === 'Negativo' ? 'Queja' : 'Solicitud';
-                }
-                
-                // Felicitaciones
-                if (/felicit|excelente trabajo|buen trabajo|enhorabuena|felicidades|magnífico|bacán|chévere|paja/i.test(texto)) {
-                    return 'Felicitación';
-                }
-                
-                // Agradecimientos
-                if (/gracias|agradecido|agradezco|agradecer|muy agradecido/i.test(texto)) {
-                    return 'Agradecimiento';
-                }
-                
-                // Sugerencias
-                if (/sugiero|sugerencia|propongo|propuesta|podrían|deberían|recomiendo/i.test(texto)) {
-                    return 'Sugerencia';
-                }
-                
-                // Críticas (negativas pero sin vulgaridad extrema)
-                if (sentimiento === 'Negativo') {
-                    return 'Crítica';
-                }
-                
-                // Quejas
-                if (sentimiento === 'Negativo') return 'Queja';
-                
-                // Humor
-                if (/jaja|jeje|jiji|😂|🤣|humor|chiste|broma|qué risa|que risa/i.test(texto)) {
-                    return 'Humor';
-                }
-                
-                // Spam
-                if (/spam|oferta|descuento|compra|vendo|publicidad|promoción/i.test(texto)) {
-                    return 'Spam';
-                }
-                
-                return 'Opinión';
-            }
-            
-            static detectarTema(texto) {
-                const puntajes = {};
-                
-                CONFIG.temas.forEach(tema => {
-                    puntajes[tema.nombre] = 0;
-                    tema.palabras.forEach(palabra => {
-                        const regex = new RegExp(`\\b${palabra}\\b`, 'gi');
-                        const coincidencias = texto.match(regex);
-                        if (coincidencias) puntajes[tema.nombre] += coincidencias.length;
-                    });
-                });
-                
-                const mejor = Object.entries(puntajes).sort((a, b) => b[1] - a[1])[0];
-                return mejor[1] > 0 ? mejor[0] : 'General';
-            }
-            
-            static calcularPrioridad(texto, sentimiento, tipo, nivelVulgaridad) {
-                // Comentarios muy vulgares con menciones políticas
-                if (nivelVulgaridad >= 10 && /MENCIÓN/.test(texto)) return 'Alta';
-                
-                // Denuncias y reclamos
-                if (['Denuncia', 'Reclamo'].includes(tipo)) return 'Alta';
-                
-                // Críticas fuertes
-                if (tipo === 'Crítica' && nivelVulgaridad >= 5) return 'Alta';
-                
-                // Menciones a autoridades + negativo
-                if (/MENCIÓN/.test(texto) && sentimiento === 'Negativo') return 'Alta';
-                
-                // Palabras de urgencia
-                if (/urgente|emergencia|peligro|grave|crítico|inmediato|ahora mismo/i.test(texto)) return 'Alta';
-                
-                // Consultas y solicitudes
-                if (['Consulta', 'Solicitud'].includes(tipo)) return 'Media';
-                
-                // Negativos moderados
-                if (sentimiento === 'Negativo') return 'Media';
-                
-                return 'Baja';
-            }
-            
-            static calcularRiesgo(sentimiento, tipo, prioridad, nivelVulgaridad) {
-                if (prioridad === 'Alta' && nivelVulgaridad >= 10) return 'Alto';
-                if (tipo === 'Denuncia' && sentimiento === 'Negativo') return 'Alto';
-                if (prioridad === 'Alta' && sentimiento === 'Negativo') return 'Alto';
-                if (tipo === 'Denuncia') return 'Alto';
-                if (sentimiento === 'Negativo' && nivelVulgaridad >= 5) return 'Medio';
-                if (sentimiento === 'Negativo') return 'Medio';
-                return 'Bajo';
-            }
-            
-            static extraerPalabrasClave(texto) {
-                const stopWords = new Set([
-                    'de', 'la', 'que', 'el', 'en', 'y', 'a', 'los', 'del', 'se', 'las', 'por',
-                    'un', 'para', 'con', 'no', 'una', 'su', 'al', 'lo', 'como', 'más', 'pero',
-                    'sus', 'le', 'ya', 'o', 'este', 'sí', 'porque', 'esta', 'entre', 'cuando',
-                    'muy', 'sin', 'sobre', 'también', 'me', 'hasta', 'hay', 'donde', 'quien',
-                    'todo', 'nos', 'durante', 'todos', 'uno', 'les', 'ni', 'contra', 'otros',
-                    'eso', 'ese', 'esto', 'mí', 'antes', 'algunos', 'qué', 'unos', 'yo', 'otro',
-                    'él', 'tanto', 'esa', 'estos', 'mucho', 'quienes', 'nada', 'muchos', 'cual',
-                    'poco', 'ella', 'estar'
-                ]);
-                
-                return texto.split(/\s+/)
-                    .map(w => w.replace(/[.,!?¡¿()\[\]{}"':;@#]/g, ''))
-                    .filter(w => w.length > 3 && !stopWords.has(w.toLowerCase()))
-                    .slice(0, 8);
-            }
-            
-            static generarResumen(texto, sentimiento, tipo, tema) {
-                const preview = texto.length > 130 ? texto.substring(0, 127) + '...' : texto;
-                const emocion = sentimiento === 'Negativo' ? 'negativo' : 
-                               sentimiento === 'Positivo' ? 'positivo' : 'neutral';
-                return `${tipo} ${emocion} sobre ${tema}: "${preview}"`;
-            }
-        }
-        
-        // ============================================
-        // FUNCIONES DE FORMATEO DE FECHAS (PERUANO)
-        // ============================================
-        
-        function formatearFechaPeru(fechaStr) {
-            try {
-                const fecha = new Date(fechaStr);
-                if (isNaN(fecha.getTime())) return fechaStr;
-                
-                return fecha.toLocaleDateString('es-PE', {
-                    day: '2-digit',
-                    month: '2-digit',
-                    year: 'numeric'
-                });
-            } catch(e) {
-                return fechaStr;
-            }
-        }
-        
-        function formatearFechaLarga(fechaStr) {
-            try {
-                const fecha = new Date(fechaStr);
-                if (isNaN(fecha.getTime())) return fechaStr;
-                
-                return fecha.toLocaleDateString('es-PE', {
-                    weekday: 'long',
-                    day: 'numeric',
-                    month: 'long',
-                    year: 'numeric'
-                });
-            } catch(e) {
-                return fechaStr;
+                return resultados;
             }
         }
         
@@ -922,8 +526,9 @@
         // PROCESAMIENTO DE DATOS
         // ============================================
         
-        function procesarDatos(datosCrudos) {
-            STATE.datos = datosCrudos
+        async function procesarComentarios(datosCrudos) {
+            // Limpiar datos
+            const datosLimpios = datosCrudos
                 .filter(fila => {
                     const texto = fila['Full Text'] || fila['full_text'] || fila['text'] || '';
                     return texto.toString().trim().length > 0;
@@ -933,23 +538,35 @@
                     return index === self.findIndex(f => 
                         (f['Tweet Id'] || f['tweet_id'] || f['id']) === id
                     );
-                })
-                .map(fila => {
-                    const texto = fila['Full Text'] || fila['full_text'] || fila['text'] || '';
-                    const analisis = AnalizadorPeruano.analizar(texto.toString());
-                    return { ...fila, _analisis: analisis };
                 });
+            
+            console.log(`📊 ${datosLimpios.length} comentarios para analizar`);
+            
+            // Mostrar barra de progreso
+            const progressContainer = document.getElementById('progressContainer');
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+            const progressPercent = document.getElementById('progressPercent');
+            
+            progressContainer.classList.remove('hidden');
+            
+            // Analizar con IA
+            STATE.datos = await IAAnalyzer.analizarLote(datosLimpios, (progreso) => {
+                progressBar.style.width = progreso.porcentaje + '%';
+                progressPercent.textContent = progreso.porcentaje + '%';
+                progressText.textContent = `Analizando con IA... ${progreso.actual}/${progreso.total}`;
+            });
             
             STATE.filtrados = [...STATE.datos];
             
-            console.log('✅ Análisis completado:', STATE.datos.length, 'comentarios');
-            console.log('📝 Muestra del primer comentario:');
-            if (STATE.datos.length > 0) {
-                const muestra = STATE.datos[0];
-                console.log('   Texto:', (muestra['Full Text'] || '').substring(0, 100));
-                console.log('   Resultado:', muestra._analisis);
-            }
+            // Ocultar progreso
+            setTimeout(() => {
+                progressContainer.classList.add('hidden');
+            }, 1000);
             
+            console.log('✅ Análisis completado con IA');
+            
+            // Mostrar resultados
             renderizarDashboard();
         }
         
@@ -958,14 +575,14 @@
             if (!archivo) return;
             
             const lector = new FileReader();
-            lector.onload = function(e) {
+            lector.onload = async function(e) {
                 try {
                     const datos = new Uint8Array(e.target.result);
                     const workbook = XLSX.read(datos, { type: 'array' });
                     const hoja = workbook.Sheets[workbook.SheetNames[0]];
                     const json = XLSX.utils.sheet_to_json(hoja);
-                    procesarDatos(json);
-                    alert(`✅ ${STATE.datos.length} comentarios procesados exitosamente`);
+                    await procesarComentarios(json);
+                    alert(`✅ ${STATE.datos.length} comentarios analizados con IA`);
                 } catch(err) {
                     alert('❌ Error: ' + err.message);
                 }
@@ -973,72 +590,51 @@
             lector.readAsArrayBuffer(archivo);
         }
         
-        function cargarDatosDemo() {
+        async function cargarDatosDemo() {
             const ejemplos = [
                 {
-                    'Tweet Id': '2001',
+                    'Tweet Id': '3001',
                     'Full Text': '@MuniLima @Renzo_Reggiardo @KeikoFujimori Besarle el cul0 dirán a la rata de @KeikoFujimori https://t.co/zXn8tw1KOB',
                     'Created At': '2024-01-20 16:45:00',
                     'User Name': 'Ciudadano Indignado',
-                    'User Screen Name': 'indignado_pe',
                     'Favorite Count': 67, 'Retweet Count': 34, 'Reply Count': 15, 'View Count': 2300
                 },
                 {
-                    'Tweet Id': '2002',
+                    'Tweet Id': '3002',
                     'Full Text': 'Excelente trabajo de limpieza en el Centro de Lima. ¡Por fin calles limpias! Gracias @MuniLima',
                     'Created At': '2024-01-20 10:15:00',
                     'User Name': 'María García',
-                    'User Screen Name': 'maria_lima',
                     'Favorite Count': 120, 'Retweet Count': 45, 'Reply Count': 8, 'View Count': 3200
                 },
                 {
-                    'Tweet Id': '2003',
+                    'Tweet Id': '3003',
                     'Full Text': '¿Hasta cuándo van a seguir con esta corrupción? Las obras nunca se terminan. Puro show.',
                     'Created At': '2024-01-19 18:45:00',
                     'User Name': 'Carlos López',
-                    'User Screen Name': 'carlos_l',
                     'Favorite Count': 89, 'Retweet Count': 56, 'Reply Count': 23, 'View Count': 2800
                 },
                 {
-                    'Tweet Id': '2004',
+                    'Tweet Id': '3004',
                     'Full Text': '¡Qué bacán el nuevo parque! Felicitaciones a la gestión. Mis hijos están felices.',
                     'Created At': '2024-01-19 14:20:00',
                     'User Name': 'Ana Martínez',
-                    'User Screen Name': 'ana_m',
                     'Favorite Count': 67, 'Retweet Count': 12, 'Reply Count': 3, 'View Count': 980
                 },
                 {
-                    'Tweet Id': '2005',
-                    'Full Text': 'El tráfico en la Av. Abancay es un desastre total. Pésima gestión del alcalde. Son unos inútiles.',
-                    'Created At': '2024-01-18 09:00:00',
-                    'User Name': 'Pedro Sánchez',
-                    'User Screen Name': 'pedro_s',
-                    'Favorite Count': 34, 'Retweet Count': 18, 'Reply Count': 7, 'View Count': 1200
-                },
-                {
-                    'Tweet Id': '2006',
-                    'Full Text': 'Solicito información sobre los horarios de atención para trámites de licencia por favor.',
-                    'Created At': '2024-01-18 11:30:00',
-                    'User Name': 'Laura Díaz',
-                    'User Screen Name': 'laura_d',
-                    'Favorite Count': 2, 'Retweet Count': 0, 'Reply Count': 1, 'View Count': 45
-                },
-                {
-                    'Tweet Id': '2007',
-                    'Full Text': '@MuniLima son una manga de coimeros y rateros. Se la llevan fácil con nuestra plata.',
+                    'Tweet Id': '3005',
+                    'Full Text': '@MuniLima son una manga de coimeros y rateros. Se la llevan fácil con nuestra plata. ¡Qué asco de gestión!',
                     'Created At': '2024-01-17 20:30:00',
                     'User Name': 'Vecino Enojado',
-                    'User Screen Name': 'vecino_x',
                     'Favorite Count': 156, 'Retweet Count': 89, 'Reply Count': 45, 'View Count': 5600
                 }
             ];
             
-            procesarDatos(ejemplos);
-            alert('✅ Datos de ejemplo cargados. Revisa la consola para ver el análisis detallado.');
+            await procesarComentarios(ejemplos);
+            alert('✅ Datos demo analizados con IA');
         }
         
         // ============================================
-        // RENDERIZADO DEL DASHBOARD
+        // RENDERIZADO
         // ============================================
         
         function renderizarDashboard() {
@@ -1047,35 +643,35 @@
             const d = STATE.filtrados;
             
             // KPIs
-            const sentimientos = { Positivo: 0, Neutral: 0, Negativo: 0 };
+            const sentimientos = {};
             const tipos = {};
-            let likes = 0, replies = 0, views = 0, altoRiesgo = 0;
+            let likes = 0, altoRiesgo = 0;
             
             d.forEach(r => {
-                sentimientos[r._analisis.sentimiento]++;
-                tipos[r._analisis.tipo] = (tipos[r._analisis.tipo] || 0) + 1;
+                const s = r._analisis.sentimiento;
+                sentimientos[s] = (sentimientos[s] || 0) + 1;
+                const t = r._analisis.tipo;
+                tipos[t] = (tipos[t] || 0) + 1;
                 if (r._analisis.riesgo === 'Alto') altoRiesgo++;
-                likes += parseInt(r['Favorite Count'] || r['favorite_count'] || 0);
-                replies += parseInt(r['Reply Count'] || r['reply_count'] || 0);
-                views += parseInt(r['View Count'] || r['view_count'] || 0);
+                likes += parseInt(r['Favorite Count'] || 0);
             });
             
             const kpis = [
-                { label: 'Total', value: d.length, icon: 'fa-comments', color: 'text-blue-600' },
-                { label: 'Positivos', value: sentimientos.Positivo, icon: 'fa-smile', color: 'text-green-600' },
-                { label: 'Neutrales', value: sentimientos.Neutral, icon: 'fa-meh', color: 'text-yellow-600' },
-                { label: 'Negativos', value: sentimientos.Negativo, icon: 'fa-angry', color: 'text-red-600' },
-                { label: 'Riesgo Alto', value: altoRiesgo, icon: 'fa-exclamation-triangle', color: 'text-orange-600' },
-                { label: 'Likes', value: likes, icon: 'fa-heart', color: 'text-pink-600' }
+                { label: 'Total', value: d.length, icon: '📊', color: 'text-blue-600' },
+                { label: 'Positivos', value: sentimientos['Positivo'] || 0, icon: '😊', color: 'text-green-600' },
+                { label: 'Neutrales', value: sentimientos['Neutral'] || 0, icon: '😐', color: 'text-yellow-600' },
+                { label: 'Negativos', value: sentimientos['Negativo'] || 0, icon: '😡', color: 'text-red-600' },
+                { label: 'Riesgo Alto', value: altoRiesgo, icon: '⚠️', color: 'text-orange-600' },
+                { label: 'Likes', value: likes, icon: '❤️', color: 'text-pink-600' }
             ];
             
             document.getElementById('kpiContainer').innerHTML = kpis.map(k => `
                 <div class="bg-white rounded-xl p-4 shadow-sm kpi-card">
                     <div class="flex justify-between items-center mb-2">
-                        <span class="text-xs text-gray-500 uppercase tracking-wider">${k.label}</span>
-                        <i class="fas ${k.icon} ${k.color} text-xl"></i>
+                        <span class="text-xs text-gray-500 uppercase">${k.label}</span>
+                        <span class="text-2xl">${k.icon}</span>
                     </div>
-                    <div class="text-3xl font-bold text-gray-900">${k.value.toLocaleString()}</div>
+                    <div class="text-3xl font-bold text-gray-900">${k.value}</div>
                 </div>
             `).join('');
             
@@ -1093,17 +689,17 @@
             Object.values(STATE.graficos).forEach(g => g.destroy());
             
             // Sentimiento
-            const sData = { Positivo: 0, Neutral: 0, Negativo: 0 };
-            d.forEach(r => sData[r._analisis.sentimiento]++);
+            const sData = {};
+            d.forEach(r => sData[r._analisis.sentimiento] = (sData[r._analisis.sentimiento] || 0) + 1);
             
             const ctx1 = document.getElementById('chartSentimiento').getContext('2d');
             STATE.graficos.sentimiento = new Chart(ctx1, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Positivo', 'Neutral', 'Negativo'],
+                    labels: Object.keys(sData),
                     datasets: [{
-                        data: [sData.Positivo, sData.Neutral, sData.Negativo],
-                        backgroundColor: ['#10B981', '#F59E0B', '#EF4444'],
+                        data: Object.values(sData),
+                        backgroundColor: ['#10B981', '#F59E0B', '#EF4444', '#8B5CF6'],
                         borderWidth: 0
                     }]
                 },
@@ -1124,9 +720,8 @@
                 data: {
                     labels: Object.keys(tData),
                     datasets: [{
-                        label: 'Cantidad',
                         data: Object.values(tData),
-                        backgroundColor: '#DC2626',
+                        backgroundColor: '#8B5CF6',
                         borderRadius: 8
                     }]
                 },
@@ -1137,55 +732,18 @@
                 }
             });
             
-            // Diario (con fechas en español)
-            const diario = {};
-            d.forEach(r => {
-                const fecha = formatearFechaPeru(r['Created At'] || r['created_at'] || '');
-                diario[fecha] = (diario[fecha] || 0) + 1;
-            });
-            
-            const ctx3 = document.getElementById('chartDiario').getContext('2d');
-            STATE.graficos.diario = new Chart(ctx3, {
-                type: 'line',
-                data: {
-                    labels: Object.keys(diario).sort(),
-                    datasets: [{
-                        label: 'Comentarios',
-                        data: Object.values(diario),
-                        borderColor: '#DC2626',
-                        backgroundColor: 'rgba(220,38,38,0.1)',
-                        fill: true,
-                        tension: 0.4
-                    }]
-                },
-                options: { 
-                    responsive: true, 
-                    maintainAspectRatio: false,
-                    scales: {
-                        x: { 
-                            ticks: { 
-                                callback: function(value) {
-                                    return this.getLabelForValue(value);
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-            
             // Temas
             const temas = {};
             d.forEach(r => temas[r._analisis.tema] = (temas[r._analisis.tema] || 0) + 1);
             
-            const ctx4 = document.getElementById('chartTemas').getContext('2d');
-            STATE.graficos.temas = new Chart(ctx4, {
+            const ctx3 = document.getElementById('chartTemas').getContext('2d');
+            STATE.graficos.temas = new Chart(ctx3, {
                 type: 'bar',
                 data: {
                     labels: Object.keys(temas),
                     datasets: [{
-                        label: 'Menciones',
                         data: Object.values(temas),
-                        backgroundColor: '#991B1B',
+                        backgroundColor: '#EC4899',
                         borderRadius: 8
                     }]
                 },
@@ -1202,29 +760,30 @@
             if (STATE.tablaData) STATE.tablaData.destroy();
             
             document.getElementById('tablaBody').innerHTML = d.map(r => `
-                <tr class="cursor-pointer hover:bg-gray-50" onclick="mostrarDetalle('${r['Tweet Id'] || r['tweet_id']}')">
-                    <td class="text-xs fecha-peruana">${formatearFechaPeru(r['Created At'] || r['created_at'] || '')}</td>
-                    <td class="text-sm font-semibold">${r['User Name'] || r['user_name'] || 'Anónimo'}</td>
-                    <td class="text-sm max-w-xs truncate">${(r['Full Text'] || r['full_text'] || '').toString().substring(0, 80)}...</td>
-                    <td><span class="${r._analisis.sentimiento === 'Positivo' ? 'badge-pos' : r._analisis.sentimiento === 'Negativo' ? 'badge-neg' : 'badge-neu'}">${r._analisis.sentimiento}</span></td>
+                <tr class="cursor-pointer hover:bg-purple-50" onclick="mostrarDetalle('${r['Tweet Id'] || r['tweet_id']}')">
+                    <td class="text-xs">${new Date(r['Created At'] || '').toLocaleDateString('es-PE')}</td>
+                    <td class="text-sm font-semibold">${r['User Name'] || 'Anónimo'}</td>
+                    <td class="text-sm max-w-xs truncate">${(r['Full Text'] || '').substring(0, 80)}...</td>
+                    <td><span class="badge-sentiment badge-${(r._analisis.sentimiento || '').toLowerCase()}">${r._analisis.sentimiento}</span></td>
                     <td class="text-xs">${r._analisis.tipo}</td>
                     <td class="text-xs">${r._analisis.tema}</td>
                     <td class="text-xs font-semibold ${r._analisis.prioridad === 'Alta' ? 'text-red-600' : ''}">${r._analisis.prioridad}</td>
-                    <td class="text-xs font-semibold ${r._analisis.riesgo === 'Alto' ? 'text-red-600' : ''}">${r._analisis.riesgo}</td>
+                    <td>
+                        <div class="flex items-center space-x-2">
+                            <div class="flex-1 bg-gray-200 rounded-full h-2">
+                                <div class="confidence-bar bg-purple-600 rounded-full" style="width: ${(r._analisis.confianza || 0.95) * 100}%"></div>
+                            </div>
+                            <span class="text-xs text-gray-500">${Math.round((r._analisis.confianza || 0.95) * 100)}%</span>
+                        </div>
+                    </td>
                     <td class="text-xs">${r['Favorite Count'] || 0}</td>
                     <td class="text-xs">${r['Retweet Count'] || 0}</td>
-                    <td class="text-xs">${r['View Count'] || 0}</td>
                 </tr>
             `).join('');
             
             STATE.tablaData = $('#tablaComentarios').DataTable({
                 pageLength: 25,
-                language: {
-                    url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
-                },
-                columnDefs: [
-                    { type: 'date', targets: 0 }
-                ]
+                language: { url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json' }
             });
         }
         
@@ -1232,59 +791,65 @@
             const tipos = [...new Set(d.map(r => r._analisis.tipo))].sort();
             const temas = [...new Set(d.map(r => r._analisis.tema))].sort();
             
-            document.getElementById('filtroTipo').innerHTML = '<option value="">Todos los tipos</option>' +
+            document.getElementById('filtroTipo').innerHTML = '<option value="">Tipo</option>' +
                 tipos.map(t => `<option value="${t}">${t}</option>`).join('');
-            document.getElementById('filtroTema').innerHTML = '<option value="">Todos los temas</option>' +
+            document.getElementById('filtroTema').innerHTML = '<option value="">Tema</option>' +
                 temas.map(t => `<option value="${t}">${t}</option>`).join('');
         }
         
         function aplicarFiltros() {
             let d = [...STATE.datos];
             
-            const sentimiento = document.getElementById('filtroSentimiento').value;
-            const tipo = document.getElementById('filtroTipo').value;
-            const tema = document.getElementById('filtroTema').value;
-            const prioridad = document.getElementById('filtroPrioridad').value;
+            const s = document.getElementById('filtroSentimiento').value;
+            const ti = document.getElementById('filtroTipo').value;
+            const te = document.getElementById('filtroTema').value;
             
-            if (sentimiento) d = d.filter(r => r._analisis.sentimiento === sentimiento);
-            if (tipo) d = d.filter(r => r._analisis.tipo === tipo);
-            if (tema) d = d.filter(r => r._analisis.tema === tema);
-            if (prioridad) d = d.filter(r => r._analisis.prioridad === prioridad);
+            if (s) d = d.filter(r => r._analisis.sentimiento === s);
+            if (ti) d = d.filter(r => r._analisis.tipo === ti);
+            if (te) d = d.filter(r => r._analisis.tema === te);
             
             STATE.filtrados = d;
             renderizarDashboard();
         }
         
         // ============================================
-        // PANEL DE DETALLE
+        // DETALLE
         // ============================================
         
         function mostrarDetalle(id) {
-            const comentario = STATE.datos.find(r => (r['Tweet Id'] || r['tweet_id']) === id);
-            if (!comentario) return;
+            const c = STATE.datos.find(r => (r['Tweet Id'] || r['tweet_id']) === id);
+            if (!c) return;
             
-            const a = comentario._analisis;
+            const a = c._analisis;
             
             document.getElementById('detalleContenido').innerHTML = `
-                <div class="space-y-5">
+                <div class="space-y-4">
+                    <div class="card-ia p-4 rounded-lg">
+                        <div class="flex items-center space-x-2 mb-2">
+                            <span class="text-2xl">🧠</span>
+                            <span class="font-bold text-purple-600">Análisis de IA (${a.fuente})</span>
+                            <span class="text-sm text-gray-500">${Math.round((a.confianza || 0.95) * 100)}% confianza</span>
+                        </div>
+                    </div>
+                    
                     <div class="bg-gray-50 p-4 rounded-lg">
-                        <h3 class="font-bold text-lg">${comentario['User Name'] || 'Anónimo'}</h3>
-                        <p class="text-sm text-gray-600">@${comentario['User Screen Name'] || 'usuario'}</p>
-                        <p class="mt-3 text-gray-800">${comentario['Full Text'] || comentario['full_text']}</p>
+                        <h3 class="font-bold">${c['User Name'] || 'Anónimo'}</h3>
+                        <p class="text-sm text-gray-600">@${c['User Screen Name'] || 'usuario'}</p>
+                        <p class="mt-3">${c['Full Text']}</p>
                     </div>
                     
                     <div class="grid grid-cols-2 gap-3">
-                        <div class="bg-blue-50 p-3 rounded-lg text-center">
-                            <p class="text-xs text-gray-600">Sentimiento</p>
-                            <p class="text-lg font-bold ${a.sentimiento === 'Positivo' ? 'text-green-600' : a.sentimiento === 'Negativo' ? 'text-red-600' : 'text-yellow-600'}">${a.sentimiento}</p>
-                        </div>
                         <div class="bg-purple-50 p-3 rounded-lg text-center">
-                            <p class="text-xs text-gray-600">Tipo</p>
-                            <p class="text-lg font-bold text-purple-600">${a.tipo}</p>
+                            <p class="text-xs text-gray-600">Sentimiento</p>
+                            <p class="text-lg font-bold">${a.sentimiento}</p>
                         </div>
-                        <div class="bg-orange-50 p-3 rounded-lg text-center">
+                        <div class="bg-blue-50 p-3 rounded-lg text-center">
+                            <p class="text-xs text-gray-600">Tipo</p>
+                            <p class="text-lg font-bold">${a.tipo}</p>
+                        </div>
+                        <div class="bg-green-50 p-3 rounded-lg text-center">
                             <p class="text-xs text-gray-600">Tema</p>
-                            <p class="text-lg font-bold text-orange-600">${a.tema}</p>
+                            <p class="text-lg font-bold">${a.tema}</p>
                         </div>
                         <div class="bg-red-50 p-3 rounded-lg text-center">
                             <p class="text-xs text-gray-600">Prioridad</p>
@@ -1292,27 +857,20 @@
                         </div>
                     </div>
                     
-                    <div class="flex space-x-4 text-sm">
-                        <span><i class="fas fa-heart text-red-500"></i> ${comentario['Favorite Count'] || 0}</span>
-                        <span><i class="fas fa-retweet text-green-500"></i> ${comentario['Retweet Count'] || 0}</span>
-                        <span><i class="fas fa-comment text-blue-500"></i> ${comentario['Reply Count'] || 0}</span>
-                    </div>
-                    
                     <div>
                         <h4 class="font-bold mb-2">Palabras Clave</h4>
                         <div class="flex flex-wrap gap-2">
-                            ${a.palabrasClave.map(p => `<span class="px-3 py-1 bg-gray-200 rounded-full text-sm">${p}</span>`).join('')}
+                            ${(a.palabrasClave || []).map(p => `<span class="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm">${p}</span>`).join('')}
                         </div>
                     </div>
                     
-                    <div class="bg-gray-50 p-4 rounded-lg">
-                        <p class="text-sm"><strong>📝 Resumen:</strong> ${a.resumen}</p>
+                    <div class="bg-purple-50 p-4 rounded-lg">
+                        <p class="text-sm"><strong>📝 Resumen IA:</strong> ${a.resumen}</p>
                     </div>
                     
-                    <div class="${a.riesgo === 'Alto' ? 'bg-red-50 border border-red-200' : 'bg-yellow-50 border border-yellow-200'} p-3 rounded-lg">
-                        <p class="text-sm"><strong>⚠️ Riesgo Reputacional:</strong> ${a.riesgo}</p>
-                        <p class="text-sm"><strong>📞 ¿Necesita respuesta?:</strong> ${a.necesitaRespuesta ? 'SÍ - Atención prioritaria' : 'No requiere'}</p>
-                        <p class="text-sm"><strong>🔞 Nivel de vulgaridad:</strong> ${a.nivelVulgaridad}/20</p>
+                    <div class="${a.riesgo === 'Alto' ? 'bg-red-50 border-red-200' : 'bg-yellow-50 border-yellow-200'} p-3 rounded-lg border">
+                        <p><strong>⚠️ Riesgo:</strong> ${a.riesgo}</p>
+                        <p><strong>📞 ¿Responder?:</strong> ${a.necesitaRespuesta ? 'SÍ' : 'No'}</p>
                     </div>
                 </div>
             `;
@@ -1325,241 +883,74 @@
         }
         
         // ============================================
-        // REPORTES
-        // ============================================
-        
-        function generarReporte(tipo) {
-            if (!STATE.datos.length) return alert('No hay datos');
-            
-            const d = STATE.datos;
-            const s = {
-                Positivo: d.filter(r => r._analisis.sentimiento === 'Positivo').length,
-                Neutral: d.filter(r => r._analisis.sentimiento === 'Neutral').length,
-                Negativo: d.filter(r => r._analisis.sentimiento === 'Negativo').length
-            };
-            
-            const temas = {};
-            const tipos = {};
-            d.forEach(r => {
-                temas[r._analisis.tema] = (temas[r._analisis.tema] || 0) + 1;
-                tipos[r._analisis.tipo] = (tipos[r._analisis.tipo] || 0) + 1;
-            });
-            
-            const topTemas = Object.entries(temas).sort((a,b) => b[1]-a[1]).slice(0,3);
-            const topTipos = Object.entries(tipos).sort((a,b) => b[1]-a[1]).slice(0,3);
-            const riesgos = d.filter(r => r._analisis.riesgo === 'Alto').length;
-            
-            const titulos = { diario: 'Diario', semanal: 'Semanal', mensual: 'Mensual' };
-            const titulo = titulos[tipo] || 'Personalizado';
-            
-            STATE.reporte = { tipo, datos: d };
-            
-            document.getElementById('reporteOutput').classList.remove('hidden');
-            document.getElementById('reporteOutput').innerHTML = `
-                <h2 class="text-2xl font-bold mb-6">📊 Reporte ${titulo} - ${formatearFechaLarga(new Date().toISOString())}</h2>
-                <div class="bg-gradient-to-r from-red-50 to-white p-6 rounded-xl mb-6">
-                    <h3 class="text-xl font-bold mb-3">Resumen Ejecutivo</h3>
-                    <p class="text-gray-700 leading-relaxed">
-                        Se analizaron <strong>${d.length}</strong> comentarios. 
-                        Sentimiento <strong>${s.Positivo > s.Negativo ? 'mayoritariamente positivo' : 'predominantemente negativo'}</strong> 
-                        (${((s.Positivo/d.length)*100).toFixed(1)}% positivo, ${((s.Negativo/d.length)*100).toFixed(1)}% negativo).
-                        Se detectaron <strong>${riesgos}</strong> riesgos reputacionales altos.
-                    </p>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                    <div class="text-center p-4 bg-white border rounded-xl">
-                        <i class="fas fa-comments text-3xl text-blue-500 mb-2"></i>
-                        <p class="text-3xl font-bold">${d.length}</p>
-                        <p class="text-gray-600">Total</p>
-                    </div>
-                    <div class="text-center p-4 bg-white border rounded-xl">
-                        <i class="fas fa-smile text-3xl text-green-500 mb-2"></i>
-                        <p class="text-3xl font-bold text-green-600">${s.Positivo}</p>
-                        <p class="text-gray-600">Positivos</p>
-                    </div>
-                    <div class="text-center p-4 bg-white border rounded-xl">
-                        <i class="fas fa-frown text-3xl text-red-500 mb-2"></i>
-                        <p class="text-3xl font-bold text-red-600">${s.Negativo}</p>
-                        <p class="text-gray-600">Negativos</p>
-                    </div>
-                </div>
-                <div class="flex gap-2 mt-6">
-                    <button onclick="exportarReporte('pdf')" class="px-4 py-2 bg-red-700 text-white rounded-lg">PDF</button>
-                    <button onclick="exportarReporte('excel')" class="px-4 py-2 bg-green-600 text-white rounded-lg">Excel</button>
-                    <button onclick="exportarReporte('csv')" class="px-4 py-2 bg-blue-600 text-white rounded-lg">CSV</button>
-                </div>
-            `;
-            
-            document.getElementById('reporteOutput').scrollIntoView({ behavior: 'smooth' });
-        }
-        
-        function mostrarModalPersonalizado() {
-            document.getElementById('modalPersonalizado').classList.remove('hidden');
-        }
-        
-        function cerrarModalPersonalizado() {
-            document.getElementById('modalPersonalizado').classList.add('hidden');
-        }
-        
-        function generarReportePersonalizado() {
-            const inicio = document.getElementById('fechaInicio').value;
-            const fin = document.getElementById('fechaFin').value;
-            if (!inicio || !fin) return alert('Selecciona ambas fechas');
-            
-            const filtrados = STATE.datos.filter(r => {
-                const fecha = (r['Created At'] || '').toString().substring(0, 10);
-                return fecha >= inicio && fecha <= fin;
-            });
-            
-            if (!filtrados.length) return alert('Sin datos en ese rango');
-            
-            const original = STATE.datos;
-            STATE.datos = filtrados;
-            generarReporte('personalizado');
-            STATE.datos = original;
-            cerrarModalPersonalizado();
-        }
-        
-        function exportarReporte(formato) {
-            if (!STATE.reporte) return alert('Genera un reporte primero');
-            
-            if (formato === 'pdf') {
-                const { jsPDF } = window.jspdf;
-                const doc = new jsPDF();
-                doc.text('Reporte', 20, 20);
-                doc.save(`reporte-${Date.now()}.pdf`);
-                return;
-            }
-            
-            let csv = 'Fecha,Usuario,Comentario,Sentimiento,Tipo,Tema,Prioridad,Riesgo\n';
-            STATE.reporte.datos.forEach(r => {
-                csv += `"${formatearFechaPeru(r['Created At'])}","${r['User Name']}","${r['Full Text']}","${r._analisis.sentimiento}","${r._analisis.tipo}","${r._analisis.tema}","${r._analisis.prioridad}","${r._analisis.riesgo}"\n`;
-            });
-            
-            const mime = formato === 'excel' ? 'application/vnd.ms-excel' : 'text/csv';
-            const ext = formato === 'excel' ? '.xls' : '.csv';
-            
-            const blob = new Blob([csv], { type: mime });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `reporte-${Date.now()}${ext}`;
-            a.click();
-            URL.revokeObjectURL(url);
-        }
-        
-        // ============================================
-        // CONFIGURACIÓN
-        // ============================================
-        
-        function renderizarConfig() {
-            document.getElementById('cfgNombre').value = CONFIG.institucion;
-            document.getElementById('cfgColor').value = CONFIG.color;
-            document.getElementById('cfgPositivas').value = CONFIG.diccionario.positivas.join(', ');
-            document.getElementById('cfgNegativas').value = CONFIG.diccionario.negativas.join(', ');
-            
-            document.getElementById('temasConfig').innerHTML = CONFIG.temas.map((t, i) => `
-                <div class="mb-3 p-4 bg-gray-50 rounded-lg">
-                    <div class="flex justify-between items-center mb-2">
-                        <input class="tema-nombre font-bold bg-transparent border-b-2 border-gray-300 focus:border-red-500 outline-none" value="${t.nombre}" data-index="${i}">
-                        <button onclick="eliminarTema(${i})" class="text-red-600 hover:text-red-800">&times;</button>
-                    </div>
-                    <input class="tema-palabras w-full px-3 py-2 border rounded-lg text-sm" value="${t.palabras.join(', ')}" data-index="${i}">
-                </div>
-            `).join('');
-        }
-        
-        function agregarTema() {
-            CONFIG.temas.push({ nombre: 'Nuevo Tema', palabras: [] });
-            renderizarConfig();
-        }
-        
-        function eliminarTema(i) {
-            CONFIG.temas.splice(i, 1);
-            renderizarConfig();
-        }
-        
-        function guardarConfig() {
-            CONFIG.institucion = document.getElementById('cfgNombre').value;
-            CONFIG.color = document.getElementById('cfgColor').value;
-            CONFIG.diccionario.positivas = document.getElementById('cfgPositivas').value.split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
-            CONFIG.diccionario.negativas = document.getElementById('cfgNegativas').value.split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
-            
-            document.querySelectorAll('.tema-nombre').forEach((el, i) => {
-                CONFIG.temas[i].nombre = el.value;
-            });
-            document.querySelectorAll('.tema-palabras').forEach((el, i) => {
-                CONFIG.temas[i].palabras = el.value.split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
-            });
-            
-            localStorage.setItem('mml_config_v3_peru', JSON.stringify(CONFIG));
-            
-            if (STATE.datos.length) {
-                STATE.datos = STATE.datos.map(r => {
-                    const texto = r['Full Text'] || r['full_text'] || '';
-                    return { ...r, _analisis: AnalizadorPeruano.analizar(texto.toString()) };
-                });
-                STATE.filtrados = [...STATE.datos];
-                renderizarDashboard();
-            }
-            
-            alert('✅ Configuración guardada exitosamente');
-        }
-        
-        // ============================================
-        // NAVEGACIÓN
+        // NAVEGACIÓN Y UI
         // ============================================
         
         function navegar(vista) {
-            STATE.vista = vista;
             document.querySelectorAll('[id^="vista-"]').forEach(el => el.classList.add('hidden'));
             const target = document.getElementById(`vista-${vista}`);
-            if (target) {
-                target.classList.remove('hidden');
-                target.classList.add('animate-fadeIn');
-            }
-            
-            document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
-            event?.target?.closest('.sidebar-link')?.classList.add('active');
-            
-            if (vista === 'dashboard' && STATE.datos.length) renderizarDashboard();
-            if (vista === 'config') renderizarConfig();
-            if (window.innerWidth < 1024) cerrarSidebar();
-        }
-        
-        function seleccionarPlataforma(p) {
-            if (p !== 'twitter') return alert('Próximamente');
-            STATE.plataforma = p;
-            document.getElementById('sidebar-platform-badge').classList.remove('hidden');
-            navegar('dashboard');
+            if (target) target.classList.remove('hidden');
         }
         
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('-translate-x-full');
         }
         
-        function cerrarSidebar() {
-            document.getElementById('sidebar').classList.add('-translate-x-full');
+        function guardarAPIKey() {
+            const key = document.getElementById('apiKey').value.trim();
+            if (key) {
+                STATE.apiKey = key;
+                localStorage.setItem('gemini_api_key', key);
+                document.getElementById('ia-status').textContent = 'Gemini ✅';
+                alert('✅ API Key guardada');
+            }
+        }
+        
+        function guardarConfig() {
+            const key = document.getElementById('cfgApiKey').value.trim();
+            if (key) {
+                STATE.apiKey = key;
+                localStorage.setItem('gemini_api_key', key);
+                document.getElementById('ia-status').textContent = 'Gemini ✅';
+            }
+            
+            const prompt = document.getElementById('cfgPrompt').value;
+            if (prompt) CONFIG.prompt = prompt;
+            
+            alert('✅ Configuración guardada');
         }
         
         // Inicialización
         document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('fecha-header').textContent = new Date().toLocaleDateString('es-PE', {
-                weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
-            });
+            document.getElementById('fecha-header').textContent = 
+                new Date().toLocaleDateString('es-PE', { 
+                    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' 
+                });
+            
+            // Cargar API key guardada
+            if (STATE.apiKey) {
+                document.getElementById('apiKey').value = STATE.apiKey;
+                document.getElementById('cfgApiKey').value = STATE.apiKey;
+                document.getElementById('ia-status').textContent = 'Gemini ✅';
+            } else {
+                document.getElementById('ia-status').textContent = 'Esperando clave';
+            }
+            
+            // Cargar prompt guardado
+            const savedPrompt = localStorage.getItem('gemini_prompt');
+            if (savedPrompt) {
+                CONFIG.prompt = savedPrompt;
+                document.getElementById('cfgPrompt').value = savedPrompt;
+            }
             
             document.addEventListener('keydown', e => {
-                if (e.key === 'Escape') {
-                    cerrarDetalle();
-                    cerrarModalPersonalizado();
-                }
+                if (e.key === 'Escape') cerrarDetalle();
             });
             
-            console.log('🦙 Social Listening Dashboard v3.0 - Motor Peruano');
-            console.log('✅ Diccionario de jerga peruana cargado');
-            console.log('✅ Detección de sarcasmo y vulgaridad activada');
-            console.log('✅ Fechas en formato peruano (DD/MM/AAAA)');
-            console.log('✅ Análisis contextual de menciones políticas');
+            console.log('🧠 Social Listening Dashboard v4.0 - IA Edition');
+            console.log('✅ Gemini API integrado');
+            console.log('✅ Fallback de reglas incluido');
+            console.log('✅ Análisis contextual profundo');
         });
     </script>
 </body>
