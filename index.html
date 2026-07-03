@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sentinel AI Enterprise v8.0 - Plataforma Completa</title>
+    <title>Sentinel AI v9.0 - Sistema Completo</title>
     
-    <!-- Dependencias -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -14,673 +13,452 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
-    <script src="https://cdn.jsdelivr.net/npm/wordcloud@1.2.2/src/wordcloud2.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wordcloud2.js/1.0.2/wordcloud2.min.js"></script>
     
     <style>
-        /* ============================================
-           SISTEMA DE DISEÑO ENTERPRISE
-           ============================================ */
-        
         :root {
-            --bg-void: #060913;
-            --bg-deep: #0a0f1e;
-            --bg-surface: #111827;
-            --bg-elevated: #1a2332;
-            --bg-hover: #1e2d44;
-            
-            --border-subtle: #1e3050;
-            --border-active: #3b82f6;
-            --border-gold: #f59e0b;
-            
-            --text-primary: #e2e8f0;
-            --text-secondary: #94a3b8;
-            --text-muted: #64748b;
-            
-            --accent-blue: #3b82f6;
-            --accent-cyan: #06b6d4;
-            --accent-purple: #8b5cf6;
-            --accent-green: #10b981;
-            --accent-red: #ef4444;
-            --accent-orange: #f59e0b;
-            --accent-pink: #ec4899;
-            
-            --glass-bg: rgba(17, 24, 39, 0.7);
-            --glass-border: rgba(59, 130, 246, 0.15);
-            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-            
-            --radius-sm: 8px;
-            --radius-md: 12px;
-            --radius-lg: 16px;
-            --radius-xl: 24px;
-            
-            --transition-fast: 0.15s ease;
-            --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            --transition-bounce: 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            --bg: #0a0e17;
+            --surface: #111827;
+            --elevated: #1a2332;
+            --border: #1e3050;
+            --accent: #3b82f6;
+            --gold: #f59e0b;
+            --danger: #ef4444;
+            --success: #10b981;
+            --purple: #8b5cf6;
+            --cyan: #06b6d4;
         }
         
-        * {
-            scrollbar-width: thin;
-            scrollbar-color: var(--border-subtle) var(--bg-void);
-        }
-        
-        *::-webkit-scrollbar { width: 6px; height: 6px; }
-        *::-webkit-scrollbar-track { background: var(--bg-void); }
-        *::-webkit-scrollbar-thumb { background: var(--border-subtle); border-radius: 10px; }
+        * { scrollbar-width: thin; scrollbar-color: #1e3050 #0a0e17; }
+        *::-webkit-scrollbar { width: 5px; }
+        *::-webkit-scrollbar-track { background: #0a0e17; }
+        *::-webkit-scrollbar-thumb { background: #1e3050; border-radius: 10px; }
         
         body {
-            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background: var(--bg-void);
-            color: var(--text-primary);
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--bg);
+            color: #e2e8f0;
             margin: 0;
-            line-height: 1.6;
-            overflow-x: hidden;
         }
         
-        /* ========== EFECTOS GLASS ========== */
         .glass {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid var(--glass-border);
-            box-shadow: var(--glass-shadow);
+            background: rgba(17,24,39,0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(59,130,246,0.12);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
         }
         
         .glass-hover {
-            transition: all var(--transition-smooth);
+            transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
         }
         .glass-hover:hover {
-            border-color: rgba(59, 130, 246, 0.4);
-            box-shadow: 0 12px 40px rgba(59, 130, 246, 0.1);
+            border-color: rgba(59,130,246,0.35);
+            box-shadow: 0 12px 40px rgba(59,130,246,0.12);
             transform: translateY(-2px);
         }
         
-        /* ========== GRADIENTES AVANZADOS ========== */
-        .gradient-hero {
-            background: linear-gradient(135deg, #0a0f1e 0%, #1a2332 50%, #0d1b2a 100%);
+        .kpi-card {
+            border-left: 4px solid var(--accent);
+            transition: all 0.3s;
         }
-        
-        .gradient-blue-purple {
-            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
-        }
-        
-        .gradient-cyan-green {
-            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-green));
-        }
-        
-        .gradient-fire {
-            background: linear-gradient(135deg, var(--accent-red), var(--accent-orange));
-        }
-        
-        .gradient-aurora {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-        }
-        
-        /* ========== ANIMACIONES ========== */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        @keyframes fadeInLeft {
-            from { opacity: 0; transform: translateX(-20px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-        
-        @keyframes fadeInRight {
-            from { opacity: 0; transform: translateX(20px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-        
-        @keyframes pulse-glow {
-            0%, 100% { box-shadow: 0 0 5px rgba(59, 130, 246, 0.3); }
-            50% { box-shadow: 0 0 25px rgba(59, 130, 246, 0.6); }
-        }
-        
-        @keyframes shimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-        }
-        
-        @keyframes rotate-slow {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-        
-        @keyframes heartbeat {
-            0%, 100% { transform: scale(1); }
-            15% { transform: scale(1.15); }
-            30% { transform: scale(1); }
-            45% { transform: scale(1.1); }
-            60% { transform: scale(1); }
-        }
-        
-        .animate-fadeInUp { animation: fadeInUp 0.6s ease-out; }
-        .animate-fadeInLeft { animation: fadeInLeft 0.6s ease-out; }
-        .animate-fadeInRight { animation: fadeInRight 0.6s ease-out; }
-        .animate-pulse-glow { animation: pulse-glow 2s infinite; }
-        .animate-float { animation: float 6s ease-in-out infinite; }
-        .animate-heartbeat { animation: heartbeat 1.5s ease-in-out infinite; }
-        
-        .shimmer-effect {
-            background: linear-gradient(90deg, 
-                var(--accent-blue), 
-                var(--accent-purple), 
-                var(--accent-cyan), 
-                var(--accent-blue));
-            background-size: 200% 100%;
-            animation: shimmer 3s infinite;
-        }
-        
-        /* ========== COMPONENTES ========== */
-        .kpi-card-enterprise {
-            position: relative;
-            overflow: hidden;
-            border-left: 4px solid var(--accent-blue);
-            transition: all var(--transition-smooth);
-        }
-        .kpi-card-enterprise::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(59,130,246,0.03) 0%, transparent 50%);
-            pointer-events: none;
-        }
-        .kpi-card-enterprise:hover {
+        .kpi-card:hover {
             border-left-width: 8px;
-            border-left-color: var(--accent-orange);
-            transform: translateX(4px);
-            box-shadow: 0 0 30px rgba(59,130,246,0.1);
+            border-left-color: var(--gold);
+            transform: translateX(3px);
         }
         
-        .kpi-value-enterprise {
+        .kpi-value {
             background: linear-gradient(135deg, #60a5fa, #a78bfa, #22d3ee);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            font-weight: 900;
         }
         
-        .badge-enterprise {
-            padding: 4px 10px;
+        .badge {
+            padding: 3px 10px;
             border-radius: 20px;
             font-size: 0.65rem;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
+            letter-spacing: 1px;
         }
         
-        .btn-enterprise {
-            padding: 10px 20px;
-            border-radius: var(--radius-md);
-            font-weight: 600;
-            transition: all var(--transition-smooth);
-            position: relative;
-            overflow: hidden;
-        }
-        .btn-enterprise::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.3);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-        .btn-enterprise:active::after {
-            width: 300px;
-            height: 300px;
-        }
+        .badge-neg { background: rgba(239,68,68,0.12); color: #ef4444; border: 1px solid rgba(239,68,68,0.25); }
+        .badge-pos { background: rgba(16,185,129,0.12); color: #10b981; border: 1px solid rgba(16,185,129,0.25); }
+        .badge-neu { background: rgba(245,158,11,0.12); color: #f59e0b; border: 1px solid rgba(245,158,11,0.25); }
         
-        /* ========== SIDEBAR ========== */
-        .sidebar-enterprise {
-            background: linear-gradient(180deg, #0a0f1e 0%, #111827 100%);
-            border-right: 1px solid var(--border-subtle);
-        }
-        
-        .nav-item-enterprise {
-            transition: all var(--transition-smooth);
+        .nav-item {
+            transition: all 0.2s;
             border-left: 3px solid transparent;
-            position: relative;
+            cursor: pointer;
         }
-        .nav-item-enterprise:hover {
-            background: rgba(59,130,246,0.08);
-            border-left-color: var(--accent-blue);
+        .nav-item:hover { background: rgba(59,130,246,0.06); border-left-color: var(--accent); }
+        .nav-item.active { background: rgba(59,130,246,0.1); border-left-color: var(--gold); }
+        
+        .chart-container { position: relative; height: 300px; width: 100%; }
+        
+        .pulse-crisis {
+            animation: pulseCrisis 0.8s ease-in-out infinite alternate;
         }
-        .nav-item-enterprise.active {
-            background: rgba(59,130,246,0.12);
-            border-left-color: var(--accent-orange);
-            box-shadow: inset 0 0 20px rgba(59,130,246,0.05);
-        }
-        .nav-item-enterprise.active::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 3px;
-            height: 100%;
-            background: var(--accent-orange);
-            box-shadow: 0 0 10px var(--accent-orange);
+        @keyframes pulseCrisis {
+            from { box-shadow: 0 0 8px rgba(239,68,68,0.4); }
+            to { box-shadow: 0 0 25px rgba(239,68,68,0.9); }
         }
         
-        /* ========== ALERT BADGE ========== */
-        .crisis-pulse {
-            animation: crisisPulse 0.5s ease-in-out infinite alternate;
+        .shimmer {
+            background: linear-gradient(90deg, var(--accent), var(--purple), var(--cyan), var(--accent));
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
         }
-        @keyframes crisisPulse {
-            from { box-shadow: 0 0 10px rgba(239,68,68,0.5); }
-            to { box-shadow: 0 0 30px rgba(239,68,68,0.8); }
-        }
-        
-        /* ========== TOOLTIP ========== */
-        .tooltip-enterprise {
-            position: relative;
-        }
-        .tooltip-enterprise:hover::after {
-            content: attr(data-tooltip);
-            position: absolute;
-            bottom: calc(100% + 8px);
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--bg-elevated);
-            color: var(--text-primary);
-            padding: 6px 12px;
-            border-radius: var(--radius-sm);
-            font-size: 0.75rem;
-            white-space: nowrap;
-            z-index: 100;
-            border: 1px solid var(--border-subtle);
-            pointer-events: none;
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
         }
         
-        /* ========== RESPONSIVE ========== */
-        @media (max-width: 1024px) {
-            .sidebar-enterprise {
-                transform: translateX(-100%);
-            }
-            .sidebar-enterprise.open {
-                transform: translateX(0);
-            }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
-        /* ========== PRINT ========== */
-        @media print {
-            body { background: white; color: black; }
-            .glass { border: 1px solid #ddd; box-shadow: none; }
-            .sidebar-enterprise { display: none; }
-        }
+        .animate-in { animation: fadeInUp 0.5s ease-out; }
         
-        /* ========== DATA TABLES OVERRIDE ========== */
         table.dataTable {
-            background: var(--bg-surface) !important;
-            color: var(--text-primary) !important;
-            border-radius: var(--radius-lg) !important;
-            overflow: hidden;
+            background: var(--surface) !important;
+            color: #e2e8f0 !important;
+            border-radius: 12px !important;
         }
         table.dataTable thead th {
-            background: var(--bg-elevated) !important;
-            color: var(--text-secondary) !important;
-            border-color: var(--border-subtle) !important;
-            font-weight: 600;
+            background: var(--elevated) !important;
+            color: #93c5fd !important;
+            border-color: var(--border) !important;
+            font-size: 0.7rem;
             text-transform: uppercase;
             letter-spacing: 1px;
-            font-size: 0.7rem;
         }
-        table.dataTable tbody tr {
-            transition: background var(--transition-fast);
+        table.dataTable tbody tr:hover { background: rgba(59,130,246,0.04) !important; }
+        table.dataTable tbody td { border-color: rgba(30,48,80,0.3) !important; }
+        
+        select, input, textarea {
+            background: var(--elevated) !important;
+            color: #e2e8f0 !important;
+            border: 1px solid var(--border) !important;
+            border-radius: 8px !important;
         }
-        table.dataTable tbody tr:hover {
-            background: var(--bg-hover) !important;
+        select:focus, input:focus, textarea:focus {
+            border-color: var(--accent) !important;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.12) !important;
         }
-        table.dataTable tbody td {
-            border-color: rgba(30, 48, 80, 0.3) !important;
+        
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+        .btn-primary:hover {
+            box-shadow: 0 0 25px rgba(59,130,246,0.4);
+            transform: translateY(-2px);
+        }
+        
+        .btn-gold {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #0a0e17;
+            font-weight: 700;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+        .btn-gold:hover {
+            box-shadow: 0 0 25px rgba(245,158,11,0.4);
+            transform: translateY(-2px);
+        }
+        
+        .emotion-wheel-item {
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .emotion-wheel-item:hover {
+            transform: scale(1.08);
+            box-shadow: 0 0 20px rgba(139,92,246,0.3);
+        }
+        
+        .crisis-alert {
+            animation: fadeInUp 0.5s ease-out;
+            border-left: 4px solid #ef4444;
+        }
+        
+        .influence-node {
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .influence-node:hover {
+            filter: brightness(1.3);
+            transform: scale(1.1);
+        }
+        
+        @media (max-width: 768px) {
+            .chart-container { height: 220px; }
+            .kpi-value { font-size: 1.5rem; }
         }
     </style>
 </head>
-<body class="bg-[#060913]">
+<body class="bg-[#0a0e17]">
 
-    <!-- ============================================
-    CONTENEDOR PRINCIPAL
-    ============================================ -->
     <div class="flex h-screen overflow-hidden">
         
-        <!-- ============================================
-        SIDEBAR ENTERPRISE
-        ============================================ -->
-        <aside id="sidebar" class="sidebar-enterprise fixed inset-y-0 left-0 z-50 w-80 lg:static transition-transform duration-300 overflow-y-auto">
-            <div class="p-6">
-                
-                <!-- Logo y Marca -->
-                <div class="text-center mb-8 animate-fadeInUp">
-                    <div class="relative inline-block">
-                        <div class="w-24 h-24 bg-gradient-to-br from-blue-600 via-purple-600 to-cyan-400 rounded-2xl flex items-center justify-center shadow-2xl animate-float">
-                            <span class="text-4xl font-black text-white">🧬</span>
-                        </div>
-                        <div class="absolute -bottom-1 -right-1 w-6 h-6 bg-green-400 rounded-full border-2 border-[#0a0f1e] animate-pulse-glow"></div>
+        <!-- SIDEBAR -->
+        <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-72 bg-[#0d1117] border-r border-[#1e3050] transform -translate-x-full lg:translate-x-0 lg:static transition-transform duration-300 overflow-y-auto">
+            <div class="p-5">
+                <div class="text-center mb-6">
+                    <div class="w-16 h-16 bg-gradient-to-br from-blue-600 via-purple-600 to-cyan-400 rounded-2xl mx-auto mb-3 flex items-center justify-center shadow-lg">
+                        <span class="text-2xl font-black text-white">🧬</span>
                     </div>
-                    <h2 class="text-2xl font-black text-white mt-4">SENTINEL AI</h2>
-                    <p class="text-sm text-blue-300/60">Enterprise v8.0</p>
+                    <h2 class="text-lg font-bold text-white">Sentinel AI</h2>
+                    <p class="text-xs text-blue-300/50">v9.0 Enterprise</p>
                 </div>
                 
-                <!-- Estado del Sistema -->
-                <div class="mb-6 p-4 bg-[#1a2332] rounded-xl border border-[#1e3050] animate-fadeInLeft">
-                    <div class="flex items-center justify-between mb-3">
-                        <span class="text-xs text-blue-300/60">ESTADO DEL SISTEMA</span>
-                        <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse-glow"></span>
-                    </div>
-                    <div class="space-y-2">
-                        <div class="flex justify-between text-xs">
-                            <span class="text-blue-200/80">IA Principal</span>
-                            <span class="text-green-400 font-bold">Gemini Pro</span>
-                        </div>
-                        <div class="flex justify-between text-xs">
-                            <span class="text-blue-200/80">Motor Emocional</span>
-                            <span class="text-green-400 font-bold">Activo</span>
-                        </div>
-                        <div class="flex justify-between text-xs">
-                            <span class="text-blue-200/80">Detector Crisis</span>
-                            <span class="text-green-400 font-bold">Monitoreando</span>
-                        </div>
-                        <div class="flex justify-between text-xs">
-                            <span class="text-blue-200/80">Procesados Hoy</span>
-                            <span class="text-white font-bold" id="sidebar-processed">0</span>
-                        </div>
+                <div class="mb-4 p-3 bg-[#1a2332] rounded-xl border border-[#1e3050]">
+                    <div class="flex items-center justify-between text-xs">
+                        <span class="text-blue-300/60">Estado</span>
+                        <span class="flex items-center gap-1"><span class="w-2 h-2 bg-green-400 rounded-full"></span> Activo</span>
                     </div>
                 </div>
                 
-                <!-- Navegación Principal -->
                 <nav class="space-y-1">
-                    <a onclick="navigateTo('dashboard')" class="nav-item-enterprise active flex items-center px-4 py-3 rounded-lg cursor-pointer text-blue-200/80">
-                        <i class="fas fa-chart-pie w-6 text-blue-400"></i>
-                        <span class="ml-3 font-semibold">Dashboard</span>
-                        <span class="ml-auto text-xs bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded-full">NUEVO</span>
+                    <a onclick="navigateTo('dashboard')" class="nav-item active flex items-center px-3 py-2.5 rounded-lg text-sm text-blue-200/80">
+                        <i class="fas fa-chart-pie w-5 text-blue-400"></i><span class="ml-2">Dashboard</span>
                     </a>
-                    
-                    <a onclick="navigateTo('emotions')" class="nav-item-enterprise flex items-center px-4 py-3 rounded-lg cursor-pointer text-blue-200/80">
-                        <i class="fas fa-brain w-6 text-purple-400"></i>
-                        <span class="ml-3 font-semibold">Laboratorio Emocional</span>
-                        <span class="ml-auto text-xs bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded-full">v8.0</span>
+                    <a onclick="navigateTo('emotions')" class="nav-item flex items-center px-3 py-2.5 rounded-lg text-sm text-blue-200/80">
+                        <i class="fas fa-brain w-5 text-purple-400"></i><span class="ml-2">Lab Emocional</span>
                     </a>
-                    
-                    <a onclick="navigateTo('crisis')" class="nav-item-enterprise flex items-center px-4 py-3 rounded-lg cursor-pointer text-blue-200/80">
-                        <i class="fas fa-exclamation-triangle w-6 text-red-400"></i>
-                        <span class="ml-3 font-semibold">Centro de Crisis</span>
-                        <span id="crisis-badge" class="ml-auto text-xs bg-red-500/20 text-red-300 px-2 py-0.5 rounded-full hidden">0</span>
+                    <a onclick="navigateTo('crisis')" class="nav-item flex items-center px-3 py-2.5 rounded-lg text-sm text-blue-200/80">
+                        <i class="fas fa-exclamation-triangle w-5 text-red-400"></i><span class="ml-2">Centro Crisis</span>
+                        <span id="crisis-nav-badge" class="ml-auto text-xs bg-red-500/20 text-red-300 px-1.5 py-0.5 rounded-full hidden">0</span>
                     </a>
-                    
-                    <a onclick="navigateTo('narratives')" class="nav-item-enterprise flex items-center px-4 py-3 rounded-lg cursor-pointer text-blue-200/80">
-                        <i class="fas fa-project-diagram w-6 text-cyan-400"></i>
-                        <span class="ml-3 font-semibold">Narrativas</span>
+                    <a onclick="navigateTo('narratives')" class="nav-item flex items-center px-3 py-2.5 rounded-lg text-sm text-blue-200/80">
+                        <i class="fas fa-project-diagram w-5 text-cyan-400"></i><span class="ml-2">Narrativas</span>
                     </a>
-                    
-                    <a onclick="navigateTo('influence')" class="nav-item-enterprise flex items-center px-4 py-3 rounded-lg cursor-pointer text-blue-200/80">
-                        <i class="fas fa-users w-6 text-green-400"></i>
-                        <span class="ml-3 font-semibold">Red de Influencia</span>
+                    <a onclick="navigateTo('influence')" class="nav-item flex items-center px-3 py-2.5 rounded-lg text-sm text-blue-200/80">
+                        <i class="fas fa-users w-5 text-green-400"></i><span class="ml-2">Influencia</span>
                     </a>
-                    
-                    <a onclick="navigateTo('stories')" class="nav-item-enterprise flex items-center px-4 py-3 rounded-lg cursor-pointer text-blue-200/80">
-                        <i class="fas fa-book-open w-6 text-orange-400"></i>
-                        <span class="ml-3 font-semibold">Story Generator</span>
+                    <a onclick="navigateTo('stories')" class="nav-item flex items-center px-3 py-2.5 rounded-lg text-sm text-blue-200/80">
+                        <i class="fas fa-book-open w-5 text-orange-400"></i><span class="ml-2">Stories</span>
                     </a>
-                    
-                    <a onclick="navigateTo('collab')" class="nav-item-enterprise flex items-center px-4 py-3 rounded-lg cursor-pointer text-blue-200/80">
-                        <i class="fas fa-comments w-6 text-pink-400"></i>
-                        <span class="ml-3 font-semibold">Colaboración</span>
+                    <a onclick="navigateTo('collab')" class="nav-item flex items-center px-3 py-2.5 rounded-lg text-sm text-blue-200/80">
+                        <i class="fas fa-comments w-5 text-pink-400"></i><span class="ml-2">Colaboración</span>
                     </a>
-                    
-                    <div class="my-4 border-t border-[#1e3050]"></div>
-                    
-                    <a onclick="navigateTo('reports')" class="nav-item-enterprise flex items-center px-4 py-3 rounded-lg cursor-pointer text-blue-200/80">
-                        <i class="fas fa-file-contract w-6 text-blue-300"></i>
-                        <span class="ml-3 font-semibold">Reportes</span>
+                    <div class="my-3 border-t border-[#1e3050]"></div>
+                    <a onclick="navigateTo('reports')" class="nav-item flex items-center px-3 py-2.5 rounded-lg text-sm text-blue-200/80">
+                        <i class="fas fa-file-contract w-5 text-blue-300"></i><span class="ml-2">Reportes</span>
                     </a>
-                    
-                    <a onclick="navigateTo('config')" class="nav-item-enterprise flex items-center px-4 py-3 rounded-lg cursor-pointer text-blue-200/80">
-                        <i class="fas fa-sliders-h w-6 text-blue-300"></i>
-                        <span class="ml-3 font-semibold">Configuración</span>
+                    <a onclick="navigateTo('config')" class="nav-item flex items-center px-3 py-2.5 rounded-lg text-sm text-blue-200/80">
+                        <i class="fas fa-sliders-h w-5 text-blue-300"></i><span class="ml-2">Config</span>
                     </a>
                 </nav>
             </div>
         </aside>
         
-        <!-- ============================================
-        CONTENIDO PRINCIPAL
-        ============================================ -->
+        <!-- MAIN -->
         <main class="flex-1 overflow-y-auto">
             
-            <!-- Header Enterprise -->
-            <header class="glass sticky top-0 z-30 border-b border-[#1e3050] px-6 py-4">
+            <header class="glass sticky top-0 z-30 border-b border-[#1e3050] px-6 py-3">
                 <div class="flex items-center justify-between">
-                    <button onclick="toggleSidebar()" class="lg:hidden text-blue-300 hover:text-white">
-                        <i class="fas fa-bars text-2xl"></i>
-                    </button>
-                    
-                    <div class="flex items-center space-x-4">
-                        <h1 class="text-xl font-bold text-white" id="header-title">Dashboard Principal</h1>
-                    </div>
-                    
-                    <div class="flex items-center space-x-4">
-                        <span class="text-sm text-blue-300/60" id="fecha-header"></span>
-                        <div class="flex items-center space-x-2 text-xs bg-red-500/10 text-red-300 px-3 py-1.5 rounded-full" id="crisis-indicator">
-                            <span class="w-2 h-2 bg-red-500 rounded-full"></span>
-                            <span id="crisis-count">0 alertas</span>
-                        </div>
+                    <button onclick="toggleSidebar()" class="lg:hidden text-blue-300"><i class="fas fa-bars text-xl"></i></button>
+                    <h1 class="text-lg font-bold text-white" id="header-title">Dashboard</h1>
+                    <div class="flex items-center gap-3">
+                        <span class="text-xs text-blue-300/50" id="fecha-header"></span>
+                        <span id="crisis-header-badge" class="text-xs bg-red-500/10 text-red-300 px-2 py-1 rounded-full hidden">🚨 <span id="crisis-header-count">0</span></span>
                     </div>
                 </div>
             </header>
             
-            <!-- Contenedor de Vistas -->
-            <div class="p-6" id="view-container">
+            <div class="p-5" id="view-container">
                 
-                <!-- ============================================
-                VISTA: DASHBOARD PRINCIPAL
-                ============================================ -->
-                <div id="view-dashboard">
+                <!-- ==================== DASHBOARD ==================== -->
+                <div id="view-dashboard" class="animate-in">
                     
-                    <!-- Panel de Control -->
-                    <div class="glass rounded-2xl p-6 mb-8 animate-fadeInUp">
-                        <div class="flex flex-wrap items-center justify-between gap-4">
+                    <div class="glass rounded-2xl p-5 mb-6">
+                        <div class="flex flex-wrap items-center justify-between gap-3">
                             <div>
-                                <h2 class="text-2xl font-bold text-white">🧬 Centro de Control Enterprise</h2>
-                                <p class="text-blue-300/60 mt-1">Análisis semántico • Emociones • Crisis • Narrativas • Influencia</p>
+                                <h2 class="text-xl font-bold text-white">🧬 Sentinel AI Enterprise</h2>
+                                <p class="text-xs text-blue-300/50">Prompt Zero-Escape • Análisis Multi-capa</p>
                             </div>
-                            <div class="flex gap-3 flex-wrap">
-                                <input type="password" id="apiKey" class="px-4 py-2.5 bg-[#1a2332] border border-[#1e3050] rounded-lg text-sm w-56 text-white placeholder-blue-300/30" placeholder="🔑 Gemini API Key">
-                                <button onclick="guardarAPIKey()" class="px-5 py-2.5 btn-enterprise bg-gradient-to-r from-amber-500 to-orange-600 text-black font-bold rounded-lg hover:shadow-lg hover:shadow-orange-500/20"><i class="fas fa-key mr-2"></i>Conectar IA</button>
-                                <button onclick="document.getElementById('fileInput').click()" class="px-5 py-2.5 btn-enterprise bg-[#1a2332] border border-[#1e3050] text-white rounded-lg hover:bg-[#1e3050] font-semibold"><i class="fas fa-upload mr-2"></i>Cargar Excel</button>
-                                <button onclick="cargarDemo()" class="px-5 py-2.5 btn-enterprise bg-[#1a2332] border border-[#1e3050] text-white rounded-lg hover:bg-[#1e3050] font-semibold"><i class="fas fa-flask mr-2"></i>Demo</button>
+                            <div class="flex gap-2 flex-wrap">
+                                <input type="password" id="apiKey" class="px-3 py-2 text-sm w-48" placeholder="Gemini API Key">
+                                <button onclick="guardarAPIKey()" class="px-4 py-2 btn-gold text-sm"><i class="fas fa-key mr-1"></i>Conectar</button>
+                                <button onclick="document.getElementById('fileInput').click()" class="px-4 py-2 btn-primary text-sm"><i class="fas fa-upload mr-1"></i>Excel</button>
+                                <button onclick="cargarDemo()" class="px-4 py-2 bg-[#1a2332] border border-[#1e3050] text-white rounded-xl text-sm hover:bg-[#1e3050]"><i class="fas fa-flask mr-1"></i>Demo</button>
                             </div>
                             <input type="file" id="fileInput" accept=".xlsx,.xls" class="hidden" onchange="procesarArchivo(event)">
                         </div>
-                        
-                        <!-- Progreso -->
-                        <div id="progressContainer" class="hidden mt-6">
-                            <div class="flex justify-between text-sm mb-2">
-                                <span class="text-blue-300" id="progressText">Iniciando motores de análisis...</span>
-                                <span class="text-blue-200 font-bold" id="progressPercent">0%</span>
-                            </div>
-                            <div class="w-full bg-[#0a0f1e] rounded-full h-2.5">
-                                <div id="progressBar" class="shimmer-effect h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
-                            </div>
-                            <p class="text-xs text-blue-300/40 mt-2" id="progressDetail"></p>
+                        <div id="progressContainer" class="hidden mt-4">
+                            <div class="flex justify-between text-xs mb-1"><span class="text-blue-300" id="progressText"></span><span class="text-blue-200 font-bold" id="progressPercent">0%</span></div>
+                            <div class="w-full bg-[#0a0e17] rounded-full h-2"><div id="progressBar" class="shimmer h-2 rounded-full" style="width:0%"></div></div>
                         </div>
                     </div>
                     
-                    <!-- KPIs Enterprise -->
-                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8" id="kpiContainer"></div>
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-6" id="kpiContainer"></div>
                     
-                    <!-- Gráficos Fila 1 -->
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-                        <div class="glass rounded-2xl p-6 glass-hover animate-fadeInUp" style="animation-delay: 0.1s">
-                            <h3 class="text-lg font-bold text-white mb-4">🎭 Sentimientos</h3>
-                            <div class="chart-container" style="height: 300px"><canvas id="chartSentimiento"></canvas></div>
-                        </div>
-                        <div class="glass rounded-2xl p-6 glass-hover animate-fadeInUp" style="animation-delay: 0.2s">
-                            <h3 class="text-lg font-bold text-white mb-4">🧠 Emociones Detectadas</h3>
-                            <div class="chart-container" style="height: 300px"><canvas id="chartEmociones"></canvas></div>
-                        </div>
-                        <div class="glass rounded-2xl p-6 glass-hover animate-fadeInUp" style="animation-delay: 0.3s">
-                            <h3 class="text-lg font-bold text-white mb-4">📂 Temas</h3>
-                            <div class="chart-container" style="height: 300px"><canvas id="chartTemas"></canvas></div>
-                        </div>
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-6">
+                        <div class="glass rounded-2xl p-5 glass-hover"><h3 class="text-sm font-bold text-white mb-3">🎭 Sentimientos</h3><div class="chart-container"><canvas id="chartSentimiento"></canvas></div></div>
+                        <div class="glass rounded-2xl p-5 glass-hover"><h3 class="text-sm font-bold text-white mb-3">🧠 Emociones</h3><div class="chart-container"><canvas id="chartEmociones"></canvas></div></div>
+                        <div class="glass rounded-2xl p-5 glass-hover"><h3 class="text-sm font-bold text-white mb-3">📂 Temas</h3><div class="chart-container"><canvas id="chartTemas"></canvas></div></div>
                     </div>
                     
-                    <!-- Crisis & Timeline -->
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-                        <div class="glass rounded-2xl p-6 glass-hover animate-fadeInUp">
-                            <h3 class="text-lg font-bold text-white mb-4">🚨 Monitor de Crisis</h3>
-                            <div class="chart-container" style="height: 300px"><canvas id="chartCrisis"></canvas></div>
-                        </div>
-                        <div class="glass rounded-2xl p-6 glass-hover animate-fadeInUp">
-                            <h3 class="text-lg font-bold text-white mb-4">📈 Evolución Temporal</h3>
-                            <div class="chart-container" style="height: 300px"><canvas id="chartTimeline"></canvas></div>
-                        </div>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6">
+                        <div class="glass rounded-2xl p-5 glass-hover"><h3 class="text-sm font-bold text-white mb-3">🚨 Monitor Crisis</h3><div class="chart-container"><canvas id="chartCrisis"></canvas></div></div>
+                        <div class="glass rounded-2xl p-5 glass-hover"><h3 class="text-sm font-bold text-white mb-3">📈 Timeline</h3><div class="chart-container"><canvas id="chartTimeline"></canvas></div></div>
                     </div>
                     
-                    <!-- Nube de Palabras -->
-                    <div class="glass rounded-2xl p-6 mb-8 glass-hover animate-fadeInUp">
-                        <h3 class="text-lg font-bold text-white mb-4">☁️ Nube de Palabras Interactiva</h3>
-                        <canvas id="wordcloud" width="800" height="400" class="w-full"></canvas>
-                    </div>
+                    <div class="glass rounded-2xl p-5 mb-6"><h3 class="text-sm font-bold text-white mb-3">☁️ Nube de Palabras</h3><canvas id="wordcloud" width="700" height="300" class="w-full"></canvas></div>
                     
-                    <!-- Tabla Enterprise -->
-                    <div class="glass rounded-2xl p-6 animate-fadeInUp">
-                        <div class="flex flex-wrap justify-between items-center mb-6 gap-4">
-                            <h3 class="text-lg font-bold text-white">📋 Comentarios Analizados</h3>
-                            <div class="flex flex-wrap gap-2">
-                                <select id="filtroSentimiento" class="px-3 py-2 bg-[#1a2332] border border-[#1e3050] rounded-lg text-sm text-white" onchange="aplicarFiltros()">
-                                    <option value="">Sentimiento</option>
-                                    <option value="Negativo">🔴 Negativo</option>
-                                    <option value="Neutral">🟡 Neutral</option>
-                                    <option value="Positivo">🟢 Positivo</option>
-                                </select>
-                                <select id="filtroEmocion" class="px-3 py-2 bg-[#1a2332] border border-[#1e3050] rounded-lg text-sm text-white" onchange="aplicarFiltros()">
-                                    <option value="">Emoción</option>
-                                </select>
-                                <select id="filtroTipo" class="px-3 py-2 bg-[#1a2332] border border-[#1e3050] rounded-lg text-sm text-white" onchange="aplicarFiltros()">
-                                    <option value="">Tipo</option>
-                                </select>
+                    <div class="glass rounded-2xl p-5">
+                        <div class="flex flex-wrap justify-between items-center mb-4 gap-2">
+                            <h3 class="text-sm font-bold text-white">📋 Comentarios</h3>
+                            <div class="flex gap-2">
+                                <select id="filtroSentimiento" class="px-2 py-1.5 text-xs" onchange="aplicarFiltros()"><option value="">Sentimiento</option><option value="Negativo">Negativo</option><option value="Neutral">Neutral</option><option value="Positivo">Positivo</option></select>
+                                <select id="filtroEmocion" class="px-2 py-1.5 text-xs" onchange="aplicarFiltros()"><option value="">Emoción</option></select>
+                                <select id="filtroTipo" class="px-2 py-1.5 text-xs" onchange="aplicarFiltros()"><option value="">Tipo</option></select>
                             </div>
                         </div>
                         <div class="overflow-x-auto">
                             <table id="tablaComentarios" class="display nowrap" style="width:100%">
-                                <thead>
-                                    <tr>
-                                        <th>Fecha</th><th>Usuario</th><th>Comentario</th>
-                                        <th>Sentimiento</th><th>Emoción</th><th>Tipo</th>
-                                        <th>Tema</th><th>Prioridad</th><th>Crisis</th>
-                                    </tr>
-                                </thead>
+                                <thead><tr><th>Fecha</th><th>Usuario</th><th>Comentario</th><th>Sent</th><th>Emoción</th><th>Tipo</th><th>Tema</th><th>Prioridad</th><th>Crisis</th></tr></thead>
                                 <tbody id="tablaBody"></tbody>
                             </table>
                         </div>
                     </div>
                 </div>
                 
-                <!-- ============================================
-                OTRAS VISTAS (placeholder para las otras funcionalidades)
-                ============================================ -->
-                <div id="view-emotions" class="hidden animate-fadeInUp">
-                    <div class="glass rounded-2xl p-8 text-center">
-                        <h2 class="text-3xl font-bold text-white mb-4">🧠 Laboratorio Emocional</h2>
-                        <p class="text-blue-300/60">Análisis avanzado de emociones con rueda de Plutchik</p>
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8" id="emotion-wheel"></div>
+                <!-- ==================== LAB EMOCIONAL ==================== -->
+                <div id="view-emotions" class="hidden animate-in">
+                    <div class="glass rounded-2xl p-6 mb-6">
+                        <h2 class="text-xl font-bold text-white mb-2">🧠 Laboratorio Emocional</h2>
+                        <p class="text-sm text-blue-300/50 mb-6">Análisis avanzado basado en la Rueda de Plutchik</p>
+                        
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8" id="emotionWheel"></div>
+                        
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div class="glass rounded-xl p-5"><h3 class="text-sm font-bold text-white mb-3">Distribución Emocional</h3><div class="chart-container"><canvas id="chartEmocionDist"></canvas></div></div>
+                            <div class="glass rounded-xl p-5"><h3 class="text-sm font-bold text-white mb-3">Intensidad por Emoción</h3><div class="chart-container"><canvas id="chartIntensidad"></canvas></div></div>
+                        </div>
                     </div>
                 </div>
                 
-                <div id="view-crisis" class="hidden animate-fadeInUp">
-                    <div class="glass rounded-2xl p-8">
-                        <h2 class="text-3xl font-bold text-white mb-4">🚨 Centro de Crisis</h2>
-                        <p class="text-blue-300/60 mb-8">Monitoreo en tiempo real de picos de comentarios negativos</p>
-                        <div id="crisis-alerts" class="space-y-4"></div>
+                <!-- ==================== CENTRO DE CRISIS ==================== -->
+                <div id="view-crisis" class="hidden animate-in">
+                    <div class="glass rounded-2xl p-6 mb-6">
+                        <h2 class="text-xl font-bold text-white mb-2">🚨 Centro de Crisis</h2>
+                        <p class="text-sm text-blue-300/50 mb-6">Monitoreo en tiempo real de situaciones críticas</p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6" id="crisisStats"></div>
+                        
+                        <div class="glass rounded-xl p-5 mb-6"><h3 class="text-sm font-bold text-white mb-3">Evolución de Crisis</h3><div class="chart-container"><canvas id="chartCrisisEvo"></canvas></div></div>
+                        
+                        <h3 class="text-sm font-bold text-white mb-3">🚨 Alertas Activas</h3>
+                        <div id="crisisAlertsList" class="space-y-3"></div>
                     </div>
                 </div>
                 
-                <div id="view-narratives" class="hidden animate-fadeInUp">
-                    <div class="glass rounded-2xl p-8">
-                        <h2 class="text-3xl font-bold text-white mb-4">📊 Rastreador de Narrativas</h2>
-                        <p class="text-blue-300/60">Clustering de opiniones y detección de narrativas emergentes</p>
+                <!-- ==================== NARRATIVAS ==================== -->
+                <div id="view-narratives" class="hidden animate-in">
+                    <div class="glass rounded-2xl p-6 mb-6">
+                        <h2 class="text-xl font-bold text-white mb-2">📊 Rastreador de Narrativas</h2>
+                        <p class="text-sm text-blue-300/50 mb-6">Clustering de opiniones y detección de narrativas dominantes</p>
+                        
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                            <div class="glass rounded-xl p-5"><h3 class="text-sm font-bold text-white mb-3">Narrativas por Tema</h3><div class="chart-container"><canvas id="chartNarrativas"></canvas></div></div>
+                            <div class="glass rounded-xl p-5"><h3 class="text-sm font-bold text-white mb-3">Evolución de Narrativas</h3><div class="chart-container"><canvas id="chartNarrEvo"></canvas></div></div>
+                        </div>
+                        
+                        <h3 class="text-sm font-bold text-white mb-3">📝 Narrativas Detectadas</h3>
+                        <div id="narrativasList" class="space-y-3"></div>
                     </div>
                 </div>
                 
-                <div id="view-influence" class="hidden animate-fadeInUp">
-                    <div class="glass rounded-2xl p-8">
-                        <h2 class="text-3xl font-bold text-white mb-4">🕸️ Red de Influencia</h2>
-                        <p class="text-blue-300/60">Mapeo de interacciones y líderes de opinión</p>
+                <!-- ==================== RED DE INFLUENCIA ==================== -->
+                <div id="view-influence" class="hidden animate-in">
+                    <div class="glass rounded-2xl p-6 mb-6">
+                        <h2 class="text-xl font-bold text-white mb-2">🕸️ Red de Influencia</h2>
+                        <p class="text-sm text-blue-300/50 mb-6">Mapeo de interacciones y líderes de opinión</p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6" id="influencersList"></div>
+                        
+                        <div class="glass rounded-xl p-5 mb-6"><h3 class="text-sm font-bold text-white mb-3">Grafo de Interacciones</h3><div id="influenceGraph" style="height: 400px;"></div></div>
+                        
+                        <h3 class="text-sm font-bold text-white mb-3">👥 Usuarios Más Influyentes</h3>
+                        <div id="topInfluencers" class="space-y-2"></div>
                     </div>
                 </div>
                 
-                <div id="view-stories" class="hidden animate-fadeInUp">
-                    <div class="glass rounded-2xl p-8">
-                        <h2 class="text-3xl font-bold text-white mb-4">📖 Story Generator</h2>
-                        <p class="text-blue-300/60">Generación automática de narrativas ejecutivas</p>
-                    </div>
-                </div>
-                
-                <div id="view-collab" class="hidden animate-fadeInUp">
-                    <div class="glass rounded-2xl p-8">
-                        <h2 class="text-3xl font-bold text-white mb-4">💬 Colaboración</h2>
-                        <p class="text-blue-300/60">Asignación de comentarios y flujo de trabajo en equipo</p>
-                    </div>
-                </div>
-                
-                <div id="view-reports" class="hidden animate-fadeInUp">
-                    <div class="glass rounded-2xl p-8">
-                        <h2 class="text-3xl font-bold text-white mb-8">📊 Generador de Reportes</h2>
-                        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                            <div class="glass rounded-2xl p-6 glass-hover cursor-pointer text-center" onclick="generarReporte('diario')">
-                                <i class="fas fa-calendar-day text-4xl text-blue-400 mb-4"></i>
-                                <h3 class="text-xl font-bold text-white">Diario</h3>
+                <!-- ==================== STORY GENERATOR ==================== -->
+                <div id="view-stories" class="hidden animate-in">
+                    <div class="glass rounded-2xl p-6 mb-6">
+                        <h2 class="text-xl font-bold text-white mb-2">📖 Story Generator</h2>
+                        <p class="text-sm text-blue-300/50 mb-6">Narrativa ejecutiva automática</p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div class="glass rounded-xl p-5 cursor-pointer glass-hover" onclick="generarStory('semanal')">
+                                <i class="fas fa-calendar-week text-3xl text-blue-400 mb-3"></i>
+                                <h3 class="font-bold text-white">Story Semanal</h3>
+                                <p class="text-xs text-blue-300/50">Resumen ejecutivo de la semana</p>
                             </div>
-                            <div class="glass rounded-2xl p-6 glass-hover cursor-pointer text-center" onclick="generarReporte('semanal')">
-                                <i class="fas fa-calendar-week text-4xl text-blue-400 mb-4"></i>
-                                <h3 class="text-xl font-bold text-white">Semanal</h3>
-                            </div>
-                            <div class="glass rounded-2xl p-6 glass-hover cursor-pointer text-center" onclick="generarReporte('mensual')">
-                                <i class="fas fa-calendar-alt text-4xl text-blue-400 mb-4"></i>
-                                <h3 class="text-xl font-bold text-white">Mensual</h3>
-                            </div>
-                            <div class="glass rounded-2xl p-6 glass-hover cursor-pointer text-center" onclick="generarReporte('story')">
-                                <i class="fas fa-book text-4xl text-orange-400 mb-4"></i>
-                                <h3 class="text-xl font-bold text-white">Story</h3>
+                            <div class="glass rounded-xl p-5 cursor-pointer glass-hover" onclick="generarStory('crisis')">
+                                <i class="fas fa-exclamation-triangle text-3xl text-red-400 mb-3"></i>
+                                <h3 class="font-bold text-white">Story de Crisis</h3>
+                                <p class="text-xs text-blue-300/50">Narrativa de situación crítica</p>
                             </div>
                         </div>
-                        <div id="reporteOutput" class="glass rounded-2xl p-8 hidden"></div>
+                        
+                        <div id="storyOutput" class="glass rounded-xl p-6 hidden"></div>
                     </div>
                 </div>
                 
-                <div id="view-config" class="hidden animate-fadeInUp">
-                    <div class="max-w-5xl mx-auto">
-                        <h2 class="text-3xl font-bold text-white mb-8">⚙️ Configuración Enterprise</h2>
-                        <div class="glass rounded-2xl p-8 mb-8">
-                            <h3 class="text-xl font-bold text-white mb-4">🔑 API Key</h3>
-                            <input type="password" id="cfgApiKey" class="w-full px-4 py-3 bg-[#1a2332] border border-[#1e3050] rounded-lg text-white mb-4">
-                            <button onclick="guardarConfig()" class="px-6 py-3 btn-enterprise bg-gradient-to-r from-amber-500 to-orange-600 text-black font-bold rounded-lg">Guardar</button>
+                <!-- ==================== COLABORACIÓN ==================== -->
+                <div id="view-collab" class="hidden animate-in">
+                    <div class="glass rounded-2xl p-6 mb-6">
+                        <h2 class="text-xl font-bold text-white mb-2">💬 Colaboración en Equipo</h2>
+                        <p class="text-sm text-blue-300/50 mb-6">Asignación y seguimiento de comentarios</p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6" id="teamStats"></div>
+                        
+                        <h3 class="text-sm font-bold text-white mb-3">📋 Bandeja de Asignaciones</h3>
+                        <div id="collabList" class="space-y-3"></div>
+                    </div>
+                </div>
+                
+                <!-- ==================== REPORTES ==================== -->
+                <div id="view-reports" class="hidden animate-in">
+                    <div class="glass rounded-2xl p-6">
+                        <h2 class="text-xl font-bold text-white mb-6">📊 Reportes</h2>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                            <div class="glass rounded-xl p-5 glass-hover cursor-pointer text-center" onclick="generarReporte('diario')"><i class="fas fa-calendar-day text-3xl text-blue-400 mb-2"></i><h3 class="font-bold text-white">Diario</h3></div>
+                            <div class="glass rounded-xl p-5 glass-hover cursor-pointer text-center" onclick="generarReporte('semanal')"><i class="fas fa-calendar-week text-3xl text-blue-400 mb-2"></i><h3 class="font-bold text-white">Semanal</h3></div>
+                            <div class="glass rounded-xl p-5 glass-hover cursor-pointer text-center" onclick="generarReporte('mensual')"><i class="fas fa-calendar-alt text-3xl text-blue-400 mb-2"></i><h3 class="font-bold text-white">Mensual</h3></div>
+                            <div class="glass rounded-xl p-5 glass-hover cursor-pointer text-center" onclick="generarReporte('story')"><i class="fas fa-book text-3xl text-orange-400 mb-2"></i><h3 class="font-bold text-white">Story</h3></div>
                         </div>
-                        <div class="glass rounded-2xl p-8">
-                            <h3 class="text-xl font-bold text-white mb-4">🧬 Prompt del Sistema</h3>
-                            <textarea id="cfgPrompt" class="w-full px-4 py-3 bg-[#1a2332] border border-[#1e3050] rounded-lg text-white font-mono text-sm" rows="20"></textarea>
-                        </div>
+                        <div id="reporteOutput" class="glass rounded-xl p-6 hidden"></div>
+                    </div>
+                </div>
+                
+                <!-- ==================== CONFIG ==================== -->
+                <div id="view-config" class="hidden animate-in">
+                    <div class="glass rounded-2xl p-6 max-w-4xl">
+                        <h2 class="text-xl font-bold text-white mb-6">⚙️ Configuración</h2>
+                        <div class="mb-4"><label class="text-sm text-blue-300/70">API Key</label><input type="password" id="cfgApiKey" class="w-full px-4 py-2.5 mt-1"></div>
+                        <div class="mb-4"><label class="text-sm text-blue-300/70">Prompt del Sistema</label><textarea id="cfgPrompt" class="w-full px-4 py-2.5 mt-1 font-mono text-xs" rows="20"></textarea></div>
+                        <button onclick="guardarConfig()" class="px-6 py-2.5 btn-gold"><i class="fas fa-save mr-2"></i>Guardar</button>
                     </div>
                 </div>
             </div>
         </main>
         
-        <!-- PANEL LATERAL DE DETALLE -->
-        <div id="detailPanel" class="fixed inset-y-0 right-0 w-full sm:w-[550px] lg:w-[650px] bg-[#0a0f1e] border-l border-[#1e3050] shadow-2xl transform translate-x-full transition-transform duration-300 z-50 overflow-y-auto">
-            <div class="p-6">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-xl font-bold text-white">🧬 Análisis Completo</h2>
-                    <button onclick="cerrarDetalle()" class="text-blue-300/50 hover:text-white text-2xl transition">&times;</button>
-                </div>
+        <!-- PANEL DETALLE -->
+        <div id="detailPanel" class="fixed inset-y-0 right-0 w-full sm:w-[500px] bg-[#0d1117] border-l border-[#1e3050] shadow-2xl transform translate-x-full transition-transform duration-300 z-50 overflow-y-auto">
+            <div class="p-5">
+                <div class="flex justify-between items-center mb-5"><h2 class="text-lg font-bold text-white">🧬 Análisis</h2><button onclick="cerrarDetalle()" class="text-blue-300/50 hover:text-white text-xl">&times;</button></div>
                 <div id="detalleContenido"></div>
             </div>
         </div>
@@ -688,67 +466,100 @@
 
     <script>
         // ============================================
-        // PROMPT ENTERPRISE ULTRA-AVANZADO
+        // PROMPT ULTRA-PRECISO ZERO-ESCAPE
         // ============================================
         
-        const PROMPT_ENTERPRISE = `ERES UN ANALISTA FORENSE DE COMUNICACIÓN POLÍTICA PERUANA CON 30 AÑOS DE EXPERIENCIA. ANALIZA EL COMENTARIO CON PRECISIÓN QUIRÚRGICA.
+        const PROMPT_ZERO_ESCAPE = `ERES UN ANALISTA DE SENTIMIENTOS DE ÉLITE. TU ÚNICA MISIÓN ES CLASIFICAR CORRECTAMENTE CADA COMENTARIO. NO PUEDES DEJAR ESCAPAR NINGÚN COMENTARIO NEGATIVO.
 
 DEVUELVE EXCLUSIVAMENTE ESTE JSON (NADA MÁS):
-
 {
-  "sentimiento": "Negativo|Neutral|Positivo",
-  "emocion": "Ira|Miedo|Tristeza|Alegría|Asco|Sorpresa|Ansiedad|Frustración|Indignación|Decepción|Esperanza|Neutral",
-  "intensidadEmocional": 1-10,
-  "tipo": "Insulto|Crítica|Burla|Sarcasmo|Denuncia|Queja|Felicitación|Consulta|Sugerencia|Opinión",
-  "tema": "Gestión Municipal|Seguridad|Limpieza|Transporte|Obras|Corrupción|Eventos|General",
-  "prioridad": "Alta|Media|Baja",
-  "riesgo": "Alto|Medio|Bajo",
-  "esCrisis": true|false,
-  "narrativa": "frase que resume la narrativa del comentario",
-  "necesitaRespuesta": true|false,
-  "resumen": "análisis en una línea",
-  "palabrasClave": ["palabra1", "palabra2", "palabra3"]
+  "sentimiento": "Negativo",
+  "emocion": "Ira",
+  "intensidad": 8,
+  "tipo": "Crítica",
+  "tema": "Gestión Municipal",
+  "prioridad": "Alta",
+  "riesgo": "Alto",
+  "esCrisis": false,
+  "narrativa": "frase corta",
+  "necesitaRespuesta": true,
+  "resumen": "breve análisis",
+  "palabrasClave": ["p1","p2","p3"]
 }
 
-REGLAS CRÍTICAS:
-- Ante la duda, elige NEGATIVO
-- Detecta apodos peruanos (MONSE, Porky, rata, etc.)
-- MAYÚSCULAS = énfasis negativo
-- 🤡 = burla
-- Críticas financieras (quebrada, deuda) = Negativo + Ira
-- Si hay insultos o apodos, intensidadEmocional mínimo 7`;
+═══════════════════════════════════════
+REGLAS INQUEBRANTABLES DE SENTIMIENTO
+═══════════════════════════════════════
+
+NEGATIVO - ELIGE NEGATIVO SI EL COMENTARIO CONTIENE AL MENOS UNO DE:
+├── CUALQUIER crítica, queja, insulto, burla, sarcasmo, ironía
+├── Apodos o insultos: MONSE, Porky, rata, ratero, fantoche, payaso, bufón, títere, coimero, mermelero, argollero, inepto, inútil, incapaz, mediocre, corrupto, ladrón, sinvergüenza, caradura, descarado, demagogo, populista, oportunista, ventajista, traidor, vendido
+├── Palabras en MAYÚSCULAS usadas como énfasis: QUEBRADA, CAOS, DESASTRE, INÚTIL, CORRUPTO, RENUNCIA, FUERA, DESCONTROLADO, INACEPTABLE, VERGÜENZA
+├── Emojis negativos: 🤡😡🤬💩🙄😒🖕👎
+├── Expresiones: "no sirven", "no hacen nada", "puro show", "pura pantalla", "son un desastre", "dan asco", "son una vergüenza", "pésima gestión", "mala gestión", "no funciona", "abandonado", "olvidado"
+├── Críticas financieras: "quebrada", "quebrado", "quiebra", "deuda", "déficit", "despilfarro", "malversación", "sobrevalorado", "inflado"
+├── Demandas de renuncia: "renuncia", "fuera", "que se vaya", "no lo queremos"
+├── Comparaciones despectivas
+├── CUALQUIER expresión de descontento, frustración, indignación, enojo, hartazgo
+└── SI HAY LA MÁS MÍNIMA DUDA ENTRE NEUTRAL Y NEGATIVO → ELIGE NEGATIVO
+
+POSITIVO - SOLO si es GENUINAMENTE positivo:
+├── Felicitaciones sinceras sin ironía
+├── Agradecimientos genuinos
+└── Elogios sin doble intención
+
+NEUTRAL - SOLO si es puramente informativo sin carga emocional:
+├── Preguntas objetivas
+└── Datos sin opinión
+
+═══════════════════════════════════════
+DETECCIÓN DE EMOCIONES
+═══════════════════════════════════════
+Ira: insultos, gritos (MAYÚSCULAS), indignación, furia
+Miedo: preocupación, temor, inseguridad, amenaza
+Tristeza: decepción, desilusión, pena, lamento
+Alegría: felicidad genuina, satisfacción
+Asco: repugnancia, rechazo, desprecio
+Sorpresa: incredulidad, impacto
+Frustración: hartazgo, cansancio, fastidio
+Indignación: ultraje, ofensa, injusticia
+
+═══════════════════════════════════════
+PRIORIDAD Y RIESGO
+═══════════════════════════════════════
+Prioridad Alta: insultos, apodos, crisis, denuncias, lenguaje agresivo
+Riesgo Alto: puede dañar reputación, viralizarse, contiene acusaciones graves
+esCrisis true: insultos + alta intensidad + menciones + riesgo viral`;
 
         // ============================================
-        // ESTADO GLOBAL ENTERPRISE
+        // ESTADO GLOBAL
         // ============================================
         
         const STATE = {
             datos: [],
             filtrados: [],
-            apiKey: localStorage.getItem('sentinel_enterprise_key') || '',
-            prompt: localStorage.getItem('sentinel_enterprise_prompt') || PROMPT_ENTERPRISE,
+            apiKey: localStorage.getItem('sentinel_v9_key') || '',
+            prompt: localStorage.getItem('sentinel_v9_prompt') || PROMPT_ZERO_ESCAPE,
             tablaData: null,
             graficos: {},
-            crisisAlerts: [],
-            emocionesDetectadas: {},
-            narrativas: [],
-            wordcloudInstance: null
+            crisisAlerts: []
         };
         
         // ============================================
-        // MOTOR DE ANÁLISIS ENTERPRISE
+        // MOTOR DE ANÁLISIS ULTRA-PRECISO
         // ============================================
         
-        class EnterpriseAnalyzer {
+        class UltraAnalyzer {
             
             static async analizar(texto) {
-                if (!STATE.apiKey) return this.fallbackEnterprise(texto);
+                if (!STATE.apiKey) return this.fallbackUltra(texto);
                 
                 try {
                     const resultado = await this.callGemini(texto);
-                    return { ...resultado, fuente: 'Gemini Pro Enterprise', confianza: 0.99 };
+                    return { ...resultado, fuente: 'Gemini Pro v9', confianza: 0.99 };
                 } catch (e) {
-                    return { ...this.fallbackEnterprise(texto), fuente: 'Motor Enterprise', confianza: 0.88 };
+                    console.warn('Gemini fallback:', e.message);
+                    return { ...this.fallbackUltra(texto), fuente: 'Motor Ultra v9', confianza: 0.90 };
                 }
             }
             
@@ -759,8 +570,8 @@ REGLAS CRÍTICAS:
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        contents: [{ parts: [{ text: `${STATE.prompt}\n\nCOMENTARIO: "${texto}"\n\nJSON:` }] }],
-                        generationConfig: { temperature: 0.05, topK: 1, topP: 0.9, maxOutputTokens: 400 },
+                        contents: [{ parts: [{ text: STATE.prompt + `\n\nCOMENTARIO: "${texto}"\n\nJSON:` }] }],
+                        generationConfig: { temperature: 0.02, topK: 1, topP: 0.9, maxOutputTokens: 400 },
                         safetySettings: [
                             { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },
                             { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_NONE" },
@@ -777,88 +588,133 @@ REGLAS CRÍTICAS:
                 const match = text.match(/\{[\s\S]*\}/);
                 if (!match) throw new Error('JSON no encontrado');
                 
-                let analisis = JSON.parse(match[0]);
+                let a = JSON.parse(match[0]);
                 
                 // Normalizar
-                analisis.sentimiento = this.normalize(analisis.sentimiento, ['Negativo', 'Neutral', 'Positivo'], 'Neutral');
-                analisis.prioridad = this.normalize(analisis.prioridad, ['Alta', 'Media', 'Baja'], 'Media');
-                analisis.riesgo = this.normalize(analisis.riesgo, ['Alto', 'Medio', 'Bajo'], 'Bajo');
-                analisis.intensidadEmocional = parseInt(analisis.intensidadEmocional) || 5;
-                analisis.esCrisis = analisis.esCrisis || false;
+                a.sentimiento = this.norm(a.sentimiento, ['Negativo', 'Neutral', 'Positivo'], 'Negativo');
+                a.prioridad = this.norm(a.prioridad, ['Alta', 'Media', 'Baja'], 'Media');
+                a.riesgo = this.norm(a.riesgo, ['Alto', 'Medio', 'Bajo'], 'Medio');
+                a.intensidad = parseInt(a.intensidad) || 5;
+                a.esCrisis = a.esCrisis || false;
+                a.emocion = a.emocion || 'Neutral';
                 
-                return analisis;
+                return a;
             }
             
-            static normalize(val, options, def) {
+            static norm(val, opts, def) {
                 const v = (val || '').toLowerCase().trim();
-                for (const o of options) if (v.includes(o.toLowerCase())) return o;
+                for (const o of opts) if (v.includes(o.toLowerCase())) return o;
                 return def;
             }
             
-            static fallbackEnterprise(texto) {
+            static fallbackUltra(texto) {
                 const t = texto.toLowerCase();
                 
-                // Emociones
+                // Diccionarios expandidos
+                const apodos = ['monse', 'porky', 'rata', 'ratero', 'fantoche', 'payaso', 'bufón', 'títere', 
+                               'coimero', 'mermelero', 'argollero', 'inepto', 'inútil', 'incapaz', 'mediocre',
+                               'corrupto', 'ladrón', 'sinvergüenza', 'caradura', 'descarado', 'demagogo',
+                               'populista', 'oportunista', 'ventajista', 'traidor', 'vendido', 'cucaracha',
+                               'sabandija', 'alimaña', 'bicho', 'cojudo', 'huevón', 'pendejo', 'conchudo',
+                               'mierda', 'basura', 'porquería', 'cochinada', 'chanchada'];
+                
+                const criticasGestion = ['quebrada', 'quebrado', 'quiebra', 'deuda', 'déficit', 'despilfarro',
+                                        'malversación', 'sobrevalorado', 'inflado', 'sobrecosto', 'abandonado',
+                                        'olvidado', 'desatendido', 'no funciona', 'no sirven', 'no hacen nada',
+                                        'pésima gestión', 'mala gestión', 'ineficiente', 'desastre', 'caos',
+                                        'crisis', 'colapso', 'fracaso'];
+                
+                const negativas = ['malo', 'pésimo', 'terrible', 'horrible', 'lamentable', 'vergüenza',
+                                  'asco', 'indignante', 'inaceptable', 'ridículo', 'patético', 'estafa',
+                                  'robo', 'mentira', 'falso', 'engaño', 'burla', 'sarcasmo', 'ironía'];
+                
+                let score = 0;
+                let tieneApodo = false;
+                let tieneCriticaGestion = false;
+                let tieneMayusculas = false;
+                
+                // Detectar apodos
+                apodos.forEach(a => { if (t.includes(a)) { tieneApodo = true; score -= 20; } });
+                
+                // Detectar críticas de gestión
+                criticasGestion.forEach(c => { if (t.includes(c)) { tieneCriticaGestion = true; score -= 15; } });
+                
+                // Detectar negativas generales
+                negativas.forEach(n => { if (t.includes(n)) score -= 6; });
+                
+                // Detectar MAYÚSCULAS
+                const palabras = texto.split(/\s+/);
+                let countMayus = 0;
+                palabras.forEach(p => {
+                    if (p === p.toUpperCase() && p.length > 3 && /[A-ZÁÉÍÓÚÜÑ]/.test(p)) countMayus++;
+                });
+                if (countMayus > 0) { tieneMayusculas = true; score -= countMayus * 4; }
+                
+                // Emojis negativos
+                if (/🤡|😡|🤬|💩|🙄|😒|🖕|👎/.test(texto)) score -= 10;
+                
+                // Menciones + negativo
+                if (t.includes('@') && score < 0) score -= 6;
+                
+                // Hashtags irónicos
+                if (t.includes('#') && score < 0) score -= 4;
+                
+                // Determinar sentimiento (FORZAR Negativo si hay indicadores)
+                let sentimiento;
+                if (tieneApodo || tieneCriticaGestion || score <= -10) sentimiento = 'Negativo';
+                else if (score >= 10) sentimiento = 'Positivo';
+                else sentimiento = 'Neutral';
+                
+                // Emoción
                 let emocion = 'Neutral';
                 let intensidad = 5;
                 
-                if (/ira|furioso|indignado|rabia|odio|asco|repugnante|detesto/i.test(t)) { emocion = 'Ira'; intensidad = 8; }
-                else if (/miedo|asustado|temor|preocupado|ansiedad|nervioso/i.test(t)) { emocion = 'Miedo'; intensidad = 7; }
-                else if (/triste|decepción|decepcionado|lamento|pena|desilusión/i.test(t)) { emocion = 'Tristeza'; intensidad = 6; }
-                else if (/alegr|feliz|contento|satisfecho|esperanza|optimista/i.test(t)) { emocion = 'Alegría'; intensidad = 7; }
-                else if (/asco|repugnan|asqueroso|desagradable|horrible/i.test(t)) { emocion = 'Asco'; intensidad = 8; }
-                else if (/sorprend|impactado|increíble|no puedo creer/i.test(t)) { emocion = 'Sorpresa'; intensidad = 6; }
-                else if (/frustr|harto|cansado|fastidiado|hastiado/i.test(t)) { emocion = 'Frustración'; intensidad = 7; }
-                else if (/indign|inaceptable|vergüenza|indignante/i.test(t)) { emocion = 'Indignación'; intensidad = 8; }
-                
-                // Apodos
-                const apodos = ['monse', 'porky', 'rata', 'ratero', 'fantoche', 'payaso', 'bufón', 'títere'];
-                let tieneApodo = apodos.some(a => t.includes(a));
                 if (tieneApodo) { emocion = 'Indignación'; intensidad = 9; }
+                else if (tieneCriticaGestion) { emocion = 'Frustración'; intensidad = 8; }
+                else if (tieneMayusculas && sentimiento === 'Negativo') { emocion = 'Ira'; intensidad = 8; }
+                else if (score <= -15) { emocion = 'Ira'; intensidad = 9; }
+                else if (score <= -8) { emocion = 'Frustración'; intensidad = 7; }
+                else if (score >= 8) { emocion = 'Alegría'; intensidad = 7; }
                 
-                // MAYÚSCULAS
-                const palabras = texto.split(/\s+/);
-                let mayusCount = palabras.filter(p => p === p.toUpperCase() && p.length > 3 && /[A-ZÁÉÍÓÚÜÑ]/.test(p)).length;
-                if (mayusCount > 0) intensidad = Math.min(10, intensidad + mayusCount);
-                
-                // Sentimiento
-                let sentimiento = 'Neutral';
-                const negWords = ['malo', 'pésimo', 'terrible', 'horrible', 'lamentable', 'vergüenza', 'asco', 'crítica', 'error', 'falla', 'problema', 'caos', 'desastre', 'corrupto', 'estafa', 'robo', 'mentira', 'inútil', 'incapaz', 'mediocre'];
-                let negScore = negWords.filter(w => t.includes(w)).length * 3;
-                if (tieneApodo) negScore += 15;
-                if (mayusCount > 0) negScore += mayusCount * 2;
-                
-                if (negScore >= 8 || tieneApodo) sentimiento = 'Negativo';
-                else if (negScore <= -5) sentimiento = 'Positivo';
+                if (intensidad < 5) intensidad = 5;
                 
                 // Tipo
                 let tipo = 'Opinión';
                 if (tieneApodo) tipo = 'Insulto';
-                else if (negScore >= 12) tipo = 'Crítica';
-                else if (/🤡|burla|sarcasmo|ironía/i.test(t)) tipo = 'Burla';
+                else if (tieneCriticaGestion && score <= -15) tipo = 'Crítica';
                 else if (/denuncia|corrupción|estafa|robo|coima/i.test(t)) tipo = 'Denuncia';
+                else if (/🤡|burla|sarcasmo|ironía/i.test(t)) tipo = 'Burla';
                 else if (sentimiento === 'Negativo') tipo = 'Crítica';
                 else if (t.includes('?')) tipo = 'Consulta';
-                else if (/felicit|gracias|excelente/i.test(t)) tipo = 'Felicitación';
+                else if (/felicit|gracias|excelente/i.test(t) && sentimiento === 'Positivo') tipo = 'Felicitación';
                 
                 // Tema
                 let tema = 'General';
-                if (/gestión|municipal|alcalde|administración|quiebra|deuda|corrupción/i.test(t)) tema = 'Gestión Municipal';
-                else if (/seguridad|delincuencia|robo|policía|serenazgo/i.test(t)) tema = 'Seguridad';
-                else if (/basura|limpieza|residuos/i.test(t)) tema = 'Limpieza';
-                else if (/transporte|tráfico|bus/i.test(t)) tema = 'Transporte';
+                if (/gestión|municipal|alcalde|administración|quiebra|deuda|corrupción|coima/i.test(t)) tema = 'Gestión Municipal';
+                else if (/seguridad|delincuencia|robo|policía|serenazgo|violencia/i.test(t)) tema = 'Seguridad Ciudadana';
+                else if (/basura|limpieza|residuos/i.test(t)) tema = 'Limpieza Pública';
+                else if (/transporte|tráfico|bus|movilidad/i.test(t)) tema = 'Transporte';
+                else if (/obra|construcción|pista|parque|infraestructura/i.test(t)) tema = 'Obras Públicas';
+                
+                // Prioridad
+                let prioridad = 'Baja';
+                if (tieneApodo || tipo === 'Insulto' || tipo === 'Denuncia' || intensidad >= 9) prioridad = 'Alta';
+                else if (tieneCriticaGestion || intensidad >= 7) prioridad = 'Media';
+                
+                // Riesgo
+                let riesgo = 'Bajo';
+                if ((tieneApodo || tipo === 'Insulto') && t.includes('@')) riesgo = 'Alto';
+                else if (tipo === 'Denuncia') riesgo = 'Alto';
+                else if (prioridad === 'Alta') riesgo = 'Medio';
                 
                 // Crisis
-                let esCrisis = (intensidad >= 9 && sentimiento === 'Negativo' && tieneApodo) || (negScore >= 20);
+                let esCrisis = (intensidad >= 9 && sentimiento === 'Negativo' && (tieneApodo || tieneCriticaGestion));
                 
                 return {
-                    sentimiento, emocion, intensidadEmocional: intensidad, tipo, tema,
-                    prioridad: (intensidad >= 8 || tieneApodo) ? 'Alta' : (intensidad >= 5 ? 'Media' : 'Baja'),
-                    riesgo: (intensidad >= 9 && tieneApodo) ? 'Alto' : (intensidad >= 6 ? 'Medio' : 'Bajo'),
-                    esCrisis,
-                    narrativa: tipo + ' ' + sentimiento.toLowerCase() + ' sobre ' + tema,
+                    sentimiento, emocion, intensidad, tipo, tema, prioridad, riesgo, esCrisis,
+                    narrativa: `${tipo} ${sentimiento.toLowerCase()} sobre ${tema}`,
                     necesitaRespuesta: ['Insulto', 'Crítica', 'Denuncia', 'Queja', 'Consulta'].includes(tipo),
-                    resumen: `Análisis: ${tipo} con intensidad ${intensidad}/10`,
+                    resumen: `${tipo} con intensidad ${intensidad}/10 - ${emocion}`,
                     palabrasClave: t.split(/\s+/).filter(w => w.length > 4).slice(0, 5)
                 };
             }
@@ -866,21 +722,21 @@ REGLAS CRÍTICAS:
             static async analizarLote(comentarios, callback) {
                 const resultados = [];
                 const total = comentarios.length;
+                STATE.crisisAlerts = [];
                 
                 for (let i = 0; i < total; i++) {
                     const c = comentarios[i];
                     const texto = c['Full Text'] || c['full_text'] || c['text'] || '';
                     
-                    if (callback) callback({ actual: i + 1, total, porcentaje: Math.round(((i+1)/total)*100), texto: texto.substring(0, 60) });
+                    if (callback) callback({ actual: i + 1, total, porcentaje: Math.round(((i+1)/total)*100), texto: texto.substring(0, 50) });
                     
                     const analisis = await this.analizar(texto.toString());
                     
-                    // Detectar crisis
                     if (analisis.esCrisis) STATE.crisisAlerts.push({ ...c, _analisis: analisis });
                     
                     resultados.push({ ...c, _analisis: analisis });
                     
-                    if (STATE.apiKey) await new Promise(r => setTimeout(r, 100));
+                    if (STATE.apiKey) await new Promise(r => setTimeout(r, 80));
                 }
                 
                 return resultados;
@@ -899,53 +755,45 @@ REGLAS CRÍTICAS:
                     return i === self.findIndex(x => (x['Tweet Id'] || x['tweet_id'] || x['id']) === id);
                 });
             
-            STATE.crisisAlerts = [];
-            
             const pc = document.getElementById('progressContainer');
+            const pb = document.getElementById('progressBar');
+            const pt = document.getElementById('progressText');
+            const pp = document.getElementById('progressPercent');
             pc.classList.remove('hidden');
             
-            STATE.datos = await EnterpriseAnalyzer.analizarLote(limpios, (p) => {
-                document.getElementById('progressBar').style.width = p.porcentaje + '%';
-                document.getElementById('progressPercent').textContent = p.porcentaje + '%';
-                document.getElementById('progressText').textContent = `🧬 Enterprise Analysis... ${p.actual}/${p.total}`;
-                document.getElementById('progressDetail').textContent = `"${p.texto}..."`;
+            STATE.datos = await UltraAnalyzer.analizarLote(limpios, (p) => {
+                pb.style.width = p.porcentaje + '%';
+                pp.textContent = p.porcentaje + '%';
+                pt.textContent = `🧬 Analizando... ${p.actual}/${p.total}`;
             });
             
             STATE.filtrados = [...STATE.datos];
+            setTimeout(() => pc.classList.add('hidden'), 600);
             
-            setTimeout(() => pc.classList.add('hidden'), 800);
-            
-            // Actualizar crisis
-            updateCrisisIndicator();
-            document.getElementById('sidebar-processed').textContent = STATE.datos.length;
-            
-            console.log('✅ Enterprise Analysis Complete');
-            console.log('🚨 Crisis detectadas:', STATE.crisisAlerts.length);
-            
+            updateCrisisBadges();
             renderizarDashboard();
         }
         
-        function updateCrisisIndicator() {
+        function updateCrisisBadges() {
             const count = STATE.crisisAlerts.length;
-            const badge = document.getElementById('crisis-badge');
-            const indicator = document.getElementById('crisis-count');
+            const navBadge = document.getElementById('crisis-nav-badge');
+            const headerBadge = document.getElementById('crisis-header-badge');
+            const headerCount = document.getElementById('crisis-header-count');
             
             if (count > 0) {
-                badge.classList.remove('hidden');
-                badge.textContent = count;
-                indicator.textContent = `${count} alertas`;
-                document.getElementById('crisis-indicator').classList.add('crisis-pulse');
+                navBadge.classList.remove('hidden');
+                navBadge.textContent = count;
+                headerBadge.classList.remove('hidden');
+                headerCount.textContent = count;
             } else {
-                badge.classList.add('hidden');
-                indicator.textContent = '0 alertas';
-                document.getElementById('crisis-indicator').classList.remove('crisis-pulse');
+                navBadge.classList.add('hidden');
+                headerBadge.classList.add('hidden');
             }
         }
         
         function procesarArchivo(e) {
             const file = e.target.files[0];
             if (!file) return;
-            
             const reader = new FileReader();
             reader.onload = async function(ev) {
                 try {
@@ -954,7 +802,7 @@ REGLAS CRÍTICAS:
                     const ws = wb.Sheets[wb.SheetNames[0]];
                     const json = XLSX.utils.sheet_to_json(ws);
                     await procesarComentarios(json);
-                    alert(`✅ ${STATE.datos.length} comentarios analizados\n🚨 ${STATE.crisisAlerts.length} crisis detectadas`);
+                    alert(`✅ ${STATE.datos.length} comentarios\n🚨 ${STATE.crisisAlerts.length} crisis`);
                 } catch(err) { alert('❌ Error: ' + err.message); }
             };
             reader.readAsArrayBuffer(file);
@@ -962,44 +810,20 @@ REGLAS CRÍTICAS:
         
         async function cargarDemo() {
             const demo = [
-                {
-                    'Tweet Id': '8001',
-                    'Full Text': '@MuniLima Este MONSE está asustado. Su legado es el de Porky. Una municipalidad QUEBRADA.',
-                    'Created At': '2024-06-15 10:30:00',
-                    'User Name': 'Ciudadano Furioso', 'Favorite Count': 567, 'Retweet Count': 234, 'Reply Count': 89
-                },
-                {
-                    'Tweet Id': '8002',
-                    'Full Text': '@MuniLima #LimaPotenciaMundial 🤡',
-                    'Created At': '2024-06-15 11:00:00',
-                    'User Name': 'Burlón', 'Favorite Count': 234, 'Retweet Count': 123, 'Reply Count': 45
-                },
-                {
-                    'Tweet Id': '8003',
-                    'Full Text': '¡ESTO ES UN DESASTRE! La delincuencia está DESCONTROLADA. ¿Dónde está el alcalde? ¡RENUNCIA YA!',
-                    'Created At': '2024-06-14 20:00:00',
-                    'User Name': 'Vecino Aterrado', 'Favorite Count': 890, 'Retweet Count': 456, 'Reply Count': 167
-                },
-                {
-                    'Tweet Id': '8004',
-                    'Full Text': 'Excelente trabajo de limpieza en el Centro. ¡Gracias por mantener todo impecable! ❤️',
-                    'Created At': '2024-06-14 09:00:00',
-                    'User Name': 'Vecina Feliz', 'Favorite Count': 45, 'Retweet Count': 12, 'Reply Count': 3
-                },
-                {
-                    'Tweet Id': '8005',
-                    'Full Text': '¿Cuál es el horario de atención para licencias?',
-                    'Created At': '2024-06-13 14:00:00',
-                    'User Name': 'Ciudadano', 'Favorite Count': 1, 'Retweet Count': 0, 'Reply Count': 1
-                }
+                { 'Tweet Id': '9001', 'Full Text': '@MuniLima Este MONSE está asustado. Su legado es el de Porky. Una municipalidad QUEBRADA.', 'Created At': '2024-07-20 10:30:00', 'User Name': 'Ciudadano Furioso', 'Favorite Count': 567, 'Retweet Count': 234 },
+                { 'Tweet Id': '9002', 'Full Text': '@MuniLima #LimaPotenciaMundial 🤡', 'Created At': '2024-07-20 11:00:00', 'User Name': 'Burlón', 'Favorite Count': 234, 'Retweet Count': 123 },
+                { 'Tweet Id': '9003', 'Full Text': '¡ESTO ES UN DESASTRE! La delincuencia está DESCONTROLADA. ¿Dónde está el alcalde? ¡RENUNCIA YA!', 'Created At': '2024-07-19 20:00:00', 'User Name': 'Vecino Aterrado', 'Favorite Count': 890, 'Retweet Count': 456 },
+                { 'Tweet Id': '9004', 'Full Text': 'Excelente trabajo de limpieza en el Centro. ¡Gracias por mantener todo impecable! ❤️', 'Created At': '2024-07-19 09:00:00', 'User Name': 'Vecina Feliz', 'Favorite Count': 45, 'Retweet Count': 12 },
+                { 'Tweet Id': '9005', 'Full Text': 'Son unos inútiles, no sirven para nada. Pura pantalla y figurettis.', 'Created At': '2024-07-18 15:00:00', 'User Name': 'Indignado', 'Favorite Count': 345, 'Retweet Count': 178 },
+                { 'Tweet Id': '9006', 'Full Text': '¿Cuál es el horario de atención para licencias?', 'Created At': '2024-07-18 14:00:00', 'User Name': 'Ciudadano', 'Favorite Count': 1, 'Retweet Count': 0 }
             ];
             
             await procesarComentarios(demo);
-            alert('✅ Demo Enterprise cargado\n🧠 Análisis emocional activado\n🚨 Sistema de crisis monitoreando');
+            alert('✅ Demo cargado con análisis ultra-preciso');
         }
         
         // ============================================
-        // RENDERIZADO ENTERPRISE
+        // RENDERIZADO DASHBOARD
         // ============================================
         
         function renderizarDashboard() {
@@ -1007,161 +831,127 @@ REGLAS CRÍTICAS:
             
             const d = STATE.filtrados;
             
-            // KPIs Enterprise
-            const s = {}, emociones = {}, tipos = {};
-            let likes = 0, crisis = 0, altaIntensidad = 0;
+            // KPIs
+            const s = {}, emo = {};
+            let likes = 0, crisis = 0, altaInt = 0;
             
             d.forEach(r => {
                 s[r._analisis.sentimiento] = (s[r._analisis.sentimiento] || 0) + 1;
-                emociones[r._analisis.emocion] = (emociones[r._analisis.emocion] || 0) + 1;
-                tipos[r._analisis.tipo] = (tipos[r._analisis.tipo] || 0) + 1;
+                emo[r._analisis.emocion] = (emo[r._analisis.emocion] || 0) + 1;
                 if (r._analisis.esCrisis) crisis++;
-                if (r._analisis.intensidadEmocional >= 8) altaIntensidad++;
+                if (r._analisis.intensidad >= 8) altaInt++;
                 likes += parseInt(r['Favorite Count'] || 0);
             });
-            
-            STATE.emocionesDetectadas = emociones;
             
             const kpis = [
                 { label: 'Total', value: d.length, icon: '📊', color: 'text-blue-400' },
                 { label: '😡 Negativos', value: s['Negativo'] || 0, icon: '🔴', color: 'text-red-400' },
                 { label: '🚨 Crisis', value: crisis, icon: '⚠️', color: 'text-orange-400' },
-                { label: '💢 Alta Intensidad', value: altaIntensidad, icon: '🔥', color: 'text-pink-400' },
+                { label: '💢 Alta Intensidad', value: altaInt, icon: '🔥', color: 'text-pink-400' },
                 { label: '😊 Positivos', value: s['Positivo'] || 0, icon: '🟢', color: 'text-green-400' },
-                { label: '❤️ Engagement', value: likes, icon: '💜', color: 'text-purple-400' }
+                { label: '❤️ Likes', value: likes, icon: '💜', color: 'text-purple-400' }
             ];
             
             document.getElementById('kpiContainer').innerHTML = kpis.map(k => `
-                <div class="kpi-card-enterprise glass rounded-xl p-4">
-                    <div class="flex justify-between items-center mb-2">
-                        <span class="text-xs text-blue-300/50 uppercase tracking-wider">${k.label}</span>
-                        <span class="text-lg">${k.icon}</span>
-                    </div>
-                    <div class="text-3xl font-black kpi-value-enterprise">${k.value.toLocaleString()}</div>
+                <div class="kpi-card glass rounded-xl p-4">
+                    <div class="flex justify-between items-center mb-1"><span class="text-xs text-blue-300/50">${k.label}</span><span>${k.icon}</span></div>
+                    <div class="text-2xl font-black kpi-value">${k.value.toLocaleString()}</div>
                 </div>
             `).join('');
             
-            renderizarGraficos(d);
+            renderizarGraficosDashboard(d);
             renderizarWordCloud(d);
             renderizarTabla(d);
             actualizarFiltros(d);
         }
         
-        function renderizarGraficos(d) {
+        function renderizarGraficosDashboard(d) {
             Object.values(STATE.graficos).forEach(g => g.destroy());
+            STATE.graficos = {};
             
             // Sentimiento
-            const sData = {};
-            d.forEach(r => sData[r._analisis.sentimiento] = (sData[r._analisis.sentimiento] || 0) + 1);
-            
+            const sData = {}; d.forEach(r => sData[r._analisis.sentimiento] = (sData[r._analisis.sentimiento] || 0) + 1);
             STATE.graficos.sentimiento = new Chart(document.getElementById('chartSentimiento'), {
                 type: 'doughnut',
-                data: { labels: Object.keys(sData), datasets: [{ data: Object.values(sData), backgroundColor: ['#10B981', '#F59E0B', '#EF4444'] }] },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#93c5fd' } } } }
+                data: { labels: Object.keys(sData), datasets: [{ data: Object.values(sData), backgroundColor: ['#10B981','#F59E0B','#EF4444'] }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#93c5fd', font: { size: 10 } } } } }
             });
             
             // Emociones
-            const eData = {};
-            d.forEach(r => eData[r._analisis.emocion] = (eData[r._analisis.emocion] || 0) + 1);
-            
+            const eData = {}; d.forEach(r => eData[r._analisis.emocion] = (eData[r._analisis.emocion] || 0) + 1);
             STATE.graficos.emociones = new Chart(document.getElementById('chartEmociones'), {
                 type: 'radar',
-                data: {
-                    labels: Object.keys(eData),
-                    datasets: [{ data: Object.values(eData), backgroundColor: 'rgba(139,92,246,0.2)', borderColor: '#8b5cf6', borderWidth: 2 }]
-                },
-                options: {
-                    responsive: true, maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: { r: { ticks: { color: '#93c5fd' }, grid: { color: 'rgba(30,48,80,0.5)' }, pointLabels: { color: '#93c5fd' } } }
-                }
+                data: { labels: Object.keys(eData), datasets: [{ data: Object.values(eData), backgroundColor: 'rgba(139,92,246,0.2)', borderColor: '#8b5cf6', borderWidth: 2 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { r: { ticks: { color: '#93c5fd', font: { size: 8 } }, grid: { color: 'rgba(30,48,80,0.4)' }, pointLabels: { color: '#93c5fd', font: { size: 9 } } } } }
             });
             
             // Temas
-            const temas = {};
-            d.forEach(r => temas[r._analisis.tema] = (temas[r._analisis.tema] || 0) + 1);
-            
+            const tData = {}; d.forEach(r => tData[r._analisis.tema] = (tData[r._analisis.tema] || 0) + 1);
             STATE.graficos.temas = new Chart(document.getElementById('chartTemas'), {
                 type: 'bar',
-                data: { labels: Object.keys(temas), datasets: [{ data: Object.values(temas), backgroundColor: '#3b82f6', borderRadius: 8 }] },
-                options: {
-                    indexAxis: 'y', responsive: true, maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: { x: { ticks: { color: '#93c5fd' }, grid: { color: 'rgba(30,48,80,0.3)' } }, y: { ticks: { color: '#93c5fd' } } }
-                }
+                data: { labels: Object.keys(tData), datasets: [{ data: Object.values(tData), backgroundColor: '#3b82f6', borderRadius: 6 }] },
+                options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#93c5fd' }, grid: { color: 'rgba(30,48,80,0.3)' } }, y: { ticks: { color: '#93c5fd' } } } }
             });
             
-            // Crisis Timeline
+            // Crisis
             const crisisData = {};
             d.forEach(r => {
-                const fecha = new Date(r['Created At'] || '');
-                if (!isNaN(fecha)) {
-                    const key = fecha.toLocaleDateString('es-PE', { day: '2-digit', month: '2-digit', hour: '2-digit' });
-                    if (r._analisis.intensidadEmocional >= 7) crisisData[key] = (crisisData[key] || 0) + 1;
+                if (r._analisis.intensidad >= 7) {
+                    const f = new Date(r['Created At'] || '');
+                    if (!isNaN(f)) {
+                        const k = f.toLocaleDateString('es-PE', { day: '2-digit', month: '2-digit', hour: '2-digit' });
+                        crisisData[k] = (crisisData[k] || 0) + 1;
+                    }
                 }
             });
-            
+            const crisisKeys = Object.keys(crisisData).slice(-15);
             STATE.graficos.crisis = new Chart(document.getElementById('chartCrisis'), {
                 type: 'bar',
-                data: {
-                    labels: Object.keys(crisisData).slice(-20),
-                    datasets: [{ data: Object.values(crisisData).slice(-20), backgroundColor: '#ef4444', borderRadius: 4 }]
-                },
-                options: {
-                    responsive: true, maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: { y: { ticks: { color: '#93c5fd' } }, x: { ticks: { color: '#93c5fd' } } }
-                }
+                data: { labels: crisisKeys, datasets: [{ data: crisisKeys.map(k => crisisData[k]), backgroundColor: '#ef4444', borderRadius: 4 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { ticks: { color: '#93c5fd' } }, x: { ticks: { color: '#93c5fd', font: { size: 8 } } } } }
             });
             
             // Timeline
             const timeline = {};
             d.forEach(r => {
-                const fecha = new Date(r['Created At'] || '');
-                if (!isNaN(fecha)) {
-                    const key = fecha.toLocaleDateString('es-PE', { day: '2-digit', month: '2-digit' });
-                    timeline[key] = (timeline[key] || 0) + 1;
+                const f = new Date(r['Created At'] || '');
+                if (!isNaN(f)) {
+                    const k = f.toLocaleDateString('es-PE', { day: '2-digit', month: '2-digit' });
+                    timeline[k] = (timeline[k] || 0) + 1;
                 }
             });
-            
+            const timeKeys = Object.keys(timeline).sort();
             STATE.graficos.timeline = new Chart(document.getElementById('chartTimeline'), {
                 type: 'line',
                 data: {
-                    labels: Object.keys(timeline).sort(),
+                    labels: timeKeys,
                     datasets: [
-                        { label: 'Total', data: Object.values(timeline), borderColor: '#3b82f6', tension: 0.4, fill: true, backgroundColor: 'rgba(59,130,246,0.1)' },
-                        { label: 'Alta Intensidad', data: Object.keys(timeline).sort().map(k => d.filter(r => { const f = new Date(r['Created At']||''); return !isNaN(f) && f.toLocaleDateString('es-PE',{day:'2-digit',month:'2-digit'})===k && r._analisis.intensidadEmocional>=7; }).length), borderColor: '#ef4444', tension: 0.4 }
+                        { label: 'Total', data: timeKeys.map(k => timeline[k]), borderColor: '#3b82f6', tension: 0.4, fill: true, backgroundColor: 'rgba(59,130,246,0.08)' },
+                        { label: 'Alta Intensidad', data: timeKeys.map(k => d.filter(r => { const f = new Date(r['Created At']||''); return !isNaN(f) && f.toLocaleDateString('es-PE',{day:'2-digit',month:'2-digit'})===k && r._analisis.intensidad>=7; }).length), borderColor: '#ef4444', tension: 0.4 }
                     ]
                 },
-                options: {
-                    responsive: true, maintainAspectRatio: false,
-                    plugins: { legend: { labels: { color: '#93c5fd' } } },
-                    scales: { y: { ticks: { color: '#93c5fd' } }, x: { ticks: { color: '#93c5fd' } } }
-                }
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#93c5fd', font: { size: 10 } } } }, scales: { y: { ticks: { color: '#93c5fd' } }, x: { ticks: { color: '#93c5fd', font: { size: 9 } } } } }
             });
         }
         
         function renderizarWordCloud(d) {
             const canvas = document.getElementById('wordcloud');
             const words = {};
-            
             d.forEach(r => {
-                (r._analisis.palabrasClave || []).forEach(p => {
-                    words[p] = (words[p] || 0) + 1;
-                });
+                (r._analisis.palabrasClave || []).forEach(p => { words[p] = (words[p] || 0) + 1; });
             });
             
-            const wordList = Object.entries(words).map(([word, count]) => [word, count * 10]);
+            const list = Object.entries(words).map(([w, c]) => [w, c * 15]);
             
-            if (wordList.length > 0 && window.WordCloud) {
+            if (list.length > 0 && window.WordCloud) {
                 WordCloud(canvas, {
-                    list: wordList,
-                    gridSize: 12,
-                    weightFactor: 3,
+                    list: list,
+                    gridSize: 10,
+                    weightFactor: 2,
                     fontFamily: 'Inter, sans-serif',
-                    color: () => `hsl(${Math.random() * 60 + 200}, 70%, ${Math.random() * 40 + 40}%)`,
+                    color: () => `hsl(${Math.random()*60+200}, 70%, ${Math.random()*30+45}%)`,
                     backgroundColor: 'transparent',
-                    rotateRatio: 0.3
+                    rotateRatio: 0.2
                 });
             }
         }
@@ -1171,15 +961,15 @@ REGLAS CRÍTICAS:
             
             document.getElementById('tablaBody').innerHTML = d.map(r => `
                 <tr class="cursor-pointer hover:bg-[#1a2332]" onclick="mostrarDetalle('${r['Tweet Id'] || r['tweet_id']}')">
-                    <td class="text-xs">${new Date(r['Created At'] || '').toLocaleDateString('es-PE')}</td>
-                    <td class="text-sm font-semibold text-white">${r['User Name'] || 'Anónimo'}</td>
-                    <td class="text-sm max-w-xs truncate text-blue-100/70">${(r['Full Text'] || '').substring(0, 60)}...</td>
-                    <td><span class="badge-enterprise ${r._analisis.sentimiento==='Negativo'?'bg-red-500/15 text-red-400 border-red-500/30':r._analisis.sentimiento==='Positivo'?'bg-green-500/15 text-green-400 border-green-500/30':'bg-yellow-500/15 text-yellow-400 border-yellow-500/30'} border">${r._analisis.sentimiento}</span></td>
-                    <td class="text-xs ${r._analisis.intensidadEmocional>=8?'text-red-400 font-bold':'text-blue-200/70'}">${r._analisis.emocion} (${r._analisis.intensidadEmocional}/10)</td>
-                    <td class="text-xs text-blue-200/70">${r._analisis.tipo}</td>
-                    <td class="text-xs text-blue-200/70">${r._analisis.tema}</td>
+                    <td class="text-xs">${new Date(r['Created At']||'').toLocaleDateString('es-PE')}</td>
+                    <td class="text-sm font-semibold text-white">${r['User Name']||'Anónimo'}</td>
+                    <td class="text-sm max-w-xs truncate text-blue-100/60">${(r['Full Text']||'').substring(0,60)}...</td>
+                    <td><span class="badge ${r._analisis.sentimiento==='Negativo'?'badge-neg':r._analisis.sentimiento==='Positivo'?'badge-pos':'badge-neu'}">${r._analisis.sentimiento}</span></td>
+                    <td class="text-xs ${r._analisis.intensidad>=8?'text-red-400 font-bold':'text-blue-200/60'}">${r._analisis.emocion} (${r._analisis.intensidad}/10)</td>
+                    <td class="text-xs text-blue-200/60">${r._analisis.tipo}</td>
+                    <td class="text-xs text-blue-200/60">${r._analisis.tema}</td>
                     <td class="text-xs font-bold ${r._analisis.prioridad==='Alta'?'text-red-400':''}">${r._analisis.prioridad}</td>
-                    <td>${r._analisis.esCrisis ? '<span class="badge-enterprise bg-red-500/20 text-red-400 border-red-500/30 border animate-heartbeat">🚨 CRISIS</span>' : '<span class="text-xs text-blue-300/30">-</span>'}</td>
+                    <td>${r._analisis.esCrisis?'<span class="badge badge-neg pulse-crisis">🚨 CRISIS</span>':'<span class="text-xs text-blue-300/20">-</span>'}</td>
                 </tr>
             `).join('');
             
@@ -1193,7 +983,6 @@ REGLAS CRÍTICAS:
         function actualizarFiltros(d) {
             const emociones = [...new Set(d.map(r => r._analisis.emocion))].sort();
             const tipos = [...new Set(d.map(r => r._analisis.tipo))].sort();
-            
             document.getElementById('filtroEmocion').innerHTML = '<option value="">Emoción</option>' + emociones.map(e => `<option>${e}</option>`).join('');
             document.getElementById('filtroTipo').innerHTML = '<option value="">Tipo</option>' + tipos.map(t => `<option>${t}</option>`).join('');
         }
@@ -1203,17 +992,359 @@ REGLAS CRÍTICAS:
             const s = document.getElementById('filtroSentimiento').value;
             const e = document.getElementById('filtroEmocion').value;
             const t = document.getElementById('filtroTipo').value;
-            
             if (s) d = d.filter(r => r._analisis.sentimiento === s);
             if (e) d = d.filter(r => r._analisis.emocion === e);
             if (t) d = d.filter(r => r._analisis.tipo === t);
-            
             STATE.filtrados = d;
             renderizarDashboard();
         }
         
         // ============================================
-        // DETALLE ENTERPRISE
+        // VISTAS COMPLETAS
+        // ============================================
+        
+        function renderizarLabEmocional() {
+            if (!STATE.datos.length) return;
+            const d = STATE.datos;
+            
+            // Rueda de emociones
+            const emociones = [
+                { name: 'Ira', color: '#ef4444', icon: '😡', desc: 'Furia, enojo, indignación' },
+                { name: 'Miedo', color: '#8b5cf6', icon: '😨', desc: 'Temor, ansiedad, inseguridad' },
+                { name: 'Tristeza', color: '#3b82f6', icon: '😢', desc: 'Pena, decepción, desilusión' },
+                { name: 'Alegría', color: '#10b981', icon: '😊', desc: 'Felicidad, satisfacción, gozo' },
+                { name: 'Asco', color: '#059669', icon: '🤢', desc: 'Repugnancia, rechazo' },
+                { name: 'Sorpresa', color: '#f59e0b', icon: '😲', desc: 'Asombro, incredulidad' },
+                { name: 'Frustración', color: '#f97316', icon: '😤', desc: 'Hartazgo, fastidio' },
+                { name: 'Indignación', color: '#dc2626', icon: '🤬', desc: 'Ultraje, ofensa' }
+            ];
+            
+            const emoCount = {};
+            d.forEach(r => { emoCount[r._analisis.emocion] = (emoCount[r._analisis.emocion] || 0) + 1; });
+            
+            document.getElementById('emotionWheel').innerHTML = emociones.map(e => `
+                <div class="emotion-wheel-item glass rounded-xl p-4 text-center" style="border-top: 3px solid ${e.color}">
+                    <span class="text-3xl">${e.icon}</span>
+                    <h4 class="font-bold text-white mt-2">${e.name}</h4>
+                    <p class="text-xs text-blue-300/50">${e.desc}</p>
+                    <p class="text-2xl font-black mt-2" style="color: ${e.color}">${emoCount[e.name] || 0}</p>
+                    <p class="text-xs text-blue-300/30">comentarios</p>
+                </div>
+            `).join('');
+            
+            // Gráfico distribución emocional
+            if (STATE.graficos.emocionDist) STATE.graficos.emocionDist.destroy();
+            STATE.graficos.emocionDist = new Chart(document.getElementById('chartEmocionDist'), {
+                type: 'bar',
+                data: { labels: Object.keys(emoCount), datasets: [{ data: Object.values(emoCount), backgroundColor: Object.keys(emoCount).map(e => emociones.find(x => x.name === e)?.color || '#3b82f6'), borderRadius: 8 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { ticks: { color: '#93c5fd' } }, x: { ticks: { color: '#93c5fd' } } } }
+            });
+            
+            // Intensidad por emoción
+            const intensidadPorEmocion = {};
+            d.forEach(r => {
+                if (!intensidadPorEmocion[r._analisis.emocion]) intensidadPorEmocion[r._analisis.emocion] = [];
+                intensidadPorEmocion[r._analisis.emocion].push(r._analisis.intensidad);
+            });
+            
+            const avgIntensidad = {};
+            Object.entries(intensidadPorEmocion).forEach(([e, vals]) => {
+                avgIntensidad[e] = Math.round(vals.reduce((a,b) => a+b, 0) / vals.length);
+            });
+            
+            if (STATE.graficos.intensidad) STATE.graficos.intensidad.destroy();
+            STATE.graficos.intensidad = new Chart(document.getElementById('chartIntensidad'), {
+                type: 'radar',
+                data: { labels: Object.keys(avgIntensidad), datasets: [{ data: Object.values(avgIntensidad), backgroundColor: 'rgba(239,68,68,0.15)', borderColor: '#ef4444', borderWidth: 2 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { r: { min: 0, max: 10, ticks: { color: '#93c5fd' }, grid: { color: 'rgba(30,48,80,0.4)' }, pointLabels: { color: '#93c5fd' } } } }
+            });
+        }
+        
+        function renderizarCentroCrisis() {
+            if (!STATE.datos.length) return;
+            const d = STATE.datos;
+            const crisis = STATE.crisisAlerts;
+            
+            document.getElementById('crisisStats').innerHTML = `
+                <div class="glass rounded-xl p-4 text-center"><p class="text-3xl font-black text-red-400">${crisis.length}</p><p class="text-xs text-blue-300/50">Crisis Activas</p></div>
+                <div class="glass rounded-xl p-4 text-center"><p class="text-3xl font-black text-orange-400">${d.filter(r => r._analisis.intensidad >= 8).length}</p><p class="text-xs text-blue-300/50">Alta Intensidad</p></div>
+                <div class="glass rounded-xl p-4 text-center"><p class="text-3xl font-black text-yellow-400">${d.filter(r => r._analisis.riesgo === 'Alto').length}</p><p class="text-xs text-blue-300/50">Riesgo Alto</p></div>
+            `;
+            
+            // Evolución crisis
+            const crisisEvo = {};
+            d.forEach(r => {
+                if (r._analisis.intensidad >= 7) {
+                    const f = new Date(r['Created At'] || '');
+                    if (!isNaN(f)) {
+                        const k = f.toLocaleDateString('es-PE', { day: '2-digit', month: '2-digit' });
+                        crisisEvo[k] = (crisisEvo[k] || 0) + 1;
+                    }
+                }
+            });
+            
+            if (STATE.graficos.crisisEvo) STATE.graficos.crisisEvo.destroy();
+            STATE.graficos.crisisEvo = new Chart(document.getElementById('chartCrisisEvo'), {
+                type: 'line',
+                data: { labels: Object.keys(crisisEvo).sort(), datasets: [{ data: Object.values(crisisEvo), borderColor: '#ef4444', backgroundColor: 'rgba(239,68,68,0.1)', fill: true, tension: 0.4 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { ticks: { color: '#93c5fd' } }, x: { ticks: { color: '#93c5fd' } } } }
+            });
+            
+            // Alertas
+            document.getElementById('crisisAlertsList').innerHTML = crisis.length > 0 ? crisis.map(c => `
+                <div class="crisis-alert glass rounded-xl p-4">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="font-bold text-white">${c['User Name']}</p>
+                            <p class="text-sm text-blue-100/70 mt-1">${c['Full Text']}</p>
+                            <div class="flex gap-2 mt-2">
+                                <span class="badge badge-neg">${c._analisis.sentimiento}</span>
+                                <span class="text-xs text-red-400">Intensidad: ${c._analisis.intensidad}/10</span>
+                            </div>
+                        </div>
+                        <span class="text-xs text-blue-300/30">${new Date(c['Created At']||'').toLocaleDateString('es-PE')}</span>
+                    </div>
+                </div>
+            `).join('') : '<p class="text-blue-300/50 text-center py-8">✅ No hay crisis activas</p>';
+        }
+        
+        function renderizarNarrativas() {
+            if (!STATE.datos.length) return;
+            const d = STATE.datos;
+            
+            // Agrupar narrativas por tema
+            const narrativas = {};
+            d.forEach(r => {
+                const tema = r._analisis.tema;
+                if (!narrativas[tema]) narrativas[tema] = { positivo: 0, negativo: 0, neutral: 0, narrativas: [] };
+                narrativas[tema][r._analisis.sentimiento.toLowerCase()]++;
+                narrativas[tema].narrativas.push(r._analisis.narrativa);
+            });
+            
+            if (STATE.graficos.narrativas) STATE.graficos.narrativas.destroy();
+            STATE.graficos.narrativas = new Chart(document.getElementById('chartNarrativas'), {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(narrativas),
+                    datasets: [
+                        { label: 'Negativo', data: Object.values(narrativas).map(n => n.negativo), backgroundColor: '#ef4444' },
+                        { label: 'Neutral', data: Object.values(narrativas).map(n => n.neutral), backgroundColor: '#f59e0b' },
+                        { label: 'Positivo', data: Object.values(narrativas).map(n => n.positivo), backgroundColor: '#10b981' }
+                    ]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#93c5fd' } } }, scales: { x: { stacked: true, ticks: { color: '#93c5fd' } }, y: { stacked: true, ticks: { color: '#93c5fd' } } } }
+            });
+            
+            // Evolución
+            const narrEvo = {};
+            d.forEach(r => {
+                const f = new Date(r['Created At'] || '');
+                if (!isNaN(f)) {
+                    const k = f.toLocaleDateString('es-PE', { day: '2-digit', month: '2-digit' });
+                    if (!narrEvo[k]) narrEvo[k] = { negativo: 0, positivo: 0 };
+                    narrEvo[k][r._analisis.sentimiento.toLowerCase()]++;
+                }
+            });
+            
+            const narrKeys = Object.keys(narrEvo).sort();
+            if (STATE.graficos.narrEvo) STATE.graficos.narrEvo.destroy();
+            STATE.graficos.narrEvo = new Chart(document.getElementById('chartNarrEvo'), {
+                type: 'line',
+                data: {
+                    labels: narrKeys,
+                    datasets: [
+                        { label: 'Negativo', data: narrKeys.map(k => narrEvo[k].negativo || 0), borderColor: '#ef4444', tension: 0.4 },
+                        { label: 'Positivo', data: narrKeys.map(k => narrEvo[k].positivo || 0), borderColor: '#10b981', tension: 0.4 }
+                    ]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#93c5fd' } } }, scales: { y: { ticks: { color: '#93c5fd' } }, x: { ticks: { color: '#93c5fd' } } } }
+            });
+            
+            // Lista
+            document.getElementById('narrativasList').innerHTML = Object.entries(narrativas).map(([tema, data]) => `
+                <div class="glass rounded-xl p-4">
+                    <h4 class="font-bold text-white">${tema}</h4>
+                    <div class="flex gap-3 mt-2 text-xs">
+                        <span class="text-red-400">🔴 ${data.negativo} negativos</span>
+                        <span class="text-yellow-400">🟡 ${data.neutral} neutrales</span>
+                        <span class="text-green-400">🟢 ${data.positivo} positivos</span>
+                    </div>
+                    <p class="text-xs text-blue-300/50 mt-2">Narrativa dominante: ${data.negativo > data.positivo ? 'Predomina descontento' : 'Percepción mixta'}</p>
+                </div>
+            `).join('');
+        }
+        
+        function renderizarInfluencia() {
+            if (!STATE.datos.length) return;
+            const d = STATE.datos;
+            
+            // Top influencers (por likes + RTs)
+            const influencers = d
+                .map(r => ({
+                    name: r['User Name'] || 'Anónimo',
+                    screenName: r['User Screen Name'] || '',
+                    engagement: (parseInt(r['Favorite Count'] || 0) + parseInt(r['Retweet Count'] || 0) * 2),
+                    comentarios: 1,
+                    texto: r['Full Text'] || ''
+                }))
+                .sort((a, b) => b.engagement - a.engagement)
+                .slice(0, 6);
+            
+            document.getElementById('influencersList').innerHTML = influencers.map((inf, i) => `
+                <div class="glass rounded-xl p-4 text-center" style="border-top: 3px solid ${i === 0 ? '#f59e0b' : i === 1 ? '#c0c0c0' : i === 2 ? '#cd7f32' : '#3b82f6'}">
+                    <span class="text-2xl">${i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : '👤'}</span>
+                    <h4 class="font-bold text-white mt-1">${inf.name}</h4>
+                    <p class="text-xs text-blue-300/50">@${inf.screenName}</p>
+                    <p class="text-lg font-black text-blue-400 mt-2">${inf.engagement.toLocaleString()}</p>
+                    <p class="text-xs text-blue-300/30">engagement</p>
+                </div>
+            `).join('');
+            
+            // Grafo simple con D3
+            const graphDiv = document.getElementById('influenceGraph');
+            graphDiv.innerHTML = '';
+            
+            const width = graphDiv.clientWidth;
+            const height = 400;
+            
+            const nodes = influencers.map((inf, i) => ({
+                id: inf.name,
+                group: i,
+                radius: Math.max(15, inf.engagement / 50)
+            }));
+            
+            const links = [];
+            for (let i = 0; i < nodes.length - 1; i++) {
+                links.push({ source: nodes[i].id, target: nodes[i+1].id, value: 1 });
+            }
+            
+            const svg = d3.select('#influenceGraph')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+            
+            const simulation = d3.forceSimulation(nodes)
+                .force('link', d3.forceLink(links).id(d => d.id).distance(100))
+                .force('charge', d3.forceManyBody().strength(-200))
+                .force('center', d3.forceCenter(width / 2, height / 2));
+            
+            const link = svg.append('g')
+                .selectAll('line')
+                .data(links)
+                .join('line')
+                .attr('stroke', '#1e3050')
+                .attr('stroke-width', 2);
+            
+            const node = svg.append('g')
+                .selectAll('circle')
+                .data(nodes)
+                .join('circle')
+                .attr('r', d => d.radius)
+                .attr('fill', (d, i) => ['#f59e0b', '#3b82f6', '#8b5cf6', '#10b981', '#ef4444', '#06b6d4'][i])
+                .attr('class', 'influence-node')
+                .call(d3.drag()
+                    .on('start', (event, d) => { if (!event.active) simulation.alphaTarget(0.3).restart(); d.fx = d.x; d.fy = d.y; })
+                    .on('drag', (event, d) => { d.fx = event.x; d.fy = event.y; })
+                    .on('end', (event, d) => { if (!event.active) simulation.alphaTarget(0); d.fx = null; d.fy = null; }));
+            
+            node.append('title').text(d => d.id);
+            
+            simulation.on('tick', () => {
+                link.attr('x1', d => d.source.x).attr('y1', d => d.source.y).attr('x2', d => d.target.x).attr('y2', d => d.target.y);
+                node.attr('cx', d => d.x).attr('cy', d => d.y);
+            });
+            
+            // Top influencers lista
+            document.getElementById('topInfluencers').innerHTML = influencers.map((inf, i) => `
+                <div class="glass rounded-lg p-3 flex justify-between items-center">
+                    <div class="flex items-center gap-2">
+                        <span class="text-lg">${i+1}.</span>
+                        <div>
+                            <p class="font-semibold text-white text-sm">${inf.name}</p>
+                            <p class="text-xs text-blue-300/50">@${inf.screenName}</p>
+                        </div>
+                    </div>
+                    <span class="text-sm font-bold text-blue-400">${inf.engagement.toLocaleString()} pts</span>
+                </div>
+            `).join('');
+        }
+        
+        function generarStory(tipo) {
+            if (!STATE.datos.length) return alert('No hay datos');
+            const d = STATE.datos;
+            
+            const output = document.getElementById('storyOutput');
+            output.classList.remove('hidden');
+            
+            const negCount = d.filter(r => r._analisis.sentimiento === 'Negativo').length;
+            const crisisCount = STATE.crisisAlerts.length;
+            const altaInt = d.filter(r => r._analisis.intensidad >= 8).length;
+            
+            output.innerHTML = `
+                <div class="space-y-4">
+                    <div class="bg-gradient-to-r from-blue-900/30 to-purple-900/30 rounded-xl p-5">
+                        <h3 class="text-lg font-bold text-white">📖 ${tipo === 'semanal' ? 'Story Semanal' : 'Story de Crisis'}</h3>
+                        <p class="text-xs text-blue-300/50">Generado automáticamente por Sentinel AI</p>
+                    </div>
+                    
+                    <div class="glass rounded-xl p-5">
+                        <h4 class="font-bold text-white">📊 Resumen Ejecutivo</h4>
+                        <p class="text-blue-200 mt-2">Esta semana se analizaron <strong class="text-white">${d.length}</strong> comentarios ciudadanos sobre la gestión municipal.</p>
+                        <p class="text-blue-200 mt-1">El sentimiento general fue <strong class="${negCount > d.length/2 ? 'text-red-400' : 'text-yellow-400'}">${negCount > d.length/2 ? 'predominantemente negativo' : 'mixto'}</strong> con <strong class="text-red-400">${negCount}</strong> comentarios negativos (${((negCount/d.length)*100).toFixed(1)}%).</p>
+                    </div>
+                    
+                    <div class="glass rounded-xl p-5">
+                        <h4 class="font-bold text-white">🚨 Situación de Crisis</h4>
+                        <p class="text-blue-200 mt-2">Se detectaron <strong class="text-red-400">${crisisCount}</strong> situaciones de crisis potencial.</p>
+                        <p class="text-blue-200 mt-1"><strong class="text-orange-400">${altaInt}</strong> comentarios mostraron alta intensidad emocional (≥8/10).</p>
+                    </div>
+                    
+                    <div class="glass rounded-xl p-5">
+                        <h4 class="font-bold text-white">💡 Recomendaciones</h4>
+                        <ul class="text-blue-200 mt-2 space-y-1 text-sm">
+                            <li>• ${negCount > d.length/2 ? 'URGENTE: Abordar la ola de comentarios negativos con comunicación proactiva' : 'Mantener monitoreo constante de la percepción ciudadana'}</li>
+                            <li>• ${crisisCount > 0 ? 'Atender inmediatamente los ' + crisisCount + ' casos de crisis detectados' : 'Continuar con las buenas prácticas actuales'}</li>
+                            <li>• ${altaInt > 5 ? 'Implementar plan de contención para comentarios de alta intensidad' : 'Fortalecer canales de comunicación positiva'}</li>
+                        </ul>
+                    </div>
+                </div>
+            `;
+            
+            output.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function renderizarColaboracion() {
+            if (!STATE.datos.length) return;
+            const d = STATE.datos;
+            
+            const pendientes = d.filter(r => r._analisis.necesitaRespuesta).length;
+            const urgentes = d.filter(r => r._analisis.prioridad === 'Alta' && r._analisis.necesitaRespuesta).length;
+            
+            document.getElementById('teamStats').innerHTML = `
+                <div class="glass rounded-xl p-4 text-center"><p class="text-3xl font-black text-blue-400">${d.length}</p><p class="text-xs text-blue-300/50">Total</p></div>
+                <div class="glass rounded-xl p-4 text-center"><p class="text-3xl font-black text-yellow-400">${pendientes}</p><p class="text-xs text-blue-300/50">Pendientes</p></div>
+                <div class="glass rounded-xl p-4 text-center"><p class="text-3xl font-black text-red-400">${urgentes}</p><p class="text-xs text-blue-300/50">Urgentes</p></div>
+            `;
+            
+            const asignaciones = d.filter(r => r._analisis.necesitaRespuesta).slice(0, 10);
+            
+            document.getElementById('collabList').innerHTML = asignaciones.length > 0 ? asignaciones.map((c, i) => `
+                <div class="glass rounded-xl p-4 flex justify-between items-center">
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs text-blue-300/30">#${i+1}</span>
+                            <span class="font-semibold text-white text-sm">${c['User Name']}</span>
+                            <span class="badge ${c._analisis.prioridad==='Alta'?'badge-neg':'badge-neu'}">${c._analisis.prioridad}</span>
+                        </div>
+                        <p class="text-xs text-blue-100/60 mt-1">${(c['Full Text']||'').substring(0, 80)}...</p>
+                    </div>
+                    <button class="px-3 py-1.5 bg-blue-600/20 text-blue-400 rounded-lg text-xs hover:bg-blue-600/30 transition">Asignar</button>
+                </div>
+            `).join('') : '<p class="text-blue-300/50 text-center py-8">✅ No hay comentarios pendientes</p>';
+        }
+        
+        // ============================================
+        // DETALLE
         // ============================================
         
         function mostrarDetalle(id) {
@@ -1222,30 +1353,30 @@ REGLAS CRÍTICAS:
             const a = c._analisis;
             
             document.getElementById('detalleContenido').innerHTML = `
-                <div class="space-y-5">
-                    ${a.esCrisis ? '<div class="bg-red-500/10 border border-red-500/30 rounded-xl p-4 animate-heartbeat"><p class="text-red-400 font-bold">🚨 CRISIS DETECTADA - ATENCIÓN INMEDIATA</p></div>' : ''}
+                <div class="space-y-4">
+                    ${a.esCrisis ? '<div class="bg-red-500/10 border border-red-500/30 rounded-xl p-3 pulse-crisis"><p class="text-red-400 font-bold text-sm">🚨 CRISIS DETECTADA</p></div>' : ''}
                     
                     <div class="glass rounded-xl p-4">
-                        <h3 class="font-bold text-white text-lg">${c['User Name']}</h3>
-                        <p class="text-blue-300/50 text-sm">@${c['User Screen Name'] || 'usuario'}</p>
-                        <div class="mt-3 p-4 bg-[#0a0f1e] rounded-lg"><p class="text-white">${c['Full Text']}</p></div>
+                        <h3 class="font-bold text-white">${c['User Name']}</h3>
+                        <p class="text-xs text-blue-300/50">@${c['User Screen Name'] || 'usuario'}</p>
+                        <div class="mt-3 p-3 bg-[#0a0e17] rounded-lg"><p class="text-white text-sm">${c['Full Text']}</p></div>
                     </div>
                     
-                    <div class="grid grid-cols-2 gap-3">
-                        <div class="glass rounded-xl p-4 text-center"><p class="text-xs text-blue-300/50">Sentimiento</p><p class="text-2xl font-bold ${a.sentimiento==='Negativo'?'text-red-400':a.sentimiento==='Positivo'?'text-green-400':'text-yellow-400'}">${a.sentimiento}</p></div>
-                        <div class="glass rounded-xl p-4 text-center"><p class="text-xs text-blue-300/50">Emoción</p><p class="text-2xl font-bold text-purple-400">${a.emocion}</p></div>
-                        <div class="glass rounded-xl p-4 text-center"><p class="text-xs text-blue-300/50">Intensidad</p><p class="text-2xl font-bold ${a.intensidadEmocional>=8?'text-red-400':a.intensidadEmocional>=5?'text-orange-400':'text-blue-400'}">${a.intensidadEmocional}/10</p></div>
-                        <div class="glass rounded-xl p-4 text-center"><p class="text-xs text-blue-300/50">Tipo</p><p class="text-2xl font-bold text-cyan-400">${a.tipo}</p></div>
-                    </div>
-                    
-                    <div class="glass rounded-xl p-4">
-                        <h4 class="font-bold text-white mb-3">📊 Narrativa Detectada</h4>
-                        <p class="text-blue-200">${a.narrativa}</p>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div class="glass rounded-lg p-3 text-center"><p class="text-xs text-blue-300/50">Sentimiento</p><p class="text-lg font-bold ${a.sentimiento==='Negativo'?'text-red-400':a.sentimiento==='Positivo'?'text-green-400':'text-yellow-400'}">${a.sentimiento}</p></div>
+                        <div class="glass rounded-lg p-3 text-center"><p class="text-xs text-blue-300/50">Emoción</p><p class="text-lg font-bold text-purple-400">${a.emocion}</p></div>
+                        <div class="glass rounded-lg p-3 text-center"><p class="text-xs text-blue-300/50">Intensidad</p><p class="text-lg font-bold ${a.intensidad>=8?'text-red-400':'text-blue-400'}">${a.intensidad}/10</p></div>
+                        <div class="glass rounded-lg p-3 text-center"><p class="text-xs text-blue-300/50">Tipo</p><p class="text-lg font-bold text-cyan-400">${a.tipo}</p></div>
                     </div>
                     
                     <div class="glass rounded-xl p-4">
-                        <h4 class="font-bold text-white mb-3">🏷️ Palabras Clave</h4>
-                        <div class="flex flex-wrap gap-2">${(a.palabrasClave||[]).map(p => `<span class="px-3 py-1.5 bg-[#1a2332] text-blue-200 rounded-full text-sm">${p}</span>`).join('')}</div>
+                        <h4 class="font-bold text-white text-sm mb-2">📝 Resumen</h4>
+                        <p class="text-blue-200 text-sm">${a.resumen}</p>
+                    </div>
+                    
+                    <div class="glass rounded-xl p-4">
+                        <h4 class="font-bold text-white text-sm mb-2">🏷️ Palabras Clave</h4>
+                        <div class="flex flex-wrap gap-1">${(a.palabrasClave||[]).map(p => `<span class="px-2 py-1 bg-[#1a2332] text-blue-200 rounded-full text-xs">${p}</span>`).join('')}</div>
                     </div>
                 </div>
             `;
@@ -1261,37 +1392,30 @@ REGLAS CRÍTICAS:
         
         function generarReporte(tipo) {
             if (!STATE.datos.length) return alert('No hay datos');
-            
             const d = STATE.datos;
-            const titulos = { diario: 'Diario', semanal: 'Semanal', mensual: 'Mensual', story: 'Story Ejecutivo' };
-            
-            STATE.reporte = { tipo, datos: d };
+            const titulos = { diario: 'Diario', semanal: 'Semanal', mensual: 'Mensual', story: 'Story' };
             
             document.getElementById('reporteOutput').classList.remove('hidden');
             document.getElementById('reporteOutput').innerHTML = `
-                <h2 class="text-2xl font-bold text-white mb-6">📊 Reporte ${titulos[tipo]}</h2>
-                <div class="glass rounded-xl p-6 mb-6">
-                    <h3 class="text-xl font-bold text-white mb-3">Resumen</h3>
-                    <p class="text-blue-200">Análisis de <strong class="text-white">${d.length}</strong> comentarios.</p>
-                    <p class="text-blue-200 mt-2">🚨 Crisis detectadas: <strong class="text-red-400">${STATE.crisisAlerts.length}</strong></p>
-                    <p class="text-blue-200 mt-2">💢 Alta intensidad emocional: <strong class="text-orange-400">${d.filter(r => r._analisis.intensidadEmocional >= 8).length}</strong></p>
+                <h3 class="text-lg font-bold text-white mb-4">📊 Reporte ${titulos[tipo]}</h3>
+                <div class="glass rounded-xl p-4 mb-4">
+                    <p class="text-blue-200 text-sm">Total: <strong class="text-white">${d.length}</strong> | Negativos: <strong class="text-red-400">${d.filter(r=>r._analisis.sentimiento==='Negativo').length}</strong> | Crisis: <strong class="text-orange-400">${STATE.crisisAlerts.length}</strong></p>
                 </div>
-                <button onclick="exportarReporte()" class="px-6 py-3 btn-enterprise bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg">📥 Exportar CSV</button>
+                <button onclick="exportarReporte()" class="px-4 py-2 btn-primary text-sm">📥 Exportar CSV</button>
             `;
             document.getElementById('reporteOutput').scrollIntoView({ behavior: 'smooth' });
         }
         
         function exportarReporte() {
-            if (!STATE.reporte) return;
-            let csv = 'Fecha,Usuario,Comentario,Sentimiento,Emoción,Intensidad,Tipo,Tema,Prioridad,Crisis\n';
-            STATE.reporte.datos.forEach(r => {
-                csv += `"${r['Created At']}","${r['User Name']}","${r['Full Text']}","${r._analisis.sentimiento}","${r._analisis.emocion}","${r._analisis.intensidadEmocional}","${r._analisis.tipo}","${r._analisis.tema}","${r._analisis.prioridad}","${r._analisis.esCrisis}"\n`;
+            let csv = 'Fecha,Usuario,Comentario,Sentimiento,Emoción,Intensidad,Tipo,Tema,Prioridad,Riesgo,Crisis\n';
+            STATE.datos.forEach(r => {
+                csv += `"${r['Created At']}","${r['User Name']}","${(r['Full Text']||'').replace(/"/g,'""')}","${r._analisis.sentimiento}","${r._analisis.emocion}","${r._analisis.intensidad}","${r._analisis.tipo}","${r._analisis.tema}","${r._analisis.prioridad}","${r._analisis.riesgo}","${r._analisis.esCrisis}"\n`;
             });
             
             const blob = new Blob([csv], { type: 'text/csv' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
-            a.href = url; a.download = `reporte-enterprise-${Date.now()}.csv`;
+            a.href = url; a.download = `reporte-sentinel-${Date.now()}.csv`;
             a.click(); URL.revokeObjectURL(url);
         }
         
@@ -1302,35 +1426,48 @@ REGLAS CRÍTICAS:
         function navigateTo(view) {
             document.querySelectorAll('[id^="view-"]').forEach(el => el.classList.add('hidden'));
             const target = document.getElementById(`view-${view}`);
-            if (target) target.classList.remove('hidden');
+            if (target) {
+                target.classList.remove('hidden');
+                target.classList.add('animate-in');
+            }
             
-            document.querySelectorAll('.nav-item-enterprise').forEach(el => el.classList.remove('active'));
-            event?.target?.closest('.nav-item-enterprise')?.classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            event?.target?.closest('.nav-item')?.classList.add('active');
             
             document.getElementById('header-title').textContent = {
-                dashboard: 'Dashboard Principal', emotions: 'Laboratorio Emocional',
-                crisis: 'Centro de Crisis', narratives: 'Rastreador de Narrativas',
+                dashboard: 'Dashboard', emotions: 'Laboratorio Emocional',
+                crisis: 'Centro de Crisis', narratives: 'Narrativas',
                 influence: 'Red de Influencia', stories: 'Story Generator',
                 collab: 'Colaboración', reports: 'Reportes', config: 'Configuración'
             }[view] || 'Dashboard';
+            
+            // Renderizar vista específica
+            if (STATE.datos.length) {
+                if (view === 'emotions') renderizarLabEmocional();
+                if (view === 'crisis') renderizarCentroCrisis();
+                if (view === 'narratives') renderizarNarrativas();
+                if (view === 'influence') renderizarInfluencia();
+                if (view === 'collab') renderizarColaboracion();
+            }
+            
+            if (view === 'config') {
+                document.getElementById('cfgApiKey').value = STATE.apiKey;
+                document.getElementById('cfgPrompt').value = STATE.prompt;
+            }
             
             if (window.innerWidth < 1024) toggleSidebar();
         }
         
         function guardarAPIKey() {
             const key = document.getElementById('apiKey').value.trim();
-            if (key) {
-                STATE.apiKey = key;
-                localStorage.setItem('sentinel_enterprise_key', key);
-                alert('✅ API Key Enterprise guardada');
-            }
+            if (key) { STATE.apiKey = key; localStorage.setItem('sentinel_v9_key', key); alert('✅ Conectado'); }
         }
         
         function guardarConfig() {
             const key = document.getElementById('cfgApiKey').value.trim();
             const prompt = document.getElementById('cfgPrompt').value.trim();
-            if (key) { STATE.apiKey = key; localStorage.setItem('sentinel_enterprise_key', key); }
-            if (prompt) { STATE.prompt = prompt; localStorage.setItem('sentinel_enterprise_prompt', prompt); }
+            if (key) { STATE.apiKey = key; localStorage.setItem('sentinel_v9_key', key); }
+            if (prompt) { STATE.prompt = prompt; localStorage.setItem('sentinel_v9_prompt', prompt); }
             alert('✅ Configuración guardada');
         }
         
@@ -1338,28 +1475,25 @@ REGLAS CRÍTICAS:
         
         // Init
         document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('fecha-header').textContent = new Date().toLocaleDateString('es-PE', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+            document.getElementById('fecha-header').textContent = new Date().toLocaleDateString('es-PE', { weekday: 'long', day: 'numeric', month: 'long' });
             
             if (STATE.apiKey) {
                 document.getElementById('apiKey').value = STATE.apiKey;
                 document.getElementById('cfgApiKey').value = STATE.apiKey;
             }
-            
             document.getElementById('cfgPrompt').value = STATE.prompt;
             
             document.addEventListener('keydown', e => { if (e.key === 'Escape') cerrarDetalle(); });
             
-            console.log('🧬 SENTINEL AI ENTERPRISE v8.0');
-            console.log('✅ Análisis Semántico');
-            console.log('✅ Detección Emocional (Plutchik)');
+            console.log('🧬 Sentinel AI v9.0 - SISTEMA COMPLETO');
+            console.log('✅ Dashboard');
+            console.log('✅ Laboratorio Emocional (Plutchik)');
             console.log('✅ Centro de Crisis');
-            console.log('✅ Nube de Palabras');
             console.log('✅ Narrativas');
-            console.log('✅ Red de Influencia');
+            console.log('✅ Red de Influencia (D3.js)');
             console.log('✅ Story Generator');
             console.log('✅ Colaboración');
-            console.log('✅ Reportes Enterprise');
-            console.log('🚀 SISTEMA COMPLETO INICIALIZADO');
+            console.log('✅ Prompt Zero-Escape');
         });
     </script>
 </body>
